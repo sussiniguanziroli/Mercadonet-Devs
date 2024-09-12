@@ -1,191 +1,154 @@
 .burger-mobile {
     display: flex;
-    width: 40%;
-    height: 100%;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
-    .burger-mobile-logo {
-        img {
-            height: 100%;
-            width: auto;
-        }
-        height: 100%;
-        width: auto;
-    }
+    width: 100%;
+    padding: 1em;
+
     h2 {
-        font-family: "Raleway", sans-serif;
-        color: $main-white;
-        text-wrap: nowrap;
+        font-size: 2rem; // Aumenta ligeramente el tamaño del título
+        font-family: 'Raleway', sans-serif;
+        font-weight: 700;
+
+        .mercado {
+            color: $color-blanco;
+        }
+
+        .dot-net {
+            color: $color-naranja;
+        }
     }
 }
 
 .nav-burger {
-    width: 100%;
-    height: 5em;
-    background-color: $black;
-    border-radius: 1px solid;
+    background-color: $color-azul;
+    padding: 1em;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1em;
-    z-index: 6;
+}
+
+.menu-controls {
+    display: flex;
+    align-items: center;
+    .ioclose {
+        cursor: pointer;
+        font-size: 2.5rem;
+        margin-right: .5rem;
+    }
+    margin: 2rem;
+    h2 {
+        font-size: 2.3rem; // Aumenta ligeramente el tamaño del título
+        font-family: 'Raleway', sans-serif;
+        font-weight: 700;
+
+        .mercado {
+            color: $color-negro;
+        }
+
+        .dot-net {
+            color: $color-naranja;
+        }
+    }
 }
 
 .burger-menu {
-    height: 90%;
-    width: 4em;
-    background-color: $black;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
+    justify-content: space-around;
+    height: 2em;
+    width: 2em;
     cursor: pointer;
-    z-index: 5;
 }
 
 .burger-bar {
-    width: 4em;
-    height: 0.37em;
-    background-color: $main-white;
-    border-radius: 0.5em;
-    z-index: 4;
+    width: 100%;
+    height: 0.2em;
+    background-color: $color-blanco;
 }
 
 .menu {
-    width: 50%;
+    width: 60%; // Se reduce el ancho del menú
     height: 100vh;
-    background-color: $black;
-    z-index: 6;
+    background-color: $color-blanco;
     position: fixed;
-    transition: all 0.3s;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease;
     overflow: hidden;
-
+    z-index: 1000;
 }
 
 .slide-right {
-
-    animation: slide-right 0.3s ease-in both;
-
+    transform: translateX(0);
 }
 
-@keyframes slide-right {
-    0% {
-       
-        transform: translateX(-100%);
-    }
-
-    100% {
-       
-        transform: translateX(0);
-    }
+.slide-left {
+    transform: translateX(-100%);
 }
 
-
-
-
-//hiding menu
-.hidden {
-    display: none;
-   
+.provider-login-btn, .buyer-login-btn {
+    width: 85%; // Ajusta el ancho de los botones
+    padding: 1.2em; // Hace los botones un poco más altos
+    margin: .7em auto; // Aumenta el espaciado entre los botones y el menú
+    border-radius: 0.5em;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    text-align: center;
 }
 
-.visible {
-    display: inherit;
-    
+.provider-login-btn {
+    background-color: $color-naranja;
+    color: $color-blanco;
 }
 
-//animations
-//clicked
-.burger-bar.clicked:nth-child(1) {
-    transform: rotate(43deg) translate(0.73em, 1.23em);
-    transition: ease-out 0.5s;
+.buyer-login-btn {
+    background-color: $color-negro;
+    color: $color-blanco;
 }
-
-.burger-bar.clicked:nth-child(2) {
-    transform: scale(0);
-    transition: ease-out 0.5s;
-}
-
-.burger-bar.clicked:nth-child(3) {
-    transform: rotate(133deg) translate(-0.47em, .97em);
-    transition: ease-out 0.5s;
-}
-
-//unclicked
-.burger-bar.unclicked {
-    transform: rotate(0), translate(0);
-    transition: cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s;
-}
-
-//menu nav inside
 
 .burger-nav-menu {
-    width: fit-content;
-    height: 40vh;
-    background-color: $black;
-    position: relative;
-    z-index: 6;
-    ul {
-        li {
-            list-style: none;
-           
-        }
-    }
-    
-}
-
-.burger-nav-item {
-    background-color: $black;
-    text-decoration: none;
-    font-family: "Raleway", sans-serif;
-    font-weight: 700;
-    font-size: x-large;
-    color: white;
-   
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .burger-nav-ul {
+    list-style: none;
+    padding: 0;
+    width: 85%; // Ajusta el ancho de la lista para mantenerla alineada con los botones
+
     li {
-        margin: 1rem;
-        padding: 0.5rem;
+        margin: 1em 0; // Aumenta el espacio entre los elementos del menú
     }
+}
+
+.burger-nav-item {
+    text-decoration: none;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem; // Aumenta el tamaño de la fuente para los links del menú
+    color: $text-gray;
 }
 
 .burger-active {
     color: $dark-gray;
 }
 
-.burger-god {
-    @media (min-width: 1000px) {
-        display: none;
-        
-    }
-    
-}
-
-
-
 .overlay {
     position: fixed;
-    top: 5em;
+    top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
-    z-index: 4; /* Asegura que esté por encima de otros elementos */
-}
-
-.burger-god.menu-active {
-    overflow: hidden; /* Evita el desplazamiento del contenido detrás del menú */
-    
-}
-
-.burger-god.menu-active .overlay {
-    display: block; /* Muestra la capa de fondo oscuro cuando el menú está activo */
-    
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
 }
 
 .no-scroll {
-    overflow: hidden; /* Desactiva el scroll en la página */
-  }
-  
+    overflow: hidden;
+}

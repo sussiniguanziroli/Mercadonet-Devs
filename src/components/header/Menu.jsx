@@ -1,31 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { IoClose } from "react-icons/io5";
 
 const Menu = () => {
-    // To change burger classes
-    const [burger_class, setBurgerClass] = useState('burger-bar unclicked');
     const [menu_class, setMenuClass] = useState('menu hidden');
     const [isMenuClicked, setIsMenuClicked] = useState(false);
 
-    // Toggle burger menu change
     const updateMenu = () => {
         if (!isMenuClicked) {
-            setBurgerClass('burger-bar clicked');
             setMenuClass('menu slide-right visible');
         } else {
-            setBurgerClass('burger-bar unclicked');
             setMenuClass('menu slide-left hidden');
         }
         setIsMenuClicked(!isMenuClicked);
     };
 
     const closeMenu = () => {
-        setBurgerClass('burger-bar unclicked');
         setMenuClass('menu slide-left hidden');
         setIsMenuClicked(false);
     };
 
-    // Add or remove no-scroll class to body
     useEffect(() => {
         if (isMenuClicked) {
             document.body.classList.add('no-scroll');
@@ -33,7 +27,6 @@ const Menu = () => {
             document.body.classList.remove('no-scroll');
         }
         return () => {
-            // Cleanup class on unmount
             document.body.classList.remove('no-scroll');
         };
     }, [isMenuClicked]);
@@ -42,68 +35,57 @@ const Menu = () => {
         <div className="burger-god">
             <nav className="nav-burger">
                 <div className="burger-menu" onClick={updateMenu}>
-                    <div className={burger_class}></div>
-                    <div className={burger_class}></div>
-                    <div className={burger_class}></div>
+                    <div className="burger-bar"></div>
+                    <div className="burger-bar"></div>
+                    <div className="burger-bar"></div>
                 </div>
-                
                 <div className='burger-mobile'>
                     <div className='burger-mobile-logo'>
                         <img src="" alt="" />
                     </div>
-                    <h2>Mercadonet</h2>
+                    <h2><span className="mercado">Mercado</span><span className="dot-net">.NET</span></h2>
                 </div>
-                
             </nav>
 
             <div className={menu_class}>
+                <div className='menu-controls'>
+                    <IoClose onClick={closeMenu} className='ioclose' />
+                    <h2><span className="mercado">Mercado</span><span className="dot-net">.NET</span></h2>
+                </div>
                 <div className="burger-nav-menu">
+                    <button className="provider-login-btn">Iniciar sesión Proveedor</button>
+                    <button className="buyer-login-btn">Iniciar sesión Comprador</button>
                     <ul className="burger-nav-ul">
                         <li>
-                            <NavLink
-                                onClick={closeMenu}
-                                to="/"
-                                className="burger-nav-item"
-                                activeclassname="burger-active"
-                            >
-                                Opcion 1
+                            <NavLink onClick={closeMenu} to="" className="burger-nav-item" activeclassname="burger-active">
+                                ¿Qué es Mercadonet?
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink
-                                onClick={closeMenu}
-                                to="/servicios"
-                                className="burger-nav-item"
-                                activeclassname="burger-active"
-                            >
-                                Opcion 2
+                            <NavLink onClick={closeMenu} to="" className="burger-nav-item" activeclassname="burger-active">
+                                Proveedores
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink
-                                onClick={closeMenu}
-                                to="/nosotros"
-                                className="burger-nav-item"
-                                activeclassname="burger-active"
-                            >
-                                Opcion 3
+                            <NavLink onClick={closeMenu} to="" className="burger-nav-item" activeclassname="burger-active">
+                                Registros
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink
-                                onClick={closeMenu}
-                                to="/contacto"
-                                className="burger-nav-item"
-                                activeclassname="burger-active"
-                            >
-                                Opcion 4
+                            <NavLink onClick={closeMenu} to="" className="burger-nav-item" activeclassname="burger-active">
+                                Ingresar
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink onClick={closeMenu} to="" className="burger-nav-item" activeclassname="burger-active">
+                                Contacto
                             </NavLink>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            {isMenuClicked && <div className="overlay" onClick={updateMenu}></div>}
+            {isMenuClicked && <div className="overlay" onClick={closeMenu}></div>}
         </div>
     );
 };
