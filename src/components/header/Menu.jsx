@@ -32,7 +32,7 @@ const Menu = () => {
     }, [isMenuClicked]);
 
     return (
-        <div className="burger-god">
+        <div className="burger-god hiddenInDesktop">
             <nav className="nav-burger">
                 <div className="burger-menu" onClick={updateMenu}>
                     <div className="burger-bar"></div>

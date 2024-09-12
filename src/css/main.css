@@ -87,15 +87,16 @@
 }
 
 .provider-login-btn, .buyer-login-btn {
+  font-family: "Montserrat", sans-serif;
   width: 85%;
-  padding: 1.2em;
+  padding: 1rem;
   margin: 0.7em auto;
   border-radius: 0.5em;
-  font-family: "Raleway", sans-serif;
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
   border: none;
   text-align: center;
+  font-size: 1.3rem;
 }
 
 .provider-login-btn {
@@ -119,16 +120,20 @@
 .burger-nav-ul {
   list-style: none;
   padding: 0;
-  width: 85%;
+  width: 100%;
 }
 .burger-nav-ul li {
-  margin: 1em 0;
+  border-top: 1px solid lightgrey;
+  margin: 1.1rem 0;
+  padding: 1rem 0.7rem;
+  padding-left: 1.3rem;
+  padding-top: 1.5rem;
 }
 
 .burger-nav-item {
   text-decoration: none;
-  font-family: "Raleway", sans-serif;
-  font-weight: 700;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
   font-size: 1.4rem;
   color: #2c2c2c;
 }
