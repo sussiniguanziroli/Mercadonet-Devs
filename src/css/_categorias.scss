@@ -1,0 +1,66 @@
+.main-categorias {
+    font-family: 'Roboto', system-ui;
+    background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: $color-azul;
+    h1,h3 {
+        color: $color-blanco;
+    }
+    h1 {
+        font-size: 4.2rem;
+        margin: 2.2rem;
+        text-align: center;
+        margin-top: 6.6rem;
+        margin-bottom: 1rem;
+    }
+    h3 {
+        margin-top: .5rem;
+        margin: 1.3rem;
+        text-align: center;
+        font-size: 1.3rem;
+        letter-spacing: 0.5px;
+    }
+    section {
+        margin-top: 3rem;
+        h4 {
+            font-weight: 300;
+            color: $color-gris;
+            font-size: 1.5rem;
+            margin-left: 1rem;
+        }
+
+        .div-de-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+
+            .categorias-contenido {
+                background-color: $color-azul;
+                border-radius: 1rem;
+                margin: .7rem;
+                margin-left: 1rem;
+                margin-right: 1rem;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                
+
+                img {
+                    border-top-left-radius: inherit;
+                    border-bottom-left-radius: inherit;
+                    height: 7em;
+                    width: 20%;
+                    object-fit: cover;
+                }
+
+                p {
+                    color: $color-blanco;
+                    margin: 1.2rem;
+                    padding: .7rem;
+                    font-size: 1.7rem;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+}

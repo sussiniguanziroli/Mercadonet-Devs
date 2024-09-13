@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { IoClose } from "react-icons/io5";
+import { HiSearch } from "react-icons/hi";
 
 const Menu = () => {
-    const [menu_class, setMenuClass] = useState('menu hidden');
+    const [menu_class, setMenuClass] = useState('menu slide-left hidden');
     const [isMenuClicked, setIsMenuClicked] = useState(false);
 
     const updateMenu = () => {
@@ -41,16 +42,16 @@ const Menu = () => {
                 </div>
                 <div className='burger-mobile'>
                     <div className='burger-mobile-logo'>
-                        <img src="" alt="" />
+                        <img src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png" alt="logo white" />
                     </div>
-                    <h2><span className="mercado">Mercado</span><span className="dot-net">.NET</span></h2>
+                    <h2><HiSearch /></h2>
                 </div>
             </nav>
 
             <div className={menu_class}>
                 <div className='menu-controls'>
                     <IoClose onClick={closeMenu} className='ioclose' />
-                    <h2><span className="mercado">Mercado</span><span className="dot-net">.NET</span></h2>
+                    <img src="https://i.ibb.co/DY81r0L/Logo-Mercadonet-Desplegable.png" alt="logo blue" />
                 </div>
                 <div className="burger-nav-menu">
                     <button className="provider-login-btn">Iniciar sesión Proveedor</button>

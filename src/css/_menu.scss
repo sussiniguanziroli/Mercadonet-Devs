@@ -1,29 +1,29 @@
 .burger-mobile {
-    
+    margin-left: .3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 1em;
-
+    padding: .7em;
+    .burger-mobile-logo {
+        img {
+            object-fit: contain;
+            width: 100%;
+            height: 3.6em;
+        }
+    }
     h2 {
         font-size: 2rem; // Aumenta ligeramente el tamaño del título
         font-family: 'Raleway', sans-serif;
         font-weight: 700;
 
-        .mercado {
-            color: $color-blanco;
-        }
-
-        .dot-net {
-            color: $color-naranja;
-        }
+        color: white;
     }
 }
 
 .nav-burger {
     background-color: $color-azul;
-    padding: 1em;
+    padding: .6em;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -39,6 +39,11 @@
         margin-left: -.7rem;
     }
     margin: 2rem;
+    img {
+        object-fit: contain;
+        width: 100%;
+        height: 3.7em;
+    }
     h2 {
         font-size: 2.3rem; // Aumenta ligeramente el tamaño del título
         font-family: 'Raleway', sans-serif;

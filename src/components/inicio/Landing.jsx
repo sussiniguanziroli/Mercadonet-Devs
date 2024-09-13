@@ -1,8 +1,14 @@
 import React from 'react'
+import Categorias from './Categorias'
 
 const Landing = () => {
+
+
+
   return (
-    <div>Landing</div>
+    <main>
+        <Categorias />
+    </main>
   )
 }
 
