@@ -1,0 +1,41 @@
+.header {
+    font-family: 'Montserrat',sans-serif;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 1rem;
+    background-color: $color-azul;
+    img {
+        width: 12%;
+        height: 100%;
+    }
+    .searchbox {
+        border-radius: .3rem;
+        width: 20em;
+        display: flex;
+        justify-content: space-between;
+        input {
+            all: unset;
+            padding: .3rem;
+            background-color: $color-blanco;
+            width: 100%;
+            border-top-left-radius: inherit;
+            border-bottom-left-radius: inherit;
+        }
+        div {
+            display: flex;
+            border-top-right-radius: inherit;
+            border-bottom-right-radius: inherit;
+            padding: .3rem;
+            background-color: $color-naranja;
+            cursor: pointer;
+            align-items: center;
+        }
+    }
+    .nav-link {
+        color: $color-blanco;
+        text-decoration: none;
+        
+    }
+    
+}

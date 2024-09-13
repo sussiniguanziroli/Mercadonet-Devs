@@ -2,6 +2,46 @@
 /* Definición de colores principales */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+.header {
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 1rem;
+  background-color: #131921;
+}
+.header img {
+  width: 12%;
+  height: 100%;
+}
+.header .searchbox {
+  border-radius: 0.3rem;
+  width: 20em;
+  display: flex;
+  justify-content: space-between;
+}
+.header .searchbox input {
+  all: unset;
+  padding: 0.3rem;
+  background-color: #FFFFFF;
+  width: 100%;
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+.header .searchbox div {
+  display: flex;
+  border-top-right-radius: inherit;
+  border-bottom-right-radius: inherit;
+  padding: 0.3rem;
+  background-color: #FF7F00;
+  cursor: pointer;
+  align-items: center;
+}
+.header .nav-link {
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
 main {
   display: flex;
   flex-direction: column;
@@ -202,11 +242,12 @@ main {
   font-size: 1.5rem;
   margin-left: 1rem;
 }
-.main-categorias section .div-de-grid {
+
+.div-de-grid {
   display: grid;
   grid-template-columns: 1fr;
 }
-.main-categorias section .div-de-grid .categorias-contenido {
+.div-de-grid .categorias-contenido {
   background-color: #131921;
   border-radius: 1rem;
   margin: 0.7rem;
@@ -216,14 +257,14 @@ main {
   justify-content: flex-start;
   align-items: center;
 }
-.main-categorias section .div-de-grid .categorias-contenido img {
+.div-de-grid .categorias-contenido img {
   border-top-left-radius: inherit;
   border-bottom-left-radius: inherit;
   height: 7em;
   width: 20%;
   object-fit: cover;
 }
-.main-categorias section .div-de-grid .categorias-contenido p {
+.div-de-grid .categorias-contenido p {
   color: #FFFFFF;
   margin: 1.2rem;
   padding: 0.7rem;
@@ -231,6 +272,37 @@ main {
   font-weight: 400;
 }
 
+@media (min-width: 850px) {
+  .div-de-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 1024px) {
+  .main-categorias {
+    padding: 10%;
+  }
+  .main-categorias h1 {
+    margin-top: 0;
+  }
+  .main-categorias section h4 {
+    font-size: 1.2rem;
+  }
+  .div-de-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .div-de-grid .categorias-contenido img {
+    width: 30%;
+    height: 100%;
+  }
+  .div-de-grid .categorias-contenido p {
+    font-size: 1.2rem;
+    margin: 1rem;
+    padding: 0.5rem;
+    padding-right: 0;
+    margin-right: 0;
+    width: 70%;
+  }
+}
 * {
   padding: 0;
   margin: 0;
