@@ -8,6 +8,7 @@ const Landing = () => {
   return (
     <main>
         <Categorias />
+        
     </main>
   )
 }

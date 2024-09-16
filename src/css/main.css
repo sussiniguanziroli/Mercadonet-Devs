@@ -271,6 +271,22 @@ main {
   font-size: 1.7rem;
   font-weight: 400;
 }
+.div-de-grid .cat-iconos {
+  margin: 0.1rem;
+  padding: 0.1rem;
+  height: 5.2em;
+}
+.div-de-grid .cat-iconos img {
+  height: 60%;
+  width: 15%;
+  object-fit: contain;
+  border: none;
+}
+.div-de-grid .cat-iconos p {
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  width: 85%;
+}
 
 @media (min-width: 850px) {
   .div-de-grid {
@@ -301,6 +317,23 @@ main {
     padding-right: 0;
     margin-right: 0;
     width: 70%;
+  }
+  .div-de-grid .cat-iconos {
+    margin: 0.1rem;
+    padding: 0.1rem;
+    height: 5em;
+  }
+  .div-de-grid .cat-iconos img {
+    height: 100%;
+    width: 15%;
+    object-fit: contain;
+    border: none;
+    padding: 0.5rem;
+  }
+  .div-de-grid .cat-iconos p {
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    width: 85%;
   }
 }
 * {

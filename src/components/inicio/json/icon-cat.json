@@ -1,0 +1,72 @@
+[
+    {
+        "id": 1,
+        "titulo": "Electro e Iluminación",
+        "imagen": "https://i.imgur.com/6hU1Ofo.png"
+    },
+    {
+        "id": 2,
+        "titulo": "Estética, peluquería y Barbería",
+        "imagen": "https://i.imgur.com/Smjnqvm.png"
+    },
+    {
+        "id": 3,
+        "titulo": "Máquinas Industriales",
+        "imagen": "https://i.imgur.com/GpKo3q0.png"
+    },
+    {
+        "id": 4,
+        "titulo": "Crea tu propia Marca",
+        "imagen": "https://i.imgur.com/usOUu0w.png"
+    },
+    {
+        "id": 5,
+        "titulo": "Supermercados y Kioscos",
+        "imagen": "https://i.imgur.com/nSAJwoZ.png"
+    },
+    {
+        "id": 6,
+        "titulo": "Importados",
+        "imagen": "https://i.imgur.com/zst416V.png"
+    },
+    {
+        "id": 7,
+        "titulo": "Cotillón",
+        "imagen": "https://i.imgur.com/gAy6zWq.png"
+    },
+    {
+        "id": 8,
+        "titulo": "Santería",
+        "imagen": "https://i.imgur.com/Vk2z4wr.png"
+    },
+    {
+        "id": 9,
+        "titulo": "Juguetería",
+        "imagen": "https://i.imgur.com/OzF0pc4.png"
+    },
+    {
+        "id": 10,
+        "titulo": "Petshops y Veterinarias",
+        "imagen": "https://i.imgur.com/bkLBHfs.png"
+    },
+    {
+        "id": 11,
+        "titulo": "Descartables y Empaques",
+        "imagen": "https://i.imgur.com/Vzez25W.png"
+    },
+    {
+        "id": 12,
+        "titulo": "Farmacias e Insumos médicos",
+        "imagen": "https://i.imgur.com/AV631LM.png"
+    },
+    {
+        "id": 13,
+        "titulo": "Regalería y Marroquinería",
+        "imagen": "https://i.imgur.com/CAJnGgi.png"
+    },
+    {
+        "id": 14,
+        "titulo": "Hecho en Argentina",
+        "imagen": "https://i.imgur.com/FKiq0Oa.png"
+    }
+]

@@ -1,5 +1,6 @@
 import React from 'react'
 import categoriaspopulares from './json/cat-populares.json'
+import categoriasiconos from './json/icon-cat.json'
 
 const Categorias = () => {
 
@@ -16,6 +17,21 @@ const Categorias = () => {
                     <img src={categoriapopular.imagen} alt={categoriapopular.titulo} />
                     <p>{categoriapopular.titulo}</p>
                 </div>)}
+
+
+
+            </div>
+        </section>
+        <section >
+            <h4>MÁS CATEGORÍAS</h4>
+            <div className='div-de-grid'>
+
+                {categoriasiconos.map((categoriaicono) => <div key={categoriaicono.id} className='categorias-contenido cat-iconos' >
+                    <img src={categoriaicono.imagen} alt={categoriaicono.titulo} />
+                    <p>{categoriaicono.titulo}</p>
+                </div>)}
+
+
 
             </div>
         </section>
