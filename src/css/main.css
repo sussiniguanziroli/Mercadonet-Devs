@@ -375,6 +375,10 @@ main {
     width: 85%;
   }
 }
+.que-es-mnet {
+  display: grid;
+}
+
 * {
   padding: 0;
   margin: 0;
