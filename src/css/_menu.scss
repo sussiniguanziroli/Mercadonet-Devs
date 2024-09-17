@@ -21,12 +21,24 @@
     }
 }
 
+
 .nav-burger {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     background-color: $color-azul;
     padding: .6em;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: transform 0.2s ease-in-out;
+    transform: translateY(0); // Posición inicial
+    
+    &.sticky {
+        transform: translateY(-100px); // Cuando el header no es visible
+    }
 }
 
 .menu-controls {

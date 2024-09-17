@@ -1,19 +1,40 @@
 .header {
-    font-family: 'Montserrat',sans-serif;
+    position: -webkit-sticky; // Compatibilidad con Safari
+    position: sticky;
+    top: 0; // Siempre pegado en la parte superior al hacer scroll
+    font-family: 'Montserrat', sans-serif;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     padding: 1rem;
     background-color: $color-azul;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Sombra sutil para distinguir el header
+
+    transition: background-color 0.3s ease-in-out, padding 0.3s ease-in-out;
+
+    &.scrolled {
+        background-color: $dark-gray;
+        padding: 0.5rem 1rem;
+        img {
+            width: 9%;
+            height: 100%;
+        }
+        .searchbox {
+            display: none;
+        }
+    }
+
     img {
         width: 12%;
         height: 100%;
     }
+
     .searchbox {
         border-radius: .3rem;
         width: 20em;
         display: flex;
         justify-content: space-between;
+
         input {
             all: unset;
             padding: .3rem;
@@ -22,6 +43,7 @@
             border-top-left-radius: inherit;
             border-bottom-left-radius: inherit;
         }
+
         div {
             display: flex;
             border-top-right-radius: inherit;
@@ -32,10 +54,14 @@
             align-items: center;
         }
     }
+
     .nav-link {
         color: $color-blanco;
         text-decoration: none;
-        
-    }
-    
+        transition: all .2s ease-in-out;
+        &:hover {
+            transform: scale(1.06);
+        }
+    }   
+
 }

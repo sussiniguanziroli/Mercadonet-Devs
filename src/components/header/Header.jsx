@@ -1,11 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { FaSearch } from "react-icons/fa";
 
 
 const Header = () => {
+
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+          if (window.scrollY > 50) {
+            setScrolled(true); // Se activa cuando el usuario ha hecho scroll hacia abajo
+          } else {
+            setScrolled(false); // Se desactiva cuando el usuario vuelve hacia arriba
+          }
+        };
+    
+        window.addEventListener('scroll', handleScroll);
+    
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }, []);
+
+
   return (
-    <header className='hiddenInMobile header'>
+    <header className={`header hiddenInMobile ${scrolled ? 'scrolled' : ''}`}>
         <img src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png" alt="logo white" />
         <div className='searchbox'>
             <input type="text" placeholder='Buscar' />

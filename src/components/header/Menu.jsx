@@ -6,6 +6,8 @@ import { HiSearch } from "react-icons/hi";
 const Menu = () => {
     const [menu_class, setMenuClass] = useState('menu slide-left hidden');
     const [isMenuClicked, setIsMenuClicked] = useState(false);
+    const [isSticky, setIsSticky] = useState(false);
+    const [lastScrollY, setLastScrollY] = useState(0);
 
     const updateMenu = () => {
         if (!isMenuClicked) {
@@ -32,9 +34,29 @@ const Menu = () => {
         };
     }, [isMenuClicked]);
 
+    useEffect(() => {
+        const handleScroll = () => {
+          // Detectar si el usuario está desplazándose hacia abajo
+          if (window.scrollY > lastScrollY && window.scrollY > 100) {
+            setIsSticky(true);
+          } else {
+            setIsSticky(false);
+          }
+          setLastScrollY(window.scrollY);
+        };
+    
+        window.addEventListener('scroll', handleScroll);
+    
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }, [lastScrollY]);
+
+    
+
     return (
         <div className="burger-god hiddenInDesktop">
-            <nav className="nav-burger">
+            <nav className={`nav-burger ${isSticky ? 'sticky' : ''}`}>
                 <div className="burger-menu" onClick={updateMenu}>
                     <div className="burger-bar"></div>
                     <div className="burger-bar"></div>

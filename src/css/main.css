@@ -3,12 +3,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 .header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
   font-family: "Montserrat", sans-serif;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   padding: 1rem;
   background-color: #131921;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+.header.scrolled {
+  background-color: #474747;
+  padding: 0.5rem 1rem;
+}
+.header.scrolled img {
+  width: 9%;
+  height: 100%;
+}
+.header.scrolled .searchbox {
+  display: none;
 }
 .header img {
   width: 12%;
@@ -40,6 +56,10 @@
 .header .nav-link {
   color: #FFFFFF;
   text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+.header .nav-link:hover {
+  transform: scale(1.06);
 }
 
 main {
@@ -69,11 +89,21 @@ main {
 }
 
 .nav-burger {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   background-color: #131921;
   padding: 0.6em;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: transform 0.2s ease-in-out;
+  transform: translateY(0);
+}
+.nav-burger.sticky {
+  transform: translateY(-100px);
 }
 
 .menu-controls {
@@ -215,8 +245,10 @@ main {
   background-size: cover;
   background-repeat: no-repeat;
   background-color: #131921;
+  margin-top: 6rem;
 }
-.main-categorias h1, .main-categorias h3 {
+.main-categorias h1,
+.main-categorias h3 {
   color: #FFFFFF;
 }
 .main-categorias h1 {
@@ -247,8 +279,10 @@ main {
   display: grid;
   grid-template-columns: 1fr;
 }
-.div-de-grid .categorias-contenido {
+.div-de-grid .bg {
   background-color: #131921;
+}
+.div-de-grid .categorias-contenido {
   border-radius: 1rem;
   margin: 0.7rem;
   margin-left: 1rem;
@@ -275,6 +309,7 @@ main {
   margin: 0.1rem;
   padding: 0.1rem;
   height: 5.2em;
+  background-color: transparent;
 }
 .div-de-grid .cat-iconos img {
   height: 60%;
@@ -292,10 +327,14 @@ main {
   .div-de-grid {
     grid-template-columns: 1fr 1fr;
   }
+  .div-de-grid .cat-iconos {
+    padding: 0.7rem;
+  }
 }
 @media (min-width: 1024px) {
   .main-categorias {
     padding: 10%;
+    margin-top: 0;
   }
   .main-categorias h1 {
     margin-top: 0;

@@ -13,7 +13,7 @@ const Categorias = () => {
             <h4>CATEGORÍAS POPULARES</h4>
             <div className='div-de-grid'>
 
-                {categoriaspopulares.map((categoriapopular) => <div key={categoriapopular.id} className='categorias-contenido' >
+                {categoriaspopulares.map((categoriapopular) => <div key={categoriapopular.id} className='bg categorias-contenido' >
                     <img src={categoriapopular.imagen} alt={categoriapopular.titulo} />
                     <p>{categoriapopular.titulo}</p>
                 </div>)}

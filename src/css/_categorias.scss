@@ -4,9 +4,13 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-color: $color-azul;
-    h1,h3 {
+    margin-top: 6rem;
+
+    h1,
+    h3 {
         color: $color-blanco;
     }
+
     h1 {
         font-size: 4.2rem;
         margin: 2.2rem;
@@ -14,6 +18,7 @@
         margin-top: 6.6rem;
         margin-bottom: 1rem;
     }
+
     h3 {
         margin-top: .5rem;
         margin: 1.3rem;
@@ -21,8 +26,10 @@
         font-size: 1.3rem;
         letter-spacing: 0.5px;
     }
+
     section {
         margin-top: 3rem;
+
         h4 {
             font-weight: 300;
             color: $color-gris;
@@ -30,17 +37,19 @@
             margin-left: 1rem;
         }
 
-        
+
     }
 }
 
 .div-de-grid {
     display: grid;
     grid-template-columns: 1fr;
-    
+
+    .bg {
+        background-color: $color-azul;
+    }
 
     .categorias-contenido {
-        background-color: $color-azul;
         border-radius: 1rem;
         margin: .7rem;
         margin-left: 1rem;
@@ -48,7 +57,7 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        
+
 
         img {
             border-top-left-radius: inherit;
@@ -66,18 +75,21 @@
             font-weight: 400;
         }
 
-        
+
     }
+
     .cat-iconos {
         margin: .1rem;
         padding: .1rem;
         height: 5.2em;
+        background-color: transparent;
         img {
             height: 60%;
             width: 15%;
             object-fit: contain;
             border: none;
         }
+
         p {
             font-size: 1.2rem;
             padding: .5rem;
@@ -91,30 +103,42 @@
 @media (min-width: 850px) {
     .div-de-grid {
         grid-template-columns: 1fr 1fr;
+        .cat-iconos {
+            padding: .7rem;
+        }
     }
 }
 
 
 //desktop
 @media (min-width: 1024px) {
+
     .main-categorias {
         padding: 10%;
+        margin-top: 0;
+
         h1 {
             margin-top: 0;
         }
+
         section {
             h4 {
                 font-size: 1.2rem;
             }
         }
     }
+
+    
+
     .div-de-grid {
         grid-template-columns: repeat(5, 1fr);
+
         .categorias-contenido {
             img {
                 width: 30%;
                 height: 100%;
             }
+
             p {
                 font-size: 1.2rem;
                 margin: 1rem;
@@ -124,10 +148,13 @@
                 width: 70%;
             }
         }
+
         .cat-iconos {
+
             margin: .1rem;
             padding: .1rem;
             height: 5em;
+
             img {
                 height: 100%;
                 width: 15%;
@@ -135,12 +162,14 @@
                 border: none;
                 padding: .5rem;
             }
+
             p {
                 font-size: 1.2rem;
                 padding: .5rem;
                 width: 85%;
-                
+
             }
         }
+
     }
 }
