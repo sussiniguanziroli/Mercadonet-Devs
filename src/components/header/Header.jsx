@@ -9,7 +9,7 @@ const Header = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-          if (window.scrollY > 50) {
+          if (window.scrollY > 120) {
             setScrolled(true); // Se activa cuando el usuario ha hecho scroll hacia abajo
           } else {
             setScrolled(false); // Se desactiva cuando el usuario vuelve hacia arriba
