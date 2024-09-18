@@ -31,7 +31,7 @@ const Qsmnet = () => {
     return (
         <main className='que-es-mnet'>
             <section className='seccion-que-es'>
-                <h2>¿Qué es Mercadonet?</h2>
+                <h1>¿Qué es Mercadonet?</h1>
                 <p>Mercadonet es la primera plataforma dedicada a conectar compradores con proveedores, mayoristas y fabricantes de Argentina
                 </p>
                 <p>Nos especializamos en ofrecer un espacio donde pequeñas y medianas empresas pueden acceder a una amplia base de proveedores confiables, permitiendo a nuestros clientes concentrarse en sus ideas mientras nosotros facilitamos las conexiones estratégicas.
@@ -39,9 +39,11 @@ const Qsmnet = () => {
                 <p>Nuestro principal objetivo es fortalecer el mercado nacional e impulsar el crecimiento empresarial.
                 </p>
             </section>
-            <img className='imagen-containers' src="https://i.imgur.com/DWCcK3h.png" alt="containers bandera" />
+            <section className='seccion-imagen-containers'>
+                <img  src="https://i.imgur.com/DWCcK3h.png" alt="containers bandera" />
+            </section>
             <section className='seccion-simplificamos-mayorista'>
-                <h2>Simplificamos el Comercio Mayorista</h2>
+                <h1>Simplificamos el Comercio Mayorista</h1>
                 <p>Nuestro compromiso es brindar a las empresas una herramienta poderosa para encontrar productos de calidad, negociando directamente con los fabricantes y mayoristas más reconocidos del país.
                 </p>
                 <p>En Mercadonet, trabajamos para simplificar y potenciar el comercio mayorista, uniendo oportunidades de negocio en un solo lugar.

@@ -376,7 +376,76 @@ main {
   }
 }
 .que-es-mnet {
+  margin-top: 4.2rem;
+  font-family: "Montserrat", sans-serif;
   display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: "seccion-que-es" "seccion-imagen-containers" "seccion-simplificamos-mayorista" "seccion-contador";
+}
+
+.seccion-que-es {
+  grid-area: seccion-que-es;
+  margin: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.7rem;
+  text-align: center;
+}
+.seccion-que-es h1 {
+  font-size: 2.7rem;
+}
+.seccion-que-es p {
+  font-size: 1.7rem;
+}
+
+.seccion-imagen-containers {
+  grid-area: seccion-imagen-containers;
+  margin: 1rem;
+  border-radius: 1.3rem;
+}
+.seccion-imagen-containers img {
+  border-radius: inherit;
+  width: 100%;
+  height: 100%;
+}
+
+.seccion-simplificamos-mayorista {
+  grid-area: seccion-simplificamos-mayorista;
+  margin: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.7rem;
+  text-align: center;
+}
+.seccion-simplificamos-mayorista h1 {
+  font-size: 2.7rem;
+}
+.seccion-simplificamos-mayorista p {
+  font-size: 1.7rem;
+}
+
+.seccion-contador {
+  grid-area: seccion-contador;
+  margin: 1rem;
+}
+.seccion-contador .seccion-contador-render-condicional {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 3rem;
+}
+.seccion-contador .contadores {
+  text-align: center;
+}
+.seccion-contador .contadores strong {
+  color: #FF7F00;
+  font-weight: 800;
+  font-size: 3.1rem;
+  font-family: "Roboto", system-ui;
+}
+.seccion-contador .contadores p {
+  font-size: 1.3rem;
+  color: #474747;
+  font-weight: 550;
 }
 
 * {

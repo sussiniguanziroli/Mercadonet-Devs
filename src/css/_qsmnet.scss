@@ -1,3 +1,77 @@
 .que-es-mnet {
+    margin-top: 4.2rem;
+    font-family: "Montserrat", sans-serif;
     display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "seccion-que-es"
+        "seccion-imagen-containers"
+        "seccion-simplificamos-mayorista"
+        "seccion-contador";
+}
+
+.seccion-que-es {
+    grid-area: seccion-que-es;
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.7rem;
+    text-align: center;
+    h1 {
+        font-size: 2.7rem;
+    }
+    p {
+        font-size: 1.7rem;
+    }
+}
+
+.seccion-imagen-containers {
+    grid-area: seccion-imagen-containers;
+    margin: 1rem;
+    border-radius: 1.3rem;
+
+    img {
+        border-radius: inherit;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.seccion-simplificamos-mayorista {
+    grid-area: seccion-simplificamos-mayorista;
+    margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.7rem;
+    text-align: center;
+    h1 {
+        font-size: 2.7rem;
+    }
+    p {
+        font-size: 1.7rem;
+    }
+}
+
+.seccion-contador {
+    grid-area: seccion-contador;
+    margin: 1rem;
+    .seccion-contador-render-condicional {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 3rem;
+    }
+    .contadores {
+       text-align: center; 
+       strong {
+        color: $color-naranja;
+        font-weight: 800;
+        font-size: 3.1rem;
+        font-family: 'Roboto', system-ui;
+       }
+       p {
+        font-size: 1.3rem;
+        color: $dark-gray;
+        font-weight: 550;
+       }
+    }
 }
