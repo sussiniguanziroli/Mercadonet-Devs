@@ -17,9 +17,11 @@
     flex-direction: column;
     gap: 2.7rem;
     text-align: center;
+
     h1 {
         font-size: 2.7rem;
     }
+
     p {
         font-size: 1.7rem;
     }
@@ -44,9 +46,11 @@
     flex-direction: column;
     gap: 2.7rem;
     text-align: center;
+
     h1 {
         font-size: 2.7rem;
     }
+
     p {
         font-size: 1.7rem;
     }
@@ -55,23 +59,103 @@
 .seccion-contador {
     grid-area: seccion-contador;
     margin: 1rem;
+
     .seccion-contador-render-condicional {
         display: grid;
         grid-template-columns: 1fr 1fr;
         row-gap: 3rem;
     }
+
     .contadores {
-       text-align: center; 
-       strong {
-        color: $color-naranja;
-        font-weight: 800;
-        font-size: 3.1rem;
-        font-family: 'Roboto', system-ui;
-       }
-       p {
-        font-size: 1.3rem;
-        color: $dark-gray;
-        font-weight: 550;
-       }
+        text-align: center;
+
+        strong {
+            color: $color-naranja;
+            font-weight: 800;
+            font-size: 3.1rem;
+            font-family: 'Roboto', system-ui;
+        }
+
+        p {
+            font-size: 1.3rem;
+            color: $dark-gray;
+            font-weight: 550;
+        }
+    }
+}
+
+//tablet
+@media (min-width: 850px) {}
+
+//desktop
+@media (min-width: 1024px) {
+    .que-es-mnet {
+        margin-top: 5.2rem;
+        font-family: "Montserrat", sans-serif;
+        display: grid;
+        row-gap: 3rem;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "seccion-que-es seccion-imagen-containers"
+            "seccion-contador seccion-simplificamos-mayorista"
+        ;
+    }
+
+    .seccion-que-es {
+        padding: 2rem;
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        p {
+            font-size: 1.5rem;
+        }
+    }
+
+    .seccion-imagen-containers {
+        margin: 1rem;
+        width: 80%;
+        align-self: center;
+        justify-self: center;
+    }
+
+    .seccion-simplificamos-mayorista {
+        padding: 2rem;
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        p {
+            font-size: 1.5rem;
+        }
+    }
+
+    .seccion-contador {
+        margin: 1rem;
+        align-self: center;
+        .seccion-contador-render-condicional {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            row-gap: 5rem;
+        }
+
+        .contadores {
+            text-align: center;
+
+            strong {
+                color: $color-naranja;
+                font-weight: 800;
+                font-size: 4rem;
+                font-family: 'Roboto', system-ui;
+            }
+
+            p {
+                font-size: 1.6rem;
+                color: $dark-gray;
+                font-weight: 550;
+            }
+        }
     }
 }

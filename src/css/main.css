@@ -448,6 +448,63 @@ main {
   font-weight: 550;
 }
 
+@media (min-width: 1024px) {
+  .que-es-mnet {
+    margin-top: 5.2rem;
+    font-family: "Montserrat", sans-serif;
+    display: grid;
+    row-gap: 3rem;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "seccion-que-es seccion-imagen-containers" "seccion-contador seccion-simplificamos-mayorista";
+  }
+  .seccion-que-es {
+    padding: 2rem;
+  }
+  .seccion-que-es h1 {
+    font-size: 2rem;
+  }
+  .seccion-que-es p {
+    font-size: 1.5rem;
+  }
+  .seccion-imagen-containers {
+    margin: 1rem;
+    width: 80%;
+    align-self: center;
+    justify-self: center;
+  }
+  .seccion-simplificamos-mayorista {
+    padding: 2rem;
+  }
+  .seccion-simplificamos-mayorista h1 {
+    font-size: 2rem;
+  }
+  .seccion-simplificamos-mayorista p {
+    font-size: 1.5rem;
+  }
+  .seccion-contador {
+    margin: 1rem;
+    align-self: center;
+  }
+  .seccion-contador .seccion-contador-render-condicional {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 5rem;
+  }
+  .seccion-contador .contadores {
+    text-align: center;
+  }
+  .seccion-contador .contadores strong {
+    color: #FF7F00;
+    font-weight: 800;
+    font-size: 4rem;
+    font-family: "Roboto", system-ui;
+  }
+  .seccion-contador .contadores p {
+    font-size: 1.6rem;
+    color: #474747;
+    font-weight: 550;
+  }
+}
 * {
   padding: 0;
   margin: 0;
