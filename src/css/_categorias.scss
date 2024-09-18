@@ -1,7 +1,8 @@
 .main-categorias {
     font-family: 'Roboto', system-ui;
     background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
-    background-size: cover;
+    background-position: 56% -10%;
+    background-size: 270%;
     background-repeat: no-repeat;
     background-color: $color-azul;
     margin-top: 6rem;
@@ -101,6 +102,9 @@
 
 //tablet
 @media (min-width: 850px) {
+    .main-categorias {
+        background-size: cover;
+    }
     .div-de-grid {
         grid-template-columns: 1fr 1fr;
         .cat-iconos {
@@ -116,7 +120,8 @@
     .main-categorias {
         padding: 10%;
         margin-top: 0;
-
+        background-position: 50% 100%;
+        background-size: cover;
         h1 {
             margin-top: 0;
         }

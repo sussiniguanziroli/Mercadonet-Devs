@@ -40,7 +40,13 @@
 }
 
 html {
-    font-size: 12px;
+    font-size: 9px;
+}
+
+@media (min-width: 400px)  {
+    html {
+        font-size: 12px;
+    }
 }
 
 @media (min-width: 1500px) {
@@ -48,6 +54,8 @@ html {
         font-size: 16px;
     }
 }
+
+
 
 
 *::-webkit-scrollbar {
