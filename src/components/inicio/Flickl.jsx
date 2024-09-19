@@ -13,6 +13,7 @@ const Flickl = () => {
             contain: true,
             pageDots: false,
             prevNextButtons: false,
+            wrapAround: true,
         })
     }, []);
 

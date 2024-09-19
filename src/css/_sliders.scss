@@ -33,24 +33,32 @@
             }
         }
     }
+    .slider-section {
+        margin-top: 3rem;
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+        }
+    }
 }
 
 //-------------ESTILOS DE FLICKL-----------------
 .flickl {
+    margin-top: 4rem;
     display: flex;
     justify-content: center;
     align-items: center;
     .main-carousel {
-        width: 70%;
-        height: 30vh;
+        margin: 2rem;
+        width: 90%;
+        height: 20vh;
         .carousel-cell {
             width: 100%; /* full width */
             height: 100%; /* height of carousel */
-            margin-right: 10px;
             img {
                 object-fit: contain;
                 width: 100%;
-                height: 20em;
+                height: 14em;
             }
         }
     }
