@@ -10,19 +10,21 @@ const Flickl = () => {
     useEffect(() => {
         new Flickity(flickityRef.current, {
             cellAlign: 'center', // Centrar las imágenes
-                contain: true,
-                pageDots: false,
-                prevNextButtons: false,
-        })         
-    },[]);
+            contain: true,
+            pageDots: false,
+            prevNextButtons: false,
+        })
+    }, []);
 
-  return (
-    <div className='main-carousel' ref={flickityRef}>
-       {imagenes.map((imagen) => <div key={imagen.id} className='carousel-cell'> 
-        <img className='carousel-image' src={imagen.imagen} alt={imagen.id} />
-       </div>)}
-    </div>
-  )
+    return (
+        <main className='flickl'>
+            <div className='main-carousel' ref={flickityRef}>
+                {imagenes.map((imagen) => <div key={imagen.id} className='carousel-cell'>
+                    <img className='carousel-image' src={imagen.imagen} alt={imagen.id} />
+                </div>)}
+            </div>
+        </main>
+    )
 }
 
 export default Flickl

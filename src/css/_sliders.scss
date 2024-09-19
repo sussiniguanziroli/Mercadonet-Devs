@@ -6,6 +6,7 @@
     .banner-section {
         background-color: $color-naranja;
         padding: 1.5rem;
+        padding-bottom: 1rem;
         color: $color-blanco;
         display: flex;
         flex-direction: column;
@@ -21,7 +22,7 @@
             font-size: 1.3rem;
             color: $color-blanco;
             margin-top: 1rem;
-            padding: 1.2rem;
+            padding: 1.3rem;
             background-color: $color-azul;
             align-self: center;
             border: none;
@@ -29,6 +30,27 @@
             transition: all .2s;
             &:hover {
                 background-color: $color-azul-hover;
+            }
+        }
+    }
+}
+
+//-------------ESTILOS DE FLICKL-----------------
+.flickl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .main-carousel {
+        width: 70%;
+        height: 30vh;
+        .carousel-cell {
+            width: 100%; /* full width */
+            height: 100%; /* height of carousel */
+            margin-right: 10px;
+            img {
+                object-fit: contain;
+                width: 100%;
+                height: 20em;
             }
         }
     }
