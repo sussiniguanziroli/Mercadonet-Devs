@@ -511,6 +511,42 @@ main {
     font-weight: 550;
   }
 }
+.slider-main {
+  font-family: "Montserrat", sans-serif;
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+}
+.slider-main .banner-section {
+  background-color: #FF7F00;
+  padding: 1.5rem;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+}
+.slider-main .banner-section p {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+}
+.slider-main .banner-section button {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1.3rem;
+  color: #FFFFFF;
+  margin-top: 1rem;
+  padding: 1.2rem;
+  background-color: #131921;
+  align-self: center;
+  border: none;
+  border-radius: 0.9rem;
+  transition: all 0.2s;
+}
+.slider-main .banner-section button:hover {
+  background-color: #242e3d;
+}
+
 * {
   padding: 0;
   margin: 0;
