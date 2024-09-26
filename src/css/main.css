@@ -531,6 +531,7 @@ main {
   flex-direction: column;
 }
 .slider-main .banner-section p {
+  padding: 0.2rem;
   font-size: 1.3rem;
   font-weight: 600;
   text-align: center;
@@ -595,6 +596,21 @@ main {
   height: inherit;
 }
 
+@media (min-width: 1024px) {
+  .slider-main .banner-section {
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-bottom: 2rem;
+  }
+  .slider-main .banner-section div p {
+    font-size: 1.6rem;
+    text-align: justify;
+  }
+  .slider-main .banner-section button {
+    font-size: 1.6rem;
+  }
+}
 * {
   outline: none !important;
   box-shadow: none !important;
@@ -624,12 +640,12 @@ html {
 
 @media (min-width: 400px) {
   html {
-    font-size: 12px;
+    font-size: 11px;
   }
 }
 @media (min-width: 1500px) {
   html {
-    font-size: 16px;
+    font-size: 15px;
   }
 }
 *::-webkit-scrollbar {
