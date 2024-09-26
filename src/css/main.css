@@ -69,6 +69,8 @@ main {
 }
 
 .main-footer {
+  display: flex;
+  flex-direction: column;
   font-family: "Montserrat", sans-serif;
   background-color: #131921;
   color: #FFFFFF;
@@ -79,13 +81,25 @@ main {
 .main-footer .social-icons {
   display: flex;
   justify-content: space-between;
-  padding: 0.5rem;
-  font-size: 2.3rem;
+  padding: 0.6rem;
+  font-size: 2.4rem;
   text-decoration: none;
+  align-items: center;
+}
+.main-footer .social-icons .line {
+  border-top: 0.2rem solid white;
+  border-radius: 1rem;
+  width: 3rem;
+  height: 0;
+  align-self: center;
 }
 .main-footer .social-icons a {
   color: #FFFFFF;
   text-decoration: none;
+}
+.main-footer img {
+  width: 16em;
+  align-self: center;
 }
 
 .burger-mobile {
@@ -569,11 +583,14 @@ main {
   background-color: #242e3d;
 }
 .slider-main .slider-section {
-  margin-top: 3rem;
+  margin-top: 2.7rem;
+  margin-bottom: 1rem;
 }
 .slider-main .slider-section h1 {
   text-align: center;
   font-size: 2.2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .flickl {
@@ -624,6 +641,7 @@ main {
     justify-content: space-evenly;
     align-items: center;
     padding-bottom: 2rem;
+    margin-bottom: 2rem;
   }
   .slider-main .banner-section div p {
     font-size: 1.6rem;
@@ -631,6 +649,12 @@ main {
   }
   .slider-main .banner-section button {
     font-size: 1.6rem;
+  }
+  .slider-section {
+    margin-bottom: 1rem;
+  }
+  .slider-section h1 {
+    margin-bottom: 5rem;
   }
   .flickl .main-carousel .carousel-cell {
     width: 33%;

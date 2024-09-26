@@ -40,11 +40,13 @@
     }
 
     .slider-section {
-        margin-top: 3rem;
-
+        margin-top: 2.7rem;
+        margin-bottom: 1rem;
         h1 {
             text-align: center;
             font-size: 2.2rem;
+            padding-left: 2rem;
+            padding-right: 2rem;
         }
     }
 }
@@ -109,7 +111,7 @@
             justify-content: space-evenly;
             align-items: center;
             padding-bottom: 2rem;
-
+            margin-bottom: 2rem;
             div {
                 p {
                     font-size: 1.6rem;
@@ -120,6 +122,13 @@
             button {
                 font-size: 1.6rem;
             }
+        }
+    }
+
+    .slider-section {
+        margin-bottom: 1rem;
+        h1 {
+            margin-bottom: 5rem;
         }
     }
 

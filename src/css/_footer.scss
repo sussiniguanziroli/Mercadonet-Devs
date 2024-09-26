@@ -1,4 +1,6 @@
 .main-footer {
+    display: flex;
+    flex-direction: column;
     font-family: 'Montserrat', sans-serif;
     background-color: $color-azul;
     color: $color-blanco;
@@ -8,12 +10,24 @@
     .social-icons {
         display: flex;
         justify-content: space-between;
-        padding: .5rem;
-        font-size: 2.3rem;
+        padding: .6rem;
+        font-size: 2.4rem;
         text-decoration: none;
+        align-items: center;
+        .line {
+            border-top: .2rem solid white;
+            border-radius: 1rem;
+            width: 3rem;
+            height: 0;
+            align-self: center;
+        }
         a {
             color: $color-blanco;
             text-decoration: none;
         }
+    }
+    img {
+        width: 16em;
+        align-self: center;
     }
 }
