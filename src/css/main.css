@@ -69,8 +69,23 @@ main {
 }
 
 .main-footer {
+  font-family: "Montserrat", sans-serif;
   background-color: #131921;
   color: #FFFFFF;
+  padding: 1.3rem;
+  padding-top: 2rem;
+  margin-top: 0.5rem;
+}
+.main-footer .social-icons {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  font-size: 2.3rem;
+  text-decoration: none;
+}
+.main-footer .social-icons a {
+  color: #FFFFFF;
+  text-decoration: none;
 }
 
 .burger-mobile {

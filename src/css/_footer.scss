@@ -1,4 +1,19 @@
 .main-footer {
+    font-family: 'Montserrat', sans-serif;
     background-color: $color-azul;
     color: $color-blanco;
+    padding: 1.3rem;
+    padding-top: 2rem;
+    margin-top: .5rem;
+    .social-icons {
+        display: flex;
+        justify-content: space-between;
+        padding: .5rem;
+        font-size: 2.3rem;
+        text-decoration: none;
+        a {
+            color: $color-blanco;
+            text-decoration: none;
+        }
+    }
 }
