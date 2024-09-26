@@ -12,8 +12,9 @@ const Flickl = () => {
             cellAlign: 'center', // Centrar las imágenes
             contain: true,
             pageDots: false,
-            prevNextButtons: false,
+            prevNextButtons: true,
             wrapAround: true,
+            autoPlay: 3200,
         })
     }, []);
 

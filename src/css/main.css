@@ -570,14 +570,34 @@ main {
   width: 100%;
   height: 21em;
 }
+.flickl .main-carousel .flickity-prev-next-button {
+  width: 2.5rem; /* Ancho de las flechas */
+  height: 2.5rem; /* Alto de las flechas */
+  border: transparent; /* Sin borde */
+  outline: transparent; /* Sin borde de foco */
+  background-color: transparent;
+  /* Cambiar el icono de la flecha SVG */
+}
+.flickl .main-carousel .flickity-prev-next-button .flickity-button-icon {
+  fill: #000000; /* Color de la flecha SVG */
+  width: 1.5rem;
+  height: 1.5rem;
+  outline: transparent;
+  border: transparent;
+}
 .flickl .main-carousel .carousel-cell {
-  width: 100%; /* full width */
-  height: 21em; /* height of carousel */
+  width: 100%; /* Full width */
+  height: 21em; /* Height of carousel */
 }
 .flickl .main-carousel .carousel-cell img {
   object-fit: contain;
   width: 100%;
   height: inherit;
+}
+
+* {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 * {

@@ -1,8 +1,9 @@
 .slider-main {
-    font-family: 'Montserrat',sans-serif;
+    font-family: 'Montserrat', sans-serif;
     margin-top: 4rem;
     display: flex;
     flex-direction: column;
+
     .banner-section {
         background-color: $color-naranja;
         padding: 1.5rem;
@@ -10,13 +11,15 @@
         color: $color-blanco;
         display: flex;
         flex-direction: column;
+
         p {
             font-size: 1.3rem;
             font-weight: 600;
             text-align: center;
         }
+
         button {
-            font-family: 'Montserrat',sans-serif;
+            font-family: 'Montserrat', sans-serif;
             font-weight: 600;
             cursor: pointer;
             font-size: 1.3rem;
@@ -28,13 +31,16 @@
             border: none;
             border-radius: .9rem;
             transition: all .2s;
+
             &:hover {
                 background-color: $color-azul-hover;
             }
         }
     }
+
     .slider-section {
         margin-top: 3rem;
+
         h1 {
             text-align: center;
             font-size: 2.2rem;
@@ -48,12 +54,35 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     .main-carousel {
         width: 100%;
         height: 21em;
+        
+
+        .flickity-prev-next-button {
+            width: 2.5rem; /* Ancho de las flechas */
+            height: 2.5rem; /* Alto de las flechas */
+            border: transparent; /* Sin borde */
+            outline: transparent; /* Sin borde de foco */
+            background-color: transparent;
+           
+        
+            /* Cambiar el icono de la flecha SVG */
+            .flickity-button-icon {
+                fill: $color-negro; /* Color de la flecha SVG */
+                width: 1.5rem;
+                height: 1.5rem;
+                outline: transparent;
+                border: transparent;
+                
+            }
+        }
+        
+
         .carousel-cell {
-            width: 100%; /* full width */
-            height: 21em; /* height of carousel */
+            width: 100%; /* Full width */
+            height: 21em; /* Height of carousel */
             img {
                 object-fit: contain;
                 width: 100%;
@@ -62,3 +91,5 @@
         }
     }
 }
+
+
