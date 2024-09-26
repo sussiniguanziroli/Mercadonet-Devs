@@ -10,7 +10,6 @@ const Landing = () => {
   return (
     <main>
         <Categorias />
-        
         <Qsmnet />
         <Sliders />
     </main>

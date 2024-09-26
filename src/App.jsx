@@ -16,6 +16,7 @@ function App() {
         <Header />
         <Routes>
             <Route path="/" element={<Landing/>}/>
+            <Route path='/proveedores' element={{}}/>
         </Routes>
         <Footer />
       </BrowserRouter>

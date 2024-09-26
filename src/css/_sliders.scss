@@ -44,21 +44,20 @@
 
 //-------------ESTILOS DE FLICKL-----------------
 .flickl {
-    margin-top: 4rem;
+    margin-top: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
     .main-carousel {
-        margin: 2rem;
-        width: 90%;
-        height: 20vh;
+        width: 100%;
+        height: 21em;
         .carousel-cell {
             width: 100%; /* full width */
-            height: 100%; /* height of carousel */
+            height: 21em; /* height of carousel */
             img {
                 object-fit: contain;
                 width: 100%;
-                height: 14em;
+                height: inherit;
             }
         }
     }
