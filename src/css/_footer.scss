@@ -52,7 +52,7 @@
         font-size: 2rem;
     }
     p {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         font-weight: 300;
         text-align: center;
     }
@@ -100,7 +100,7 @@
     }
     .nav-footer {
         color: $color-blanco;
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         text-decoration: none;
         font-weight: 300;
     }
@@ -127,4 +127,53 @@
 @media (min-width: 850px) {}
 
 //desktop
-@media (min-width: 1024px) {}
+@media (min-width: 1024px) {
+    .main-footer {
+        .social-icons {
+            font-size: 1.7rem;
+            .line {
+                width: 35%;
+            }
+        }
+        .div-flex-footer {
+            flex-direction: row;
+            align-self: center;
+            justify-content: space-around;
+        }
+    }
+
+    .newsletter-section {
+        width: 50%;
+        align-items: flex-start;
+        p {
+            text-align: left;
+            width: 80%;
+        }
+        .news-suscribe {
+            margin: 0;
+            justify-content: left;
+            input {
+                width: 50%;
+                padding: 1rem;
+            }
+            button {
+                padding: 1rem;
+            }
+        }
+    }
+    .links-utiles {
+        gap: 1.2rem;
+        margin-top: 0;
+    }
+
+    .last-bit {
+        justify-content: center;
+        padding: .2rem;
+        img {
+            height: 2em;
+        }
+        p {
+            font-size: 1rem;
+        }
+    }
+}
