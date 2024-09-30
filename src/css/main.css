@@ -76,7 +76,7 @@ main {
   color: #FFFFFF;
   padding: 1.3rem;
   gap: 3rem;
-  padding-top: 2rem;
+  padding-top: 2.5rem;
   margin-top: 0.5rem;
 }
 .main-footer .social-icons {
@@ -164,8 +164,8 @@ main {
   gap: 1.7rem;
 }
 .links-utiles h1 {
-  font-size: 2rem;
-  font-weight: 500;
+  font-size: 2.3rem;
+  font-weight: 400;
 }
 .links-utiles .nav-footer {
   color: #FFFFFF;
