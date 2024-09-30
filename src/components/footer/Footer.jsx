@@ -5,6 +5,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FaTiktok } from "react-icons/fa";
 import { MdPlayArrow } from "react-icons/md";
+import { NavLink } from 'react-router-dom';
 
 
 
@@ -31,19 +32,31 @@ const Footer = () => {
                 <div className='line' />
             </div>
             <img src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png" alt="logo en white" />
-            <div className='newsletter'>
-                <h2>Newsletter</h2>
-                <p>Estás viendo la versión beta de MercadoNet. Suscríbete a nuestro newsletter para recibir las últimas actualizaciones y mejoras de la plataforma. </p>
-                <p>¡Sé parte de esta evolución!</p>
-                <div className='news-suscribe'>
-                    <input type="email" placeholder='Tu mejor email'/>
-                    <button>Suscribirse</button>
-                </div>
-                <section>
-                    <h1>Links útiles</h1>
+            <div className='div-flex-footer'>
+                <section className='newsletter-section'>
+                    <h2>Newsletter</h2>
+                    <p>Estás viendo la versión beta de MercadoNet. Suscríbete a nuestro newsletter para recibir las últimas actualizaciones y mejoras de la plataforma. </p>
+                    <p>¡Sé parte de esta evolución!</p>
+                    <div className='news-suscribe'>
+                        <input type="email" placeholder='Tu mejor email' />
+                        <button>Suscribirse</button>
+                    </div>
+                </section>
 
+                <section className='links-utiles'>
+                    <h1>Links útiles</h1>
+                    <p><MdPlayArrow /><NavLink activeClassname='active' className='nav-footer'>¿Qué es Mercadonet?</NavLink></p>
+                    <p><MdPlayArrow /><NavLink activeClassname='active' className='nav-footer'>¿Qué es Mercadonet?</NavLink></p>
+                    <p><MdPlayArrow /><NavLink activeClassname='active' className='nav-footer'>¿Qué es Mercadonet?</NavLink></p><p><MdPlayArrow /><NavLink activeClassname='active' className='nav-footer'>¿Qué es Mercadonet?</NavLink></p>
+                    <p><MdPlayArrow /><NavLink activeClassname='active' className='nav-footer'>¿Qué es Mercadonet?</NavLink></p>
                 </section>
             </div>
+
+
+            <footer className='last-bit'>
+                <p>- ©2024. Mercadonet. Todos los derechos reservados</p>
+            </footer>
+
         </footer>
     )
 }

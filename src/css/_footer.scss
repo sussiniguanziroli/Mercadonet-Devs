@@ -5,6 +5,7 @@
     background-color: $color-azul;
     color: $color-blanco;
     padding: 1.3rem;
+    gap: 2rem;
     padding-top: 2rem;
     margin-top: .5rem;
     .social-icons {
@@ -29,5 +30,41 @@
     img {
         width: 16em;
         align-self: center;
+    }
+    .div-flex-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.newsletter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    .news-suscribe {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        input {
+            width: 65%;
+            font-family: 'Roboto', system-ui;
+            font-weight: 400;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            margin-right: 2rem;
+            border: none;
+        }
+        button {
+            font-family: 'Roboto', system-ui;
+            font-weight: 300;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 1rem;
+            background-color: $color-naranja;
+            color: $color-blanco;
+        }
     }
 }
