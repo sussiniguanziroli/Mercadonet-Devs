@@ -13,7 +13,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -23,13 +22,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'  # Puedes ajustar la versión de Node según lo que uses
+          node-version: '16'  # Ajusta la versión de Node según tu proyecto
 
       - name: Install dependencies
         run: npm install
 
       - name: Run tests
-        run: npm test  # Esto ejecuta las pruebas, asegúrate de tenerlas configuradas
+        run: npm test  # Ejecuta tus pruebas
 
       - name: Build project
         env:
@@ -40,7 +39,9 @@ jobs:
           REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}
           REACT_APP_FIREBASE_APP_ID: ${{ secrets.REACT_APP_FIREBASE_APP_ID }}
           REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ secrets.REACT_APP_FIREBASE_MEASUREMENT_ID }}
-        run: npm run build  # Esto construye tu proyecto (React, Node, etc.)
+        run: npm run build  # Construye tu proyecto
 
-      - name: Deploy to production (opcional)
-        run: echo "Deploy step here"
+      - name: Deploy to production
+        run: |
+          echo "Aquí va el paso de despliegue"
+          # Por ejemplo, puedes usar la CLI de Netlify, Vercel, etc., según lo que uses para desplegar
