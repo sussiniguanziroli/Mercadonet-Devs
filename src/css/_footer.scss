@@ -5,7 +5,7 @@
     background-color: $color-azul;
     color: $color-blanco;
     padding: 1.3rem;
-    gap: 2rem;
+    gap: 3rem;
     padding-top: 2rem;
     margin-top: .5rem;
     .social-icons {
@@ -28,7 +28,7 @@
         }
     }
     img {
-        width: 16em;
+        width: 18em;
         align-self: center;
     }
     .div-flex-footer {
@@ -39,20 +39,31 @@
 }
 
 .newsletter-section {
+    font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem;
     padding: 1rem;
+    h1 {
+        font-weight: 400;
+        font-size: 2rem;
+    }
+    p {
+        font-size: 1.3rem;
+        font-weight: 300;
+        text-align: center;
+    }
     .news-suscribe {
+        margin: .5rem;
         display: flex;
         justify-content: center;
         width: 100%;
         input {
-            width: 65%;
+            width: 70%;
             font-family: 'Roboto', system-ui;
             font-weight: 400;
-            padding: 1.2rem;
+            padding: 1.3rem;
             border-radius: 1rem;
             margin-right: 2rem;
             border: none;
@@ -60,11 +71,35 @@
         button {
             font-family: 'Roboto', system-ui;
             font-weight: 300;
-            padding: 1.2rem;
+            padding: 1.3rem;
             border: none;
             border-radius: 1rem;
             background-color: $color-naranja;
             color: $color-blanco;
+            transition: all .2s;
+            cursor: pointer;
+            &:hover {
+                background-color: $color-naranja-hover;
+            }
         }
+    }
+}
+
+.links-utiles {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 1.7rem;
+    h1 {
+        font-size: 2rem;
+        font-weight: 500;
+    }
+    .nav-footer {
+        color: $color-blanco;
+        font-size: 1.6rem;
+        text-decoration: none;
+        font-weight: 300;
     }
 }

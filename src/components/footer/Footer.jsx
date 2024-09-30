@@ -34,7 +34,7 @@ const Footer = () => {
             <img src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png" alt="logo en white" />
             <div className='div-flex-footer'>
                 <section className='newsletter-section'>
-                    <h2>Newsletter</h2>
+                    <h1>Newsletter</h1>
                     <p>Estás viendo la versión beta de MercadoNet. Suscríbete a nuestro newsletter para recibir las últimas actualizaciones y mejoras de la plataforma. </p>
                     <p>¡Sé parte de esta evolución!</p>
                     <div className='news-suscribe'>
@@ -45,10 +45,11 @@ const Footer = () => {
 
                 <section className='links-utiles'>
                     <h1>Links útiles</h1>
-                    <p><MdPlayArrow /><NavLink activeClassname='active' className='nav-footer'>¿Qué es Mercadonet?</NavLink></p>
-                    <p><MdPlayArrow /><NavLink activeClassname='active' className='nav-footer'>¿Qué es Mercadonet?</NavLink></p>
-                    <p><MdPlayArrow /><NavLink activeClassname='active' className='nav-footer'>¿Qué es Mercadonet?</NavLink></p><p><MdPlayArrow /><NavLink activeClassname='active' className='nav-footer'>¿Qué es Mercadonet?</NavLink></p>
-                    <p><MdPlayArrow /><NavLink activeClassname='active' className='nav-footer'>¿Qué es Mercadonet?</NavLink></p>
+                    <NavLink activeClassname='active' className='nav-footer'><MdPlayArrow />¿Qué es Mercadonet?</NavLink>
+                    <NavLink activeClassname='active' className='nav-footer'><MdPlayArrow />Proveedores</NavLink>
+                    <NavLink activeClassname='active' className='nav-footer'><MdPlayArrow />Registros</NavLink>
+                    <NavLink activeClassname='active' className='nav-footer'><MdPlayArrow />Ingresar</NavLink>
+                    <NavLink activeClassname='active' className='nav-footer'><MdPlayArrow />Contacto</NavLink>
                 </section>
             </div>
 
