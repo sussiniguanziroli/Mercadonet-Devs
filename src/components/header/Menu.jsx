@@ -80,12 +80,12 @@ const Menu = () => {
                     <button className="buyer-login-btn">Iniciar sesión Comprador</button>
                     <ul className="burger-nav-ul">
                         <li>
-                            <NavLink onClick={closeMenu} to="" className="burger-nav-item" activeclassname="burger-active">
+                            <NavLink onClick={closeMenu} to="/" className="burger-nav-item" activeclassname="burger-active">
                                 ¿Qué es Mercadonet?
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink onClick={closeMenu} to="" className="burger-nav-item" activeclassname="burger-active">
+                            <NavLink onClick={closeMenu} to="/proveedores" className="burger-nav-item" activeclassname="burger-active">
                                 Proveedores
                             </NavLink>
                         </li>
