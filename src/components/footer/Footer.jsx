@@ -11,6 +11,7 @@ import { NavLink } from 'react-router-dom';
 
 const Footer = () => {
     return (
+        <>
         <footer className='main-footer'>
             <div className="social-icons">
                 <div className='line' />
@@ -54,11 +55,12 @@ const Footer = () => {
             </div>
 
 
-            <footer className='last-bit'>
-                <p>- ©2024. Mercadonet. Todos los derechos reservados</p>
-            </footer>
-
         </footer>
+        <footer className='last-bit'>
+            <img src="../../src/assets/footer-icon.png" alt="" />
+            <p> ©2024. Mercadonet. Todos los derechos reservados</p>
+        </footer>
+        </>
     )
 }
 

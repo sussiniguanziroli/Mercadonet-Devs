@@ -8,6 +8,7 @@
     gap: 3rem;
     padding-top: 2.5rem;
     margin-top: .5rem;
+    padding-bottom: 3rem;
     .social-icons {
         display: flex;
         justify-content: space-between;
@@ -36,6 +37,7 @@
         flex-direction: column;
         align-items: center;
     }
+   
 }
 
 .newsletter-section {
@@ -98,8 +100,31 @@
     }
     .nav-footer {
         color: $color-blanco;
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         text-decoration: none;
         font-weight: 300;
     }
 }
+
+.last-bit {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 1rem;
+    width: 100%;
+    color: $color-blanco;
+    background-color: $color-azul-barroq;
+    img {
+        height: 2.7em;
+    }
+    p {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.3rem;
+    }
+}
+
+//tablet
+@media (min-width: 850px) {}
+
+//desktop
+@media (min-width: 1024px) {}

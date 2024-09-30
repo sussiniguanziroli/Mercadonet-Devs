@@ -9,7 +9,7 @@
     padding: 1rem;
     background-color: $color-azul;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Sombra sutil para distinguir el header
-
+    z-index: 3000;
     transition: background-color 0.3s ease-in-out, padding 0.3s ease-in-out;
 
     &.scrolled {
