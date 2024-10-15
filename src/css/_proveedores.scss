@@ -19,9 +19,9 @@
 //desktop
 @media (min-width: 1024px) {
     .proveedores-desktop {
-        background-image: url(https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png);
-        background-position: 50% 100%;
-        background-size: cover;
+        background-image: linear-gradient(to bottom, rgba(238,238,238,0.00000000001), $color-azul), url(https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png);
+        background-position: 50% 72%;
+        background-size: 100%;
         background-repeat: no-repeat;
         .proveedores-header {
             display: flex;
