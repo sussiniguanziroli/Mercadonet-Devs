@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const FiltrosComponent = () => {
+const FiltrosComponent = ({setIsMenuHidden, isMenuHidden}) => {
+
+    const [filtros, setFiltros] = useState([]);
+
+
   return (
-    <div>FiltrosComponent</div>
+    <main className={`main-filters-component ${isMenuHidden ? 'hidden' : 'visible'}`}>
+        <button onClick={()=>setIsMenuHidden(true)}>X</button>
+        <p>Soy el menu de prueba</p>
+    </main>
   )
 }
 

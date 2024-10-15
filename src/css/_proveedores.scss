@@ -2,12 +2,28 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.main-proveedores{ 
+.main-proveedores {
     display: flex;
     flex-direction: column;
-    .proveedores-filter-section {
-        background: linear-gradient(to bottom, $color-azul 50%, #eee 80%);
-        height: 40vh;
+
+    .secondary-proveedores {
+        border: 2px solid green;
+
+        .proveedores-filter-section {
+            background: linear-gradient(to bottom, $color-azul 45%, #eee 55%);
+            min-height: 40vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .news-banner {
+                width: 80%;
+                height: 20em;
+                img {
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+        }
     }
 }
 
@@ -19,17 +35,19 @@
 //desktop
 @media (min-width: 1024px) {
     .proveedores-desktop {
-        background-image: linear-gradient(to bottom, rgba(238,238,238,0.00000000001), $color-azul), url(https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png);
+        background-image: linear-gradient(to bottom, rgba(238, 238, 238, 0), $color-azul), url(https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png);
         background-position: 50% 72%;
         background-size: 100%;
         background-repeat: no-repeat;
+
         .proveedores-header {
             display: flex;
             justify-content: space-between;
             padding: 2rem;
+
             img {
+                height: 10%;
                 width: 10%;
-                height: 80%;                
             }
             nav {
                 .nav-link {
@@ -37,14 +55,16 @@
                     color: $color-blanco;
                     text-decoration: none;
                     transition: all .2s ease-in-out;
+
                     &:hover {
                         transform: scale(1.06);
                     }
-                }  
+                }
             }
         }
     }
-    .main-proveedores{
+
+    .main-proveedores {
         .search-box {
             margin-bottom: 2rem;
             margin-top: 2rem;
@@ -53,12 +73,14 @@
             align-items: center;
             justify-content: center;
             gap: 2rem;
+
             h1 {
                 font-family: 'Montserrat', sans-serif;
                 color: $main-white;
                 font-size: 2.5rem;
                 font-weight: 600;
             }
+
             .search-section {
                 width: 45%;
                 display: flex;
@@ -67,12 +89,14 @@
                 padding: .5rem;
                 border-radius: 2rem;
                 background-color: $main-white;
+
                 input {
                     all: unset;
                     margin-left: 1rem;
                     margin-right: 1rem;
                     width: 100%;
                 }
+
                 button {
                     all: unset;
                     cursor: pointer;
@@ -82,20 +106,35 @@
                     padding-right: .8rem;
                     padding-left: .8rem;
                     border-radius: 1rem;
+
                     &:hover {
                         background-color: $color-naranja-hover;
                     }
-                    
+
                 }
             }
         }
+
         .secondary-proveedores {
+            display: flex;
+            flex-direction: column;
             background-color: $main-white;
             border-radius: 2rem;
             margin: 3rem;
-            .proveedores-filter-section{
+
+            .proveedores-filter-section {
                 background: none;
+                .news-banner {
+                    width: 80%;
+                    height: 20em;
+                    img {
+                        height: 100%;
+                        width: 100%;
+                    }
+                }
             }
         }
     }
 }
+
+

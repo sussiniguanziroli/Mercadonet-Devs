@@ -1,0 +1,44 @@
+.main-filters-component {
+    position: fixed;
+    top: 8%;
+    left: 0;
+    width: 60vw;
+    height: 100vh;
+    background-color: $main-white;
+    transform: translateX(100%); // Estado inicial fuera de la pantalla
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    &.visible {
+        animation-name: slideIn;
+    }
+
+    &.hidden {
+        animation-name: slideOut;
+    }
+}
+
+
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+// Keyframes para la animación de cierre del menú
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
