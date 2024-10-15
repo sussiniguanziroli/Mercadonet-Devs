@@ -263,7 +263,7 @@ main {
 
 .nav-burger {
   position: fixed;
-  z-index: 3000;
+  z-index: 1000;
   top: 0;
   left: 0;
   right: 0;
@@ -798,6 +798,94 @@ main {
   }
   .flickl .main-carousel .carousel-cell {
     width: 33%;
+  }
+}
+.proveedores-desktop {
+  font-family: "Montserrat", sans-serif;
+}
+
+.main-proveedores {
+  display: flex;
+  flex-direction: column;
+}
+.main-proveedores .proveedores-filter-section {
+  background: linear-gradient(to bottom, #131921 50%, #eee 80%);
+  height: 40vh;
+}
+
+@media (min-width: 1024px) {
+  .proveedores-desktop {
+    background-image: url(https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png);
+    background-position: 50% 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .proveedores-desktop .proveedores-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+  }
+  .proveedores-desktop .proveedores-header img {
+    width: 10%;
+    height: 80%;
+  }
+  .proveedores-desktop .proveedores-header nav .nav-link {
+    margin-right: 1rem;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+  }
+  .proveedores-desktop .proveedores-header nav .nav-link:hover {
+    transform: scale(1.06);
+  }
+  .main-proveedores .search-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+  .main-proveedores .search-box h1 {
+    font-family: "Montserrat", sans-serif;
+    color: #F5F5F5;
+    font-size: 2.5rem;
+    font-weight: 600;
+  }
+  .main-proveedores .search-box .search-section {
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 2rem;
+    background-color: #F5F5F5;
+  }
+  .main-proveedores .search-box .search-section input {
+    all: unset;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width: 100%;
+  }
+  .main-proveedores .search-box .search-section button {
+    all: unset;
+    cursor: pointer;
+    background-color: #FF7F00;
+    transition: all 0.3s;
+    padding: 0.4rem;
+    padding-right: 0.8rem;
+    padding-left: 0.8rem;
+    border-radius: 1rem;
+  }
+  .main-proveedores .search-box .search-section button:hover {
+    background-color: #ff9c39;
+  }
+  .main-proveedores .secondary-proveedores {
+    background-color: #F5F5F5;
+    border-radius: 2rem;
+    margin: 3rem;
+  }
+  .main-proveedores .secondary-proveedores .proveedores-filter-section {
+    background: none;
   }
 }
 * {
