@@ -916,6 +916,7 @@ main {
   border: 1px solid red;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 .proveedores-list-container .proveedores-list {
   border: 1px solid brown;
@@ -979,7 +980,11 @@ main {
   }
 }
 .proveedor-item {
-  border: 1px solid orange;
+  background-color: lightgray;
+  border-radius: 0.7rem;
+  padding: 1rem;
+  margin: 2rem;
+  width: 60%;
 }
 .proveedor-item img {
   height: 100%;
