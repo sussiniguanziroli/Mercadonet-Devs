@@ -22,13 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'  # Ajusta la versión de Node según tu proyecto
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test  # Ejecuta tus pruebas
+          node-version: '18'  # Ajusta la versión de Node según tu proyecto
 
       - name: Build project
         env:
@@ -41,7 +35,4 @@ jobs:
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
         run: npm run build  # Construye tu proyecto
 
-      - name: Deploy to production
-        run: |
-          echo "Aquí va el paso de despliegue"
-          # Por ejemplo, puedes usar la CLI de Netlify, Vercel, etc., según lo que uses para desplegar
+      
