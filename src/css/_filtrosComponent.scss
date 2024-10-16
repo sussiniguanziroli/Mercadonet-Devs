@@ -2,10 +2,10 @@
     position: fixed;
     top: 8%;
     left: 0;
-    width: 60vw;
+    width: 100vw;
     height: 100vh;
     background-color: $main-white;
-    transform: translateX(100%); // Estado inicial fuera de la pantalla
+    transform: translateX(-100%); // Estado inicial fuera de la pantalla
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
     &.visible {
@@ -21,7 +21,7 @@
 
 @keyframes slideIn {
     from {
-        transform: translateX(100%);
+        transform: translateX(0);
         opacity: 0;
     }
     to {
@@ -37,7 +37,7 @@
         opacity: 1;
     }
     to {
-        transform: translateX(100%);
+        transform: translateY(100%);
         opacity: 0;
     }
 }

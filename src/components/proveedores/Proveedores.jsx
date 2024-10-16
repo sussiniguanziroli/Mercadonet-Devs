@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import ProveedoresListContainer from './ProveedoresContainer';
+import React, { useEffect, useState } from 'react'
+import ProveedoresList from './ProveedoresList';
 import FiltrosComponent from './FiltrosComponent';
 import HeaderCustomProveedores from './HeaderCustomProveedores';
 import SearchBox from './SearchBox';
@@ -12,18 +12,16 @@ const Proveedores = () => {
     const [isMenuHidden, setIsMenuHidden] = useState(true);
     const [proveedores, setProveedores] = useState([]);
 
-    const [filtrosOpciones, setFiltrosOpciones] = useState({
-        marca: [],
-        tipo: [],
-        ubicacion: []
-    });
+    const [filtrosOpciones, setFiltrosOpciones] = useState([]);
 
     // Estado de los filtros seleccionados
     const [filtros, setFiltros] = useState({
-        tipos: [],
+        tipos: '',
         ubicacion: '',
         marca: ''
     });
+
+    console.log("filtros opciones", filtrosOpciones)
 
 
     // Obtener proveedores desde Firebase
@@ -49,15 +47,15 @@ const Proveedores = () => {
     useEffect(() => {
         const fetchFiltros = async () => {
             try {
-                const doc = await db.collection('filtros').doc('ToV01af3d4m6aVPZi3jf').get();
-                if (doc.exists) {
-                    const data = doc.data();
-                    setFiltrosOpciones(data.opciones_filtros);
-                } else {
-                    console.log("El documento no existe");
-                }
+                const q = query(collection(db, 'filtros'));
+                const snapshot = await getDocs(q);
+                const opciones_filtros = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setFiltrosOpciones(opciones_filtros);
             } catch (error) {
-                console.error("Error al obtener los filtros:", error);
+                console.error("Error obteniendo los proveedores: ", error);
             }
         };
 
@@ -75,19 +73,22 @@ const Proveedores = () => {
             <main className='main-proveedores'>
                 <SearchBox />
                 <div className='secondary-proveedores'>
-                    
+
                     <section className='proveedores-filter-section'>
-                        <NewsBanner/>
+                        <NewsBanner />
 
                         <div>
                             <button className='filterBtn hiddenInDesktop' onClick={openFilters}>Filtrar</button>
                             {/* Menu desplegable en mobile */}
-                            <FiltrosComponent setIsMenuHidden={setIsMenuHidden} isMenuHidden={isMenuHidden} />
+                            <FiltrosComponent setIsMenuHidden={setIsMenuHidden} isMenuHidden={isMenuHidden}
+                                filtros={filtros}
+                                setFiltros={setFiltros}
+                                filtrosOpciones={filtrosOpciones} />
                         </div>
                     </section>
-                    <div>
-                        <ProveedoresListContainer />
-                    </div>
+
+                    <ProveedoresList proveedores={proveedores} />
+
                 </div>
             </main>
         </div>

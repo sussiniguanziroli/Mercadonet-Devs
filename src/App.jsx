@@ -5,7 +5,7 @@ import Landing from './components/inicio/Landing';
 import Menu from './components/header/Menu';
 import Footer from './components/footer/Footer';
 import Proveedores from './components/proveedores/Proveedores';
-import Header from './components/header/Header';
+
 
 function App() {
   
