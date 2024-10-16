@@ -37,13 +37,13 @@
 
 //-------MOBILE AUTOMATICO---------
 .hiddenInMobile {
-    @media (max-width: 1000px) {
+    @media (max-width: 1024px) {
         display: none;
     }
 }
 
 .hiddenInDesktop {
-    @media (min-width: 1000px) {
+    @media (min-width: 1024px) {
         display: none;
     }
 }

@@ -916,7 +916,6 @@ main {
   border: 1px solid red;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
 }
 .proveedores-list-container .proveedores-list {
   border: 1px solid brown;
@@ -1002,13 +1001,13 @@ main {
   box-sizing: border-box;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1024px) {
   .hiddenInMobile {
     display: none;
   }
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 1024px) {
   .hiddenInDesktop {
     display: none;
   }
