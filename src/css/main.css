@@ -914,6 +914,8 @@ main {
 }
 .proveedores-list-container {
   border: 1px solid red;
+  display: flex;
+  flex-direction: row;
 }
 .proveedores-list-container .proveedores-list {
   border: 1px solid brown;
@@ -955,6 +957,25 @@ main {
   to {
     transform: translateY(100%);
     opacity: 0;
+  }
+}
+@media (min-width: 1024px) {
+  .main-filters-component {
+    position: fixed;
+    top: 8%;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #F5F5F5;
+    transform: translateX(100%);
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+  }
+  .main-filters-component.visible {
+    animation-name: slideIn;
+  }
+  .main-filters-component.hidden {
+    animation-name: slideOut;
   }
 }
 .proveedor-item {

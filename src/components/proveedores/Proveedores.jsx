@@ -87,7 +87,10 @@ const Proveedores = () => {
                         </div>
                     </section>
 
-                    <ProveedoresList proveedores={proveedores} />
+                    <ProveedoresList proveedores={proveedores} 
+                        filtros={filtros}
+                        setFiltros={setFiltros}
+                        filtrosOpciones={filtrosOpciones} />
 
                 </div>
             </main>
