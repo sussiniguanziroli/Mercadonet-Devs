@@ -828,7 +828,7 @@ main {
 
 @media (min-width: 1024px) {
   .proveedores-desktop {
-    background-image: linear-gradient(to bottom, rgba(238, 238, 238, 0), #131921), url(https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png);
+    background-image: linear-gradient(to bottom, rgba(238, 238, 238, 0) 60%, #131921 50%), url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
     background-position: 50% 72%;
     background-size: 100%;
     background-repeat: no-repeat;
