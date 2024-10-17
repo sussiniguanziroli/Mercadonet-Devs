@@ -1,12 +1,27 @@
 .proveedores-list-container {
-    display: flex;
-    flex-direction: row;
     border: 1px solid green;
-    .filtros-desktop {
-        padding: 1rem;
-        border: 1px solid purple;
-    }
     .proveedores-list {
         border: 1px solid black;
+        width: 100%;
+        overflow: scroll;
+    }
+}
+
+@media (min-width: 1024px) {
+    .proveedores-list-container {
+        display: flex;
+        flex-direction: row;
+        border: 1px solid green;
+        justify-content: space-between;
+        .filtros-desktop {
+            padding: 1rem;
+            width: 30%;
+            border: 1px solid purple;
+        }
+        .proveedores-list {
+            border: 1px solid black;
+            width: 100%;
+            overflow: scroll;
+        }
     }
 }

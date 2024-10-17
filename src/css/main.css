@@ -825,7 +825,7 @@ main {
 @media (min-width: 1024px) {
   .proveedores-desktop {
     background-image: linear-gradient(to bottom, rgba(238, 238, 238, 0) 60%, #131921 50%), url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
-    background-position: 50% 1200%;
+    background-position: 50% 120%;
     background-size: cover;
     background-repeat: no-repeat;
   }
@@ -914,18 +914,32 @@ main {
   }
 }
 .proveedores-list-container {
-  display: flex;
-  flex-direction: row;
   border: 1px solid green;
-}
-.proveedores-list-container .filtros-desktop {
-  padding: 1rem;
-  border: 1px solid purple;
 }
 .proveedores-list-container .proveedores-list {
   border: 1px solid black;
+  width: 100%;
+  overflow: scroll;
 }
 
+@media (min-width: 1024px) {
+  .proveedores-list-container {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid green;
+    justify-content: space-between;
+  }
+  .proveedores-list-container .filtros-desktop {
+    padding: 1rem;
+    width: 30%;
+    border: 1px solid purple;
+  }
+  .proveedores-list-container .proveedores-list {
+    border: 1px solid black;
+    width: 100%;
+    overflow: scroll;
+  }
+}
 .main-filters-component {
   position: fixed;
   top: 8%;
@@ -988,13 +1002,25 @@ main {
   border-radius: 0.7rem;
   padding: 1rem;
   margin: 2rem;
-  width: 60%;
 }
 .proveedor-item img {
   height: 100%;
   width: 20em;
 }
 
+@media (min-width: 1024px) {
+  .proveedor-item {
+    background-color: lightgray;
+    border-radius: 0.7rem;
+    padding: 1rem;
+    margin: 2rem;
+    width: 95%;
+  }
+  .proveedor-item img {
+    height: 100%;
+    width: 20em;
+  }
+}
 * {
   outline: none !important;
   box-shadow: none !important;

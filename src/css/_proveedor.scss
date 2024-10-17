@@ -3,9 +3,22 @@
     border-radius: .7rem;
     padding: 1rem;
     margin: 2rem;
-    width: 60%;
     img {
         height: 100%;
         width: 20em;
+    }
+}
+
+@media (min-width: 1024px) {
+    .proveedor-item {
+        background-color: lightgray;
+        border-radius: .7rem;
+        padding: 1rem;
+        margin: 2rem;
+        width: 95%;
+        img {
+            height: 100%;
+            width: 20em;
+        }
     }
 }
