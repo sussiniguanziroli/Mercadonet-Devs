@@ -807,11 +807,8 @@ main {
   display: flex;
   flex-direction: column;
 }
-.main-proveedores .secondary-proveedores {
-  border: 2px solid green;
-}
 .main-proveedores .secondary-proveedores .proveedores-filter-section {
-  background: linear-gradient(to bottom, #131921 45%, #eee 55%);
+  background: linear-gradient(to bottom, #131921 22%, #eee 30%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -828,8 +825,8 @@ main {
 @media (min-width: 1024px) {
   .proveedores-desktop {
     background-image: linear-gradient(to bottom, rgba(238, 238, 238, 0) 60%, #131921 50%), url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
-    background-position: 50% 72%;
-    background-size: 100%;
+    background-position: 50% 1200%;
+    background-size: cover;
     background-repeat: no-repeat;
   }
   .proveedores-desktop .proveedores-header {
@@ -904,8 +901,11 @@ main {
     background: none;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner {
-    width: 80%;
-    height: 20em;
+    width: 96%;
+    height: 17em;
+    margin: 2.5rem;
+    border-radius: 1.7rem;
+    border: 1px solid darkblue;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner img {
     height: 100%;
@@ -913,12 +913,11 @@ main {
   }
 }
 .proveedores-list-container {
-  border: 1px solid red;
   display: flex;
   flex-direction: row;
 }
 .proveedores-list-container .proveedores-list {
-  border: 1px solid brown;
+  border: 1px solid black;
 }
 
 .main-filters-component {
