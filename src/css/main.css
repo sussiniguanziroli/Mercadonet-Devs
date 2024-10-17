@@ -893,7 +893,7 @@ main {
   .main-proveedores .secondary-proveedores {
     display: flex;
     flex-direction: column;
-    background-color: #F5F5F5;
+    background-color: #f5f7f8;
     border-radius: 2rem;
     margin: 3rem;
     max-height: 1200px;
@@ -919,7 +919,6 @@ main {
 .proveedores-list-container .proveedores-list {
   border: 1px solid black;
   width: 100%;
-  overflow: scroll;
 }
 
 @media (min-width: 1024px) {
@@ -1010,7 +1009,7 @@ main {
 
 @media (min-width: 1024px) {
   .proveedor-item {
-    background-color: lightgray;
+    background-color: #ffffff;
     border-radius: 0.7rem;
     padding: 1rem;
     margin: 2rem;
