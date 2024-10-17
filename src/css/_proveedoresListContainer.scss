@@ -1,6 +1,11 @@
 .proveedores-list-container {
     display: flex;
     flex-direction: row;
+    border: 1px solid green;
+    .filtros-desktop {
+        padding: 1rem;
+        border: 1px solid purple;
+    }
     .proveedores-list {
         border: 1px solid black;
     }

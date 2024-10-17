@@ -896,6 +896,7 @@ main {
     background-color: #F5F5F5;
     border-radius: 2rem;
     margin: 3rem;
+    max-height: 1200px;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section {
     background: none;
@@ -915,6 +916,11 @@ main {
 .proveedores-list-container {
   display: flex;
   flex-direction: row;
+  border: 1px solid green;
+}
+.proveedores-list-container .filtros-desktop {
+  padding: 1rem;
+  border: 1px solid purple;
 }
 .proveedores-list-container .proveedores-list {
   border: 1px solid black;
