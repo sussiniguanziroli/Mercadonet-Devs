@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setSelectedMarca, setSelectedTipo, setSelectedUbicacion }) => {
+const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setSelectedMarca, setSelectedTipo, setSelectedUbicacion, selectedTipo, selectedMarca, selectedUbicacion }) => {
 
     const handleTipoChange = (e) => {
         setSelectedTipo(e.target.value);
@@ -23,35 +23,58 @@ const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setS
                 <button onClick={() => setIsMenuHidden(true)}>X</button>
             </div>
             <section className='actual-filters-mobile'>
-                <h3>Filtrar por tipo</h3>
-                <select onChange={handleTipoChange}>
-                    <option value="">Todos los tipos</option>
-                    {filtrosOpciones.map(filtro => (
-                        filtro.tipo && filtro.tipo.map(tipo => (
-                            <option key={tipo} value={tipo}>{tipo}</option>
-                        ))
-                    ))}
-                </select>
+                {/* Filtro de Tipo */}
+                <div className="filtro-tipos">
+                    <h3>Tipos de proveedores</h3>
+                    <button onClick={() => setSelectedTipo('')}>Limpiar</button>
+                    <ul>
+                        {filtrosOpciones.tipo.map((tipo) => (
+                            <li key={tipo}>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        value={tipo}
+                                        checked={selectedTipo === tipo}
+                                        onChange={handleTipoChange}
+                                    />
+                                    {tipo}
+                                </label>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
 
-                <h3>Filtrar por marca</h3>
-                <select onChange={handleMarcaChange}>
-                    <option value="">Todas las marcas</option>
-                    {filtrosOpciones.map(filtro => (
-                        filtro.marca && filtro.marca.map(marca => (
-                            <option key={marca} value={marca}>{marca}</option>
-                        ))
-                    ))}
-                </select>
+                {/* Filtro de Ubicación */}
+                <div className="filtro-ubicacion">
+                    <h3>Ubicación</h3>
+                    <select
+                        value={selectedUbicacion}
+                        onChange={handleUbicacionChange}
+                    >
+                        <option value="">Todo</option>
+                        {filtrosOpciones.ubicacion.map((ubicacion) => (
+                            <option key={ubicacion} value={ubicacion}>
+                                {ubicacion}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
-                <h3>Filtrar por ubicación</h3>
-                <select onChange={handleUbicacionChange}>
-                    <option value="">Todas las ubicaciones</option>
-                    {filtrosOpciones.map(filtro => (
-                        filtro.ubicacion && filtro.ubicacion.map(ubicacion => (
-                            <option key={ubicacion} value={ubicacion}>{ubicacion}</option>
-                        ))
-                    ))}
-                </select>
+                {/* Filtro de Marca */}
+                <div className="filtro-marca">
+                    <h3>Marca</h3>
+                    <select
+                        value={selectedMarca}
+                        onChange={handleMarcaChange}
+                    >
+                        <option value="">Todo</option>
+                        {filtrosOpciones.marca.map((marca) => (
+                            <option key={marca} value={marca}>
+                                {marca}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </section>
         </main>
     )

@@ -15,7 +15,12 @@ const Proveedores = () => {
     const [selectedMarca, setSelectedMarca] = useState('');
     const [selectedUbicacion, setSelectedUbicacion] = useState('');
 
-    const [filtrosOpciones, setFiltrosOpciones] = useState([]);
+    const [filtrosOpciones, setFiltrosOpciones] = useState({
+        ubicacion: [],
+        tipo: [],
+        marca: []
+    });
+    
 
 
     console.log("filtros opciones", filtrosOpciones)
@@ -40,22 +45,38 @@ const Proveedores = () => {
         obtenerProveedores();
     }, []);
 
-    //Obtener filtros desde firebase
     useEffect(() => {
         const fetchFiltros = async () => {
             try {
                 const q = query(collection(db, 'filtros'));
                 const snapshot = await getDocs(q);
-                const opciones_filtros = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-                setFiltrosOpciones(opciones_filtros);
+    
+                // Creamos objetos vacíos para cada filtro
+                let ubicacion = [];
+                let tipo = [];
+                let marca = [];
+    
+                // Iteramos sobre los documentos obtenidos desde Firebase
+                snapshot.docs.forEach(doc => {
+                    const data = doc.data();
+                    
+                    // Llenamos los arrays correspondientes según el contenido
+                    if (data.ubicacion) ubicacion = data.ubicacion;
+                    if (data.tipo) tipo = data.tipo;
+                    if (data.marca) marca = data.marca;
+                });
+    
+                // Establecemos el estado con los tres arrays
+                setFiltrosOpciones({
+                    ubicacion,
+                    tipo,
+                    marca
+                });
             } catch (error) {
-                console.error("Error obteniendo los proveedores: ", error);
+                console.error("Error obteniendo los filtros: ", error);
             }
         };
-
+    
         fetchFiltros();
     }, []);
 
@@ -67,7 +88,7 @@ const Proveedores = () => {
         return proveedores.filter(proveedor => {
             const cumpleTipo = !selectedTipo || proveedor.Tipo.includes(selectedTipo);
             const cumpleMarca = !selectedMarca || proveedor.marcas.includes(selectedMarca);
-            const cumpleUbicacion = !selectedUbicacion || proveedor.contacto?.ubicacion === selectedUbicacion;
+            const cumpleUbicacion = !selectedUbicacion || proveedor.ubicacion === selectedUbicacion;
 
             return cumpleTipo && cumpleMarca && cumpleUbicacion;
         });
@@ -97,11 +118,14 @@ const Proveedores = () => {
                                 setSelectedTipo={setSelectedTipo}
                                 setSelectedUbicacion={setSelectedUbicacion} />
                         </div>
-                        <ProveedoresList proveedores={proveedores}
+                        <ProveedoresList proveedores={proveedoresFiltrados}
                             filtrosOpciones={filtrosOpciones}
                             setSelectedMarca={setSelectedMarca}
                             setSelectedTipo={setSelectedTipo}
-                            setSelectedUbicacion={setSelectedUbicacion} />
+                            setSelectedUbicacion={setSelectedUbicacion}
+                            selectedTipo={selectedTipo}
+                            selectedUbicacion={selectedUbicacion}
+                            selectedMarca={selectedMarca} />
 
                     </section>
 

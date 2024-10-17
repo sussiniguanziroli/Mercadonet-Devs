@@ -5,6 +5,7 @@ import Landing from './components/inicio/Landing';
 import Menu from './components/header/Menu';
 import Footer from './components/footer/Footer';
 import Proveedores from './components/proveedores/Proveedores';
+import AdminPanel from './components/admin/AdminPanel';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Routes>
             <Route path="/" element={<Landing/>}/>
             <Route path='/proveedores' element={<Proveedores />}/>
+            <Route path='/admin' element={<AdminPanel/>} />
         </Routes>
         <Footer />
       </BrowserRouter>
