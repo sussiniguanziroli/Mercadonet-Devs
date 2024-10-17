@@ -1,7 +1,5 @@
 .proveedores-list-container {
-    border: 1px solid green;
     .proveedores-list {
-        border: 1px solid black;
         width: 100%;
     }
 }
@@ -10,17 +8,33 @@
     .proveedores-list-container {
         display: flex;
         flex-direction: row;
-        border: 1px solid green;
         justify-content: space-between;
         .filtros-desktop {
             padding: 1rem;
             width: 30%;
-            border: 1px solid purple;
-        }
+            }
         .proveedores-list {
-            border: 1px solid black;
             width: 100%;
             overflow: scroll;
         }
     }
+
+    .filtros-desktop {
+        width: 250px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    
+    .filtros-desktop h3 {
+        margin-bottom: 10px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    
+    .filtros-desktop div {
+        margin-bottom: 5px;
+    }
+    
 }

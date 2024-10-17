@@ -11,15 +11,12 @@ const Proveedores = () => {
 
     const [isMenuHidden, setIsMenuHidden] = useState(true);
     const [proveedores, setProveedores] = useState([]);
+    const [selectedTipo, setSelectedTipo] = useState('');
+    const [selectedMarca, setSelectedMarca] = useState('');
+    const [selectedUbicacion, setSelectedUbicacion] = useState('');
 
     const [filtrosOpciones, setFiltrosOpciones] = useState([]);
 
-    // Estado de los filtros seleccionados
-    const [filtros, setFiltros] = useState({
-        tipos: '',
-        ubicacion: '',
-        marca: ''
-    });
 
     console.log("filtros opciones", filtrosOpciones)
 
@@ -66,6 +63,20 @@ const Proveedores = () => {
         setIsMenuHidden(false);
     }
 
+    const filtrarProveedores = (proveedores, selectedMarca, selectedTipo, selectedUbicacion) => {
+        return proveedores.filter(proveedor => {
+            const cumpleTipo = !selectedTipo || proveedor.Tipo.includes(selectedTipo);
+            const cumpleMarca = !selectedMarca || proveedor.marcas.includes(selectedMarca);
+            const cumpleUbicacion = !selectedUbicacion || proveedor.contacto?.ubicacion === selectedUbicacion;
+
+            return cumpleTipo && cumpleMarca && cumpleUbicacion;
+        });
+    };
+
+
+    // Filtrar los proveedores basados en los filtros seleccionados
+    const proveedoresFiltrados = filtrarProveedores(proveedores, selectedMarca, selectedTipo, selectedUbicacion)
+
 
     return (
         <div className='proveedores-desktop'>
@@ -81,18 +92,20 @@ const Proveedores = () => {
                             <button className='filterBtn hiddenInDesktop' onClick={openFilters}>Filtrar</button>
                             {/* Menu desplegable en mobile */}
                             <FiltrosComponent setIsMenuHidden={setIsMenuHidden} isMenuHidden={isMenuHidden}
-                                filtros={filtros}
-                                setFiltros={setFiltros}
-                                filtrosOpciones={filtrosOpciones} />
+                                filtrosOpciones={filtrosOpciones}
+                                setSelectedMarca={setSelectedMarca}
+                                setSelectedTipo={setSelectedTipo}
+                                setSelectedUbicacion={setSelectedUbicacion} />
                         </div>
-                        <ProveedoresList proveedores={proveedores} 
-                        filtros={filtros}
-                        setFiltros={setFiltros}
-                        filtrosOpciones={filtrosOpciones} />
+                        <ProveedoresList proveedores={proveedores}
+                            filtrosOpciones={filtrosOpciones}
+                            setSelectedMarca={setSelectedMarca}
+                            setSelectedTipo={setSelectedTipo}
+                            setSelectedUbicacion={setSelectedUbicacion} />
 
                     </section>
 
-                    
+
                 </div>
             </main>
         </div>

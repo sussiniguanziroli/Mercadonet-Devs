@@ -1,4 +1,7 @@
 .main-filters-component {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     position: fixed;
     top: 8%;
     left: 0;
@@ -42,23 +45,3 @@
     }
 }
 
-@media (min-width: 1024px) {
-    .main-filters-component {
-        position: fixed;
-        top: 8%;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: $main-white;
-        transform: translateX(100%); // Estado inicial fuera de la pantalla
-        animation-duration: 0.5s;
-        animation-fill-mode: forwards;
-        &.visible {
-            animation-name: slideIn;
-        }
-    
-        &.hidden {
-            animation-name: slideOut;
-        }
-    }
-}

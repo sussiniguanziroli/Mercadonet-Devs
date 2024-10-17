@@ -1,36 +1,58 @@
 import React, { useEffect, useState } from 'react'
 import Proveedor from './Proveedor'
 
-const ProveedoresList = ({ proveedores, filtros, setFiltros, filtrosOpciones }) => {
+const ProveedoresList = ({ proveedores,filtrosOpciones, setSelectedMarca, setSelectedTipo, setSelectedUbicacion }) => {
 
-    const [filtrosMarca, setFiltrosMarca] = useState([]);
-    const [filtrosTipo, setFitrosTipo] = useState([]);
-    const [filtrosUbicacion, setFiltrosUbicacion] = useState([]);
+    console.log('proveedores', proveedores)
 
+    const handleTipoChange = (e) => {
+        setSelectedTipo(e.target.value);
+    };
 
-    const [selectedMarca, setSelectedMarca] = useState('');
-    const [searchedMarca, setSearchedMarca] = useState('');
-    const [selectedTipo, setSelectedTipo] = useState('');
-    const [selectedUbicacion, setSelectedUbicacion] = useState('');
+    const handleMarcaChange = (e) => {
+        setSelectedMarca(e.target.value);
+    };
 
+    const handleUbicacionChange = (e) => {
+        setSelectedUbicacion(e.target.value);
+    };
 
-    useEffect(() => {
-
-        const filtrosTempTipo = filtrosOpciones.filter(filtro => filtro.tipo);
-        setFitrosTipo(filtrosTempTipo);
-        const filtrosTempUbicacion = filtrosOpciones.filter(filtro => filtro.ubicacion);
-        setFiltrosUbicacion(filtrosTempUbicacion);
-        const filtrosTempMarca = filtrosOpciones.filter(filtro => filtro.marca);
-        setFiltrosMarca(filtrosTempMarca);
-
-
-    }, [filtrosOpciones])
-
+   
 
     return (
         <main className='proveedores-list-container'>
             <div className='filtros-desktop hiddenInMobile'>
-                FiltrosDesktop
+                {/* ACA IRIAN ESOS FILTROS DESKTOP */}
+                <h3>Filtrar por tipo</h3>
+            <select onChange={handleTipoChange}>
+                <option value="">Todos los tipos</option>
+                {filtrosOpciones.map(filtro => (
+                    filtro.tipo && filtro.tipo.map(tipo => (
+                        <option key={tipo} value={tipo}>{tipo}</option>
+                    ))
+                ))}
+            </select>
+
+            <h3>Filtrar por marca</h3>
+            <select onChange={handleMarcaChange}>
+                <option value="">Todas las marcas</option>
+                {filtrosOpciones.map(filtro => (
+                    filtro.marca && filtro.marca.map(marca => (
+                        <option key={marca} value={marca}>{marca}</option>
+                    ))
+                ))}
+            </select>
+
+            <h3>Filtrar por ubicación</h3>
+            <select onChange={handleUbicacionChange}>
+                <option value="">Todas las ubicaciones</option>
+                {filtrosOpciones.map(filtro => (
+                    filtro.ubicacion && filtro.ubicacion.map(ubicacion => (
+                        <option key={ubicacion} value={ubicacion}>{ubicacion}</option>
+                    ))
+                ))}
+            </select>
+
             </div>
             <div className='proveedores-list'>
 
@@ -44,8 +66,8 @@ const ProveedoresList = ({ proveedores, filtros, setFiltros, filtrosOpciones }) 
 
             </div>
 
-           
-            
+
+
         </main>
     )
 }

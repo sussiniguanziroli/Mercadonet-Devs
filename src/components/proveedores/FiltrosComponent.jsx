@@ -1,39 +1,58 @@
 import React, { useEffect, useState } from 'react'
 
-const FiltrosComponent = ({ setIsMenuHidden, isMenuHidden, filtros, setFiltros, filtrosOpciones }) => {
+const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setSelectedMarca, setSelectedTipo, setSelectedUbicacion }) => {
 
-    const [filtrosMarca, setFiltrosMarca] = useState([]);
-    const [filtrosTipo, setFitrosTipo] = useState([]);
-    const [filtrosUbicacion, setFiltrosUbicacion] = useState([]);
+    const handleTipoChange = (e) => {
+        setSelectedTipo(e.target.value);
+    };
 
+    const handleMarcaChange = (e) => {
+        setSelectedMarca(e.target.value);
+    };
 
-    const [selectedMarca, setSelectedMarca] = useState([]);
-    const [searchedMarca, setSearchedMarca] = useState([]);
-    const [selectedTipo, setSelectedTipo] = useState([]);
-    const [selectedUbicacion, setSelectedUbicacion] = useState([]);
+    const handleUbicacionChange = (e) => {
+        setSelectedUbicacion(e.target.value);
+    };
 
-
-    useEffect(() => {
-
-        const filtrosTempTipo = filtrosOpciones.filter(filtro => filtro.tipo);
-        setFitrosTipo(filtrosTempTipo);
-        const filtrosTempUbicacion = filtrosOpciones.filter(filtro => filtro.ubicacion);
-        setFiltrosUbicacion(filtrosTempUbicacion);
-        const filtrosTempMarca = filtrosOpciones.filter(filtro => filtro.marca);
-        setFiltrosMarca(filtrosTempMarca);
-
-
-    }, [filtrosOpciones])
 
 
 
     return (
         <main className={`main-filters-component ${isMenuHidden ? 'hidden' : 'visible'}`}>
-            <button onClick={() => setIsMenuHidden(true)}>X</button>
-            <p>Soy el menu de prueba</p>
+            <div>
+                <button onClick={() => setIsMenuHidden(true)}>X</button>
+            </div>
+            <section className='actual-filters-mobile'>
+                <h3>Filtrar por tipo</h3>
+                <select onChange={handleTipoChange}>
+                    <option value="">Todos los tipos</option>
+                    {filtrosOpciones.map(filtro => (
+                        filtro.tipo && filtro.tipo.map(tipo => (
+                            <option key={tipo} value={tipo}>{tipo}</option>
+                        ))
+                    ))}
+                </select>
 
+                <h3>Filtrar por marca</h3>
+                <select onChange={handleMarcaChange}>
+                    <option value="">Todas las marcas</option>
+                    {filtrosOpciones.map(filtro => (
+                        filtro.marca && filtro.marca.map(marca => (
+                            <option key={marca} value={marca}>{marca}</option>
+                        ))
+                    ))}
+                </select>
 
-
+                <h3>Filtrar por ubicación</h3>
+                <select onChange={handleUbicacionChange}>
+                    <option value="">Todas las ubicaciones</option>
+                    {filtrosOpciones.map(filtro => (
+                        filtro.ubicacion && filtro.ubicacion.map(ubicacion => (
+                            <option key={ubicacion} value={ubicacion}>{ubicacion}</option>
+                        ))
+                    ))}
+                </select>
+            </section>
         </main>
     )
 }
