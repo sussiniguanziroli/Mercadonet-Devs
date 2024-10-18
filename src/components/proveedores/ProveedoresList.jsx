@@ -25,9 +25,11 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                 {/* ACA IRIAN ESOS FILTROS DESKTOP */}
                 {/* Filtro de Tipo */}
                 <div className="filtro-tipos">
-                    <h3>Tipos de proveedores</h3>
-                    <button onClick={() => setSelectedTipo('')}>Limpiar</button>
-                    <ul>
+                    <div className='tipo-boton'>
+                        <h3>Tipos de proveedores</h3>
+                        <button onClick={() => setSelectedTipo('')}>Limpiar</button>
+                    </div>
+                    <ul className='filtro-tipos-checkboxes'>
                         {filtrosOpciones.tipo.map((tipo) => (
                             <li key={tipo}>
                                 <label>
