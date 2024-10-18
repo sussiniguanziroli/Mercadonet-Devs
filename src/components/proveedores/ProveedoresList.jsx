@@ -55,7 +55,7 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                     >
                         <option value="">Todo</option>
                         {filtrosOpciones.ubicacion.map((ubicacion) => (
-                            <option key={ubicacion} value={ubicacion}>
+                            <option className='ubicacion-option' key={ubicacion} value={ubicacion}>
                                 {ubicacion}
                             </option>
                         ))}
@@ -69,9 +69,9 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                         value={selectedMarca}
                         onChange={handleMarcaChange}
                     >
-                        <option value="">Todo</option>
+                        <option value="">Todas</option>
                         {filtrosOpciones.marca.map((marca) => (
-                            <option key={marca} value={marca}>
+                            <option className='marca-option' key={marca} value={marca}>
                                 {marca}
                             </option>
                         ))}
