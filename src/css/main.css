@@ -937,7 +937,22 @@ main {
     width: 30%;
   }
   .proveedores-list-container .filtros-desktop .filtro-tipos .tipo-boton {
+    margin-bottom: 0.5rem;
     display: flex;
+  }
+  .proveedores-list-container .filtros-desktop .filtro-tipos .tipo-boton button {
+    cursor: pointer;
+    margin-left: 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: lightgray;
+    font-family: "Roboto", system-ui;
+    padding: 0.3rem;
+    transition: all 0.3s;
+    font-weight: 500;
+  }
+  .proveedores-list-container .filtros-desktop .filtro-tipos .tipo-boton button:hover {
+    background-color: #ff9c39;
   }
   .proveedores-list-container .filtros-desktop .filtro-tipos .filtro-tipos-checkboxes li {
     list-style: none;

@@ -24,7 +24,22 @@
             // TIPO------------------TIPO--------
             .filtro-tipos {
                 .tipo-boton {
+                    margin-bottom: .5rem;
                     display: flex;
+                    button {
+                        cursor: pointer;
+                        margin-left: 1rem;
+                        border: none;
+                        border-radius: .5rem;
+                        background-color: lightgray;
+                        font-family: 'Roboto', system-ui;
+                        padding: .3rem;
+                        transition: all .3s;
+                        font-weight: 500;
+                        &:hover {
+                            background-color: $color-naranja-hover;
+                        }
+                    }
                 }
                 .filtro-tipos-checkboxes {
                     li {
