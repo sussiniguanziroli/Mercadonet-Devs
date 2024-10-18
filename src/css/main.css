@@ -896,7 +896,7 @@ main {
     background-color: #f5f7f8;
     border-radius: 2rem;
     margin: 3rem;
-    max-height: 1200px;
+    max-height: 1500px;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section {
     background: none;
@@ -919,6 +919,7 @@ main {
 
 @media (min-width: 1024px) {
   .proveedores-list-container {
+    overflow: scroll;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -928,8 +929,24 @@ main {
     width: 30%;
   }
   .proveedores-list-container .proveedores-list {
+    margin: 2rem;
     width: 100%;
     overflow: scroll;
+    max-height: 1000px;
+    /* Para Firefox */
+    scrollbar-width: thin; /* Cambia a barra fina */
+    scrollbar-color: #888 #f1f1f1; /* Color de la barra y del track */
+  }
+  .proveedores-list-container .proveedores-list::-webkit-scrollbar {
+    display: block;
+    width: 8px;
+  }
+  .proveedores-list-container .proveedores-list::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color de la barra */
+    border-radius: 10px; /* Redondear bordes de la barra */
+  }
+  .proveedores-list-container .proveedores-list::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color de fondo del track */
   }
   .filtros-desktop {
     width: 250px;
@@ -1003,9 +1020,7 @@ main {
   .proveedor-item {
     background-color: #ffffff;
     border-radius: 0.7rem;
-    padding: 1rem;
-    margin: 2rem;
-    width: 95%;
+    width: 96%;
   }
   .proveedor-item img {
     height: 100%;
