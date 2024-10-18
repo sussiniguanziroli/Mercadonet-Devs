@@ -87,7 +87,7 @@ const Proveedores = () => {
     const filtrarProveedores = (proveedores, selectedMarca, selectedTipo, selectedUbicacion) => {
         return proveedores.filter(proveedor => {
             const cumpleTipo = !selectedTipo || proveedor.tipo.includes(selectedTipo);
-            const cumpleMarca = !selectedMarca || proveedor.marcas.includes(selectedMarca);
+            const cumpleMarca = !selectedMarca || proveedor.marca.includes(selectedMarca);
             const cumpleUbicacion = !selectedUbicacion || proveedor.ubicacion === selectedUbicacion;
 
             return cumpleTipo && cumpleMarca && cumpleUbicacion;

@@ -15,7 +15,7 @@ const AgregarProveedor = () => {
         imagen: '',
         nombre: '',
         tags: [],
-        marcas: [],
+        marca: [],
         tipo: [],
         ubicacion: '',
         ubicacionDetalle: ''
@@ -43,7 +43,7 @@ const AgregarProveedor = () => {
                 imagen: '',
                 nombre: '',
                 tags: [],
-                marcas: [],
+                marca: [],
                 tipo: [],
                 ubicacion: '',
                 ubicacionDetalle: ''
@@ -65,7 +65,7 @@ const AgregarProveedor = () => {
     };
 
     const agregarMarca = () => {
-        setProveedor({ ...proveedor, marcas: [...proveedor.marcas, marca] });
+        setProveedor({ ...proveedor, marcas: [...proveedor.marca, marca] });
         setMarca(''); // Limpiar el campo de marca
     };
 
@@ -186,7 +186,7 @@ const AgregarProveedor = () => {
                         placeholder="Añadir marca"
                     />
                     <button type="button" onClick={agregarMarca}>Agregar Marca</button>
-                    <div>{proveedor.marcas.map((m, index) => <span key={index}>{m}, </span>)}</div>
+                    <div>{proveedor.marca.map((m, index) => <span key={index}>{m}, </span>)}</div>
                 </div>
 
                 <button type="submit">Cargar Proveedor</button>
