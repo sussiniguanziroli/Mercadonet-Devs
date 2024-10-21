@@ -1089,10 +1089,41 @@ main {
 }
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label {
   display: flex;
-  gap: 0.3rem;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: "Roboto", system-ui;
+  font-size: 16px;
+  color: #2c2c2c;
 }
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #131921;
+  border-radius: 4px;
+  position: relative;
   cursor: pointer;
+  background-color: #F5F5F5;
+  transition: all 0.3s ease;
+}
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input:checked {
+  background-color: #7098ee;
+  border-color: #7098ee;
+}
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input:checked:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 5px;
+  height: 10px;
+  border: solid #F5F5F5;
+  border-width: 0 2px 2px 0;
+}
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input:focus {
+  outline: none;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
 }
 .actual-filters-mobile .filtro-ubicacion {
   margin-top: 1rem;
@@ -1147,6 +1178,19 @@ main {
   to {
     transform: translateX(-100%);
     opacity: 0;
+  }
+}
+@media (max-width: 768px) {
+  .filtro-tipos-checkboxes li {
+    margin-top: 0.5rem;
+  }
+  .filtro-tipos-checkboxes li label {
+    font-size: 14px;
+    gap: 0.4rem;
+  }
+  .filtro-tipos-checkboxes li label input {
+    width: 16px;
+    height: 16px;
   }
 }
 .proveedor-item {

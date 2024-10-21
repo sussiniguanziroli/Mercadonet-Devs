@@ -77,18 +77,53 @@
         .filtro-tipos-checkboxes {
             li {
                 list-style: none;
-                margin-top: .3rem;
-
+                margin-top: 0.3rem;
+        
                 label {
                     display: flex;
-                    gap: .3rem;
-
+                    align-items: center;
+                    gap: 0.5rem;  // Un poco más de espacio entre checkbox y texto
+                    font-family: 'Roboto', system-ui; // Aplicando la fuente que utilizas
+                    font-size: 16px; // Tamaño de letra
+                    color: $text-gray;  // Usando el gris para el texto
+        
                     input {
+                        appearance: none; // Oculta el checkbox por defecto
+                        width: 18px;
+                        height: 18px;
+                        border: 2px solid $color-azul;  // Color del borde del checkbox
+                        border-radius: 4px; // Bordes redondeados
+                        position: relative;
                         cursor: pointer;
+                        background-color: $main-white;
+                        transition: all 0.3s ease;
+        
+                        &:checked {
+                            background-color: $azul-oscuro;  // Color de fondo cuando está seleccionado
+                            border-color: $azul-oscuro;
+        
+                            &:before {
+                                content: "";
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%) rotate(45deg);
+                                width: 5px;
+                                height: 10px;
+                                border: solid $main-white;
+                                border-width: 0 2px 2px 0;
+                            }
+                        }
+        
+                        &:focus {
+                            outline: none;
+                            box-shadow: 0 0 3px rgba(0, 123, 255, 0.5); // Efecto de foco
+                        }
                     }
                 }
             }
         }
+        
     }
 
     //UBI-----------------UBICACION---------
@@ -160,5 +195,24 @@
     to {
         transform: translateX(-100%);
         opacity: 0;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .filtro-tipos-checkboxes {
+        li {
+            margin-top: 0.5rem;
+
+            label {
+                font-size: 14px; // Texto más pequeño en pantallas móviles
+                gap: 0.4rem; // Ajusta el espacio en mobile
+
+                input {
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+        }
     }
 }
