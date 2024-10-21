@@ -1015,16 +1015,18 @@ main {
   }
 }
 .main-filters-component {
+  z-index: 1000;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  position: fixed;
-  top: 8%;
+  position: absolute;
+  top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 90vw;
+  max-height: 100vh;
   background-color: #F5F5F5;
-  transform: translateX(-100%);
+  transform: translateY(-100%);
   animation-duration: 0.5s;
   animation-fill-mode: forwards;
 }
@@ -1034,10 +1036,102 @@ main {
 .main-filters-component.hidden {
   animation-name: slideOut;
 }
+.main-filters-component .closebtn-div {
+  display: flex;
+  justify-content: flex-end;
+}
+.main-filters-component .closebtn-div button {
+  margin-top: 1rem;
+  margin-right: 1rem;
+  font-size: 2.1rem;
+  margin-left: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: inherit;
+  font-family: "Roboto", system-ui;
+  padding: 0.3rem;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+
+.actual-filters-mobile {
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto", system-ui;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: #2c2c2c;
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+}
+.actual-filters-mobile .filtro-tipos .tipo-boton {
+  margin-bottom: 0.5rem;
+  display: flex;
+}
+.actual-filters-mobile .filtro-tipos .tipo-boton button {
+  cursor: pointer;
+  margin-left: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: lightgray;
+  font-family: "Roboto", system-ui;
+  padding: 0.3rem;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+.actual-filters-mobile .filtro-tipos .tipo-boton button:hover {
+  background-color: #ff9c39;
+}
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li {
+  list-style: none;
+  margin-top: 0.3rem;
+}
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label {
+  display: flex;
+  gap: 0.3rem;
+}
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input {
+  cursor: pointer;
+}
+.actual-filters-mobile .filtro-ubicacion {
+  margin-top: 1rem;
+}
+.actual-filters-mobile .filtro-ubicacion select {
+  cursor: pointer;
+  font-size: 1.3rem;
+  border-radius: 0.7rem;
+  border: none;
+  font-family: "Roboto", system-ui;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: #ffffff;
+  color: #2c2c2c;
+}
+.actual-filters-mobile .filtro-ubicacion select option .ubicacion-option {
+  padding: 1rem;
+}
+.actual-filters-mobile .filtro-marca {
+  margin-top: 1rem;
+}
+.actual-filters-mobile .filtro-marca select {
+  cursor: pointer;
+  font-size: 1.3rem;
+  border-radius: 0.7rem;
+  border: none;
+  font-family: "Roboto", system-ui;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: #ffffff;
+  color: #2c2c2c;
+}
+.actual-filters-mobile .filtro-marca select option .marca-option {
+  padding: 1rem;
+}
 
 @keyframes slideIn {
   from {
-    transform: translateX(0);
+    transform: translateX(-100%);
     opacity: 0;
   }
   to {
@@ -1051,7 +1145,7 @@ main {
     opacity: 1;
   }
   to {
-    transform: translateY(100%);
+    transform: translateX(-100%);
     opacity: 0;
   }
 }

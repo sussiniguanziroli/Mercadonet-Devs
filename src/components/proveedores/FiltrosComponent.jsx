@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { IoClose } from "react-icons/io5";
+
 
 const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setSelectedMarca, setSelectedTipo, setSelectedUbicacion, selectedTipo, selectedMarca, selectedUbicacion }) => {
 
@@ -19,15 +21,18 @@ const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setS
 
     return (
         <main className={`main-filters-component ${isMenuHidden ? 'hidden' : 'visible'}`}>
-            <div>
-                <button onClick={() => setIsMenuHidden(true)}>X</button>
+            <div className='closebtn-div'>
+                <button onClick={() => setIsMenuHidden(true)}><IoClose />
+                </button>
             </div>
             <section className='actual-filters-mobile'>
                 {/* Filtro de Tipo */}
                 <div className="filtro-tipos">
-                    <h3>Tipos de proveedores</h3>
-                    <button onClick={() => setSelectedTipo('')}>Limpiar</button>
-                    <ul>
+                    <div className='tipo-boton'>
+                        <h3>Tipos de proveedores</h3>
+                        <button onClick={() => setSelectedTipo('')}>Limpiar</button>
+                    </div>
+                    <ul className='filtro-tipos-checkboxes'>
                         {filtrosOpciones.tipo.map((tipo) => (
                             <li key={tipo}>
                                 <label>
