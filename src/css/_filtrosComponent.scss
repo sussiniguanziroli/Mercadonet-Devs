@@ -45,7 +45,7 @@
     display: flex;
     flex-direction: column;
     font-family: 'Roboto', system-ui;
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     font-weight: 400;
     color: $text-gray;
     gap: 1rem;
@@ -77,14 +77,13 @@
         .filtro-tipos-checkboxes {
             li {
                 list-style: none;
-                margin-top: 0.3rem;
-        
+                margin-top: 0.7rem;
                 label {
+                    font-size: 1.7rem;
                     display: flex;
                     align-items: center;
                     gap: 0.5rem;  // Un poco más de espacio entre checkbox y texto
                     font-family: 'Roboto', system-ui; // Aplicando la fuente que utilizas
-                    font-size: 16px; // Tamaño de letra
                     color: $text-gray;  // Usando el gris para el texto
         
                     input {

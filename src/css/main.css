@@ -1058,7 +1058,7 @@ main {
   display: flex;
   flex-direction: column;
   font-family: "Roboto", system-ui;
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   font-weight: 400;
   color: #2c2c2c;
   gap: 1rem;
@@ -1085,14 +1085,14 @@ main {
 }
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li {
   list-style: none;
-  margin-top: 0.3rem;
+  margin-top: 0.7rem;
 }
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label {
+  font-size: 1.7rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-family: "Roboto", system-ui;
-  font-size: 16px;
   color: #2c2c2c;
 }
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input {
