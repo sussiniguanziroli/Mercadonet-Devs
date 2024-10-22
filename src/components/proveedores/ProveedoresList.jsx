@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Proveedor from './Proveedor'
+import { ScaleLoader } from 'react-spinners';
 
 const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSelectedTipo, setSelectedUbicacion, selectedTipo, selectedMarca, selectedUbicacion }) => {
 
@@ -90,10 +91,27 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                     ))
 
                 ) : selectedUbicacion || selectedMarca || selectedTipo ? (
-                    <div>Ningun proveedor coincide con los filtros</div>
+                    <div className='no-criteria'>Ningun proveedor coincide con los filtros</div>
                 ) : (
-                    <div>
-                        Cargando Proveedores
+                    <div className='loader'>
+                        <div className='hiddenInMobile'>
+                            <ScaleLoader
+                                color="#FF7F00"
+                                height={200}
+                                margin={7}
+                                radius={8}
+                                width={30}
+                            />
+                        </div>
+                        <div className='hiddenInDesktop'>
+                            <ScaleLoader
+                                color="#FF7F00"
+                                height={50}
+                                margin={2}
+                                radius={8}
+                                width={7}
+                            />
+                        </div>
                     </div>
                 )}
 
