@@ -80,13 +80,24 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
 
             </div>
             <div className='proveedores-list'>
+                {proveedores.length > 0 ? (
 
 
-                {proveedores.map((proveedor =>
+                    proveedores.map((proveedor =>
 
-                    <Proveedor proveedor={proveedor} key={proveedor.id} />
+                        <Proveedor proveedor={proveedor} key={proveedor.id} />
 
-                ))}
+                    ))
+
+
+                ) : (
+                    <div>
+                        Cargando Proveedores
+                    </div>
+                )}
+
+
+
 
 
             </div>
