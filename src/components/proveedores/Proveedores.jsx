@@ -117,7 +117,7 @@ const Proveedores = () => {
 
                         <div className='mobile-thumb-filters hiddenInDesktop'>
                             <div className='mobile-thumb-filters-btns-container'>
-                                {filtersIcons.map((filterIcon => <div className='thumbFilter' onClick={() => setSelectedTipo()}>
+                                {filtersIcons.map((filterIcon => <div className='thumbFilter' onClick={() => setSelectedTipo(filterIcon.name)}>
                                     <div className='thumbFilter-icon'>
                                         <img src={filterIcon.icon} alt={filterIcon.name} />
                                     </div>
