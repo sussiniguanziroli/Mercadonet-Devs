@@ -9,13 +9,84 @@
     .secondary-proveedores {
 
         .proveedores-filter-section {
-            background: linear-gradient(to bottom, $color-azul 22%, #eee 30%);
+            background: linear-gradient(to bottom, $color-azul 12%, #eee 16%);
             display: flex;
             flex-direction: column;
-            align-items: center;
+
+            .mobile-thumb-filters {
+                margin-top: 1rem;
+                width: 100%;
+                border: 1px solid purple;
+                
+                .mobile-thumb-filters-btns-container {
+                    border: 1px solid red;
+                    overflow-x: scroll;
+                    display: flex;
+                    height: auto;
+                    width: 100%;
+                    gap: 1.5rem;
+                    &::-webkit-scrollbar {
+                        height: 8px;
+                    }
+            
+                    &::-webkit-scrollbar-thumb {
+                        background-color: #ccc;
+                        border-radius: 4px;
+                    }
+            
+                    &::-webkit-scrollbar-track {
+                        background-color: #f1f1f1;
+                    }
+                    .thumbFilter {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        text-align: center;
+                        padding-left: .2rem;
+
+                        .thumbFilter-icon {
+                            width: 5em;
+                            background-color: $color-azul;
+                            border-radius: 10em;
+                            padding: .8rem;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                            }
+                        }
+
+                        p {
+                            color: $dark-gray;
+                            font-weight: 500;
+                            margin-top: .5rem;
+                            text-align: center;
+                        }
+                    }
+                }
+
+                .filterBtn {
+                    all: unset;
+                    padding: .3rem;
+                    align-self: flex-end;
+                    font-family: 'Roboto', system-ui;
+                    cursor: pointer;
+                    font-size: 1.7rem;
+                    margin-left: 1.5rem;
+                    font-weight: 400;
+                    color: $dark-gray;
+
+                    .icon {
+                        font-size: 2rem;
+                    }
+                }
+            }
+
             .news-banner {
+                align-self: center;
                 width: 80%;
                 height: 20em;
+
                 img {
                     height: 100%;
                     width: 100%;
@@ -37,6 +108,7 @@
         background-position: 50% 120%;
         background-size: cover;
         background-repeat: no-repeat;
+
         .proveedores-header {
             display: flex;
             justify-content: space-between;
@@ -46,6 +118,7 @@
                 height: 10%;
                 width: 10%;
             }
+
             nav {
                 .nav-link {
                     margin-right: 1rem;
@@ -119,23 +192,24 @@
             border-radius: 2rem;
             margin: 3rem;
             max-height: 1500px;
+
             .proveedores-filter-section {
                 background: none;
+
                 .news-banner {
                     width: 96%;
                     height: 17em;
                     margin: 2.5rem;
                     border-radius: 1.7rem;
                     border: 1px solid darkblue;
+
                     img {
                         height: 100%;
                         width: 100%;
                     }
                 }
             }
-            
+
         }
     }
 }
-
-

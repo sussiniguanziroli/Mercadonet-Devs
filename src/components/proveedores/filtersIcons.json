@@ -1,0 +1,98 @@
+[
+    {
+        "name": "Tecnología y Accesorios",
+        "icon": "https://i.imgur.com/Mi67wD1.png"
+    },
+    {
+        "name": "Ropa y Calzado",
+        "icon": "https://i.imgur.com/i4WgLrj.png"
+    },
+    {
+        "name": "Ferreterías",
+        "icon": "https://i.imgur.com/QlFAsgA.png"
+    },
+    {
+        "name": "Mueblería y Colchonería",
+        "icon": "https://i.imgur.com/96cNmjM.png"
+    },
+    {
+        "name": "Gimnasios y Deportes",
+        "icon": "https://i.imgur.com/LIkEO4G.png"
+    },
+    {
+        "name": "Estética Vehicular",
+        "icon": "https://i.imgur.com/S8qRVLh.png"
+    },
+    {
+        "name": "Corralones y Constructoras",
+        "icon": "https://i.imgur.com/YSvFsTK.png"
+    },
+    {
+        "name": "Deco y Hogar",
+        "icon": "https://i.imgur.com/uCeR1GE.png"
+    },
+    {
+        "name": "Agro y campo",
+        "icon": "https://i.imgur.com/cMZI8Kn.png"
+    },
+    {
+        "name": "Librerías y Mercerías",
+        "icon": "https://i.imgur.com/XaIPr2a.png"
+    },
+    {
+        "name": "Electro e Iluminación",
+        "icon": "https://i.imgur.com/wikhrBL.png"
+    },
+    {
+        "name": "Estética, peluquería y Barbería",
+        "icon": "https://i.imgur.com/vQUhIFk.png"
+    },
+    {
+        "name": "Máquinas Industriales",
+        "icon": "https://i.imgur.com/yTneg4U.png"
+    },
+    {
+        "name": "Crea tu propia Marca",
+        "icon": "https://i.imgur.com/bTy7Oww.png"
+    },
+    {
+        "name": "Supermercados y Kioscos",
+        "icon": "https://i.imgur.com/jQ7jdvy.png"
+    },
+    {
+        "name": "Importados",
+        "icon": "https://i.imgur.com/KDGuKD5.png"
+    },
+    {
+        "name": "Cotillón",
+        "icon": "https://i.imgur.com/nBE1uG8.png"
+    },
+    {
+        "name": "Santería",
+        "icon": "https://i.imgur.com/8D0aosz.png"
+    },
+    {
+        "name": "Juguetería",
+        "icon": "https://i.imgur.com/2ytnSbM.png"
+    },
+    {
+        "name": "Petshops y Veterinarias",
+        "icon": "https://i.imgur.com/1ROLVzg.png"
+    },
+    {
+        "name": "Descartables y Empaques",
+        "icon": "https://i.imgur.com/1dC8Wj1.png"
+    },
+    {
+        "name": "Farmacias e Insumos médicos",
+        "icon": "https://i.imgur.com/3M4pfhB.png"
+    },
+    {
+        "name": "Regalería y Marroquinería",
+        "icon": "https://i.imgur.com/nV115tr.png"
+    },
+    {
+        "name": "Hecho en Argentina",
+        "icon": "https://i.imgur.com/jrPhK9r.png"
+    }
+]

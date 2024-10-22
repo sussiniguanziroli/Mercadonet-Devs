@@ -6,6 +6,12 @@ import SearchBox from './SearchBox';
 import NewsBanner from './NewsBanner';
 import { db } from '../../firebase/config'
 import { collection, query, getDocs } from "firebase/firestore";
+import filtersIcons from '../proveedores/filtersIcons.json'
+import { MdTune } from "react-icons/md";
+
+
+
+
 
 const Proveedores = () => {
 
@@ -20,7 +26,7 @@ const Proveedores = () => {
         tipo: [],
         marca: []
     });
-    
+
 
 
     console.log("filtros opciones", filtrosOpciones)
@@ -50,22 +56,22 @@ const Proveedores = () => {
             try {
                 const q = query(collection(db, 'filtros'));
                 const snapshot = await getDocs(q);
-    
+
                 // Creamos objetos vacíos para cada filtro
                 let ubicacion = [];
                 let tipo = [];
                 let marca = [];
-    
+
                 // Iteramos sobre los documentos obtenidos desde Firebase
                 snapshot.docs.forEach(doc => {
                     const data = doc.data();
-                    
+
                     // Llenamos los arrays correspondientes según el contenido
                     if (data.ubicacion) ubicacion = data.ubicacion;
                     if (data.tipo) tipo = data.tipo;
                     if (data.marca) marca = data.marca;
                 });
-    
+
                 // Establecemos el estado con los tres arrays
                 setFiltrosOpciones({
                     ubicacion,
@@ -76,7 +82,7 @@ const Proveedores = () => {
                 console.error("Error obteniendo los filtros: ", error);
             }
         };
-    
+
         fetchFiltros();
     }, []);
 
@@ -109,14 +115,23 @@ const Proveedores = () => {
                     <section className='proveedores-filter-section'>
                         <NewsBanner />
 
-                        <div>
-                            <button className='filterBtn hiddenInDesktop' onClick={openFilters}>Filtrar</button>
+                        <div className='mobile-thumb-filters hiddenInDesktop'>
+                            <div className='mobile-thumb-filters-btns-container'>
+                                {filtersIcons.map((filterIcon => <div className='thumbFilter' onClick={() => setSelectedTipo()}>
+                                    <div className='thumbFilter-icon'>
+                                        <img src={filterIcon.icon} alt={filterIcon.name} />
+                                    </div>
+                                    <p>{filterIcon.name}</p>
+                                </div>))}
+                            </div>
+                            <button className='filterBtn' onClick={openFilters}><MdTune className='icon' /> Filtrar</button>
                             {/* Menu desplegable en mobile */}
                             <FiltrosComponent setIsMenuHidden={setIsMenuHidden} isMenuHidden={isMenuHidden}
                                 filtrosOpciones={filtrosOpciones}
                                 setSelectedMarca={setSelectedMarca}
                                 setSelectedTipo={setSelectedTipo}
-                                setSelectedUbicacion={setSelectedUbicacion} />
+                                setSelectedUbicacion={setSelectedUbicacion}
+                            />
                         </div>
                         <ProveedoresList proveedores={proveedoresFiltrados}
                             filtrosOpciones={filtrosOpciones}
