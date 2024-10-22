@@ -89,7 +89,8 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
 
                     ))
 
-
+                ) : selectedUbicacion || selectedMarca || selectedTipo ? (
+                    <div>Ningun proveedor coincide con los filtros</div>
                 ) : (
                     <div>
                         Cargando Proveedores
