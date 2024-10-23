@@ -82,8 +82,7 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
             </div>
             <div className='proveedores-list'>
                 {proveedores.length > 0 ? (
-
-
+                
                     proveedores.map((proveedor =>
 
                         <Proveedor proveedor={proveedor} key={proveedor.id} />
@@ -91,7 +90,7 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                     ))
 
                 ) : selectedUbicacion || selectedMarca || selectedTipo ? (
-                    <div className='no-criteria'>Ningun proveedor coincide con los filtros</div>
+                    <div className='no-criteria'><p>No se ha encontrado ningun proveedor.</p></div>
                 ) : (
                     <div className='loader'>
                         <div className='hiddenInMobile'>
