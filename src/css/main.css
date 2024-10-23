@@ -875,6 +875,7 @@ main {
   font-size: 2rem;
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner {
+  margin-top: 3.5rem;
   align-self: center;
   width: 80%;
   height: 20em;
@@ -967,6 +968,7 @@ main {
     width: 96%;
     height: 17em;
     margin: 2.5rem;
+    margin-top: 2.5rem;
     border-radius: 1.7rem;
     border: 1px solid darkblue;
   }
