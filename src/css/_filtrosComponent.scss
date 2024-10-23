@@ -80,48 +80,50 @@
             li {
                 list-style: none;
                 margin-top: 0.7rem;
-
+        
                 label {
-                    font-size: 1.7rem;
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem; // Un poco más de espacio entre checkbox y texto
-                    font-family: 'Roboto', system-ui; // Aplicando la fuente que utilizas
-                    color: $text-gray; // Usando el gris para el texto
-
-                    input[type="checkbox"] { 
-                        width: 18px;
-                        height: 18px;
-                        cursor: pointer;
-                        position: relative;
-                        background-color: $main-white;
-                        transition: all 0.3s ease;
-
-                        &:checked {
+                    gap: 0.5rem;
+                    font-size: 1.7rem;
+                    font-family: 'Roboto', system-ui;
+                    color: $text-gray; // Usa la variable que tengas definida
+        
+                    input {
+                        display: none; // Ocultar el checkbox original
+        
+                        &:checked + .custom-checkbox {
                             background-color: $azul-oscuro; // Color de fondo cuando está seleccionado
-                            border-color: $azul-oscuro;
-
-                            &:before {
-                                content: "";
+                            border-color: $azul-oscuro; // Cambiar el borde también
+        
+                            &::after {
+                                content: ''; // Usar pseudo-elemento para el "check"
                                 position: absolute;
-                                top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -50%) rotate(45deg);
-                                width: 5px;
-                                height: 10px;
-                                border: solid $main-white;
-                                border-width: 0 2px 2px 0;
+                                left: 6px; // Ajustar según el tamaño
+                                top: 2px; // Ajustar según el tamaño
+                                width: 4px; // Ancho de la marca de verificación
+                                height: 10px; // Altura de la marca de verificación
+                                border: solid white; // Color de la marca de verificación
+                                border-width: 0 2px 2px 0; // Formato de la marca
+                                transform: rotate(45deg); // Rotar para que parezca un "check"
                             }
                         }
-
-                        &:focus {
-                            outline: none;
-                            box-shadow: 0 0 3px rgba(0, 123, 255, 0.5); // Efecto de foco
-                        }
+                    }
+        
+                    .custom-checkbox {
+                        width: 18px;
+                        height: 18px;
+                        border: 2px solid $azul-oscuro; // Color del borde
+                        border-radius: 16px; // Bordes redondeados
+                        position: relative; // Para el pseudo-elemento
+                        z-index: 2000;
+                        // Añadir un efecto de transición
+                        transition: background-color 0.3s ease, border-color 0.3s ease;
                     }
                 }
             }
         }
+        
 
     }
 
