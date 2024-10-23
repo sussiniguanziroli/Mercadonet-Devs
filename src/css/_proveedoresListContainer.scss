@@ -26,6 +26,13 @@
                 color: $dark-gray;
             }
         }
+
+        .texto-proveedores-encontrados {
+            font-size: 1rem;
+            font-weight: 500;
+            margin: 1rem 2rem;
+            color: $dark-gray;
+        }
     }
 }
 
@@ -181,6 +188,9 @@
                     font-weight: 500;
                     color: $dark-gray;
                 }
+            }
+            .texto-proveedores-encontrados {
+                margin: 1rem 3rem;
             }
         }
 

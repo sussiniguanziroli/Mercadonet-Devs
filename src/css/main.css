@@ -1001,6 +1001,12 @@ main {
   font-weight: 500;
   color: #474747;
 }
+.proveedores-list-container .proveedores-list .texto-proveedores-encontrados {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 1rem 2rem;
+  color: #474747;
+}
 
 @media (min-width: 1024px) {
   .proveedores-list-container {
@@ -1119,6 +1125,9 @@ main {
     margin-top: 2.5rem;
     font-weight: 500;
     color: #474747;
+  }
+  .proveedores-list-container .proveedores-list .texto-proveedores-encontrados {
+    margin: 1rem 3rem;
   }
 }
 .main-filters-component {
