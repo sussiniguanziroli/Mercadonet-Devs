@@ -83,7 +83,10 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
             <div className='proveedores-list'>
                 {proveedores.length > 0 ? (
                     <>
-                    <p className='texto-proveedores-encontrados'>{proveedores.length} proveedor/es encontrado/s.</p>
+                    {proveedores.length == 1 ? (
+                        <p className='texto-proveedores-encontrados'>{proveedores.length} proveedor encontrado.</p>
+                    ) : (<p className='texto-proveedores-encontrados'>{proveedores.length} proveedor/es encontrado/s.</p>)}
+                    
                     
                     {proveedores.map((proveedor) => 
                                                 
