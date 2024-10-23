@@ -818,7 +818,7 @@ main {
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .mobile-thumb-filters .mobile-thumb-filters-btns-container {
   overflow-x: scroll;
-  margin: 0 0.5rem;
+  padding: 0 0.5rem;
   margin-bottom: 1rem;
   display: flex;
   height: auto;
