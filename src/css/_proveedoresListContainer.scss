@@ -1,6 +1,8 @@
 .proveedores-list-container {
+    
     .proveedores-list {
         width: 100%;
+        min-height: 120vh;
         .loader {
             display: flex;
             justify-content: center;

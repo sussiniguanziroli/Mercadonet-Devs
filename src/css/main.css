@@ -977,6 +977,7 @@ main {
 }
 .proveedores-list-container .proveedores-list {
   width: 100%;
+  min-height: 120vh;
 }
 .proveedores-list-container .proveedores-list .loader {
   display: flex;
@@ -1139,7 +1140,7 @@ main {
   font-weight: 400;
   color: #2c2c2c;
   gap: 1rem;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   width: 100%;
 }
 .actual-filters-mobile .filtro-tipos .tipo-boton {
@@ -1235,6 +1236,19 @@ main {
 }
 .actual-filters-mobile .filtro-marca select option .marca-option {
   padding: 1rem;
+}
+.actual-filters-mobile .readyBtn {
+  align-self: center;
+  width: 10em;
+  margin-top: 2rem;
+  font-size: 1.7rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  font-family: "Roboto", system-ui;
+  padding: 1rem;
+  transition: all 0.3s;
+  font-weight: 500;
 }
 
 @keyframes slideIn {

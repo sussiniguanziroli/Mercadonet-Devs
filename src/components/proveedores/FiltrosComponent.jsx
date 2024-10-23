@@ -80,6 +80,8 @@ const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setS
                         ))}
                     </select>
                 </div>
+                <button className='readyBtn' onClick={() => setIsMenuHidden(true)}><p>Hecho</p>
+                </button>
             </section>
         </main>
     )

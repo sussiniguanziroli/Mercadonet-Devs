@@ -25,6 +25,7 @@
     .closebtn-div {
         display: flex;
         justify-content: flex-end;
+
         button {
             margin-top: 1rem;
             margin-right: 1rem;
@@ -50,7 +51,7 @@
     font-weight: 400;
     color: $text-gray;
     gap: 1rem;
-    padding: 1rem;
+    padding: 1rem 1.5rem;
     width: 100%;
 
     .filtro-tipos {
@@ -79,29 +80,30 @@
             li {
                 list-style: none;
                 margin-top: 0.7rem;
+
                 label {
                     font-size: 1.7rem;
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem;  // Un poco más de espacio entre checkbox y texto
+                    gap: 0.5rem; // Un poco más de espacio entre checkbox y texto
                     font-family: 'Roboto', system-ui; // Aplicando la fuente que utilizas
-                    color: $text-gray;  // Usando el gris para el texto
-        
+                    color: $text-gray; // Usando el gris para el texto
+
                     input {
                         appearance: none; // Oculta el checkbox por defecto
                         width: 18px;
                         height: 18px;
-                        border: 2px solid $color-azul;  // Color del borde del checkbox
+                        border: 2px solid $color-azul; // Color del borde del checkbox
                         border-radius: 4px; // Bordes redondeados
                         position: relative;
                         cursor: pointer;
                         background-color: $main-white;
                         transition: all 0.3s ease;
-        
+
                         &:checked {
-                            background-color: $azul-oscuro;  // Color de fondo cuando está seleccionado
+                            background-color: $azul-oscuro; // Color de fondo cuando está seleccionado
                             border-color: $azul-oscuro;
-        
+
                             &:before {
                                 content: "";
                                 position: absolute;
@@ -114,7 +116,7 @@
                                 border-width: 0 2px 2px 0;
                             }
                         }
-        
+
                         &:focus {
                             outline: none;
                             box-shadow: 0 0 3px rgba(0, 123, 255, 0.5); // Efecto de foco
@@ -123,12 +125,13 @@
                 }
             }
         }
-        
+
     }
 
     //UBI-----------------UBICACION---------
     .filtro-ubicacion {
         margin-top: 1rem;
+
         select {
             cursor: pointer;
             font-size: 1.3rem;
@@ -151,6 +154,7 @@
     //MARCA--------------------MARCA------------
     .filtro-marca {
         margin-top: 1rem;
+
         select {
             cursor: pointer;
             font-size: 1.3rem;
@@ -168,6 +172,20 @@
                 }
             }
         }
+    }
+
+    .readyBtn {
+        align-self: center;
+        width: 10em;
+        margin-top: 2rem;
+        font-size: 1.7rem;
+        border: none;
+        border-radius: .5rem;
+        background-color: $item-white;
+        font-family: 'Roboto', system-ui;
+        padding: 1rem;
+        transition: all .3s;
+        font-weight: 500;
     }
 }
 
