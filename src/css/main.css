@@ -1177,14 +1177,14 @@ main {
   display: none;
 }
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input:checked + .custom-checkbox {
-  background-color: #7098ee;
-  border-color: #7098ee;
+  background-color: #131921;
+  border-color: #131921;
 }
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input:checked + .custom-checkbox::after {
   content: "";
   position: absolute;
-  left: 6px;
-  top: 2px;
+  left: 30%;
+  top: 2%;
   width: 4px;
   height: 10px;
   border: solid white;

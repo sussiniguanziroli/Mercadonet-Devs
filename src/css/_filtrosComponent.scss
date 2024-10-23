@@ -93,14 +93,14 @@
                         display: none; // Ocultar el checkbox original
         
                         &:checked + .custom-checkbox {
-                            background-color: $azul-oscuro; // Color de fondo cuando está seleccionado
-                            border-color: $azul-oscuro; // Cambiar el borde también
+                            background-color: $color-azul; // Color de fondo cuando está seleccionado
+                            border-color: $color-azul; // Cambiar el borde también
         
                             &::after {
                                 content: ''; // Usar pseudo-elemento para el "check"
                                 position: absolute;
-                                left: 6px; // Ajustar según el tamaño
-                                top: 2px; // Ajustar según el tamaño
+                                left: 30%; // Ajustar según el tamaño
+                                top: 2%; // Ajustar según el tamaño
                                 width: 4px; // Ancho de la marca de verificación
                                 height: 10px; // Altura de la marca de verificación
                                 border: solid white; // Color de la marca de verificación
