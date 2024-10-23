@@ -1194,7 +1194,7 @@ main {
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label .custom-checkbox {
   width: 18px;
   height: 18px;
-  border: 2px solid #7098ee;
+  border: 2px solid #FF7F00;
   border-radius: 16px;
   position: relative;
   z-index: 2000;
