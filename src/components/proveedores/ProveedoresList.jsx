@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Proveedor from './Proveedor'
 import { ScaleLoader } from 'react-spinners';
 

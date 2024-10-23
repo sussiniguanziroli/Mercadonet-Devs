@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 90vw;
@@ -89,14 +89,11 @@
                     font-family: 'Roboto', system-ui; // Aplicando la fuente que utilizas
                     color: $text-gray; // Usando el gris para el texto
 
-                    input {
-                        appearance: none; // Oculta el checkbox por defecto
+                    input[type="checkbox"] { 
                         width: 18px;
                         height: 18px;
-                        border: 2px solid $color-azul; // Color del borde del checkbox
-                        border-radius: 4px; // Bordes redondeados
-                        position: relative;
                         cursor: pointer;
+                        position: relative;
                         background-color: $main-white;
                         transition: all 0.3s ease;
 
@@ -175,13 +172,14 @@
     }
 
     .readyBtn {
+        color: $main-white;
         align-self: center;
         width: 10em;
         margin-top: 2rem;
         font-size: 1.7rem;
         border: none;
         border-radius: .5rem;
-        background-color: $item-white;
+        background-color: #004787;
         font-family: 'Roboto', system-ui;
         padding: 1rem;
         transition: all .3s;

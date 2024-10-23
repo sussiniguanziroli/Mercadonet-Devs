@@ -1097,7 +1097,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 90vw;
@@ -1173,22 +1173,19 @@ main {
   font-family: "Roboto", system-ui;
   color: #2c2c2c;
 }
-.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input {
-  appearance: none;
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input[type=checkbox] {
   width: 18px;
   height: 18px;
-  border: 2px solid #131921;
-  border-radius: 4px;
-  position: relative;
   cursor: pointer;
+  position: relative;
   background-color: #F5F5F5;
   transition: all 0.3s ease;
 }
-.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input:checked {
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input[type=checkbox]:checked {
   background-color: #7098ee;
   border-color: #7098ee;
 }
-.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input:checked:before {
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input[type=checkbox]:checked:before {
   content: "";
   position: absolute;
   top: 50%;
@@ -1199,7 +1196,7 @@ main {
   border: solid #F5F5F5;
   border-width: 0 2px 2px 0;
 }
-.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input:focus {
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input[type=checkbox]:focus {
   outline: none;
   box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
 }
@@ -1238,13 +1235,14 @@ main {
   padding: 1rem;
 }
 .actual-filters-mobile .readyBtn {
+  color: #F5F5F5;
   align-self: center;
   width: 10em;
   margin-top: 2rem;
   font-size: 1.7rem;
   border: none;
   border-radius: 0.5rem;
-  background-color: #ffffff;
+  background-color: #004787;
   font-family: "Roboto", system-ui;
   padding: 1rem;
   transition: all 0.3s;
