@@ -89,6 +89,18 @@
                 }
             }
 
+            .banners-loading {
+                margin-top: 7rem;
+                align-self: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 95%;
+                background-color: $color-azul;
+                height: 15em;
+                border-radius: 1.7rem;
+                color: $main-white;
+            }
 
             .news-banner {
                 margin-top: 7rem;
@@ -227,6 +239,19 @@
 
             .proveedores-filter-section {
                 background: none;
+
+                .banners-loading {
+                    margin-top: 3rem;
+                    align-self: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 95%;
+                    background-color: $color-azul;
+                    height: 30em;
+                    border-radius: 1.7rem;
+                    color: $main-white;
+                }
 
                 .news-banner {
                     width: 96%;

@@ -877,6 +877,18 @@ main {
 .main-proveedores .secondary-proveedores .proveedores-filter-section .mobile-thumb-filters .filterBtn .icon {
   font-size: 2rem;
 }
+.main-proveedores .secondary-proveedores .proveedores-filter-section .banners-loading {
+  margin-top: 7rem;
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  background-color: #131921;
+  height: 15em;
+  border-radius: 1.7rem;
+  color: #F5F5F5;
+}
 .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner {
   margin-top: 7rem;
   align-self: center;
@@ -982,6 +994,18 @@ main {
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section {
     background: none;
+  }
+  .main-proveedores .secondary-proveedores .proveedores-filter-section .banners-loading {
+    margin-top: 3rem;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95%;
+    background-color: #131921;
+    height: 30em;
+    border-radius: 1.7rem;
+    color: #F5F5F5;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner {
     width: 96%;
