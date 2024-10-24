@@ -24,7 +24,7 @@ const NewsBanner = () => {
             cellAlign: 'center', // Centrar las imágenes
             contain: true,
             pageDots: false,
-            prevNextButtons: true,
+            prevNextButtons: false,
             wrapAround: true,
             autoPlay: 2900,
         })
