@@ -875,14 +875,26 @@ main {
   font-size: 2rem;
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner {
-  margin-top: 3.5rem;
+  margin-top: 7rem;
   align-self: center;
-  width: 80%;
-  height: 20em;
+  width: 98%;
+  height: 100%;
+  border-radius: 1.7rem;
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner .main-carousel {
   height: 100%;
   width: 100%;
+}
+.main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner .main-carousel .flickity-prev-next-button {
+  width: 2.5rem;
+  /* Ancho de las flechas */
+  height: 2.5rem;
+  /* Alto de las flechas */
+  border: transparent;
+  /* Sin borde */
+  outline: transparent;
+  /* Sin borde de foco */
+  background-color: #474747;
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner .main-carousel .carousel-image {
   width: 100%;

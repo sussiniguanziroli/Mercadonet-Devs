@@ -32,7 +32,7 @@ const NewsBanner = () => {
     return (
         <>
             {/* MOBILE */}
-            <aside className='news-banner hiddenInDesktop'>
+            <aside className='news-banner bannerMobile hiddenInDesktop'>
                 <div className='main-carousel' ref={flickityRefMobile}>
                     {bannersMobile.map((banner) => <div key={banner.name} className='carousel-cell'>
                         <img className='carousel-image' src={banner.img} alt={banner.name} />
