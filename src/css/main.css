@@ -813,7 +813,6 @@ main {
   flex-direction: column;
   background-size: 100% 1000px;
   background-repeat: no-repeat;
-  background-attachment: fixed;
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .mobile-thumb-filters {
   margin-top: 1rem;
