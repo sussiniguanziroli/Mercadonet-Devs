@@ -9,10 +9,12 @@
     .secondary-proveedores {
 
         .proveedores-filter-section {
-            background: linear-gradient(to bottom, $color-azul 12%, #eee 16%);
+            background: linear-gradient(to bottom, $color-azul 22%, #eee 32%);
             display: flex;
             flex-direction: column;
-
+            background-size: 100% 1000px;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             .mobile-thumb-filters {
                 margin-top: 1rem;
                 width: 100%;

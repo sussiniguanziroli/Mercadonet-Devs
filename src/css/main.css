@@ -808,9 +808,12 @@ main {
   flex-direction: column;
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section {
-  background: linear-gradient(to bottom, #131921 12%, #eee 16%);
+  background: linear-gradient(to bottom, #131921 22%, #eee 32%);
   display: flex;
   flex-direction: column;
+  background-size: 100% 1000px;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .mobile-thumb-filters {
   margin-top: 1rem;

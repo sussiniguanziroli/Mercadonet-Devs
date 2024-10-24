@@ -9,25 +9,29 @@ const NewsBanner = () => {
     const flickityRefMobile = useRef(null);
 
     useEffect(() => {
-        new Flickity(flickityRef.current, {
-            cellAlign: 'center', // Centrar las imágenes
-            contain: true,
-            pageDots: true,
-            prevNextButtons: true,
-            wrapAround: true,
-            autoPlay: 2900,
-        })
+        setTimeout(() => {
+            new Flickity(flickityRef.current, {
+                cellAlign: 'center', // Centrar las imágenes
+                contain: true,
+                pageDots: true,
+                prevNextButtons: true,
+                wrapAround: true,
+                autoPlay: 2900,
+            })
+        }, 200);
     }, []);
 
     useEffect(() => {
-        new Flickity(flickityRefMobile.current, {
-            cellAlign: 'center', // Centrar las imágenes
-            contain: true,
-            pageDots: false,
-            prevNextButtons: false,
-            wrapAround: true,
-            autoPlay: 2900,
-        })
+        setTimeout(() => {
+            new Flickity(flickityRefMobile.current, {
+                cellAlign: 'center', // Centrar las imágenes
+                contain: true,
+                pageDots: false,
+                prevNextButtons: false,
+                wrapAround: true,
+                autoPlay: 2900,
+            })
+        }, 200);
     }, []);
     return (
         <>
