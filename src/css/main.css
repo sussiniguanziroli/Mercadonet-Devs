@@ -880,9 +880,13 @@ main {
   width: 80%;
   height: 20em;
 }
-.main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner img {
+.main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner .main-carousel {
   height: 100%;
   width: 100%;
+}
+.main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner .main-carousel .carousel-image {
+  width: 100%;
+  height: 100%;
 }
 
 @media (min-width: 1024px) {
@@ -959,7 +963,7 @@ main {
     background-color: #f5f7f8;
     border-radius: 2rem;
     margin: 3rem;
-    max-height: 2200px;
+    max-height: 2500px;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section {
     background: none;
@@ -969,12 +973,14 @@ main {
     height: 17em;
     margin: 2.5rem;
     margin-top: 2.5rem;
-    border-radius: 1.7rem;
-    border: 1px solid darkblue;
   }
-  .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner img {
-    height: 100%;
+  .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner .main-carousel {
     width: 100%;
+    height: 100%;
+  }
+  .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner .main-carousel .carousel-image {
+    width: 100%;
+    height: 100%;
   }
 }
 .proveedores-list-container .proveedores-list {
@@ -1013,6 +1019,7 @@ main {
     overflow: scroll;
     display: flex;
     flex-direction: row;
+    margin-top: 7rem;
   }
   .proveedores-list-container .filtros-desktop {
     font-family: "Roboto", system-ui;

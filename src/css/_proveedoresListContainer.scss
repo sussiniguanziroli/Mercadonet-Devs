@@ -1,5 +1,5 @@
 .proveedores-list-container {
-
+    
     .proveedores-list {
         width: 100%;
         min-height: 120vh;
@@ -41,7 +41,7 @@
         overflow: scroll;
         display: flex;
         flex-direction: row;
-
+        margin-top: 7rem;
         .filtros-desktop {
             font-family: 'Roboto', system-ui;
             font-size: 1.2rem;
@@ -137,8 +137,6 @@
                 }
             }
         }
-
-
 
 
         .proveedores-list {
