@@ -12,6 +12,32 @@ const NewsBanner = () => {
     const [bannersDesktop, setBannersDesktop] = useState([]);
     const [bannersMobile, setBannersMobile] = useState([]);
 
+    useEffect(() => {
+
+        new Flickity(flickityRef.current, {
+            cellAlign: 'center', // Centrar las imágenes
+            contain: true,
+            pageDots: true,
+            prevNextButtons: true,
+            wrapAround: true,
+            autoPlay: 2900,
+        })
+
+    }, [bannersDesktop]);
+
+    useEffect(() => {
+
+        new Flickity(flickityRefMobile.current, {
+            cellAlign: 'center', // Centrar las imágenes
+            contain: true,
+            pageDots: false,
+            prevNextButtons: false,
+            wrapAround: true,
+            autoPlay: 2900,
+        })
+
+    }, [bannersMobile]);
+
     // Función para traer la colección "bannersDesktop"
     const fetchBannersDesktop = async () => {
         const docRef = doc(db, 'banners', 'MImKl6eI8mBBiLaSAbQ5');
@@ -46,31 +72,6 @@ const NewsBanner = () => {
 
 
 
-    useEffect(() => {
-
-        new Flickity(flickityRef.current, {
-            cellAlign: 'center', // Centrar las imágenes
-            contain: true,
-            pageDots: true,
-            prevNextButtons: true,
-            wrapAround: true,
-            autoPlay: 2900,
-        })
-
-    }, [bannersDesktop]);
-
-    useEffect(() => {
-
-        new Flickity(flickityRefMobile.current, {
-            cellAlign: 'center', // Centrar las imágenes
-            contain: true,
-            pageDots: false,
-            prevNextButtons: false,
-            wrapAround: true,
-            autoPlay: 2900,
-        })
-
-    }, [bannersMobile]);
     return (
         <>
             {bannersDesktop.length == 0 || bannersMobile.length == 0 ? (
