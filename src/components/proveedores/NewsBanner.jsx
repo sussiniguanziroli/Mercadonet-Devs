@@ -16,22 +16,26 @@ const NewsBanner = () => {
     const fetchBannersDesktop = async () => {
         const docRef = doc(db, 'banners', 'MImKl6eI8mBBiLaSAbQ5');
         const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            setBannersDesktop(docSnap.data().bannersDesktop);
-        } else {
-            console.log("No se encontraron banners desktop");
-        }
+        setTimeout(() => {
+            if (docSnap.exists()) {
+                setBannersDesktop(docSnap.data().bannersDesktop);
+            } else {
+                console.log("No se encontraron banners desktop");
+            }
+        }, 1000);
     };
 
     // Función para traer la colección "bannersMobile"
     const fetchBannersMobile = async () => {
         const docRef = doc(db, 'banners', 'piiyYFE6gNKmgNOUeF1o');
         const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            setBannersMobile(docSnap.data().bannersMobile);
-        } else {
-            console.log("No se encontraron banners móviles");
-        }
+        setTimeout(() => {
+            if (docSnap.exists()) {
+                setBannersMobile(docSnap.data().bannersMobile);
+            } else {
+                console.log("No se encontraron banners móviles");
+            }
+        }, 1000);
     };
 
     // Llamada a las funciones cuando el componente se monta
