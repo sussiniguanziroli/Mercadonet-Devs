@@ -846,8 +846,9 @@ main {
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .mobile-thumb-filters .mobile-thumb-filters-btns-container .thumbFilter .thumbFilter-icon {
   width: 5em;
+  height: 5em;
   background-color: #131921;
-  border-radius: 10em;
+  border-radius: 50%;
   padding: 1rem;
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .mobile-thumb-filters .mobile-thumb-filters-btns-container .thumbFilter .thumbFilter-icon img {
