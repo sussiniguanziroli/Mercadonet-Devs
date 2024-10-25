@@ -14,7 +14,7 @@ const Proveedor = ({ proveedor }) => {
             {/* CARDS MOBILE */}
             <div className='proveedor-item hiddenInDesktop'>
                 <img src={proveedor.imagen} alt={proveedor.name} />
-                <div>
+                <div className='titulos'>
                     <h2>{proveedor.nombre}</h2>
                     <strong><IoLocationOutline className='icon' />
                         {proveedor.ubicacionDetalle}</strong>

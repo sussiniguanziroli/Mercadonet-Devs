@@ -11,9 +11,15 @@
     height: 330px;
     color: $text-gray;
 
+    .titulos {
+        align-self: flex-start;
+    }
+
     h2 {
         align-self: flex-start;
         color: $text-gray;
+        font-weight: 470;
+        font-size: 1.6rem;
     }
 
     .descripcion {

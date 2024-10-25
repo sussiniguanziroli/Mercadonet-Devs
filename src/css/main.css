@@ -1388,9 +1388,14 @@ main {
   height: 330px;
   color: #2c2c2c;
 }
+.proveedor-item .titulos {
+  align-self: flex-start;
+}
 .proveedor-item h2 {
   align-self: flex-start;
   color: #2c2c2c;
+  font-weight: 470;
+  font-size: 1.6rem;
 }
 .proveedor-item .descripcion {
   align-self: flex-start;
