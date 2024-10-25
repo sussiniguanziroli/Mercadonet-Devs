@@ -17,6 +17,7 @@ const Proveedor = ({ proveedor }) => {
                 <h4>Marcas:</h4>
                 {proveedor.marca.map((marca)=> <p>{marca},</p>)}
             </div>
+            <button>Ver Detalles</button>
         </div>
     )
 }

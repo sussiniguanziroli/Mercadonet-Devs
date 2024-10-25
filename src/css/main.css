@@ -1379,6 +1379,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   background-color: #ffffff;
   border-radius: 0.7rem;
   padding: 1rem;
@@ -1404,6 +1405,19 @@ main {
   object-fit: contain;
   height: 40%;
   width: 40%;
+}
+.proveedor-item button {
+  padding: 0.4rem;
+  font-family: "Roboto", system-ui;
+  color: #F5F5F5;
+  background-color: #004787;
+  border: none;
+  border-radius: 0.4rem;
+  width: 98%;
+  transition: 0.3s all;
+}
+.proveedor-item button:hover {
+  background-color: #242e3d;
 }
 
 @media (min-width: 1024px) {
