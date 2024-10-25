@@ -19,11 +19,13 @@ const Proveedor = ({ proveedor }) => {
                     <strong><IoLocationOutline className='icon' />
                         {proveedor.ubicacionDetalle}</strong>
                     <p className='descripcion'>{truncatedDescription}</p>
+                    <div className='proveedor-marcas'>
+                        <h4>Marcas:</h4>
+                        {proveedor.marca.map((marca) => <p>{marca},</p>)}
+                    </div>
                 </div>
-                <div className='proveedor-marcas'>
-                    <h4>Marcas:</h4>
-                    {proveedor.marca.map((marca) => <p>{marca},</p>)}
-                </div>
+
+
                 <button>Ver Detalles</button>
             </div>
 
