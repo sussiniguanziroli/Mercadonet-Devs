@@ -9,7 +9,7 @@ const Proveedor = ({ proveedor }) => {
         ? proveedor.descripcion.slice(0, maxLength) + "...[ver más]"
         : proveedor.descripcion;
 
-    const marcasLimitadas = proveedor.marca.slice(0,4);
+    const marcasLimitadas = proveedor.marca.slice(0, 5);
 
 
 
