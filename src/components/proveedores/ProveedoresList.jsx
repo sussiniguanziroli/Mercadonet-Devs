@@ -83,16 +83,18 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
             <div className='proveedores-list'>
                 {proveedores.length > 0 ? (
                     <>
-                    {proveedores.length == 1 ? (
-                        <p className='texto-proveedores-encontrados'>{proveedores.length} proveedor encontrado.</p>
-                    ) : (<p className='texto-proveedores-encontrados'>{proveedores.length} proveedores encontrados.</p>)}
-                    
-                    
-                    {proveedores.map((proveedor) => 
-                                                
-                        <Proveedor proveedor={proveedor} key={proveedor.id} />
+                        {proveedores.length == 1 ? (
+                            <p className='texto-proveedores-encontrados'>{proveedores.length} proveedor encontrado.</p>
+                        ) : (<p className='texto-proveedores-encontrados'>{proveedores.length} proveedores encontrados.</p>)}
 
-                    )}
+                        <div className='proveedores-list-grid'>
+                            {proveedores.map((proveedor) =>
+
+                                <Proveedor proveedor={proveedor} key={proveedor.id} />
+
+                            )}
+                        </div>
+
                     </>
                 ) : selectedUbicacion || selectedMarca || selectedTipo ? (
                     <div className='no-criteria'><p>No se ha encontrado ningun proveedor.</p></div>

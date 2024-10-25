@@ -1,20 +1,43 @@
 .proveedor-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: $item-white;
     border-radius: .7rem;
     padding: 1rem;
-    margin: 2rem;
-    max-height: 400px;
+    margin: 1rem;
+    font-size: 1rem;
+    height: 330px;
+    h2 {
+        align-self: flex-start;
+    }
+    .descripcion {
+        align-self: flex-start;
+    }
+    strong {
+        align-self: flex-start;
+    }
+    .proveedor-marcas {
+        display: flex;
+        gap: .2rem;
+        align-self: flex-start;
+    }
     img {
-        height: 100%;
-        width: 20em;
+        object-fit: contain;
+        height: 40%;
+        width: 40%;
     }
 }
 
 @media (min-width: 1024px) {
     .proveedor-item {
+        height: auto;
         background-color: $item-white;
         border-radius: .7rem;
+        padding: 1rem;
+        margin: 2rem;
         width: 96%;
+        font-size: 1rem;
         img {
             height: 100%;
             width: 20em;

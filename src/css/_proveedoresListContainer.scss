@@ -4,6 +4,11 @@
         width: 100%;
         min-height: 120vh;
 
+        .proveedores-list-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
         .loader {
             display: flex;
             justify-content: center;
@@ -144,7 +149,9 @@
             width: 100%;
             overflow: scroll;
             max-height: 2000px;
-
+            .proveedores-list-grid {
+                display: block;
+            }
             &::-webkit-scrollbar {
                 display: block;
                 width: 8px;
