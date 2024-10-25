@@ -1439,7 +1439,7 @@ main {
   transition: 0.3s all;
 }
 .proveedor-item button:hover {
-  background-color: #242e3d;
+  background-color: #FF7F00;
 }
 
 @media (min-width: 1024px) {
