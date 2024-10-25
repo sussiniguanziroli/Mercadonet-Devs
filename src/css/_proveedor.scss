@@ -16,9 +16,10 @@
     }
     .descripcion {
         align-self: flex-start;
+        font-weight: 450;
     }
     strong {
-        font-weight: 450;
+        font-weight: 480;
         display: flex;
         align-items: flex-start;
         gap: .1rem;
@@ -32,8 +33,8 @@
     }
     img {
         object-fit: contain;
-        height: 40%;
-        width: 40%;
+        height: 33%;
+        width: 100%;
     }
     button {
         padding: .5rem;

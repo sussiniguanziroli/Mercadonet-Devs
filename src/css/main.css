@@ -1394,9 +1394,10 @@ main {
 }
 .proveedor-item .descripcion {
   align-self: flex-start;
+  font-weight: 450;
 }
 .proveedor-item strong {
-  font-weight: 450;
+  font-weight: 480;
   display: flex;
   align-items: flex-start;
   gap: 0.1rem;
@@ -1410,8 +1411,8 @@ main {
 }
 .proveedor-item img {
   object-fit: contain;
-  height: 40%;
-  width: 40%;
+  height: 33%;
+  width: 100%;
 }
 .proveedor-item button {
   padding: 0.5rem;
