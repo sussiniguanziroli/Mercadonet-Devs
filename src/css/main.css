@@ -1394,8 +1394,8 @@ main {
 .proveedor-item h2 {
   align-self: flex-start;
   color: #2c2c2c;
-  font-weight: 550;
-  font-size: 1.6rem;
+  font-weight: 580;
+  font-size: 1.3rem;
 }
 .proveedor-item .descripcion {
   align-self: flex-start;
