@@ -52,33 +52,39 @@ const NewsBanner = () => {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        if (!isLoading && bannersDesktop.length > 0 && bannersMobile.length > 0) {
-            new Flickity(flickityRef.current, {
-                cellAlign: 'center',
-                contain: true,
-                pageDots: true,
-                prevNextButtons: true,
-                wrapAround: true,
-                autoPlay: 2900,
-            });
+    const initializeFlickity = () => {
+        const flktyDesktop = new Flickity(flickityRef.current, {
+            cellAlign: 'center',
+            contain: true,
+            pageDots: true,
+            prevNextButtons: true,
+            wrapAround: true,
+            autoPlay: 2900,
+        });
 
-            new Flickity(flickityRefMobile.current, {
-                cellAlign: 'center',
-                contain: true,
-                pageDots: false,
-                prevNextButtons: false,
-                wrapAround: true,
-                autoPlay: 2900,
-            });
-        }
-    }, [isLoading, bannersDesktop, bannersMobile]);
+        const flktyMobile = new Flickity(flickityRefMobile.current, {
+            cellAlign: 'center',
+            contain: true,
+            pageDots: false,
+            prevNextButtons: false,
+            wrapAround: true,
+            autoPlay: 2900,
+        });
+
+        // Forzar un resize después de inicializar para asegurar que todo esté correcto
+        flktyDesktop.resize();
+        flktyMobile.resize();
+    };
 
     const handleImageLoad = (type) => {
-        setImagesLoaded(prevState => ({
-            ...prevState,
-            [type]: prevState[type] + 1
-        }));
+        setImagesLoaded((prev) => {
+            const newCount = { ...prev, [type]: prev[type] + 1 };
+            // Verificar si todas las imágenes han sido cargadas
+            if (newCount.desktop === bannersDesktop.length && newCount.mobile === bannersMobile.length) {
+                initializeFlickity();
+            }
+            return newCount;
+        });
     };
 
 
