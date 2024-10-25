@@ -1397,12 +1397,17 @@ main {
   font-weight: 450;
 }
 .proveedor-item strong {
+  margin-top: 0.2rem;
   font-weight: 480;
   display: flex;
+  font-size: 1rem;
   align-items: flex-start;
   gap: 0.1rem;
   align-self: flex-start;
-  color: #2c2c2c;
+  color: #474747;
+}
+.proveedor-item strong .icon {
+  font-size: 1rem;
 }
 .proveedor-item .proveedor-marcas {
   display: flex;

@@ -14,9 +14,12 @@ const Proveedor = ({ proveedor }) => {
             {/* CARDS MOBILE */}
             <div className='proveedor-item hiddenInDesktop'>
                 <img src={proveedor.imagen} alt={proveedor.name} />
-                <h2>{proveedor.nombre}</h2>
-                <strong><IoLocationOutline />
-                    {proveedor.ubicacionDetalle}</strong>
+                <div>
+                    <h2>{proveedor.nombre}</h2>
+                    <strong><IoLocationOutline className='icon' />
+                        {proveedor.ubicacionDetalle}</strong>
+                    
+                </div>
                 <p className='descripcion'>{truncatedDescription}</p>
                 <div className='proveedor-marcas'>
                     <h4>Marcas:</h4>
@@ -32,7 +35,7 @@ const Proveedor = ({ proveedor }) => {
                         <img src={proveedor.imagen} alt={proveedor.name} />
                         <div className='title-location'>
                             <h2>{proveedor.nombre}</h2>
-                            <strong><IoLocationOutline />
+                            <strong><IoLocationOutline className='icon' />
                                 {proveedor.ubicacionDetalle}</strong>
                         </div>
                     </div>
@@ -43,7 +46,7 @@ const Proveedor = ({ proveedor }) => {
                     </div>
                 </div>
                 <div className='buttons-box'>
-                    
+
                 </div>
             </div>
         </>

@@ -22,12 +22,17 @@
     }
 
     strong {
+        margin-top: .2rem;
+        .icon {
+            font-size: 1rem;
+        }
         font-weight: 480;
         display: flex;
+        font-size: 1rem;
         align-items: flex-start;
         gap: .1rem;
         align-self: flex-start;
-        color: $text-gray;
+        color: $dark-gray;
     }
 
     .proveedor-marcas {
