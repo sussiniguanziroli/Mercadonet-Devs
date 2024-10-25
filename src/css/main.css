@@ -1622,7 +1622,7 @@ html {
   font-size: 9px;
 }
 
-@media (min-width: 400px) {
+@media (min-width: 300px) {
   html {
     font-size: 11px;
   }
