@@ -18,9 +18,8 @@ const Proveedor = ({ proveedor }) => {
                     <h2>{proveedor.nombre}</h2>
                     <strong><IoLocationOutline className='icon' />
                         {proveedor.ubicacionDetalle}</strong>
-                    
+                    <p className='descripcion'>{truncatedDescription}</p>
                 </div>
-                <p className='descripcion'>{truncatedDescription}</p>
                 <div className='proveedor-marcas'>
                     <h4>Marcas:</h4>
                     {proveedor.marca.map((marca) => <p>{marca},</p>)}

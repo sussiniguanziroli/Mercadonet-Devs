@@ -1400,6 +1400,7 @@ main {
 .proveedor-item .descripcion {
   align-self: flex-start;
   font-weight: 450;
+  margin-top: 0.6rem;
 }
 .proveedor-item strong {
   margin-top: 0.2rem;
