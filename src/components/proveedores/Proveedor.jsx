@@ -10,18 +10,43 @@ const Proveedor = ({ proveedor }) => {
         : proveedor.descripcion;
 
     return (
-        <div className='proveedor-item'>
-            <img src={proveedor.imagen} alt={proveedor.name} />
-            <h2>{proveedor.nombre}</h2>
-            <strong><IoLocationOutline /> 
-                {proveedor.ubicacionDetalle}</strong>
-            <p className='descripcion'>{truncatedDescription}</p>
-            <div className='proveedor-marcas'>
-                <h4>Marcas:</h4>
-                {proveedor.marca.map((marca) => <p>{marca},</p>)}
+        <>
+            {/* CARDS MOBILE */}
+            <div className='proveedor-item hiddenInDesktop'>
+                <img src={proveedor.imagen} alt={proveedor.name} />
+                <h2>{proveedor.nombre}</h2>
+                <strong><IoLocationOutline />
+                    {proveedor.ubicacionDetalle}</strong>
+                <p className='descripcion'>{truncatedDescription}</p>
+                <div className='proveedor-marcas'>
+                    <h4>Marcas:</h4>
+                    {proveedor.marca.map((marca) => <p>{marca},</p>)}
+                </div>
+                <button>Ver Detalles</button>
             </div>
-            <button>Ver Detalles</button>
-        </div>
+
+            {/* CARDS DESKTOP */}
+            <div className='proveedor-item-desktop hiddenInMobile'>
+                <div className='info-box'>
+                    <div className='title-img'>
+                        <img src={proveedor.imagen} alt={proveedor.name} />
+                        <div className='title-location'>
+                            <h2>{proveedor.nombre}</h2>
+                            <strong><IoLocationOutline />
+                                {proveedor.ubicacionDetalle}</strong>
+                        </div>
+                    </div>
+                    <p className='descripcion'>{truncatedDescription}</p>
+                    <div className='proveedor-marcas'>
+                        <h4>Marcas:</h4>
+                        {proveedor.marca.map((marca) => <p>{marca},</p>)}
+                    </div>
+                </div>
+                <div className='buttons-box'>
+                    
+                </div>
+            </div>
+        </>
     )
 }
 

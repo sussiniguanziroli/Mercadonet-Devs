@@ -1429,7 +1429,11 @@ main {
 }
 
 @media (min-width: 1024px) {
-  .proveedor-item {
+  .proveedor-item-desktop {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     height: auto;
     background-color: #ffffff;
     border-radius: 0.7rem;
@@ -1438,9 +1442,44 @@ main {
     width: 96%;
     font-size: 1rem;
   }
-  .proveedor-item img {
+  .proveedor-item-desktop img {
     height: 100%;
     width: 20em;
+    object-fit: contain;
+  }
+  .proveedor-item-desktop h2 {
+    align-self: flex-start;
+    color: #2c2c2c;
+  }
+  .proveedor-item-desktop .descripcion {
+    align-self: flex-start;
+    font-weight: 450;
+  }
+  .proveedor-item-desktop strong {
+    font-weight: 480;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.1rem;
+    align-self: flex-start;
+    color: #2c2c2c;
+  }
+  .proveedor-item-desktop .proveedor-marcas {
+    display: flex;
+    gap: 0.2rem;
+    align-self: flex-start;
+  }
+  .proveedor-item-desktop button {
+    padding: 0.5rem;
+    font-family: "Roboto", system-ui;
+    color: #F5F5F5;
+    background-color: #004787;
+    border: none;
+    border-radius: 0.4rem;
+    width: 98%;
+    transition: 0.3s all;
+  }
+  .proveedor-item-desktop button:hover {
+    background-color: #242e3d;
   }
 }
 .admin-panel {
@@ -1580,7 +1619,7 @@ main {
 }
 
 html {
-  font-size: 9px;
+  font-size: 10px;
 }
 
 @media (min-width: 400px) {
