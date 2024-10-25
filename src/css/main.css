@@ -1390,7 +1390,6 @@ main {
   gap: 1.3rem;
 }
 .proveedor-item .titulos {
-  border: 1px solid purple;
   align-self: flex-start;
 }
 .proveedor-item h2 {
@@ -1423,7 +1422,6 @@ main {
   align-self: flex-start;
   margin-top: 0.7rem;
   flex-wrap: wrap;
-  border: 1px solid red;
 }
 .proveedor-item img {
   object-fit: contain;
