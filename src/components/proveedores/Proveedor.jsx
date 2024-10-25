@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoLocationOutline } from "react-icons/io5";
 
 
@@ -8,6 +8,13 @@ const Proveedor = ({ proveedor }) => {
     const truncatedDescription = proveedor.descripcion.length > maxLength
         ? proveedor.descripcion.slice(0, maxLength) + "...[ver más]"
         : proveedor.descripcion;
+
+    const marcasLimitadas = proveedor.marca.slice(1, 6);
+
+
+
+
+
 
     return (
         <>
@@ -21,7 +28,7 @@ const Proveedor = ({ proveedor }) => {
                     <p className='descripcion'>{truncatedDescription}</p>
                     <div className='proveedor-marcas'>
                         <h4>Marcas:</h4>
-                        {proveedor.marca.map((marca) => <p>{marca},</p>)}
+                        {marcasLimitadas.map((marcas) => <p>{marcas},</p>)}
                     </div>
                 </div>
 

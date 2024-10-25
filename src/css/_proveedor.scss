@@ -12,6 +12,7 @@
     color: $text-gray;
     gap: 1.3rem;
     .titulos {
+        border: 1px solid purple;
         align-self: flex-start;
     }
 
@@ -44,9 +45,11 @@
 
     .proveedor-marcas {
         display: flex;
-        gap: .2rem;
+        column-gap: .3rem;
         align-self: flex-start;
         margin-top: .7rem;
+        flex-wrap: wrap;
+        border: 1px solid red;
     }
 
     img {
