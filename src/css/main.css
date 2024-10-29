@@ -992,7 +992,7 @@ main {
     background-color: #f5f7f8;
     border-radius: 2rem;
     margin: 3rem;
-    max-height: 2500px;
+    max-height: 3000px;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section {
     background: none;
@@ -1005,13 +1005,13 @@ main {
     align-items: center;
     width: 95%;
     background-color: #131921;
-    height: 30em;
+    height: 25em;
     border-radius: 1.7rem;
     color: #F5F5F5;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner {
     width: 96%;
-    height: 17em;
+    height: 25em;
     margin: 2.5rem;
     margin-top: 2.5rem;
   }
@@ -1019,7 +1019,11 @@ main {
     width: 100%;
     height: 100%;
   }
-  .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner .main-carousel .carousel-image {
+  .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner .main-carousel .carousel-cell {
+    width: 100%;
+    height: 100%;
+  }
+  .main-proveedores .secondary-proveedores .proveedores-filter-section .news-banner .main-carousel .carousel-cell .carousel-image {
     width: 100%;
     height: 100%;
   }
@@ -1140,7 +1144,7 @@ main {
     margin: 2rem;
     width: 100%;
     overflow: scroll;
-    max-height: 2000px;
+    height: 2000px;
     /* Para Firefox */
     scrollbar-width: thin;
     /* Cambia a barra fina */

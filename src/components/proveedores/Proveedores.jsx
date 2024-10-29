@@ -6,15 +6,14 @@ import SearchBox from './SearchBox';
 import NewsBanner from './NewsBanner';
 import { db } from '../../firebase/config'
 import { collection, query, getDocs } from "firebase/firestore";
-import filtersIcons from '../proveedores/filtersIcons.json'
+import filtersIcons from '../proveedores/filtersIcons.json';
 import { MdTune } from "react-icons/md";
-
-
 
 
 
 const Proveedores = () => {
 
+    const [searchTerm, setSearchTerm] = useState('');
     const [isMenuHidden, setIsMenuHidden] = useState(true);
     const [proveedores, setProveedores] = useState([]);
     const [selectedTipo, setSelectedTipo] = useState('');
@@ -27,9 +26,6 @@ const Proveedores = () => {
         marca: []
     });
 
-
-
-    console.log("filtros opciones", filtrosOpciones)
 
 
     // Obtener proveedores desde Firebase
@@ -90,26 +86,35 @@ const Proveedores = () => {
         setIsMenuHidden(false);
     }
 
-    const filtrarProveedores = (proveedores, selectedMarca, selectedTipo, selectedUbicacion) => {
+    const filtrarProveedores = (proveedores, searchTerm, selectedMarca, selectedTipo, selectedUbicacion) => {
         return proveedores.filter(proveedor => {
             const cumpleTipo = !selectedTipo || proveedor.tipo.includes(selectedTipo);
             const cumpleMarca = !selectedMarca || proveedor.marca.includes(selectedMarca);
             const cumpleUbicacion = !selectedUbicacion || proveedor.ubicacion === selectedUbicacion;
+            const cumpleSearchTerm =  !searchTerm || proveedor.nombre.toLowerCase().includes(searchTerm); 
 
-            return cumpleTipo && cumpleMarca && cumpleUbicacion;
+            return cumpleTipo && cumpleMarca && cumpleUbicacion && cumpleSearchTerm;
         });
     };
 
 
     // Filtrar los proveedores basados en los filtros seleccionados
-    const proveedoresFiltrados = filtrarProveedores(proveedores, selectedMarca, selectedTipo, selectedUbicacion)
+    const proveedoresFiltrados = filtrarProveedores(proveedores, searchTerm,selectedMarca, selectedTipo, selectedUbicacion)
 
 
     return (
         <div className='proveedores-desktop'>
             <HeaderCustomProveedores />
             <main className='main-proveedores'>
-                <SearchBox />
+                <SearchBox
+                    setSearchTerm={setSearchTerm}
+                    searchTerm={searchTerm}
+                    proveedores={proveedores}
+                    filtrosOpciones={filtrosOpciones}
+                    setSelectedMarca={setSelectedMarca}
+                    setSelectedTipo={setSelectedTipo}
+                    setSelectedUbicacion={setSelectedUbicacion}
+                />
                 <div className='secondary-proveedores'>
 
                     <section className='proveedores-filter-section'>
@@ -140,7 +145,8 @@ const Proveedores = () => {
                             setSelectedUbicacion={setSelectedUbicacion}
                             selectedTipo={selectedTipo}
                             selectedUbicacion={selectedUbicacion}
-                            selectedMarca={selectedMarca} />
+                            selectedMarca={selectedMarca}
+                        />
 
                     </section>
 
