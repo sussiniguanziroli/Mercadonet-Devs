@@ -1,19 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaSearch } from "react-icons/fa";
 
 const SearchBox = ({searchTerm, setSearchTerm, filtrosOpciones, setSelectedMarca, setSelectedTipo, setSelectedUbicacion, selectedTipo, selectedMarca, selectedUbicacion}) => {
+
+    const [tempSearchTerm, setTempSearchTerm] = useState('');
+    const handleSearchClick = () => {
+        setSearchTerm(tempSearchTerm); // Solo actualiza searchTerm cuando se hace clic en el botón
+      };
+
   return (
     <main className='search-box hiddenInMobile'>
         <h1>El directorio B2B líder de Argentina</h1>
         <section className='search-section'>
             <input 
-                type="text" 
-                placeholder='Buscá tu proveedor' 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+                type="text"
+                placeholder='Buscá tu proveedor'
+                value={tempSearchTerm}
+                onChange={(e) => setTempSearchTerm(e.target.value.toLowerCase())}
                 aria-label="Buscar proveedores"
             />
-            <button><FaSearch className='search-icon'/></button>
+            <button onClick={handleSearchClick}><FaSearch className='search-icon'/></button>
         </section>
     </main>
   )

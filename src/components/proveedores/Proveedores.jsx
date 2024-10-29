@@ -138,7 +138,9 @@ const Proveedores = () => {
                                 setSelectedUbicacion={setSelectedUbicacion}
                             />
                         </div>
-                        <ProveedoresList proveedores={proveedoresFiltrados}
+                        <ProveedoresList 
+                            searchTerm={searchTerm}
+                            proveedores={proveedoresFiltrados}
                             filtrosOpciones={filtrosOpciones}
                             setSelectedMarca={setSelectedMarca}
                             setSelectedTipo={setSelectedTipo}

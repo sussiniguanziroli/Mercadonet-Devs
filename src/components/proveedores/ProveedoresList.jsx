@@ -2,7 +2,7 @@ import React from 'react'
 import Proveedor from './Proveedor'
 import { ScaleLoader } from 'react-spinners';
 
-const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSelectedTipo, setSelectedUbicacion, selectedTipo, selectedMarca, selectedUbicacion }) => {
+const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSelectedTipo, setSelectedUbicacion, selectedTipo, selectedMarca, selectedUbicacion, searchTerm }) => {
 
     console.log('proveedores', proveedores)
 
@@ -96,7 +96,7 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                         </div>
 
                     </>
-                ) : selectedUbicacion || selectedMarca || selectedTipo ? (
+                ) : selectedUbicacion || selectedMarca || selectedTipo || searchTerm ? (
                     <div className='no-criteria'><p>No se ha encontrado ningun proveedor.</p></div>
                 ) : (
                     <div className='loader'>
