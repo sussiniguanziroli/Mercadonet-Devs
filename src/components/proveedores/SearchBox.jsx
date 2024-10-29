@@ -5,8 +5,8 @@ const SearchBox = ({searchTerm, setSearchTerm, filtrosOpciones, setSelectedMarca
 
     const [tempSearchTerm, setTempSearchTerm] = useState('');
     const handleSearchClick = () => {
-        setSearchTerm(tempSearchTerm); // Solo actualiza searchTerm cuando se hace clic en el botón
-      };
+        setSearchTerm(tempSearchTerm);
+    };
 
   return (
     <main className='search-box hiddenInMobile'>

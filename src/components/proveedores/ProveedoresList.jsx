@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Proveedor from './Proveedor'
 import { ScaleLoader } from 'react-spinners';
 
 const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSelectedTipo, setSelectedUbicacion, selectedTipo, selectedMarca, selectedUbicacion, searchTerm }) => {
 
-    console.log('proveedores', proveedores)
 
     const handleTipoChange = (e) => {
         setSelectedTipo(e.target.value);
@@ -17,6 +16,7 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
     const handleUbicacionChange = (e) => {
         setSelectedUbicacion(e.target.value);
     };
+
 
 
 
