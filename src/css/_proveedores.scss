@@ -15,7 +15,7 @@
             flex-direction: column;
             background-size: 100% 1000px;
             background-repeat: no-repeat;
-            
+
             .mobile-thumb-filters {
                 margin-top: 1rem;
                 width: 100%;
@@ -55,7 +55,7 @@
                             width: 5em;
                             height: 5em;
                             background-color: $color-azul;
-                            border-radius: 50% ;
+                            border-radius: 50%;
                             padding: 1rem;
 
                             img {
@@ -126,7 +126,7 @@
                         background-color: $dark-gray;
 
 
-                       
+
                     }
 
                     .carousel-image {
@@ -154,6 +154,7 @@
         background-repeat: no-repeat;
         background-size: 100% 1500px;
         background-color: $color-azul;
+
         .proveedores-header {
             display: flex;
             justify-content: space-between;
@@ -180,55 +181,90 @@
     }
 
     .main-proveedores {
-        .search-box {
-            margin-bottom: 2rem;
-            margin-top: 2rem;
+        .main-search {
+            align-self: center;
+            width: 48%;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            gap: 2rem;
-
-            h1 {
-                font-family: 'Montserrat', sans-serif;
-                color: $main-white;
-                font-size: 2.5rem;
-                font-weight: 600;
-            }
-
-            .search-section {
-                width: 45%;
+            gap: 0;
+            margin-top: 2rem;
+            .search-box {
+                
                 display: flex;
+                flex-direction: column;
                 align-items: center;
-                justify-content: space-between;
-                padding: .5rem;
-                border-radius: 2rem;
-                background-color: $main-white;
+                justify-content: center;
+                gap: 2rem;
 
-                input {
-                    all: unset;
-                    margin-left: 1rem;
-                    margin-right: 1rem;
-                    width: 100%;
+                h1 {
+                    font-family: 'Montserrat', sans-serif;
+                    color: $main-white;
+                    font-size: 2.5rem;
+                    font-weight: 600;
                 }
 
-                button {
-                    all: unset;
-                    cursor: pointer;
-                    background-color: $color-naranja;
-                    transition: all .3s;
-                    padding: .4rem;
-                    padding-right: .8rem;
-                    padding-left: .8rem;
-                    border-radius: 1rem;
-
-                    &:hover {
-                        background-color: $color-naranja-hover;
+                .search-section {
+                    width: 90%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: .5rem;
+                    border-radius: 2rem;
+                    background-color: $main-white;
+                    
+                    input {
+                        all: unset;
+                        margin-left: 1rem;
+                        margin-right: 1rem;
+                        width: 100%;
+                        
                     }
 
+                    button {
+                        all: unset;
+                        cursor: pointer;
+                        background-color: $color-naranja;
+                        transition: all .3s;
+                        padding: .4rem;
+                        padding-right: .8rem;
+                        padding-left: .8rem;
+                        border-radius: 1rem;
+
+                        &:hover {
+                            background-color: $color-naranja-hover;
+                        }
+
+                    }
+                }
+            }
+
+            .suggestions-list-box {
+                display: flex;
+                justify-content: center;
+                .suggestions-list {
+                    position: absolute;
+                    background-color: white;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    width: 43%;
+                    max-height: fit-content;
+                    overflow-y: auto;
+                    z-index: 1000;
+                    list-style: none;
+                    padding: 0;
+                    margin-top: 5px;
+                    li {
+                        padding: 10px;
+                        cursor: pointer;
+                    }
+                    li:hover {
+                        background-color: #f0f0f0;
+                    }
                 }
             }
         }
+
 
         .secondary-proveedores {
             display: flex;
@@ -267,13 +303,14 @@
                         .carousel-cell {
                             width: 100%;
                             height: 100%;
+
                             .carousel-image {
                                 width: 100%;
                                 height: 100%;
                             }
                         }
 
-                        
+
                     }
                 }
             }

@@ -943,23 +943,30 @@ main {
   .proveedores-desktop .proveedores-header nav .nav-link:hover {
     transform: scale(1.06);
   }
-  .main-proveedores .search-box {
-    margin-bottom: 2rem;
+  .main-proveedores .main-search {
+    align-self: center;
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
     margin-top: 2rem;
+  }
+  .main-proveedores .main-search .search-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 2rem;
   }
-  .main-proveedores .search-box h1 {
+  .main-proveedores .main-search .search-box h1 {
     font-family: "Montserrat", sans-serif;
     color: #F5F5F5;
     font-size: 2.5rem;
     font-weight: 600;
   }
-  .main-proveedores .search-box .search-section {
-    width: 45%;
+  .main-proveedores .main-search .search-box .search-section {
+    width: 90%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -967,13 +974,13 @@ main {
     border-radius: 2rem;
     background-color: #F5F5F5;
   }
-  .main-proveedores .search-box .search-section input {
+  .main-proveedores .main-search .search-box .search-section input {
     all: unset;
     margin-left: 1rem;
     margin-right: 1rem;
     width: 100%;
   }
-  .main-proveedores .search-box .search-section button {
+  .main-proveedores .main-search .search-box .search-section button {
     all: unset;
     cursor: pointer;
     background-color: #FF7F00;
@@ -983,8 +990,32 @@ main {
     padding-left: 0.8rem;
     border-radius: 1rem;
   }
-  .main-proveedores .search-box .search-section button:hover {
+  .main-proveedores .main-search .search-box .search-section button:hover {
     background-color: #ff9c39;
+  }
+  .main-proveedores .main-search .suggestions-list-box {
+    display: flex;
+    justify-content: center;
+  }
+  .main-proveedores .main-search .suggestions-list-box .suggestions-list {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 43%;
+    max-height: fit-content;
+    overflow-y: auto;
+    z-index: 1000;
+    list-style: none;
+    padding: 0;
+    margin-top: 5px;
+  }
+  .main-proveedores .main-search .suggestions-list-box .suggestions-list li {
+    padding: 10px;
+    cursor: pointer;
+  }
+  .main-proveedores .main-search .suggestions-list-box .suggestions-list li:hover {
+    background-color: #f0f0f0;
   }
   .main-proveedores .secondary-proveedores {
     display: flex;
@@ -1068,7 +1099,7 @@ main {
     overflow: scroll;
     display: flex;
     flex-direction: row;
-    margin-top: 7rem;
+    margin-top: 1rem;
   }
   .proveedores-list-container .filtros-desktop {
     font-family: "Roboto", system-ui;
