@@ -7,27 +7,14 @@ import { BarLoader } from 'react-spinners';
 
 
 const NewsBanner = () => {
-    const flickityRef = useRef(null);
+    
     const flickityRefMobile = useRef(null);
-    const [bannersDesktop, setBannersDesktop] = useState([]);
     const [bannersMobile, setBannersMobile] = useState([]);
     const [imagesLoaded, setImagesLoaded] = useState({ desktop: 0, mobile: 0 });
     const [isLoading, setIsLoading] = useState(true);
 
 
-    // Función para traer la colección "bannersDesktop"
-    const fetchBannersDesktop = async () => {
-        const docRef = doc(db, 'banners', 'MImKl6eI8mBBiLaSAbQ5');
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            setBannersDesktop(docSnap.data().bannersDesktop);
-        } else {
-            console.log("No se encontraron banners desktop");
-        }
-
-    };
-
+    
     // Función para traer la colección "bannersMobile"
     const fetchBannersMobile = async () => {
         const docRef = doc(db, 'banners', 'piiyYFE6gNKmgNOUeF1o');
@@ -44,23 +31,15 @@ const NewsBanner = () => {
     // Llamada a las funciones cuando el componente se monta
     useEffect(() => {
         const fetchData = async () => {
-            await fetchBannersDesktop();
             await fetchBannersMobile();
-            setIsLoading(false); // Termina la carga de datos desde Firebase
+            setIsLoading(false); 
         };
 
         fetchData();
     }, []);
 
     const initializeFlickity = () => {
-        const flktyDesktop = new Flickity(flickityRef.current, {
-            cellAlign: 'center',
-            contain: true,
-            pageDots: true,
-            prevNextButtons: true,
-            wrapAround: true,
-            autoPlay: 2900,
-        });
+
 
         const flktyMobile = new Flickity(flickityRefMobile.current, {
             cellAlign: 'center',
@@ -71,8 +50,8 @@ const NewsBanner = () => {
             autoPlay: 2900,
         });
 
-        // Forzar un resize después de inicializar para asegurar que todo esté correcto
-        flktyDesktop.resize();
+        
+        
         flktyMobile.resize();
     };
 
@@ -80,7 +59,7 @@ const NewsBanner = () => {
         setImagesLoaded((prev) => {
             const newCount = { ...prev, [type]: prev[type] + 1 };
             // Verificar si todas las imágenes han sido cargadas
-            if (newCount.desktop === bannersDesktop.length && newCount.mobile === bannersMobile.length) {
+            if ( newCount.mobile === bannersMobile.length) {
                 initializeFlickity();
             }
             return newCount;
@@ -91,9 +70,9 @@ const NewsBanner = () => {
 
 
     return (
-        <>
+        <main className='hiddenInDesktop'>
             {isLoading ? (
-                <div className='banners-loading'><BarLoader
+                <div className='banners-loading hiddenInDesktop'><BarLoader
                     color="#fff"
                     width={200}
                 /></div>
@@ -108,19 +87,11 @@ const NewsBanner = () => {
                         </div>
                     </aside >
 
-                    {/* DESKTOP */}
-                    < aside className='news-banner hiddenInMobile' >
-                        <div className='main-carousel' ref={flickityRef}>
-                            {bannersDesktop.map((banner) => <div key={banner.name} className='carousel-cell'>
-                                <img className='carousel-image' src={banner.img} alt={banner.name} onLoad={() => handleImageLoad('desktop')}
-                                />
-                            </div>)}
-                        </div>
-                    </aside >
+                    
                 </>
             )
             }
-        </>
+        </main>
 
 
     )
