@@ -23,7 +23,7 @@ ofrecer una plataforma para listar proveedores y aplicar filtros de búsqueda pe
 
 1. Clona este repositorio:
    ```bash
-   git clone https://github.com/tu-usuario/mercado.net.git
+   git clone https://github.com/sussiniguanziroli/Mercadonet-Devs
    cd mercado.net
    ```
 
