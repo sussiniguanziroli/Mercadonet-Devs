@@ -1,6 +1,11 @@
 import React from 'react';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
+import { FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
+
+
+
 
 const NewsCarousel = () => {
     return (
@@ -22,12 +27,14 @@ const NewsCarousel = () => {
                         <img className='carousel-image' src="https://www.solidbackgrounds.com/images/1280x800/1280x800-indigo-dye-solid-color-background.jpg" alt="Slide 3" />
                     </Slide>
                 </Slider>
-                <ButtonBack className="carousel-button back">Back</ButtonBack>
-                <ButtonNext className="carousel-button next">Next</ButtonNext>
+                <ButtonBack className="carousel-button back"><FaArrowLeft />
+                </ButtonBack>
+                <ButtonNext className="carousel-button next"><FaArrowRight />
+                </ButtonNext>
             </CarouselProvider>
         </div>
 
-  
+
     );
 };
 
