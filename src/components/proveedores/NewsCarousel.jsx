@@ -13,19 +13,22 @@ const NewsCarousel = () => {
             <CarouselProvider
                 naturalSlideWidth={100}
                 naturalSlideHeight={40}
-                totalSlides={3}
+                totalSlides={4}
                 className="carousel-frame"
             >
                 <Slider>
                     <Slide index={0}>
-                        <img className='carousel-image' src="https://www.solidbackgrounds.com/images/1920x1080/1920x1080-yellow-solid-color-background.jpg" alt="Slide 1" />
+                        <img className='carousel-image' src="https://http2.mlstatic.com/D_NQ_639672-MLA80622004552_112024-OO.webp" alt="Slide 1" />
                     </Slide>
                     <Slide index={1}>
-                        <img className='carousel-image' src="https://www.solidbackgrounds.com/images/7680x4320/7680x4320-bisque-solid-color-background.jpg" alt="Slide 2" />
+                        <img className='carousel-image' src="https://http2.mlstatic.com/D_NQ_656264-MLA80939003907_112024-OO.webp" alt="Slide 2" />
                     </Slide>
                     <Slide index={2}>
-                        <img className='carousel-image' src="https://www.solidbackgrounds.com/images/1280x800/1280x800-indigo-dye-solid-color-background.jpg" alt="Slide 3" />
+                        <img className='carousel-image' src="https://http2.mlstatic.com/D_NQ_657991-MLA80886869747_112024-OO.webp" alt="Slide 3" />
                     </Slide>
+                    <Slide index={3}>
+                        <img className='carousel-image' src="https://http2.mlstatic.com/D_NQ_966444-MLA80886866275_112024-OO.webp" alt="Slide 4" />
+                    </Slide>                    
                 </Slider>
                 <ButtonBack className="carousel-button back"><FaArrowLeft />
                 </ButtonBack>
