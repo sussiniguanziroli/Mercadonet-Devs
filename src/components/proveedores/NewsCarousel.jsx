@@ -3,21 +3,32 @@ import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-re
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
 const NewsCarousel = () => {
-  return (
-    <CarouselProvider
-      naturalSlideWidth={100}
-      naturalSlideHeight={125}
-      totalSlides={3} 
-    >
-      <Slider>
-        <Slide index={0}>I am the first Slide.</Slide>
-        <Slide index={1}>I am the second Slide.</Slide>
-        <Slide index={2}>I am the third Slide.</Slide>
-      </Slider>
-      <ButtonBack>Back</ButtonBack>
-      <ButtonNext>Next</ButtonNext>
-    </CarouselProvider>
-  );
+    return (
+        <div className="carousel-background hiddenInMobile">
+            <CarouselProvider
+                naturalSlideWidth={100}
+                naturalSlideHeight={40}
+                totalSlides={3}
+                className="carousel-frame"
+            >
+                <Slider>
+                    <Slide index={0}>
+                        <img className='carousel-image' src="https://www.solidbackgrounds.com/images/1920x1080/1920x1080-yellow-solid-color-background.jpg" alt="Slide 1" />
+                    </Slide>
+                    <Slide index={1}>
+                        <img className='carousel-image' src="https://www.solidbackgrounds.com/images/7680x4320/7680x4320-bisque-solid-color-background.jpg" alt="Slide 2" />
+                    </Slide>
+                    <Slide index={2}>
+                        <img className='carousel-image' src="https://www.solidbackgrounds.com/images/1280x800/1280x800-indigo-dye-solid-color-background.jpg" alt="Slide 3" />
+                    </Slide>
+                </Slider>
+                <ButtonBack className="carousel-button back">Back</ButtonBack>
+                <ButtonNext className="carousel-button next">Next</ButtonNext>
+            </CarouselProvider>
+        </div>
+
+  
+    );
 };
 
 export default NewsCarousel;

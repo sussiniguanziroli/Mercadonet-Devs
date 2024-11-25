@@ -114,7 +114,7 @@ const Proveedores = () => {
             setSelectedTipo={setSelectedTipo}
             setSelectedUbicacion={setSelectedUbicacion} />
             <main className='main-proveedores'>
-                
+                <NewsCarousel />
                 <div className='secondary-proveedores'>
 
                     <section className='proveedores-filter-section'>

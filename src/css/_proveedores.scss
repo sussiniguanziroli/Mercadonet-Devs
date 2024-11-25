@@ -154,7 +154,6 @@
         background-repeat: no-repeat;
         background-size: 100% 1500px;
         background-color: $color-azul;
-
         .proveedores-header {
             display: flex;
             justify-content: space-between;
@@ -273,7 +272,8 @@
             border-radius: 2rem;
             margin: 3rem;
             max-height: 3000px;
-
+            z-index: 1;
+            margin-top: 35vh;
             .proveedores-filter-section {
                 background: none;
 
