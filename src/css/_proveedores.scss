@@ -154,29 +154,34 @@
         background-repeat: no-repeat;
         background-size: 100% 1500px;
         background-color: $color-azul;
-        .proveedores-header {
+
+
+        .suggestions-list-box {
             display: flex;
-            justify-content: space-between;
-            padding: 2rem;
-
-            img {
-                height: 10%;
-                width: 10%;
-            }
-
-            nav {
-                .nav-link {
-                    margin-right: 1rem;
-                    color: $color-blanco;
-                    text-decoration: none;
-                    transition: all .2s ease-in-out;
-
-                    &:hover {
-                        transform: scale(1.06);
-                    }
+            justify-content: center;
+            .suggestions-list {
+                position: absolute;
+                background-color: white;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                width: 35%;
+                max-height: fit-content;
+                overflow-y: auto;
+                z-index: 3;
+                list-style: none;
+                padding: 0;
+                margin-top: 5px;
+                li {
+                    padding: 10px;
+                    cursor: pointer;
+                }
+                li:hover {
+                    background-color: #f0f0f0;
                 }
             }
         }
+
+        
     }
 
     .main-proveedores {
@@ -238,30 +243,7 @@
                 }
             }
 
-            .suggestions-list-box {
-                display: flex;
-                justify-content: center;
-                .suggestions-list {
-                    position: absolute;
-                    background-color: white;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    width: 43%;
-                    max-height: fit-content;
-                    overflow-y: auto;
-                    z-index: 1000;
-                    list-style: none;
-                    padding: 0;
-                    margin-top: 5px;
-                    li {
-                        padding: 10px;
-                        cursor: pointer;
-                    }
-                    li:hover {
-                        background-color: #f0f0f0;
-                    }
-                }
-            }
+            
         }
 
 
@@ -271,7 +253,6 @@
             background-color: $list-white;
             border-radius: 2rem;
             margin: 3rem;
-            max-height: 3000px;
             z-index: 1;
             margin-top: 35vh;
             .proveedores-filter-section {

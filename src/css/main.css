@@ -938,23 +938,29 @@ main {
     background-size: 100% 1500px;
     background-color: #131921;
   }
-  .proveedores-desktop .proveedores-header {
+  .proveedores-desktop .suggestions-list-box {
     display: flex;
-    justify-content: space-between;
-    padding: 2rem;
+    justify-content: center;
   }
-  .proveedores-desktop .proveedores-header img {
-    height: 10%;
-    width: 10%;
+  .proveedores-desktop .suggestions-list-box .suggestions-list {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 35%;
+    max-height: fit-content;
+    overflow-y: auto;
+    z-index: 3;
+    list-style: none;
+    padding: 0;
+    margin-top: 5px;
   }
-  .proveedores-desktop .proveedores-header nav .nav-link {
-    margin-right: 1rem;
-    color: #FFFFFF;
-    text-decoration: none;
-    transition: all 0.2s ease-in-out;
+  .proveedores-desktop .suggestions-list-box .suggestions-list li {
+    padding: 10px;
+    cursor: pointer;
   }
-  .proveedores-desktop .proveedores-header nav .nav-link:hover {
-    transform: scale(1.06);
+  .proveedores-desktop .suggestions-list-box .suggestions-list li:hover {
+    background-color: #f0f0f0;
   }
   .main-proveedores .main-search {
     align-self: center;
@@ -1006,37 +1012,12 @@ main {
   .main-proveedores .main-search .search-box .search-section button:hover {
     background-color: #ff9c39;
   }
-  .main-proveedores .main-search .suggestions-list-box {
-    display: flex;
-    justify-content: center;
-  }
-  .main-proveedores .main-search .suggestions-list-box .suggestions-list {
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 43%;
-    max-height: fit-content;
-    overflow-y: auto;
-    z-index: 1000;
-    list-style: none;
-    padding: 0;
-    margin-top: 5px;
-  }
-  .main-proveedores .main-search .suggestions-list-box .suggestions-list li {
-    padding: 10px;
-    cursor: pointer;
-  }
-  .main-proveedores .main-search .suggestions-list-box .suggestions-list li:hover {
-    background-color: #f0f0f0;
-  }
   .main-proveedores .secondary-proveedores {
     display: flex;
     flex-direction: column;
     background-color: #f5f7f8;
     border-radius: 2rem;
     margin: 3rem;
-    max-height: 3000px;
     z-index: 1;
     margin-top: 35vh;
   }
@@ -1159,8 +1140,6 @@ main {
   .proveedores-list-container .proveedores-list {
     margin: 2rem;
     width: 100%;
-    overflow: scroll;
-    height: 2000px;
     /* Para Firefox */
     scrollbar-width: thin;
     /* Cambia a barra fina */

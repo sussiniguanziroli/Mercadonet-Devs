@@ -101,6 +101,7 @@ const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtr
     }, []);
 
     return (
+        
         <header className={`header hiddenInMobile ${scrolled ? 'scrolled' : ''}`}>
             <img src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png" alt="logo white" />
             <div className='search-box' ref={searchBoxRef}>
@@ -116,6 +117,20 @@ const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtr
                 />
                 <button onClick={() => handleSearchClick()}><FaSearch className='search-icon' /></button>
             </section>
+
+
+            <div className='suggestions-list-box'>
+            {/* Desplegable de sugerencias */}
+            {suggestions.length > 0 && (
+                <ul className="suggestions-list">
+                    {suggestions.map((suggestion, index) => (
+                        <li key={index} onMouseDown={() => handleSuggestionClick(suggestion)}>
+                            {suggestion.nombre} - {suggestion.tipo.join(", ")} - {suggestion.ubicacion}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
             </div>
             <div className='nav-container'>
                 <NavLink activeClassname='active' to='/' className='nav-link'>¿Qué es Mercadonet?</NavLink>
@@ -125,6 +140,9 @@ const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtr
                 <NavLink activeClassname='active' className='nav-link'>Contacto</NavLink>
             </div>
         </header>
+
+        
+        
     )
 }
 
