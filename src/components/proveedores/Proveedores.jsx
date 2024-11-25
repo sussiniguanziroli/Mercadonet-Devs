@@ -105,17 +105,16 @@ const Proveedores = () => {
 
     return (
         <div className='proveedores-desktop'>
-            <HeaderCustomProveedores />
+            <HeaderCustomProveedores
+            setSearchTerm={setSearchTerm}
+            searchTerm={searchTerm}
+            proveedores={proveedores}
+            filtrosOpciones={filtrosOpciones}
+            setSelectedMarca={setSelectedMarca}
+            setSelectedTipo={setSelectedTipo}
+            setSelectedUbicacion={setSelectedUbicacion} />
             <main className='main-proveedores'>
-                <SearchBox
-                    setSearchTerm={setSearchTerm}
-                    searchTerm={searchTerm}
-                    proveedores={proveedores}
-                    filtrosOpciones={filtrosOpciones}
-                    setSelectedMarca={setSelectedMarca}
-                    setSelectedTipo={setSelectedTipo}
-                    setSelectedUbicacion={setSelectedUbicacion}
-                />
+                
                 <div className='secondary-proveedores'>
 
                     <section className='proveedores-filter-section'>

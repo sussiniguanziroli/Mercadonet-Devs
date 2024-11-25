@@ -1,25 +1,27 @@
 .header {
-    position: -webkit-sticky; // Compatibilidad con Safari
+    position: -webkit-sticky;
     position: sticky;
-    top: 0; // Siempre pegado en la parte superior al hacer scroll
+    top: 0;
     font-family: 'Montserrat', sans-serif;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     padding: 1rem;
     background-color: $color-azul;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Sombra sutil para distinguir el header
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 3000;
     transition: background-color 0.3s ease-in-out, padding 0.3s ease-in-out;
 
     &.scrolled {
         background-color: $dark-gray;
         padding: 0.5rem 1rem;
+
         img {
             width: 9%;
             height: 100%;
         }
-        .searchbox {
+
+        .search-box {
             display: none;
         }
     }
@@ -29,39 +31,56 @@
         height: 100%;
     }
 
-    .searchbox {
-        border-radius: .3rem;
-        width: 20em;
-        display: flex;
-        justify-content: space-between;
+    .search-box {
+        width: 35%;
 
-        input {
-            all: unset;
-            padding: .3rem;
-            background-color: $color-blanco;
-            width: 100%;
-            border-top-left-radius: inherit;
-            border-bottom-left-radius: inherit;
-        }
-
-        div {
+        .search-section {
             display: flex;
-            border-top-right-radius: inherit;
-            border-bottom-right-radius: inherit;
-            padding: .3rem;
-            background-color: $color-naranja;
-            cursor: pointer;
             align-items: center;
+            justify-content: space-between;
+            padding: .5rem;
+            border-radius: 2rem;
+            background-color: $main-white;
+
+            input {
+                all: unset;
+                margin-left: 1rem;
+                margin-right: 1rem;
+                width: 100%;
+
+            }
+
+            button {
+                all: unset;
+                cursor: pointer;
+                background-color: $color-naranja;
+                transition: all .3s;
+                padding: .4rem;
+                padding-right: .8rem;
+                padding-left: .8rem;
+                border-radius: 1rem;
+
+                &:hover {
+                    background-color: $color-naranja-hover;
+                }
+
+            }
         }
     }
 
-    .nav-link {
-        color: $color-blanco;
-        text-decoration: none;
-        transition: all .2s ease-in-out;
-        &:hover {
-            transform: scale(1.06);
+    .nav-container {
+        display: flex;
+        justify-content: space-around;
+        width: 33%;
+        gap: 2rem;
+        .nav-link {
+            color: $color-blanco;
+            text-decoration: none;
+            transition: all .2s ease-in-out;
+            &:hover {
+                transform: scale(1.06);
+            }
         }
-    }   
+    }
 
 }
