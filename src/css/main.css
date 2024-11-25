@@ -1613,9 +1613,8 @@ main {
   position: absolute;
   z-index: 0;
   width: 100%;
-  height: 53vh;
+  height: 500px;
   overflow: hidden;
-  background-color: #131921;
 }
 .carousel-background .gradient-overlay {
   position: absolute;
@@ -1629,20 +1628,23 @@ main {
   mix-blend-mode: multiply;
 }
 .carousel-background .carousel-frame {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
+  height: 500px;
   z-index: 1;
 }
-.carousel-background .carousel-frame .carousel-image {
+.carousel-background .carousel-frame .carousel-slide {
   width: 100%;
+  height: 500px;
+}
+.carousel-background .carousel-frame .carousel-slide .carousel-image {
+  width: 100%;
+  height: 500px;
   object-fit: cover;
+  object-position: center;
 }
 .carousel-background .carousel-frame .carousel-button {
   position: absolute;
-  top: 30%;
+  top: 40%;
   transform: translateY(-50%);
   background-color: rgba(0, 0, 0, 0.5);
   color: white;

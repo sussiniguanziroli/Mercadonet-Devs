@@ -2,10 +2,10 @@
     position: absolute;
     z-index: 0;
     width: 100%;
-    height: 53vh; // O el tamaño que necesites para el carrusel
-    overflow: hidden; // Para evitar desbordamientos del carrusel
+    height: 500px;
+    overflow: hidden;
 
-    background-color: $color-azul;
+
 
     .gradient-overlay {
         position: absolute;
@@ -13,31 +13,36 @@
         left: 0;
         width: 100%;
         height: 100%;
-        pointer-events: none; 
-        z-index: 3; 
+        pointer-events: none;
+        z-index: 3;
         background: linear-gradient(to bottom,
-                rgba(19, 25, 33, 0) 30%, 
-                rgba(19, 25, 33, 0.9) 85% 
-            );
+                rgba(19, 25, 33, 0) 30%,
+                rgba(19, 25, 33, 0.9) 85%);
         mix-blend-mode: multiply; // Fusión para lograr el efecto de mergeo
     }
 
     .carousel-frame {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
-        height: 100%;
+        height: 500px;
         z-index: 1; // Por debajo del contenido
 
-        .carousel-image {
-            width: 100%;
-            object-fit: cover;
+        .carousel-slide {
+            width: 100%;           
+            height: 500px;           
+        
+            .carousel-image {
+                width: 100%; 
+                height: 500px;
+                object-fit: cover; 
+                object-position: center;
+            }
         }
+
+
 
         .carousel-button {
             position: absolute;
-            top: 30%; // Centrado verticalmente
+            top: 40%; // Centrado verticalmente
             transform: translateY(-50%);
             background-color: rgba(0, 0, 0, 0.5); // Fondo semitransparente
             color: white;
