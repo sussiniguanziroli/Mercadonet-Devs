@@ -10,6 +10,7 @@ import { FaArrowLeft } from "react-icons/fa";
 const NewsCarousel = () => {
     return (
         <div className="carousel-background hiddenInMobile">
+            
             <CarouselProvider
                 naturalSlideWidth={100}
                 naturalSlideHeight={40}
@@ -35,6 +36,7 @@ const NewsCarousel = () => {
                 <ButtonNext className="carousel-button next"><FaArrowRight />
                 </ButtonNext>
             </CarouselProvider>
+            <div className="gradient-overlay"></div>
         </div>
 
 

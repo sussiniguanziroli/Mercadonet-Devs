@@ -1019,7 +1019,7 @@ main {
     border-radius: 2rem;
     margin: 3rem;
     z-index: 1;
-    margin-top: 39vh;
+    margin-top: 40vh;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section {
     background: none;
@@ -1613,8 +1613,20 @@ main {
   position: absolute;
   z-index: 0;
   width: 100%;
-  height: 70vh;
+  height: 53vh;
   overflow: hidden;
+  background-color: #131921;
+}
+.carousel-background .gradient-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  background: linear-gradient(to bottom, rgba(19, 25, 33, 0) 30%, rgba(19, 25, 33, 0.9) 85%);
+  mix-blend-mode: multiply;
 }
 .carousel-background .carousel-frame {
   position: absolute;
