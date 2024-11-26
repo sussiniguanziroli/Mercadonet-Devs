@@ -80,17 +80,19 @@
             li {
                 list-style: none;
                 margin-top: 0.7rem;
-        
+                cursor: pointer;
+                 
                 label {
                     display: flex;
                     align-items: center;
-                    gap: 0.7rem;
+                    gap: 0.7rem;                    
                     font-size: 1.3rem;
                     font-family: 'Roboto', system-ui;
-                    color: $text-gray; // Usa la variable que tengas definida
-        
+                    color: $text-gray;
+                    
                     input {
                         display: none;
+                        cursor: pointer;
         
                         &:checked + .custom-checkbox {
                             background-color: $color-azul; 

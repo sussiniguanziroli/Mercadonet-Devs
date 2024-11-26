@@ -546,7 +546,7 @@ main {
 }
 @media (min-width: 1024px) {
   .main-categorias {
-    padding: 7% 10%;
+    padding: 8% 10%;
     margin-top: 0;
     background-position: 50% 100%;
     background-size: cover;
@@ -1278,6 +1278,7 @@ main {
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li {
   list-style: none;
   margin-top: 0.7rem;
+  cursor: pointer;
 }
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label {
   display: flex;
@@ -1289,6 +1290,7 @@ main {
 }
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input {
   display: none;
+  cursor: pointer;
 }
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li label input:checked + .custom-checkbox {
   background-color: #131921;
