@@ -1,5 +1,5 @@
 .que-es-mnet {
-    margin-top: 4.2rem;
+    margin-top: 4rem;
     font-family: "Montserrat", sans-serif;
     display: grid;
     grid-template-columns: 1fr;
@@ -19,11 +19,11 @@
     text-align: center;
 
     h1 {
-        font-size: 2.7rem;
+        font-size: 2.5rem;
     }
 
     p {
-        font-size: 1.7rem;
+        font-size: 1.4rem;
     }
 }
 
@@ -48,11 +48,11 @@
     text-align: center;
 
     h1 {
-        font-size: 2.7rem;
+        font-size: 2.5rem;
     }
 
     p {
-        font-size: 1.7rem;
+        font-size: 1.4rem;
     }
 }
 
@@ -72,7 +72,7 @@
         strong {
             color: $color-naranja;
             font-weight: 800;
-            font-size: 3.1rem;
+            font-size: 2.5rem;
             font-family: 'Roboto', system-ui;
         }
 
@@ -90,6 +90,7 @@
 //desktop
 @media (min-width: 1024px) {
     .que-es-mnet {
+        padding: 2rem;
         margin-top: 5.2rem;
         font-family: "Montserrat", sans-serif;
         display: grid;
@@ -102,33 +103,33 @@
     }
 
     .seccion-que-es {
-        padding: 2rem;
+        
 
         h1 {
-            font-size: 2rem;
+            font-size: 1.9rem;
         }
 
         p {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
         }
     }
 
     .seccion-imagen-containers {
-        margin: 1rem;
-        width: 80%;
+        
+        width: 70%;
         align-self: center;
         justify-self: center;
     }
 
     .seccion-simplificamos-mayorista {
-        padding: 2rem;
+       padding: 1rem;
 
         h1 {
-            font-size: 2rem;
+            font-size: 1.9rem;
         }
 
         p {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
         }
     }
 
@@ -147,12 +148,12 @@
             strong {
                 color: $color-naranja;
                 font-weight: 800;
-                font-size: 4rem;
+                font-size: 3rem;
                 font-family: 'Roboto', system-ui;
             }
 
             p {
-                font-size: 1.6rem;
+                font-size: 1.3rem;
                 color: $dark-gray;
                 font-weight: 550;
             }

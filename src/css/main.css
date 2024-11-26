@@ -462,10 +462,10 @@ main {
   color: #FFFFFF;
 }
 .main-categorias h1 {
-  font-size: 4.2rem;
+  font-size: 3.7rem;
   margin: 2.2rem;
   text-align: center;
-  margin-top: 6.6rem;
+  margin-top: 6rem;
   margin-bottom: 1rem;
 }
 .main-categorias h3 {
@@ -481,7 +481,7 @@ main {
 .main-categorias section h4 {
   font-weight: 300;
   color: #7A7A7A;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   margin-left: 1rem;
 }
 
@@ -512,7 +512,7 @@ main {
   color: #FFFFFF;
   margin: 1.2rem;
   padding: 0.7rem;
-  font-size: 1.7rem;
+  font-size: 1.4rem;
   font-weight: 400;
 }
 .div-de-grid .cat-iconos {
@@ -555,7 +555,7 @@ main {
     margin-top: 0;
   }
   .main-categorias section h4 {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
   .div-de-grid {
     grid-template-columns: repeat(5, 1fr);
@@ -565,7 +565,7 @@ main {
     height: 100%;
   }
   .div-de-grid .categorias-contenido p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin: 1rem;
     padding: 0.5rem;
     padding-right: 0;
@@ -585,13 +585,13 @@ main {
     padding: 0.5rem;
   }
   .div-de-grid .cat-iconos p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     padding: 0.5rem;
     width: 85%;
   }
 }
 .que-es-mnet {
-  margin-top: 4.2rem;
+  margin-top: 4rem;
   font-family: "Montserrat", sans-serif;
   display: grid;
   grid-template-columns: 1fr;
@@ -607,10 +607,10 @@ main {
   text-align: center;
 }
 .seccion-que-es h1 {
-  font-size: 2.7rem;
+  font-size: 2.5rem;
 }
 .seccion-que-es p {
-  font-size: 1.7rem;
+  font-size: 1.4rem;
 }
 
 .seccion-imagen-containers {
@@ -633,10 +633,10 @@ main {
   text-align: center;
 }
 .seccion-simplificamos-mayorista h1 {
-  font-size: 2.7rem;
+  font-size: 2.5rem;
 }
 .seccion-simplificamos-mayorista p {
-  font-size: 1.7rem;
+  font-size: 1.4rem;
 }
 
 .seccion-contador {
@@ -654,7 +654,7 @@ main {
 .seccion-contador .contadores strong {
   color: #FF7F00;
   font-weight: 800;
-  font-size: 3.1rem;
+  font-size: 2.5rem;
   font-family: "Roboto", system-ui;
 }
 .seccion-contador .contadores p {
@@ -665,6 +665,7 @@ main {
 
 @media (min-width: 1024px) {
   .que-es-mnet {
+    padding: 2rem;
     margin-top: 5.2rem;
     font-family: "Montserrat", sans-serif;
     display: grid;
@@ -672,29 +673,25 @@ main {
     grid-template-columns: 1fr 1fr;
     grid-template-areas: "seccion-que-es seccion-imagen-containers" "seccion-contador seccion-simplificamos-mayorista";
   }
-  .seccion-que-es {
-    padding: 2rem;
-  }
   .seccion-que-es h1 {
-    font-size: 2rem;
+    font-size: 1.9rem;
   }
   .seccion-que-es p {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
   .seccion-imagen-containers {
-    margin: 1rem;
-    width: 80%;
+    width: 70%;
     align-self: center;
     justify-self: center;
   }
   .seccion-simplificamos-mayorista {
-    padding: 2rem;
+    padding: 1rem;
   }
   .seccion-simplificamos-mayorista h1 {
-    font-size: 2rem;
+    font-size: 1.9rem;
   }
   .seccion-simplificamos-mayorista p {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
   .seccion-contador {
     margin: 1rem;
@@ -711,11 +708,11 @@ main {
   .seccion-contador .contadores strong {
     color: #FF7F00;
     font-weight: 800;
-    font-size: 4rem;
+    font-size: 3rem;
     font-family: "Roboto", system-ui;
   }
   .seccion-contador .contadores p {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
     color: #474747;
     font-weight: 550;
   }
@@ -819,11 +816,11 @@ main {
     margin-bottom: 2rem;
   }
   .slider-main .banner-section div p {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     text-align: justify;
   }
   .slider-main .banner-section button {
-    font-size: 1.6rem;
+    font-size: 1.1rem;
   }
   .slider-section {
     margin-bottom: 1rem;
