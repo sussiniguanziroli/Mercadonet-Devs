@@ -33,12 +33,13 @@
 }
 .header .search-box {
   width: 35%;
+  margin: 0.45rem 0;
 }
 .header .search-box .search-section {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.2rem;
+  padding: 0.25rem;
   border-radius: 2rem;
   background-color: #F5F5F5;
 }

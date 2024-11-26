@@ -33,12 +33,12 @@
 
     .search-box {
         width: 35%;
-
+        margin: .45rem 0;
         .search-section {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: .2rem;
+            padding: .25rem;
             border-radius: 2rem;
             background-color: $main-white;
 
