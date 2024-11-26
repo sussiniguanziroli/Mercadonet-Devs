@@ -10,7 +10,8 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 0.4rem 1rem; /* Ajuste para más espacio lateral */
+  padding: 0.4rem 1rem;
+  /* Ajuste para más espacio lateral */
   background-color: #131921;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 3000;
@@ -1041,7 +1042,7 @@ main {
     border-radius: 2rem;
     margin: 3rem;
     z-index: 1;
-    margin-top: 380px;
+    margin-top: 350px;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section {
     background: none;

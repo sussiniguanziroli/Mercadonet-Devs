@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { FaArrowRight } from "react-icons/fa";
@@ -9,26 +9,13 @@ import { FaArrowLeft } from "react-icons/fa";
 
 const NewsCarousel = () => {
 
-    const [slideHeight, setSlideHeight] = useState(calculateHeight());
-
-
-    function calculateHeight() {
-        return (window.innerHeight * 2) / 100;
-    }
-
-    useEffect(() => {
-        const handleResize = () => setSlideHeight(calculateHeight());
-        window.addEventListener("resize", handleResize);
-
-        
-        return () => window.removeEventListener("resize", handleResize);
-    }, [slideHeight]);
+    
     return (
         <div className="carousel-background hiddenInMobile">
 
             <CarouselProvider
                 naturalSlideWidth={100}
-                naturalSlideHeight={27}
+                naturalSlideHeight={100}
                 totalSlides={4}
                 className="carousel-frame"
             >
