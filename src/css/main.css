@@ -10,7 +10,7 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  padding: 1rem;
+  padding: 0.3rem;
   background-color: #131921;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 3000;
@@ -18,7 +18,7 @@
 }
 .header.scrolled {
   background-color: #474747;
-  padding: 0.5rem 1rem;
+  padding: 0.1rem 0.2rem;
 }
 .header.scrolled img {
   width: 9%;
@@ -28,7 +28,7 @@
   display: none;
 }
 .header img {
-  width: 12%;
+  width: 10%;
   height: 100%;
 }
 .header .search-box {
@@ -38,7 +38,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem;
+  padding: 0.2rem;
   border-radius: 2rem;
   background-color: #F5F5F5;
 }
