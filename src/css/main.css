@@ -10,7 +10,7 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  padding: 0.3rem;
+  padding: 0.4rem;
   background-color: #131921;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 3000;
@@ -68,6 +68,7 @@
   gap: 2rem;
 }
 .header .nav-container .nav-link {
+  font-size: 0.93rem;
   color: #FFFFFF;
   text-decoration: none;
   transition: all 0.2s ease-in-out;
