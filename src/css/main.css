@@ -1639,6 +1639,12 @@ main {
   height: 500px;
   overflow: hidden;
 }
+.carousel-background:hover .carousel-button {
+  opacity: 1 !important;
+  /* Hacer visibles los botones */
+  pointer-events: auto !important;
+  /* Permitir interacción */
+}
 .carousel-background .gradient-overlay {
   position: absolute;
   bottom: 0;
@@ -1678,6 +1684,11 @@ main {
   font-size: 1.8rem;
   cursor: pointer;
   z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  /* Prevenir interacción mientras están ocultos */
+  transition: opacity 0.3s ease;
+  /* Transición suave */
 }
 .carousel-background .carousel-frame .carousel-button.back {
   left: 10px;

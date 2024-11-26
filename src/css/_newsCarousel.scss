@@ -5,6 +5,12 @@
     height: 500px;
     overflow: hidden;
 
+    &:hover .carousel-button {
+        opacity: 1 !important; 
+        /* Hacer visibles los botones */
+        pointer-events: auto !important;
+        /* Permitir interacción */
+    }
 
 
     .gradient-overlay {
@@ -27,13 +33,13 @@
         z-index: 1; // Por debajo del contenido
 
         .carousel-slide {
-            width: 100%;           
-            height: 500px;           
-        
+            width: 100%;
+            height: 500px;
+
             .carousel-image {
-                width: 100%; 
+                width: 100%;
                 height: 500px;
-                object-fit: cover; 
+                object-fit: cover;
                 object-position: center;
             }
         }
@@ -54,6 +60,12 @@
             cursor: pointer;
             z-index: 3;
 
+            opacity: 0;
+            pointer-events: none;
+            /* Prevenir interacción mientras están ocultos */
+            transition: opacity 0.3s ease;
+            /* Transición suave */
+
             &.back {
                 left: 10px; // Ajusta la distancia del borde izquierdo
             }
@@ -64,6 +76,7 @@
 
             &:hover {
                 background-color: rgba(0, 0, 0, 0.8); // Cambio de color al hover
+
             }
         }
     }
