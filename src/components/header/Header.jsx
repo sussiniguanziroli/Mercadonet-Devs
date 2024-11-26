@@ -25,13 +25,13 @@ const Header = () => {
 
 
     return (
-        <header className="header hiddenInMobile">
-
-            <img
-                src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png"
-                alt="Logo Mercadonet"
-            />
-
+        <header className={`header hiddenInMobile ${scrolled ? 'scrolled' : ''}`}>
+            
+                <img
+                    src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png"
+                    alt="Logo Mercadonet"
+                />
+            
             <div className='search-box'>
                 <section className='search-section' >
                     <input
