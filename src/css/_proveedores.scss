@@ -162,11 +162,12 @@
             display: flex;
             justify-content: center;
             .suggestions-list {
+                max-width: 580px;
                 position: absolute;
                 background-color: white;
                 border: 1px solid #ccc;
                 border-radius: 4px;
-                width: 35%;
+                width: 32%;
                 max-height: fit-content;
                 overflow-y: auto;
                 z-index: 3;
