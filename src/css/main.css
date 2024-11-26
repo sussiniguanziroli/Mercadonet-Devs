@@ -1097,10 +1097,11 @@ main {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-left: 2rem;
-    margin-top: 2rem;
-    padding: 2rem;
-    width: 30%;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    width: 27%;
+    max-width: 400px;
   }
   .proveedores-list-container .filtros-desktop .filtro-tipos .tipo-boton {
     margin-bottom: 0.5rem;
@@ -1160,8 +1161,7 @@ main {
     padding: 1rem;
   }
   .proveedores-list-container .proveedores-list {
-    margin: 2rem;
-    width: 100%;
+    margin: 1rem;
     /* Para Firefox */
     scrollbar-width: thin;
     /* Cambia a barra fina */
