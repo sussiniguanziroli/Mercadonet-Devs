@@ -92,7 +92,7 @@ const Proveedores = () => {
             const cumpleTipo = !selectedTipo || proveedor.tipo.includes(selectedTipo);
             const cumpleMarca = !selectedMarca || proveedor.marca.includes(selectedMarca);
             const cumpleUbicacion = !selectedUbicacion || proveedor.ubicacion === selectedUbicacion;
-            const cumpleSearchTerm =  !searchTerm || proveedor.nombre.toLowerCase().includes(searchTerm); 
+            const cumpleSearchTerm = !searchTerm || proveedor.nombre.toLowerCase().includes(searchTerm);
 
             return cumpleTipo && cumpleMarca && cumpleUbicacion && cumpleSearchTerm;
         });
@@ -100,21 +100,23 @@ const Proveedores = () => {
 
 
     // Filtrar los proveedores basados en los filtros seleccionados
-    const proveedoresFiltrados = filtrarProveedores(proveedores, searchTerm,selectedMarca, selectedTipo, selectedUbicacion)
+    const proveedoresFiltrados = filtrarProveedores(proveedores, searchTerm, selectedMarca, selectedTipo, selectedUbicacion)
 
 
     return (
         <div className='proveedores-desktop'>
             <HeaderCustomProveedores
-            setSearchTerm={setSearchTerm}
-            searchTerm={searchTerm}
-            proveedores={proveedores}
-            filtrosOpciones={filtrosOpciones}
-            setSelectedMarca={setSelectedMarca}
-            setSelectedTipo={setSelectedTipo}
-            setSelectedUbicacion={setSelectedUbicacion} />
+                setSearchTerm={setSearchTerm}
+                searchTerm={searchTerm}
+                proveedores={proveedores}
+                filtrosOpciones={filtrosOpciones}
+                setSelectedMarca={setSelectedMarca}
+                setSelectedTipo={setSelectedTipo}
+                setSelectedUbicacion={setSelectedUbicacion} />
             <main className='main-proveedores'>
+
                 <NewsCarousel />
+
                 <div className='secondary-proveedores'>
 
                     <section className='proveedores-filter-section'>
@@ -138,7 +140,7 @@ const Proveedores = () => {
                                 setSelectedUbicacion={setSelectedUbicacion}
                             />
                         </div>
-                        <ProveedoresList 
+                        <ProveedoresList
                             searchTerm={searchTerm}
                             proveedores={proveedoresFiltrados}
                             filtrosOpciones={filtrosOpciones}

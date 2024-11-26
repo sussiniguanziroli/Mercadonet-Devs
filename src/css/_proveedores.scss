@@ -5,7 +5,7 @@
 .main-proveedores {
     display: flex;
     flex-direction: column;
-
+    
     .secondary-proveedores {
 
         .proveedores-filter-section {
@@ -188,6 +188,9 @@
     }
 
     .main-proveedores {
+
+        
+
         .main-search {
             align-self: center;
             width: 48%;
