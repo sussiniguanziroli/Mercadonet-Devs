@@ -898,8 +898,9 @@ main {
   text-align: center;
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .mobile-thumb-filters .mobile-thumb-filters-btns-container .active .thumbFilter-icon {
-  border: 2px solid #ff9c39;
+  border: 1px solid #ff9c39;
   background-color: #474747;
+  transition: all 0.2s;
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .mobile-thumb-filters .filterBtn {
   all: unset;

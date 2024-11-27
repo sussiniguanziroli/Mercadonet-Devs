@@ -78,8 +78,9 @@
                     .active {
 
                         .thumbFilter-icon {
-                            border: 2px solid $color-naranja-hover;
+                            border: 1px solid $color-naranja-hover;
                             background-color: $dark-gray;
+                            transition: all .2s;
                         }
 
                     

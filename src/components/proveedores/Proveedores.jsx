@@ -151,6 +151,7 @@ const Proveedores = () => {
                             <button className='filterBtn' onClick={openFilters}><MdTune className='icon' /> Filtrar</button>
                             {/* Menu desplegable en mobile */}
                             <FiltrosComponent setIsMenuHidden={setIsMenuHidden} isMenuHidden={isMenuHidden}
+                                selectedCategoria={selectedCategoria}
                                 filtrosOpciones={filtrosOpciones}
                                 setSelectedMarca={setSelectedMarca}
                                 setSelectedCategoria={setSelectedCategoria}

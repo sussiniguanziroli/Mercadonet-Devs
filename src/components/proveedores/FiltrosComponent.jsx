@@ -4,23 +4,14 @@ import { IoClose } from "react-icons/io5";
 
 const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setSelectedMarca, setSelectedCategoria, setSelectedUbicacion, selectedCategoria, selectedMarca, selectedUbicacion }) => {
 
-    const [selectedCategoriaMobile, setSelectedCategoriaMobile] = useState('');
-
-    const handleLimpiar = () => {
-        setSelectedCategoria('');
-        setSelectedCategoriaMobile('');
-    }
-
-    const handleTipoChange = (e) => {
-        const value = e.target.value;
-        // Si ya está seleccionado, lo deseleccionamos
-        if (selectedTipoMobile === value) {
-            setSelectedCategoriaMobile(''); // Deseleccionar
-            setSelectedCategoria(''); // También deselect el tipo
-        } else {
-            setSelectedCategoriaMobile(value);
-            setSelectedCategoria(value);
-        }
+    
+    
+    const handleCategoriaChange = (categoria) => {
+        setSelectedCategoria((prev) =>
+            prev.includes(categoria)
+                ? prev.filter((item) => item !== categoria)
+                : [...prev, categoria] 
+        );
     };
     
 
@@ -46,7 +37,7 @@ const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setS
                 <div className="filtro-tipos">
                     <div className='tipo-boton'>
                         <h3>Tipos de proveedores</h3>
-                        <button onClick={handleLimpiar}>Limpiar</button>
+                        <button onClick={() => setSelectedCategoria([])}>Limpiar</button>
                     </div>
                     <ul className='filtro-tipos-checkboxes'>
                         {filtrosOpciones.categoria.map((categoria) => (
@@ -55,8 +46,8 @@ const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setS
                                     <input
                                         type="checkbox"
                                         value={categoria}
-                                        checked={selectedCategoriaMobile === categoria}
-                                        onChange={handleTipoChange}
+                                        checked={selectedCategoria.includes(categoria)}
+                                        onChange={() => handleCategoriaChange(categoria)}
                                         className="hidden-checkbox"
                                     />
                                     <span className='custom-checkbox'></span>
