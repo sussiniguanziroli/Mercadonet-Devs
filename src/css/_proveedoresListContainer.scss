@@ -42,6 +42,25 @@
 }
 
 @media (min-width: 1024px) {
+    .proveedores-page-header {
+        font-family: 'Roboto', system-ui;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 13px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid $color-gris;
+        p {
+            margin: .5rem 44px;
+            color: $dark-gray;
+        }
+        .no-criteria {
+            margin: .5rem 44px;
+        }
+        .texto-proveedores-encontrados {
+            margin: 10px 44px;
+        }
+    }
     .proveedores-list-container {
         overflow: scroll;
         display: flex;
@@ -180,20 +199,7 @@
                 height: 100vh;
             }
 
-            .no-criteria {
-                display: block;
-
-                p {
-                    font-size: 1.2rem;
-                    margin: 2.5rem;
-                    margin-top: 2.5rem;
-                    font-weight: 500;
-                    color: $dark-gray;
-                }
-            }
-            .texto-proveedores-encontrados {
-                margin: 1rem 3rem;
-            }
+            
         }
 
     }

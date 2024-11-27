@@ -1087,6 +1087,25 @@ main {
 }
 
 @media (min-width: 1024px) {
+  .proveedores-page-header {
+    font-family: "Roboto", system-ui;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 13px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #7A7A7A;
+  }
+  .proveedores-page-header p {
+    margin: 0.5rem 44px;
+    color: #474747;
+  }
+  .proveedores-page-header .no-criteria {
+    margin: 0.5rem 44px;
+  }
+  .proveedores-page-header .texto-proveedores-encontrados {
+    margin: 10px 44px;
+  }
   .proveedores-list-container {
     overflow: scroll;
     display: flex;
@@ -1195,19 +1214,6 @@ main {
     align-items: center;
     width: 100%;
     height: 100vh;
-  }
-  .proveedores-list-container .proveedores-list .no-criteria {
-    display: block;
-  }
-  .proveedores-list-container .proveedores-list .no-criteria p {
-    font-size: 1.2rem;
-    margin: 2.5rem;
-    margin-top: 2.5rem;
-    font-weight: 500;
-    color: #474747;
-  }
-  .proveedores-list-container .proveedores-list .texto-proveedores-encontrados {
-    margin: 1rem 3rem;
   }
 }
 .main-filters-component {
