@@ -36,7 +36,7 @@ const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setS
                 {/* Filtro de Tipo */}
                 <div className="filtro-tipos">
                     <div className='tipo-boton'>
-                        <h3>Tipos de proveedores</h3>
+                        <h3>Categoría del Proveedor</h3>
                         <button onClick={() => setSelectedCategoria([])}>Limpiar</button>
                     </div>
                     <ul className='filtro-tipos-checkboxes'>
