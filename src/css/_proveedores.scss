@@ -5,7 +5,7 @@
 .main-proveedores {
     display: flex;
     flex-direction: column;
-    
+
     .secondary-proveedores {
 
         .proveedores-filter-section {
@@ -44,12 +44,16 @@
                         background-color: #f1f1f1;
                     }
 
+
+                    
                     .thumbFilter {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         text-align: center;
                         padding-left: 1rem;
+
+                        
 
                         .thumbFilter-icon {
                             width: 5em;
@@ -70,6 +74,15 @@
                             margin-top: .5rem;
                             text-align: center;
                         }
+                    }
+                    .active {
+
+                        .thumbFilter-icon {
+                            border: 2px solid $color-naranja-hover;
+                            background-color: $dark-gray;
+                        }
+
+                    
                     }
                 }
 
@@ -144,9 +157,7 @@
 
 
 
-@media (min-width: 850px) {
-    
-}
+@media (min-width: 850px) {}
 
 //desktop
 @media (min-width: 1024px) {
@@ -161,6 +172,7 @@
         .suggestions-list-box {
             display: flex;
             justify-content: center;
+
             .suggestions-list {
                 max-width: 580px;
                 position: absolute;
@@ -174,22 +186,24 @@
                 list-style: none;
                 padding: 0;
                 margin-top: 5px;
+
                 li {
                     padding: 10px;
                     cursor: pointer;
                 }
+
                 li:hover {
                     background-color: #f0f0f0;
                 }
             }
         }
 
-        
+
     }
 
     .main-proveedores {
 
-        
+
 
         .main-search {
             align-self: center;
@@ -199,8 +213,9 @@
             justify-content: center;
             gap: 0;
             margin-top: 2rem;
+
             .search-box {
-                
+
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -222,13 +237,13 @@
                     padding: .5rem;
                     border-radius: 2rem;
                     background-color: $main-white;
-                    
+
                     input {
                         all: unset;
                         margin-left: 1rem;
                         margin-right: 1rem;
                         width: 100%;
-                        
+
                     }
 
                     button {
@@ -249,7 +264,7 @@
                 }
             }
 
-            
+
         }
 
 
@@ -261,10 +276,11 @@
             margin: 3rem;
             z-index: 1;
             margin-top: 350px;
+
             .proveedores-filter-section {
                 background: none;
 
-                
+
             }
 
         }

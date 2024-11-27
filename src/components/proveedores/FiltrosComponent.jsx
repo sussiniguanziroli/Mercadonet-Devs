@@ -2,24 +2,24 @@ import React, { useState } from 'react'
 import { IoClose } from "react-icons/io5";
 
 
-const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setSelectedMarca, setSelectedTipo, setSelectedUbicacion, selectedTipo, selectedMarca, selectedUbicacion }) => {
+const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setSelectedMarca, setSelectedCategoria, setSelectedUbicacion, selectedCategoria, selectedMarca, selectedUbicacion }) => {
 
-    const [selectedTipoMobile, setSelectedTipoMobile] = useState('');
+    const [selectedCategoriaMobile, setSelectedCategoriaMobile] = useState('');
 
     const handleLimpiar = () => {
-        setSelectedTipo('');
-        setSelectedTipoMobile('');
+        setSelectedCategoria('');
+        setSelectedCategoriaMobile('');
     }
 
     const handleTipoChange = (e) => {
         const value = e.target.value;
         // Si ya está seleccionado, lo deseleccionamos
         if (selectedTipoMobile === value) {
-            setSelectedTipoMobile(''); // Deseleccionar
-            setSelectedTipo(''); // También deselect el tipo
+            setSelectedCategoriaMobile(''); // Deseleccionar
+            setSelectedCategoria(''); // También deselect el tipo
         } else {
-            setSelectedTipoMobile(value);
-            setSelectedTipo(value);
+            setSelectedCategoriaMobile(value);
+            setSelectedCategoria(value);
         }
     };
     
@@ -49,18 +49,18 @@ const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setS
                         <button onClick={handleLimpiar}>Limpiar</button>
                     </div>
                     <ul className='filtro-tipos-checkboxes'>
-                        {filtrosOpciones.tipo.map((tipo) => (
-                            <li key={tipo}>
+                        {filtrosOpciones.categoria.map((categoria) => (
+                            <li key={categoria}>
                                 <label>
                                     <input
                                         type="checkbox"
-                                        value={tipo}
-                                        checked={selectedTipoMobile === tipo}
+                                        value={categoria}
+                                        checked={selectedCategoriaMobile === categoria}
                                         onChange={handleTipoChange}
                                         className="hidden-checkbox"
                                     />
                                     <span className='custom-checkbox'></span>
-                                    {tipo}
+                                    {categoria}
                                 </label>
                             </li>
                         ))}

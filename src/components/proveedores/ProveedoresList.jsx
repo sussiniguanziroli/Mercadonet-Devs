@@ -2,11 +2,15 @@ import React, { useState } from 'react'
 import Proveedor from './Proveedor'
 import { ScaleLoader } from 'react-spinners';
 
-const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSelectedTipo, setSelectedUbicacion, selectedTipo, selectedMarca, selectedUbicacion, searchTerm }) => {
+const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSelectedCategoria, setSelectedUbicacion, selectedCategoria, selectedMarca, selectedUbicacion, searchTerm }) => {
 
 
-    const handleTipoChange = (e) => {
-        setSelectedTipo(e.target.value);
+    const handleCategoriaChange = (categoria) => {
+        setSelectedCategoria((prev) =>
+            prev.includes(categoria)
+                ? prev.filter((item) => item !== categoria)
+                : [...prev, categoria] 
+        );
     };
 
     const handleMarcaChange = (e) => {
@@ -28,19 +32,19 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                 <div className="filtro-tipos">
                     <div className='tipo-boton'>
                         <h3>Tipos de proveedores</h3>
-                        <button onClick={() => setSelectedTipo('')}>Limpiar</button>
+                        <button onClick={() => setSelectedCategoria('')}>Limpiar</button>
                     </div>
                     <ul className='filtro-tipos-checkboxes'>
-                        {filtrosOpciones.tipo.map((tipo) => (
-                            <li key={tipo}>
+                        {filtrosOpciones.categoria.map((categoria) => (
+                            <li key={categoria}>
                                 <label>
                                     <input
                                         type="checkbox"
-                                        value={tipo}
-                                        checked={selectedTipo === tipo}
-                                        onChange={handleTipoChange}
+                                        value={categoria}
+                                        checked={selectedCategoria.includes(categoria)}
+                                        onChange={() => handleCategoriaChange(categoria)}
                                     />
-                                    {tipo}
+                                    {categoria}
                                 </label>
                             </li>
                         ))}
@@ -96,7 +100,7 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                         </div>
 
                     </>
-                ) : selectedUbicacion || selectedMarca || selectedTipo || searchTerm ? (
+                ) : selectedUbicacion || selectedMarca || selectedCategoria || searchTerm ? (
                     <div className='no-criteria'><p>No se ha encontrado ningun proveedor.</p></div>
                 ) : (
                     <div className='loader'>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import ProveedoresList from './ProveedoresList';
 import FiltrosComponent from './FiltrosComponent';
 import HeaderCustomProveedores from './HeaderCustomProveedores';
-import SearchBox from './SearchBox';
 import NewsBanner from './NewsBanner';
 import { db } from '../../firebase/config'
 import { collection, query, getDocs } from "firebase/firestore";
@@ -17,13 +16,13 @@ const Proveedores = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isMenuHidden, setIsMenuHidden] = useState(true);
     const [proveedores, setProveedores] = useState([]);
-    const [selectedTipo, setSelectedTipo] = useState('');
+    const [selectedCategoria, setSelectedCategoria] = useState([]);
     const [selectedMarca, setSelectedMarca] = useState('');
     const [selectedUbicacion, setSelectedUbicacion] = useState('');
 
     const [filtrosOpciones, setFiltrosOpciones] = useState({
         ubicacion: [],
-        tipo: [],
+        categoria: [],
         marca: []
     });
 
@@ -54,25 +53,21 @@ const Proveedores = () => {
                 const q = query(collection(db, 'filtros'));
                 const snapshot = await getDocs(q);
 
-                // Creamos objetos vacíos para cada filtro
                 let ubicacion = [];
-                let tipo = [];
+                let categoria = [];
                 let marca = [];
 
-                // Iteramos sobre los documentos obtenidos desde Firebase
                 snapshot.docs.forEach(doc => {
                     const data = doc.data();
 
-                    // Llenamos los arrays correspondientes según el contenido
                     if (data.ubicacion) ubicacion = data.ubicacion;
-                    if (data.tipo) tipo = data.tipo;
+                    if (data.categoria) categoria = data.categoria;
                     if (data.marca) marca = data.marca;
                 });
 
-                // Establecemos el estado con los tres arrays
                 setFiltrosOpciones({
                     ubicacion,
-                    tipo,
+                    categoria,
                     marca
                 });
             } catch (error) {
@@ -87,20 +82,35 @@ const Proveedores = () => {
         setIsMenuHidden(false);
     }
 
-    const filtrarProveedores = (proveedores, searchTerm, selectedMarca, selectedTipo, selectedUbicacion) => {
-        return proveedores.filter(proveedor => {
-            const cumpleTipo = !selectedTipo || proveedor.tipo.includes(selectedTipo);
+    const filtrarProveedores = (proveedores, searchTerm, selectedMarca, selectedCategoria, selectedUbicacion) => {
+        return proveedores.filter((proveedor) => {
+            const cumpleCategorias =
+                !selectedCategoria.length ||
+                selectedCategoria.some((categoria) => proveedor.categoria.includes(categoria));
+
             const cumpleMarca = !selectedMarca || proveedor.marca.includes(selectedMarca);
             const cumpleUbicacion = !selectedUbicacion || proveedor.ubicacion === selectedUbicacion;
-            const cumpleSearchTerm = !searchTerm || proveedor.nombre.toLowerCase().includes(searchTerm);
+            const cumpleSearchTerm = !searchTerm || proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase());
 
-            return cumpleTipo && cumpleMarca && cumpleUbicacion && cumpleSearchTerm;
+            return cumpleCategorias && cumpleMarca && cumpleUbicacion && cumpleSearchTerm;
+        });
+    };
+
+    const handleCategoriaClick = (categoria) => {
+        setSelectedCategoria((prevSelectedCategorias) => {
+            if (prevSelectedCategorias.includes(categoria)) {
+
+                return prevSelectedCategorias.filter((cat) => cat !== categoria);
+            } else {
+
+                return [...prevSelectedCategorias, categoria];
+            }
         });
     };
 
 
     // Filtrar los proveedores basados en los filtros seleccionados
-    const proveedoresFiltrados = filtrarProveedores(proveedores, searchTerm, selectedMarca, selectedTipo, selectedUbicacion)
+    const proveedoresFiltrados = filtrarProveedores(proveedores, searchTerm, selectedMarca, selectedCategoria, selectedUbicacion)
 
 
     return (
@@ -111,7 +121,7 @@ const Proveedores = () => {
                 proveedores={proveedores}
                 filtrosOpciones={filtrosOpciones}
                 setSelectedMarca={setSelectedMarca}
-                setSelectedTipo={setSelectedTipo}
+                setSelectedCategoria={setSelectedCategoria}
                 setSelectedUbicacion={setSelectedUbicacion} />
             <main className='main-proveedores'>
 
@@ -123,20 +133,27 @@ const Proveedores = () => {
                         <NewsBanner />
 
                         <div className='mobile-thumb-filters hiddenInDesktop'>
-                            <div className='mobile-thumb-filters-btns-container'>
-                                {filtersIcons.map((filterIcon => <div className='thumbFilter' onClick={() => setSelectedTipo(filterIcon.filtro)}>
-                                    <div className='thumbFilter-icon'>
-                                        <img src={filterIcon.icon} alt={filterIcon.name} />
+                            <div className="mobile-thumb-filters-btns-container">
+                                {filtersIcons.map((filterIcon) => (
+                                    <div
+                                        key={filterIcon.filtro}
+                                        className={`thumbFilter ${selectedCategoria.includes(filterIcon.filtro) ? "active" : ""}`}
+                                        onClick={() => handleCategoriaClick(filterIcon.filtro)}
+                                    >
+                                        <div className="thumbFilter-icon">
+                                            <img src={filterIcon.icon} alt={filterIcon.name} />
+                                        </div>
+                                        <p>{filterIcon.name}</p>
                                     </div>
-                                    <p>{filterIcon.name}</p>
-                                </div>))}
+                                ))}
                             </div>
+
                             <button className='filterBtn' onClick={openFilters}><MdTune className='icon' /> Filtrar</button>
                             {/* Menu desplegable en mobile */}
                             <FiltrosComponent setIsMenuHidden={setIsMenuHidden} isMenuHidden={isMenuHidden}
                                 filtrosOpciones={filtrosOpciones}
                                 setSelectedMarca={setSelectedMarca}
-                                setSelectedTipo={setSelectedTipo}
+                                setSelectedCategoria={setSelectedCategoria}
                                 setSelectedUbicacion={setSelectedUbicacion}
                             />
                         </div>
@@ -145,9 +162,9 @@ const Proveedores = () => {
                             proveedores={proveedoresFiltrados}
                             filtrosOpciones={filtrosOpciones}
                             setSelectedMarca={setSelectedMarca}
-                            setSelectedTipo={setSelectedTipo}
+                            setSelectedCategoria={setSelectedCategoria}
                             setSelectedUbicacion={setSelectedUbicacion}
-                            selectedTipo={selectedTipo}
+                            selectedCategoria={selectedCategoria}
                             selectedUbicacion={selectedUbicacion}
                             selectedMarca={selectedMarca}
                         />

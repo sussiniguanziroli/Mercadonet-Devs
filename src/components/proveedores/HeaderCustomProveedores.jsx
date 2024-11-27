@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { FaSearch } from "react-icons/fa";
 
-const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtrosOpciones, setSelectedMarca, setSelectedTipo, setSelectedUbicacion, selectedTipo, selectedMarca, selectedUbicacion }) => {
+const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtrosOpciones, setSelectedMarca, setSelectedCategoria, setSelectedUbicacion, selectedCategoria, selectedMarca, selectedUbicacion }) => {
 
     const [scrolled, setScrolled] = useState(false);
 
@@ -12,21 +12,21 @@ const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtr
     const searchBoxRef = useRef(null);
 
     const [filtrosUbicacion, setFiltrosUbicacion] = useState([]);
-    const [filtrosTipo, setFiltrosTipo] = useState([]);
+    const [filtrosCategoria, setFiltrosCategoria] = useState([]);
 
     console.log('filtros opciones', filtrosOpciones);
 
     useEffect(() => {
         const determinarFiltros = () => {
             setFiltrosUbicacion(filtrosOpciones.ubicacion);
-            setFiltrosTipo(filtrosOpciones.tipo);
+            setFiltrosCategoria(filtrosOpciones.categoria);
         };
         determinarFiltros();
 
     }, [filtrosOpciones])
 
     console.log('filtros ubicacion', filtrosUbicacion);
-    console.log('filtro tipo', filtrosTipo);
+    console.log('filtro cat', filtrosCategoria);
 
 
 
@@ -41,12 +41,12 @@ const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtr
 
     useEffect(() => {
         if (tempSearchTerm) {
-            const proveedoresFiltrados = filtrarProveedores(proveedores, tempSearchTerm.toLowerCase(), selectedMarca, selectedTipo, selectedUbicacion);
+            const proveedoresFiltrados = filtrarProveedores(proveedores, tempSearchTerm.toLowerCase(), selectedMarca, selectedCategoria, selectedUbicacion);
             setSuggestions(proveedoresFiltrados.slice(0, 5)); // Limitar sugerencias a 3
         } else {
             setSuggestions([]);
         }
-    }, [tempSearchTerm, selectedMarca, selectedTipo, selectedUbicacion]);
+    }, [tempSearchTerm, selectedMarca, selectedCategoria, selectedUbicacion]);
 
    
     const handleSuggestionClick = (suggestions) => {
@@ -125,7 +125,7 @@ const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtr
                 <ul className="suggestions-list">
                     {suggestions.map((suggestion, index) => (
                         <li key={index} onMouseDown={() => handleSuggestionClick(suggestion)}>
-                            {suggestion.nombre} - {suggestion.tipo.join(", ")} - {suggestion.ubicacion}
+                            {suggestion.nombre} - {suggestion.categoria.join(", ")} - {suggestion.ubicacion}
                         </li>
                     ))}
                 </ul>
