@@ -4,7 +4,7 @@ import { ScaleLoader } from 'react-spinners';
 import { NavLink } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
 
-const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSelectedCategoria, setSelectedUbicacion, selectedCategoria, selectedMarca, selectedUbicacion, searchTerm, checkedServices, setCheckedServices }) => {
+const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSelectedCategoria, setSelectedUbicacion, selectedCategoria, selectedMarca, selectedUbicacion, searchTerm, checkedServices, setCheckedServices, selectedExtras, setSelectedExtras }) => {
 
     const [inputValue, setInputValue] = useState("");
     const [filteredOptions, setFilteredOptions] = useState(filtrosOpciones.marca || []);
@@ -33,7 +33,9 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
         setFilteredOptions(filtered);
     };
 
-
+    const handleExtrasChange = (e) => {
+        setSelectedExtras(e.target.value);
+    };
 
 
     const handleUbicacionChange = (e) => {
@@ -146,7 +148,7 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                                 type="text"
                                 value={inputValue}
                                 onChange={handleMarcaChange}
-                                placeholder="Ej: Adidas"
+                                placeholder="Buscar Ej: Adidas"
                                 className="combobox-input"
                             />
                             <select value={inputValue} onChange={handleMarcaChange}>
@@ -158,6 +160,22 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                                 ))}
                             </select>
                         </div>
+                    </div>
+
+                    {/* Filtro de Ubicación */}
+                    <div className="filtro-ubicacion">
+                        <h3>Servicios y Capacidades</h3>
+                        <select
+                            value={selectedExtras}
+                            onChange={handleExtrasChange}
+                        >
+                            <option value="">Todo</option>
+                            {filtrosOpciones.extras.map((extra) => (
+                                <option className='ubicacion-option' key={extra} value={extra}>
+                                    {extra}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
 

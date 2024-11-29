@@ -22,12 +22,14 @@ const Proveedores = () => {
     const [selectedMarca, setSelectedMarca] = useState('');
     const [selectedUbicacion, setSelectedUbicacion] = useState('');
     const [checkedServices, setCheckedServices] = useState([]);
+    const [selectedExtras, setSelectedExtras] = useState('');
 
     const [filtrosOpciones, setFiltrosOpciones] = useState({
         ubicacion: [],
         categoria: [],
         marca: [],
-        servicios: []
+        servicios: [],
+        extras: [],
     });
 
 
@@ -61,6 +63,7 @@ const Proveedores = () => {
                 let categoria = [];
                 let marca = [];
                 let servicios = [];
+                let extras = [];
 
                 snapshot.docs.forEach(doc => {
                     const data = doc.data();
@@ -69,13 +72,15 @@ const Proveedores = () => {
                     if (data.categoria) categoria = data.categoria;
                     if (data.marca) marca = data.marca;
                     if (data.servicios) servicios = data.servicios;
+                    if (data.extras) extras = data.extras;
                 });
 
                 setFiltrosOpciones({
                     ubicacion,
                     categoria,
                     marca,
-                    servicios
+                    servicios,
+                    extras
                 });
             } catch (error) {
                 console.error("Error obteniendo los filtros: ", error);
@@ -177,6 +182,8 @@ const Proveedores = () => {
                             selectedMarca={selectedMarca}
                             setCheckedServices={setCheckedServices}
                             checkedServices={checkedServices}
+                            setSelectedExtras={setSelectedExtras}
+                            selectedExtras={selectedExtras}
                         />
 
                     </section>
