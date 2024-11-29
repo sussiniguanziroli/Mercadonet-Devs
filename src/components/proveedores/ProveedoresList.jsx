@@ -74,112 +74,122 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
             </section>
 
             <main className='proveedores-list-container'>
+                {filtrosOpciones.servicios.length > 0 ? (
+
+                
+                
                 <div className='filtros-desktop hiddenInMobile'>
-                    {/* ACA IRIAN ESOS FILTROS DESKTOP */}
-                    {/* Filtro de Servicios */}
-                    <div className="filtro-servicios">
-                        <h3>Proveedores de Servicios</h3>
-                        <ul className="filtro-tipos-checkboxes">
-                            {filtrosOpciones.servicios.map((servicio) => (
-                                <li key={servicio}>
-                                    <label className="switch-label">
-                                        <input
-                                            type="checkbox"
-                                            className="hidden-checkbox"
-                                            value={servicio}
-                                            onChange={() => handleServicesChange(servicio)}
-                                        />
-                                        <span className="custom-switch"></span>
-                                        {servicio}
-                                        {isFulfillmentActive && (servicio === 'Logística/Transporte') && (
-                                            <span className="fulfillment-badge"><FaStar />
-                                                Fulfillment</span>
-                                        )}
-                                    </label>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    {/* Filtro de Categorias */}
-                    <div className="filtro-categorias">
-                        <div className='tipo-boton'>
-                            <h3>Categoría del Proveedor</h3>
-                            <button onClick={() => setSelectedCategoria('')}>Limpiar</button>
-                        </div>
-                        <ul className='filtro-tipos-checkboxes'>
-                            {filtrosOpciones.categoria.map((categoria) => (
-                                <li key={categoria}>
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            value={categoria}
-                                            checked={selectedCategoria.includes(categoria)}
-                                            onChange={() => handleCategoriaChange(categoria)}
-                                        />
-                                        {categoria}
-                                    </label>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Filtro de Ubicación */}
-                    <div className="filtro-ubicacion">
-                        <h3>Ubicación</h3>
-                        <select
-                            value={selectedUbicacion}
-                            onChange={handleUbicacionChange}
-                        >
-                            <option value="">Todo</option>
-                            {filtrosOpciones.ubicacion.map((ubicacion) => (
-                                <option className='ubicacion-option' key={ubicacion} value={ubicacion}>
-                                    {ubicacion}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-
-                    {/* Filtro de Marca */}
-                    <div className="filtro-marca">
-                        <h3>Marca</h3>
-                        <div className='combobox'>
-                            <input
-                                type="text"
-                                value={inputValue}
-                                onChange={handleMarcaChange}
-                                placeholder="Buscar Ej: Adidas"
-                                className="combobox-input"
-                            />
-                            <select value={inputValue} onChange={handleMarcaChange}>
-                                <option value=""></option>
-                                {filteredOptions.map((marca) => (
-                                    <option key={marca} value={marca}>
-                                        {marca}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-
-                    {/* Filtro de Ubicación */}
-                    <div className="filtro-ubicacion">
-                        <h3>Servicios y Capacidades</h3>
-                        <select
-                            value={selectedExtras}
-                            onChange={handleExtrasChange}
-                        >
-                            <option value="">Todo</option>
-                            {filtrosOpciones.extras.map((extra) => (
-                                <option className='ubicacion-option' key={extra} value={extra}>
-                                    {extra}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-
+                {/* ACA IRIAN ESOS FILTROS DESKTOP */}
+                {/* Filtro de Servicios */}
+                <div className="filtro-servicios">
+                    <h3>Proveedores de Servicios</h3>
+                    <ul className="filtro-tipos-checkboxes">
+                        {filtrosOpciones.servicios.map((servicio) => (
+                            <li key={servicio}>
+                                <label className="switch-label">
+                                    <input
+                                        type="checkbox"
+                                        className="hidden-checkbox"
+                                        value={servicio}
+                                        onChange={() => handleServicesChange(servicio)}
+                                    />
+                                    <span className="custom-switch"></span>
+                                    {servicio}
+                                    {isFulfillmentActive && (servicio === 'Logística/Transporte') && (
+                                        <span className="fulfillment-badge"><FaStar />
+                                            Fulfillment</span>
+                                    )}
+                                </label>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
+                {/* Filtro de Categorias */}
+                <div className="filtro-categorias">
+                    <div className='tipo-boton'>
+                        <h3>Categoría del Proveedor</h3>
+                        <button onClick={() => setSelectedCategoria('')}>Limpiar</button>
+                    </div>
+                    <ul className='filtro-tipos-checkboxes'>
+                        {filtrosOpciones.categoria.map((categoria) => (
+                            <li key={categoria}>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        value={categoria}
+                                        checked={selectedCategoria.includes(categoria)}
+                                        onChange={() => handleCategoriaChange(categoria)}
+                                    />
+                                    {categoria}
+                                </label>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                {/* Filtro de Ubicación */}
+                <div className="filtro-ubicacion">
+                    <h3>Ubicación</h3>
+                    <select
+                        value={selectedUbicacion}
+                        onChange={handleUbicacionChange}
+                    >
+                        <option value="">Todo</option>
+                        {filtrosOpciones.ubicacion.map((ubicacion) => (
+                            <option className='ubicacion-option' key={ubicacion} value={ubicacion}>
+                                {ubicacion}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+
+                {/* Filtro de Marca */}
+                <div className="filtro-marca">
+                    <h3>Marca</h3>
+                    <div className='combobox'>
+                        <input
+                            type="text"
+                            value={inputValue}
+                            onChange={handleMarcaChange}
+                            placeholder="Buscar Ej: Adidas"
+                            className="combobox-input"
+                        />
+                        <select value={inputValue} onChange={handleMarcaChange}>
+                            <option value=""></option>
+                            {filteredOptions.map((marca) => (
+                                <option key={marca} value={marca}>
+                                    {marca}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                {/* Filtro de Ubicación */}
+                <div className="filtro-ubicacion">
+                    <h3>Servicios y Capacidades</h3>
+                    <select
+                        value={selectedExtras}
+                        onChange={handleExtrasChange}
+                    >
+                        <option value="">Todo</option>
+                        {filtrosOpciones.extras.map((extra) => (
+                            <option className='ubicacion-option' key={extra} value={extra}>
+                                {extra}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+
+            </div>
+            ) : (
+            <div>
+            </div>
+            )
+            } 
+                
                 <div className='proveedores-list'>
                     {proveedores.length > 0 ? (
 
