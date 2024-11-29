@@ -3,6 +3,8 @@ import Proveedor from './Proveedor'
 import { ScaleLoader } from 'react-spinners';
 import { NavLink } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
+import { VscDebugRestart } from "react-icons/vsc";
+
 
 const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSelectedCategoria, setSelectedUbicacion, selectedCategoria, selectedMarca, selectedUbicacion, searchTerm, checkedServices, setCheckedServices, selectedExtras, setSelectedExtras }) => {
 
@@ -207,7 +209,10 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                                         )}
                                     </ul>
                                 )}
+                                <button onClick={handleReset}><VscDebugRestart size={18} /></button>
                             </div>
+                            
+
                         </div>
 
                         {/* Filtro de Ubicación */}
