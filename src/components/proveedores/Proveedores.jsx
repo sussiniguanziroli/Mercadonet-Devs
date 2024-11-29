@@ -11,6 +11,8 @@ import NewsCarousel from './NewsCarousel';
 
 
 
+
+
 const Proveedores = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -19,11 +21,13 @@ const Proveedores = () => {
     const [selectedCategoria, setSelectedCategoria] = useState([]);
     const [selectedMarca, setSelectedMarca] = useState('');
     const [selectedUbicacion, setSelectedUbicacion] = useState('');
+    const [checkedServices, setCheckedServices] = useState([]);
 
     const [filtrosOpciones, setFiltrosOpciones] = useState({
         ubicacion: [],
         categoria: [],
-        marca: []
+        marca: [],
+        servicios: []
     });
 
 
@@ -56,6 +60,7 @@ const Proveedores = () => {
                 let ubicacion = [];
                 let categoria = [];
                 let marca = [];
+                let servicios = [];
 
                 snapshot.docs.forEach(doc => {
                     const data = doc.data();
@@ -63,12 +68,14 @@ const Proveedores = () => {
                     if (data.ubicacion) ubicacion = data.ubicacion;
                     if (data.categoria) categoria = data.categoria;
                     if (data.marca) marca = data.marca;
+                    if (data.servicios) servicios = data.servicios;
                 });
 
                 setFiltrosOpciones({
                     ubicacion,
                     categoria,
-                    marca
+                    marca,
+                    servicios
                 });
             } catch (error) {
                 console.error("Error obteniendo los filtros: ", error);
@@ -168,6 +175,8 @@ const Proveedores = () => {
                             selectedCategoria={selectedCategoria}
                             selectedUbicacion={selectedUbicacion}
                             selectedMarca={selectedMarca}
+                            setCheckedServices={setCheckedServices}
+                            checkedServices={checkedServices}
                         />
 
                     </section>

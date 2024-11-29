@@ -1,10 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Proveedor from './Proveedor'
 import { ScaleLoader } from 'react-spinners';
 import { NavLink } from 'react-router-dom';
+import { FaStar } from 'react-icons/fa';
 
-const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSelectedCategoria, setSelectedUbicacion, selectedCategoria, selectedMarca, selectedUbicacion, searchTerm }) => {
+const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSelectedCategoria, setSelectedUbicacion, selectedCategoria, selectedMarca, selectedUbicacion, searchTerm, checkedServices, setCheckedServices }) => {
 
+    const [inputValue, setInputValue] = useState("");
+    const [filteredOptions, setFilteredOptions] = useState(filtrosOpciones.marca || []);
+
+    useEffect(() => {
+        setFilteredOptions(filtrosOpciones.marca || []);
+    }, [filtrosOpciones.marca]);
 
     const handleCategoriaChange = (categoria) => {
         setSelectedCategoria((prev) =>
@@ -15,13 +22,33 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
     };
 
     const handleMarcaChange = (e) => {
-        setSelectedMarca(e.target.value);
+        const value = e.target.value;
+        setInputValue(value); // Actualiza el valor del input
+        setSelectedMarca(value); // Actualiza el estado superior con la marca seleccionada
+
+        // Filtra las opciones basándose en lo que se escribe en el input
+        const filtered = filtrosOpciones.marca.filter((marca) =>
+            marca.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredOptions(filtered);
     };
+
+
+
 
     const handleUbicacionChange = (e) => {
         setSelectedUbicacion(e.target.value);
     };
 
+    const handleServicesChange = (servicio) => {
+        setCheckedServices((prevState) =>
+            prevState.includes(servicio)
+                ? prevState.filter((item) => item !== servicio) // Elimina el servicio si está activado
+                : [...prevState, servicio] // Agrega el servicio si está desactivado
+        );
+    };
+
+    const isFulfillmentActive = checkedServices.includes('Logística/Transporte') && checkedServices.includes('Almacenamiento');
 
 
 
@@ -47,8 +74,32 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
             <main className='proveedores-list-container'>
                 <div className='filtros-desktop hiddenInMobile'>
                     {/* ACA IRIAN ESOS FILTROS DESKTOP */}
-                    {/* Filtro de Tipo */}
-                    <div className="filtro-tipos">
+                    {/* Filtro de Servicios */}
+                    <div className="filtro-servicios">
+                        <h3>Proveedores de Servicios</h3>
+                        <ul className="filtro-tipos-checkboxes">
+                            {filtrosOpciones.servicios.map((servicio) => (
+                                <li key={servicio}>
+                                    <label className="switch-label">
+                                        <input
+                                            type="checkbox"
+                                            className="hidden-checkbox"
+                                            value={servicio}
+                                            onChange={() => handleServicesChange(servicio)}
+                                        />
+                                        <span className="custom-switch"></span>
+                                        {servicio}
+                                        {isFulfillmentActive && (servicio === 'Logística/Transporte') && (
+                                            <span className="fulfillment-badge"><FaStar />
+                                                Fulfillment</span>
+                                        )}
+                                    </label>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    {/* Filtro de Categorias */}
+                    <div className="filtro-categorias">
                         <div className='tipo-boton'>
                             <h3>Categoría del Proveedor</h3>
                             <button onClick={() => setSelectedCategoria('')}>Limpiar</button>
@@ -86,21 +137,29 @@ const ProveedoresList = ({ proveedores, filtrosOpciones, setSelectedMarca, setSe
                         </select>
                     </div>
 
+
                     {/* Filtro de Marca */}
                     <div className="filtro-marca">
                         <h3>Marca</h3>
-                        <select
-                            value={selectedMarca}
-                            onChange={handleMarcaChange}
-                        >
-                            <option value="">Todas</option>
-                            {filtrosOpciones.marca.map((marca) => (
-                                <option className='marca-option' key={marca} value={marca}>
-                                    {marca}
-                                </option>
-                            ))}
-                        </select>
+                        <div className='combobox'>
+                            <input
+                                type="text"
+                                value={inputValue}
+                                onChange={handleMarcaChange}
+                                placeholder="Ej: Adidas"
+                                className="combobox-input"
+                            />
+                            <select value={inputValue} onChange={handleMarcaChange}>
+                                <option value=""></option>
+                                {filteredOptions.map((marca) => (
+                                    <option key={marca} value={marca}>
+                                        {marca}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
+
 
                 </div>
                 <div className='proveedores-list'>
