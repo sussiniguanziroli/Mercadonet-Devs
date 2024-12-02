@@ -1,7 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FaSearch } from "react-icons/fa";
+import { useFiltersContext } from '../../context/FiltersContext';
 
-const SearchBox = ({ searchTerm, proveedores, setSearchTerm, filtrosOpciones, setSelectedMarca, setSelectedTipo, setSelectedUbicacion, selectedTipo, selectedMarca, selectedUbicacion }) => {
+const SearchBox = ({ }) => {
+
+    const {
+        searchTerm,
+        proveedoresFiltrados,
+        filtrosOpciones,
+        updateFilters,
+        selectedCategoria,
+        selectedUbicacion,
+        selectedMarca,
+        checkedServices,
+        selectedExtras,
+        isLoading
+    } = useFiltersContext();
 
     const [suggestions, setSuggestions] = useState([]);
     const inputRef = useRef(null);
@@ -29,7 +43,7 @@ const SearchBox = ({ searchTerm, proveedores, setSearchTerm, filtrosOpciones, se
 
     const filtrarProveedores = (proveedores, searchTerm) => {
         return proveedores.filter(proveedor => {
-            
+
             const cumpleSearchTerm = !searchTerm || proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase());
 
             return cumpleSearchTerm;
@@ -45,7 +59,7 @@ const SearchBox = ({ searchTerm, proveedores, setSearchTerm, filtrosOpciones, se
         }
     }, [tempSearchTerm, selectedMarca, selectedTipo, selectedUbicacion]);
 
-   
+
     const handleSuggestionClick = (suggestions) => {
         setTempSearchTerm(suggestions.nombre);
         setSearchTerm(suggestions.nombre.toLowerCase());
@@ -80,44 +94,44 @@ const SearchBox = ({ searchTerm, proveedores, setSearchTerm, filtrosOpciones, se
             document.removeEventListener("click", handleClickOutside);
         };
     }, []);
-   
 
 
 
 
-return (
-    <main className='main-search hiddenInMobile'>
-        <div className='search-box' ref={searchBoxRef} >
-            <h1>El directorio B2B líder de Argentina</h1>
-            <section className='search-section' >
-                <input
-                    type="text"
-                    placeholder='Buscá tu proveedor'
-                    value={tempSearchTerm}
-                    onChange={(e) => setTempSearchTerm(e.target.value)}
-                    onFocus={handleFocus}
-                    aria-label="Buscar proveedores"
-                    ref={inputRef}
-                />
-                <button onClick={() => handleSearchClick()}><FaSearch className='search-icon' /></button>
-            </section>
-        </div>
 
-        <div className='suggestions-list-box'>
-            {/* Desplegable de sugerencias */}
-            {suggestions.length > 0 && (
-                <ul className="suggestions-list">
-                    {suggestions.map((suggestion, index) => (
-                        <li key={index} onMouseDown={() => handleSuggestionClick(suggestion)}>
-                            {suggestion.nombre} - {suggestion.tipo.join(", ")} - {suggestion.ubicacion}
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
+    return (
+        <main className='main-search hiddenInMobile'>
+            <div className='search-box' ref={searchBoxRef} >
+                <h1>El directorio B2B líder de Argentina</h1>
+                <section className='search-section' >
+                    <input
+                        type="text"
+                        placeholder='Buscá tu proveedor'
+                        value={tempSearchTerm}
+                        onChange={(e) => setTempSearchTerm(e.target.value)}
+                        onFocus={handleFocus}
+                        aria-label="Buscar proveedores"
+                        ref={inputRef}
+                    />
+                    <button onClick={() => handleSearchClick()}><FaSearch className='search-icon' /></button>
+                </section>
+            </div>
 
-    </main>
-)
+            <div className='suggestions-list-box'>
+                {/* Desplegable de sugerencias */}
+                {suggestions.length > 0 && (
+                    <ul className="suggestions-list">
+                        {suggestions.map((suggestion, index) => (
+                            <li key={index} onMouseDown={() => handleSuggestionClick(suggestion)}>
+                                {suggestion.nombre} - {suggestion.tipo.join(", ")} - {suggestion.ubicacion}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+
+        </main>
+    )
 }
 
 export default SearchBox

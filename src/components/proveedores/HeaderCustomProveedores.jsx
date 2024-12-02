@@ -1,8 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { FaSearch } from "react-icons/fa";
+import { useFiltersContext } from '../../context/FiltersContext';
 
-const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtrosOpciones, setSelectedMarca, setSelectedCategoria, setSelectedUbicacion, selectedCategoria, selectedMarca, selectedUbicacion }) => {
+const HeaderCustomProveedores = ({ }) => {
+
+    const {
+        searchTerm,
+        proveedoresFiltrados,
+        filtrosOpciones,
+        updateFilters,
+        selectedCategoria,
+        selectedUbicacion,
+        selectedMarca,
+        checkedServices,
+        selectedExtras,
+        isLoading,
+        proveedores
+    } = useFiltersContext();
 
     const [scrolled, setScrolled] = useState(false);
 
@@ -32,7 +47,7 @@ const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtr
 
     const filtrarProveedores = (proveedores, searchTerm) => {
         return proveedores.filter(proveedor => {
-            
+
             const cumpleSearchTerm = !searchTerm || proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase());
 
             return cumpleSearchTerm;
@@ -48,7 +63,7 @@ const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtr
         }
     }, [tempSearchTerm, selectedMarca, selectedCategoria, selectedUbicacion]);
 
-   
+
     const handleSuggestionClick = (suggestions) => {
         setTempSearchTerm(suggestions.nombre);
         setSearchTerm(suggestions.nombre.toLowerCase());
@@ -101,36 +116,36 @@ const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtr
     }, []);
 
     return (
-        
+
         <header className={`header hiddenInMobile ${scrolled ? 'scrolled' : ''}`}>
             <img src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png" alt="logo white" />
             <div className='search-box' ref={searchBoxRef}>
-            <section className='search-section' >
-                <input
-                    type="text"
-                    placeholder='Buscá tu proveedor'
-                    value={tempSearchTerm}
-                    onChange={(e) => setTempSearchTerm(e.target.value)}
-                    onFocus={handleFocus}
-                    aria-label="Buscar proveedores"
-                    ref={inputRef}
-                />
-                <button onClick={() => handleSearchClick()}><FaSearch className='search-icon' /></button>
-            </section>
+                <section className='search-section' >
+                    <input
+                        type="text"
+                        placeholder='Buscá tu proveedor'
+                        value={tempSearchTerm}
+                        onChange={(e) => setTempSearchTerm(e.target.value)}
+                        onFocus={handleFocus}
+                        aria-label="Buscar proveedores"
+                        ref={inputRef}
+                    />
+                    <button onClick={() => handleSearchClick()}><FaSearch className='search-icon' /></button>
+                </section>
 
 
-            <div className='suggestions-list-box'>
-            {/* Desplegable de sugerencias */}
-            {suggestions.length > 0 && (
-                <ul className="suggestions-list">
-                    {suggestions.map((suggestion, index) => (
-                        <li key={index} onMouseDown={() => handleSuggestionClick(suggestion)}>
-                            {suggestion.nombre} - {suggestion.categoria.join(", ")} - {suggestion.ubicacion}
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
+                <div className='suggestions-list-box'>
+                    {/* Desplegable de sugerencias */}
+                    {suggestions.length > 0 && (
+                        <ul className="suggestions-list">
+                            {suggestions.map((suggestion, index) => (
+                                <li key={index} onMouseDown={() => handleSuggestionClick(suggestion)}>
+                                    {suggestion.nombre} - {suggestion.categoria.join(", ")} - {suggestion.ubicacion}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
             </div>
             <div className='nav-container'>
                 <NavLink activeClassname='active' to='/' className='nav-link'>¿Qué es Mercadonet?</NavLink>
@@ -141,8 +156,8 @@ const HeaderCustomProveedores = ({ searchTerm, proveedores, setSearchTerm, filtr
             </div>
         </header>
 
-        
-        
+
+
     )
 }
 

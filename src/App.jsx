@@ -6,25 +6,28 @@ import Menu from './components/header/Menu';
 import Footer from './components/footer/Footer';
 import Proveedores from './components/proveedores/Proveedores';
 import AdminPanel from './components/admin/AdminPanel';
+import { FiltersProvider } from './context/FiltersContext';
 
 
 function App() {
-  
 
-  return (
-      <>
-      <BrowserRouter>
-        <Menu />
-        
-        <Routes>
-            <Route path="/" element={<Landing/>}/>
-            <Route path='/proveedores' element={<Proveedores />}/>
-            <Route path='/admin' element={<AdminPanel/>} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
-      </>
-      )
+
+    return (
+
+        <FiltersProvider>
+            <BrowserRouter>
+                <Menu />
+
+                <Routes>
+                    <Route path="/" element={<Landing />} />
+                    <Route path='/proveedores' element={<Proveedores />} />
+                    <Route path='/admin' element={<AdminPanel />} />
+                </Routes>
+                <Footer />
+            </BrowserRouter>
+        </FiltersProvider>
+
+    )
 }
 
 export default App

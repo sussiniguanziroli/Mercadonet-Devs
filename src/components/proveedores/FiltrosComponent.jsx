@@ -1,19 +1,32 @@
 import React, { useState } from 'react'
 import { IoClose } from "react-icons/io5";
+import { useFiltersContext } from '../../context/FiltersContext';
 
 
-const FiltrosComponent = ({ setIsMenuHidden, filtrosOpciones, isMenuHidden, setSelectedMarca, setSelectedCategoria, setSelectedUbicacion, selectedCategoria, selectedMarca, selectedUbicacion }) => {
+const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
 
-    
-    
+    const {
+        searchTerm,
+        proveedoresFiltrados,
+        filtrosOpciones,
+        updateFilters,
+        selectedCategoria,
+        selectedUbicacion,
+        selectedMarca,
+        checkedServices,
+        selectedExtras,
+        isLoading,
+        proveedores,
+    } = useFiltersContext();
+
     const handleCategoriaChange = (categoria) => {
         setSelectedCategoria((prev) =>
             prev.includes(categoria)
                 ? prev.filter((item) => item !== categoria)
-                : [...prev, categoria] 
+                : [...prev, categoria]
         );
     };
-    
+
 
     const handleMarcaChange = (e) => {
         setSelectedMarca(e.target.value);

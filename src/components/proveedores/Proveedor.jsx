@@ -4,6 +4,7 @@ import { IoLocationOutline } from "react-icons/io5";
 
 const Proveedor = ({ proveedor }) => {
 
+
     const maxLength = 75;
     const truncatedDescription = proveedor.descripcion.length > maxLength
         ? proveedor.descripcion.slice(0, maxLength) + "...[ver más]"
