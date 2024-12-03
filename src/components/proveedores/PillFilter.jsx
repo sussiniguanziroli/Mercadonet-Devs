@@ -124,31 +124,39 @@ const PillFilter = () => {
             </button>
           </div>
         </div>
-  
-        <div className="filter-list-badges-container">
-          <button className="arrow-btn">
-            <IoIosArrowBack />
-          </button>
-          <div className="filter-list-badges">
-            {combinedFilters.map(({ key, label }) => (
-              <span key={label} className="filter-badge">
-                {label}
-                <button
-                  className="remove-badge-btn"
-                  onClick={() => handleRemoveBadge(key, label)}
-                >
-                  &times;
-                </button>
-              </span>
-            ))}
+        
+        {
+            combinedFilters.length > 0 
+            ? (
+            <div className="filter-list-badges-container">
+            <button className="arrow-btn">
+              <IoIosArrowBack />
+            </button>
+            <div className="filter-list-badges">
+              {combinedFilters.map(({ key, label }) => (
+                <span key={label} className="filter-badge">
+                  {label}
+                  <button
+                    className="remove-badge-btn"
+                    onClick={() => handleRemoveBadge(key, label)}
+                  >
+                    &times;
+                  </button>
+                </span>
+              ))}
+            </div>
+            <button className="arrow-btn">
+              <IoIosArrowForward />
+            </button>
+            <button className="reset-flt-btn" onClick={handleResetFilters}>
+              Restablecer Filtros
+            </button>
           </div>
-          <button className="arrow-btn">
-            <IoIosArrowForward />
-          </button>
-          <button className="reset-flt-btn" onClick={handleResetFilters}>
-            Restablecer Filtros
-          </button>
-        </div>
+          ) : 
+          <div></div>
+        }
+  
+        
       </main>
     );
   };
