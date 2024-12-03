@@ -8,6 +8,7 @@ import filtersIcons from '../proveedores/filtersIcons.json';
 import { MdTune } from "react-icons/md";
 import NewsCarousel from './NewsCarousel';
 import { useFiltersContext } from '../../context/FiltersContext';
+import PillFilter from './PillFilter';
 
 
 

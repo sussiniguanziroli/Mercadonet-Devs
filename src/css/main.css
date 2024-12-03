@@ -1830,6 +1830,95 @@ main {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+@media (min-width: 1024px) {
+  .main-pill-filter {
+    border: 1px solid red;
+    font-family: "Roboto", system-ui;
+  }
+  .main-pill-filter .pill-filter-container {
+    text-align: center;
+  }
+  .main-pill-filter .pill-filter-container h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .main-pill-filter .pill-filter-container .pill-filter {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+  .main-pill-filter .pill-filter-container .pill-filter .pill-button {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    background-color: #f0f0f0;
+    color: #000;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .main-pill-filter .pill-filter-container .pill-filter .pill-button:hover {
+    background-color: #e0e0e0;
+  }
+  .main-pill-filter .pill-filter-container .pill-filter .pill-button.active {
+    background-color: #007bff;
+    color: #fff;
+  }
+  .main-pill-filter .filter-list-badges-container {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    gap: 8px;
+  }
+  .main-pill-filter .filter-list-badges-container .arrow-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #007bff;
+  }
+  .main-pill-filter .filter-list-badges-container .arrow-btn:hover {
+    color: #0056b3;
+  }
+  .main-pill-filter .filter-list-badges-container .filter-list-badges {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 5px 0;
+  }
+  .main-pill-filter .filter-list-badges-container .filter-list-badges .filter-badge {
+    display: flex;
+    align-items: center;
+    background-color: #e0e0e0;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+  .main-pill-filter .filter-list-badges-container .filter-list-badges .filter-badge .remove-badge-btn {
+    background: none;
+    border: none;
+    margin-left: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #ff0000;
+  }
+  .main-pill-filter .filter-list-badges-container .filter-list-badges .filter-badge .remove-badge-btn:hover {
+    color: #b30000;
+  }
+  .main-pill-filter .filter-list-badges-container .reset-flt-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: underline;
+  }
+  .main-pill-filter .filter-list-badges-container .reset-flt-btn:hover {
+    color: #0056b3;
+  }
+}
 * {
   outline: none !important;
   box-shadow: none !important;

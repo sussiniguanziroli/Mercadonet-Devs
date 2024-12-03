@@ -13,6 +13,7 @@ export const FiltersProvider = ({ children }) => {
     const [checkedServices, setCheckedServices] = useState([]);
     const [selectedExtras, setSelectedExtras] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [selectedPProductos, setSelectedPProductos] = useState([]);
 
     const [filtrosOpciones, setFiltrosOpciones] = useState({
         ubicacion: [],
@@ -20,6 +21,7 @@ export const FiltersProvider = ({ children }) => {
         marca: [],
         servicios: [],
         extras: [],
+        pproductos: [],
     });
 
     // **Obtener proveedores desde Firebase**
@@ -55,6 +57,7 @@ export const FiltersProvider = ({ children }) => {
                 let marca = [];
                 let servicios = [];
                 let extras = [];
+                let pproductos = [];
 
                 snapshot.docs.forEach((doc) => {
                     const data = doc.data();
@@ -63,6 +66,7 @@ export const FiltersProvider = ({ children }) => {
                     if (data.marca) marca = data.marca;
                     if (data.servicios) servicios = data.servicios;
                     if (data.extras) extras = data.extras;
+                    if (data.pproductos) pproductos = data.pproductos;
                 });
 
                 setFiltrosOpciones({
@@ -71,6 +75,7 @@ export const FiltersProvider = ({ children }) => {
                     marca,
                     servicios,
                     extras,
+                    pproductos,
                 });
             } catch (error) {
                 console.error("Error obteniendo los filtros: ", error);
@@ -98,6 +103,7 @@ export const FiltersProvider = ({ children }) => {
         });
     }, [proveedores, searchTerm, selectedMarca, selectedCategoria, selectedUbicacion]);
 
+
     // **Centralizar actualizaciones de filtros**
     const updateFilters = (key, value) => {
         switch (key) {
@@ -119,6 +125,9 @@ export const FiltersProvider = ({ children }) => {
             case "servicio": 
                 setCheckedServices(value);
                 break
+            case "pproductos":
+                setSelectedPProductos(value);
+                break
             default:
                 console.warn("Filtro desconocido:", key);
         }
@@ -138,7 +147,7 @@ export const FiltersProvider = ({ children }) => {
                 selectedExtras,
                 isLoading,
                 proveedores,
-                
+                selectedPProductos
             }}
         >
             {children}

@@ -1,95 +1,75 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { FaSearch } from "react-icons/fa";
 import { useFiltersContext } from '../../context/FiltersContext';
 
-const HeaderCustomProveedores = ({ }) => {
-
+const HeaderCustomProveedores = () => {
     const {
         searchTerm,
-        proveedoresFiltrados,
-        filtrosOpciones,
+        proveedores,
         updateFilters,
-        selectedCategoria,
-        selectedUbicacion,
-        selectedMarca,
-        checkedServices,
-        selectedExtras,
-        isLoading,
-        proveedores
     } = useFiltersContext();
 
     const [scrolled, setScrolled] = useState(false);
-
     const [suggestions, setSuggestions] = useState([]);
     const inputRef = useRef(null);
-    const [tempSearchTerm, setTempSearchTerm] = useState('');
+    const [tempSearchTerm, setTempSearchTerm] = useState(searchTerm || "");
     const searchBoxRef = useRef(null);
 
-    const [filtrosUbicacion, setFiltrosUbicacion] = useState([]);
-    const [filtrosCategoria, setFiltrosCategoria] = useState([]);
-
-    console.log('filtros opciones', filtrosOpciones);
-
-    useEffect(() => {
-        const determinarFiltros = () => {
-            setFiltrosUbicacion(filtrosOpciones.ubicacion);
-            setFiltrosCategoria(filtrosOpciones.categoria);
-        };
-        determinarFiltros();
-
-    }, [filtrosOpciones])
-
-    console.log('filtros ubicacion', filtrosUbicacion);
-    console.log('filtro cat', filtrosCategoria);
-
-
-
+    // Función para filtrar proveedores según el término de búsqueda
     const filtrarProveedores = (proveedores, searchTerm) => {
-        return proveedores.filter(proveedor => {
-
-            const cumpleSearchTerm = !searchTerm || proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase());
-
+        return proveedores.filter((proveedor) => {
+            const cumpleSearchTerm =
+                !searchTerm ||
+                proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase());
             return cumpleSearchTerm;
         });
     };
 
+    // Actualizar sugerencias cuando cambie el término de búsqueda temporal
     useEffect(() => {
         if (tempSearchTerm) {
-            const proveedoresFiltrados = filtrarProveedores(proveedores, tempSearchTerm.toLowerCase(), selectedMarca, selectedCategoria, selectedUbicacion);
-            setSuggestions(proveedoresFiltrados.slice(0, 5)); // Limitar sugerencias a 3
+            const proveedoresFiltrados = filtrarProveedores(
+                proveedores,
+                tempSearchTerm.toLowerCase()
+            );
+            setSuggestions(proveedoresFiltrados.slice(0, 5)); // Limitar sugerencias
         } else {
             setSuggestions([]);
         }
-    }, [tempSearchTerm, selectedMarca, selectedCategoria, selectedUbicacion]);
+    }, [tempSearchTerm]);
 
-
-    const handleSuggestionClick = (suggestions) => {
-        setTempSearchTerm(suggestions.nombre);
-        setSearchTerm(suggestions.nombre.toLowerCase());
+    // Manejar clic en una sugerencia
+    const handleSuggestionClick = (suggestion) => {
+        const updatedSearchTerm = suggestion.nombre;
+        setTempSearchTerm(updatedSearchTerm);
+        updateFilters("search", updatedSearchTerm);
         clearSuggestions();
     };
 
+    // Manejar clic en el botón de búsqueda
     const handleSearchClick = () => {
-        setSearchTerm(tempSearchTerm.toLowerCase());
+        updateFilters("search", tempSearchTerm.toLowerCase()); 
         clearSuggestions();
     };
 
+    // Limpiar sugerencias
     const clearSuggestions = () => {
         setSuggestions([]);
     };
 
+    // Manejar el enfoque del input
     const handleFocus = () => {
-        setSuggestions(filtrarProveedores(proveedores, tempSearchTerm.toLowerCase()).slice(0, 3));
+        setSuggestions(
+            filtrarProveedores(proveedores, tempSearchTerm.toLowerCase()).slice(0, 3)
+        );
     };
 
-    // Manejar clic fuera del input para cerrar el menú de sugerencias
+    // Cerrar sugerencias al hacer clic fuera del input
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (
-                !searchBoxRef.current.contains(event.target)
-            ) {
-                setTimeout(() => setSuggestions([]), 0); // Ocultar sugerencias con un pequeño retraso
+            if (!searchBoxRef.current.contains(event.target)) {
+                setTimeout(() => setSuggestions([]), 0);
             }
         };
 
@@ -99,66 +79,76 @@ const HeaderCustomProveedores = ({ }) => {
         };
     }, []);
 
+    // Manejar el scroll para actualizar la clase del header
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 120) {
-                setScrolled(true);
-            } else {
-                setScrolled(false);
-            }
+            setScrolled(window.scrollY > 120);
         };
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener("scroll", handleScroll);
 
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener("scroll", handleScroll);
         };
     }, []);
 
     return (
-
-        <header className={`header hiddenInMobile ${scrolled ? 'scrolled' : ''}`}>
-            <img src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png" alt="logo white" />
-            <div className='search-box' ref={searchBoxRef}>
-                <section className='search-section' >
+        <header className={`header hiddenInMobile ${scrolled ? "scrolled" : ""}`}>
+            <img
+                src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png"
+                alt="logo white"
+            />
+            <div className="search-box" ref={searchBoxRef}>
+                <section className="search-section">
                     <input
                         type="text"
-                        placeholder='Buscá tu proveedor'
+                        placeholder="Buscá tu proveedor"
                         value={tempSearchTerm}
                         onChange={(e) => setTempSearchTerm(e.target.value)}
                         onFocus={handleFocus}
                         aria-label="Buscar proveedores"
                         ref={inputRef}
                     />
-                    <button onClick={() => handleSearchClick()}><FaSearch className='search-icon' /></button>
+                    <button onClick={handleSearchClick}>
+                        <FaSearch className="search-icon" />
+                    </button>
                 </section>
 
-
-                <div className='suggestions-list-box'>
-                    {/* Desplegable de sugerencias */}
+                <div className="suggestions-list-box">
                     {suggestions.length > 0 && (
                         <ul className="suggestions-list">
                             {suggestions.map((suggestion, index) => (
-                                <li key={index} onMouseDown={() => handleSuggestionClick(suggestion)}>
-                                    {suggestion.nombre} - {suggestion.categoria.join(", ")} - {suggestion.ubicacion}
+                                <li
+                                    key={index}
+                                    onMouseDown={() => handleSuggestionClick(suggestion)}
+                                >
+                                    {suggestion.nombre} - {suggestion.categoria.join(", ")} -{" "}
+                                    {suggestion.ubicacion}
                                 </li>
                             ))}
                         </ul>
                     )}
                 </div>
             </div>
-            <div className='nav-container'>
-                <NavLink activeClassname='active' to='/' className='nav-link'>¿Qué es Mercadonet?</NavLink>
-                <NavLink activeClassname='active' to='/proveedores' className='nav-link'>Proveedores</NavLink>
-                <NavLink activeClassname='active' className='nav-link'>Registros</NavLink>
-                <NavLink activeClassname='active' className='nav-link'>Ingresar</NavLink>
-                <NavLink activeClassname='active' className='nav-link'>Contacto</NavLink>
+            <div className="nav-container">
+                <NavLink activeClassname="active" to="/" className="nav-link">
+                    ¿Qué es Mercadonet?
+                </NavLink>
+                <NavLink activeClassname="active" to="/proveedores" className="nav-link">
+                    Proveedores
+                </NavLink>
+                <NavLink activeClassname="active" className="nav-link">
+                    Registros
+                </NavLink>
+                <NavLink activeClassname="active" className="nav-link">
+                    Ingresar
+                </NavLink>
+                <NavLink activeClassname="active" className="nav-link">
+                    Contacto
+                </NavLink>
             </div>
         </header>
+    );
+};
 
-
-
-    )
-}
-
-export default HeaderCustomProveedores
+export default HeaderCustomProveedores;

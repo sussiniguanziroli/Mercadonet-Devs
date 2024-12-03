@@ -4,23 +4,24 @@ import { ScaleLoader } from 'react-spinners';
 import { NavLink } from 'react-router-dom';
 import FiltrosComponentDesktop from './FiltrosComponentDesktop';
 import { useFiltersContext } from '../../context/FiltersContext';
+import PillFilter from './PillFilter';
 
 
-const ProveedoresList = ({}) => {
+const ProveedoresList = ({ }) => {
 
     const {
         searchTerm,
-                proveedoresFiltrados,
-                filtrosOpciones,
-                updateFilters,
-                selectedCategoria,
-                selectedUbicacion,
-                selectedMarca,
-                checkedServices,
-                selectedExtras,
-    } = useFiltersContext(); 
+        proveedoresFiltrados,
+        filtrosOpciones,
+        updateFilters,
+        selectedCategoria,
+        selectedUbicacion,
+        selectedMarca,
+        checkedServices,
+        selectedExtras,
+    } = useFiltersContext();
 
-    
+
 
 
 
@@ -46,52 +47,49 @@ const ProveedoresList = ({}) => {
             <main className='proveedores-list-container'>
                 <FiltrosComponentDesktop />
                 <div className='proveedores-list'>
-                    {proveedoresFiltrados.length > 0 ? (
+                    <>
+                        <PillFilter />
+                        {proveedoresFiltrados.length > 0 ? (
 
 
-                        <div className='proveedores-list-grid'>
-                            {proveedoresFiltrados.map((proveedor) =>
+                            <div className='proveedores-list-grid'>
+                                {proveedoresFiltrados.map((proveedor) =>
 
-                                <Proveedor proveedor={proveedor} key={proveedor.id} />
+                                    <Proveedor proveedor={proveedor} key={proveedor.id} />
 
-                            )}
-                        </div>
-
-
-                    ) : selectedUbicacion || selectedMarca || selectedCategoria.length > 0 || searchTerm ? (
-                        <div className='no-criteria'><p>No se ha encontrado ningun proveedor.</p></div>
-                    ) : (
-                        <div className='loader'>
-                            <div className='hiddenInMobile'>
-                                <ScaleLoader
-                                    color="#FF7F00"
-                                    height={100}
-                                    margin={7}
-                                    radius={8}
-                                    width={15}
-                                />
+                                )}
                             </div>
-                            <div className='hiddenInDesktop'>
-                                <ScaleLoader
-                                    color="#FF7F00"
-                                    height={50}
-                                    margin={2}
-                                    radius={8}
-                                    width={7}
-                                />
+
+
+                        ) : selectedUbicacion || selectedMarca || selectedCategoria.length > 0 || searchTerm ? (
+                            <div className='no-criteria'><p>No se ha encontrado ningun proveedor.</p></div>
+                        ) : (
+                            <div className='loader'>
+                                <div className='hiddenInMobile'>
+                                    <ScaleLoader
+                                        color="#FF7F00"
+                                        height={100}
+                                        margin={7}
+                                        radius={8}
+                                        width={15}
+                                    />
+                                </div>
+                                <div className='hiddenInDesktop'>
+                                    <ScaleLoader
+                                        color="#FF7F00"
+                                        height={50}
+                                        margin={2}
+                                        radius={8}
+                                        width={7}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    )}
-
-
-
-
-
+                        )}
+                    </>
                 </div>
 
-
-
             </main>
+
         </>
     )
 }
