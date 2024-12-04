@@ -1,14 +1,15 @@
-.pill-filter-container {
-    
-}
+
 
 @media (min-width: 1024px) {
     .main-pill-filter {
-        border: 1px solid red;
+        
         font-family: "Roboto", system-ui;
     
         .pill-filter-container {
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
     
             h3 {
                 font-size: 18px;
@@ -17,22 +18,29 @@
             }
     
             .pill-filter {
+                width: fit-content;
                 display: flex;
                 justify-content: center;
-                gap: 8px;
-    
+                border-radius: 20px;
+                
                 .pill-button {
-                    padding: 10px 20px;
-                    border-radius: 20px;
+                    padding: 20px;
                     border: none;
                     background-color: #f0f0f0;
                     color: #000;
                     font-size: 14px;
                     cursor: pointer;
                     transition: background-color 0.3s ease, color 0.3s ease;
-    
+                    &:nth-child(1) {
+                        border-bottom-left-radius: inherit;
+                        border-top-left-radius: inherit;
+                    }
+                    &:nth-child(3) {
+                        border-bottom-right-radius: inherit;
+                        border-top-right-radius: inherit;
+                    }
                     &:hover {
-                        background-color: #e0e0e0;
+                        background-color: #80c4fc;
                     }
     
                     &.active {

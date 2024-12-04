@@ -47,8 +47,12 @@ const ProveedoresList = ({ }) => {
             <main className='proveedores-list-container'>
                 <FiltrosComponentDesktop />
                 <div className='proveedores-list'>
-                    <>
-                        <PillFilter />
+                    <> 
+                        {filtrosOpciones.pproductos.length > 0 ? (
+                            <PillFilter />
+                            ) : (
+                                <div></div>
+                            )}
                         {proveedoresFiltrados.length > 0 ? (
 
 

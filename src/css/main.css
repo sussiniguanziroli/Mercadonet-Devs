@@ -1832,11 +1832,13 @@ main {
 
 @media (min-width: 1024px) {
   .main-pill-filter {
-    border: 1px solid red;
     font-family: "Roboto", system-ui;
   }
   .main-pill-filter .pill-filter-container {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .main-pill-filter .pill-filter-container h3 {
     font-size: 18px;
@@ -1844,13 +1846,13 @@ main {
     margin-bottom: 10px;
   }
   .main-pill-filter .pill-filter-container .pill-filter {
+    width: fit-content;
     display: flex;
     justify-content: center;
-    gap: 8px;
+    border-radius: 20px;
   }
   .main-pill-filter .pill-filter-container .pill-filter .pill-button {
-    padding: 10px 20px;
-    border-radius: 20px;
+    padding: 20px;
     border: none;
     background-color: #f0f0f0;
     color: #000;
@@ -1858,8 +1860,16 @@ main {
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
+  .main-pill-filter .pill-filter-container .pill-filter .pill-button:nth-child(1) {
+    border-bottom-left-radius: inherit;
+    border-top-left-radius: inherit;
+  }
+  .main-pill-filter .pill-filter-container .pill-filter .pill-button:nth-child(3) {
+    border-bottom-right-radius: inherit;
+    border-top-right-radius: inherit;
+  }
   .main-pill-filter .pill-filter-container .pill-filter .pill-button:hover {
-    background-color: #e0e0e0;
+    background-color: #80c4fc;
   }
   .main-pill-filter .pill-filter-container .pill-filter .pill-button.active {
     background-color: #007bff;
