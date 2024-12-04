@@ -1123,8 +1123,8 @@ main {
     margin-left: 1rem;
     margin-top: 1rem;
     padding: 1rem;
-    width: 27%;
-    max-width: 400px;
+    width: 25%;
+    max-width: 410px;
   }
   .proveedores-list-container .filtros-desktop .filtro-servicios {
     margin-bottom: 2rem;
@@ -1303,6 +1303,7 @@ main {
   }
   .proveedores-list-container .proveedores-list {
     margin: 1rem;
+    width: 75%;
     /* Para Firefox */
     scrollbar-width: thin;
     /* Cambia a barra fina */
@@ -1832,6 +1833,8 @@ main {
 
 @media (min-width: 1024px) {
   .main-pill-filter {
+    width: 100%;
+    max-width: 1400px;
     font-family: "Roboto", system-ui;
   }
   .main-pill-filter .pill-filter-container {
@@ -1843,7 +1846,7 @@ main {
   .main-pill-filter .pill-filter-container h3 {
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
   .main-pill-filter .pill-filter-container .pill-filter {
     width: fit-content;
@@ -1878,26 +1881,38 @@ main {
   .main-pill-filter .filter-list-badges-container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-top: 15px;
     gap: 8px;
+    max-width: 1400px;
+    width: 100%;
   }
   .main-pill-filter .filter-list-badges-container .arrow-btn {
     background: none;
     border: none;
     cursor: pointer;
     font-size: 20px;
-    color: #007bff;
+    color: #808080;
   }
-  .main-pill-filter .filter-list-badges-container .arrow-btn:hover {
-    color: #0056b3;
-  }
-  .main-pill-filter .filter-list-badges-container .filter-list-badges {
-    display: flex;
+  .main-pill-filter .filter-list-badges-container .badges-overflow-container {
     overflow-x: auto;
+    overflow-y: hidden;
+    width: 85%;
+    max-height: 50px;
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+  }
+  .main-pill-filter .filter-list-badges-container .badges-overflow-container .filter-list-badges {
+    display: inline-flex;
+    align-items: center;
     gap: 8px;
     padding: 5px 0;
+    flex-wrap: nowrap;
+    overflow: scroll;
+    width: 100%;
   }
-  .main-pill-filter .filter-list-badges-container .filter-list-badges .filter-badge {
+  .main-pill-filter .filter-list-badges-container .badges-overflow-container .filter-list-badges .filter-badge {
     display: flex;
     align-items: center;
     background-color: #e0e0e0;
@@ -1905,7 +1920,7 @@ main {
     padding: 5px 10px;
     font-size: 14px;
   }
-  .main-pill-filter .filter-list-badges-container .filter-list-badges .filter-badge .remove-badge-btn {
+  .main-pill-filter .filter-list-badges-container .badges-overflow-container .filter-list-badges .filter-badge .remove-badge-btn {
     background: none;
     border: none;
     margin-left: 8px;
@@ -1913,17 +1928,17 @@ main {
     cursor: pointer;
     color: #ff0000;
   }
-  .main-pill-filter .filter-list-badges-container .filter-list-badges .filter-badge .remove-badge-btn:hover {
+  .main-pill-filter .filter-list-badges-container .badges-overflow-container .filter-list-badges .filter-badge .remove-badge-btn:hover {
     color: #b30000;
   }
   .main-pill-filter .filter-list-badges-container .reset-flt-btn {
-    margin-left: auto;
     background: none;
     border: none;
     color: #007bff;
     cursor: pointer;
     font-size: 14px;
-    text-decoration: underline;
+    font-weight: 500;
+    margin: 10px;
   }
   .main-pill-filter .filter-list-badges-container .reset-flt-btn:hover {
     color: #0056b3;

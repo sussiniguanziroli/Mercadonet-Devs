@@ -1,28 +1,27 @@
-
-
 @media (min-width: 1024px) {
     .main-pill-filter {
-        
+        width: 100%;
+        max-width: 1400px;
         font-family: "Roboto", system-ui;
-    
+
         .pill-filter-container {
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-    
+
             h3 {
                 font-size: 18px;
                 font-weight: bold;
-                margin-bottom: 10px;
+                margin-bottom: 20px;
             }
-    
+
             .pill-filter {
                 width: fit-content;
                 display: flex;
                 justify-content: center;
                 border-radius: 20px;
-                
+
                 .pill-button {
                     padding: 20px;
                     border: none;
@@ -31,18 +30,21 @@
                     font-size: 14px;
                     cursor: pointer;
                     transition: background-color 0.3s ease, color 0.3s ease;
+
                     &:nth-child(1) {
                         border-bottom-left-radius: inherit;
                         border-top-left-radius: inherit;
                     }
+
                     &:nth-child(3) {
                         border-bottom-right-radius: inherit;
                         border-top-right-radius: inherit;
                     }
+
                     &:hover {
                         background-color: #80c4fc;
                     }
-    
+
                     &.active {
                         background-color: #007bff;
                         color: #fff;
@@ -51,68 +53,82 @@
             }
         }
 
+
         .filter-list-badges-container {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             margin-top: 15px;
             gap: 8px;
-        
+            
+            max-width: 1400px;
+            width: 100%;
+
             .arrow-btn {
-              background: none;
-              border: none;
-              cursor: pointer;
-              font-size: 20px;
-              color: #007bff;
-        
-              &:hover {
-                color: #0056b3;
-              }
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 20px;
+                color: #808080;
+
             }
-        
-            .filter-list-badges {
-              display: flex;
-              overflow-x: auto;
-              gap: 8px;
-              padding: 5px 0;
-        
-              .filter-badge {
+
+            .badges-overflow-container {
+
+                overflow-x: auto; 
+                overflow-y: hidden;
+                width: 85%;
+                max-height: 50px; 
                 display: flex;
+                white-space: nowrap;
                 align-items: center;
-                background-color: #e0e0e0;
-                border-radius: 15px;
-                padding: 5px 10px;
-                font-size: 14px;
-        
-                .remove-badge-btn {
-                  background: none;
-                  border: none;
-                  margin-left: 8px;
-                  font-size: 14px;
-                  cursor: pointer;
-                  color: #ff0000;
-        
-                  &:hover {
-                    color: #b30000;
-                  }
+                .filter-list-badges {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 5px 0;
+                    flex-wrap: nowrap;
+                    overflow: scroll;
+                    width: 100%;
+                    .filter-badge {
+                        display: flex;
+                        align-items: center;
+                        background-color: #e0e0e0;
+                        border-radius: 15px;
+                        padding: 5px 10px;
+                        font-size: 14px;
+
+                        .remove-badge-btn {
+                            background: none;
+                            border: none;
+                            margin-left: 8px;
+                            font-size: 14px;
+                            cursor: pointer;
+                            color: #ff0000;
+
+                            &:hover {
+                                color: #b30000;
+                            }
+                        }
+                    }
                 }
-              }
             }
-        
+
             .reset-flt-btn {
-              margin-left: auto;
-              background: none;
-              border: none;
-              color: #007bff;
-              cursor: pointer;
-              font-size: 14px;
-              text-decoration: underline;
-        
-              &:hover {
-                color: #0056b3;
-              }
+                background: none;
+                border: none;
+                color: #007bff;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 500;
+                margin: 10px;
+
+                &:hover {
+                    color: #0056b3;
+                }
             }
-          }
-    
-    
+        }
+
+
     }
 }
