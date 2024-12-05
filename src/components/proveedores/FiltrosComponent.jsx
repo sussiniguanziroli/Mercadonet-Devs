@@ -14,10 +14,13 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
         checkedServices,
     } = useFiltersContext();
 
+    const [showMore, setShowMore] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [filteredOptions, setFilteredOptions] = useState(filtrosOpciones.marca || []);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
+
+    const visibleCount = 6;
 
     const handleCategoriaChange = (categoria) => {
         const newCategorias = selectedCategoria.includes(categoria)
@@ -141,12 +144,12 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
                 </div>
                 {/* Filtro de Categoría */}
                 <div className="filtro-tipos">
-                    <div className='tipo-boton'>
+                    <div className="tipo-boton">
                         <h3>Categoría del Proveedor</h3>
                         <button onClick={clearCategorias}>Limpiar</button>
                     </div>
-                    <ul className='filtro-tipos-checkboxes'>
-                        {filtrosOpciones.categoria.map((categoria) => (
+                    <ul className={`filtro-tipos-checkboxes ${showMore ? 'expanded' : ''}`}>
+                        {filtrosOpciones.categoria.slice(0, visibleCount).map((categoria) => (
                             <li key={categoria}>
                                 <label>
                                     <input
@@ -156,14 +159,35 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
                                         onChange={() => handleCategoriaChange(categoria)}
                                         className="hidden-checkbox"
                                     />
-                                    <span className='custom-checkbox'></span>
+                                    <span className="custom-checkbox"></span>
+                                    {categoria}
+                                </label>
+                            </li>
+                        ))}
+                        {filtrosOpciones.categoria.slice(visibleCount).map((categoria) => (
+                            <li key={categoria} className="extra-category">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        value={categoria}
+                                        checked={selectedCategoria.includes(categoria)}
+                                        onChange={() => handleCategoriaChange(categoria)}
+                                        className="hidden-checkbox"
+                                    />
+                                    <span className="custom-checkbox"></span>
                                     {categoria}
                                 </label>
                             </li>
                         ))}
                     </ul>
+                    <button
+                        className="toggle-more-btn"
+                        onClick={() => setShowMore((prev) => !prev)}
+                    >
+                        {showMore ? '-' : '+'}
+                    </button>
                 </div>
-
+                
                 {/* Filtro de Ubicación */}
                 <div className="filtro-ubicacion">
                     <h3>Ubicación</h3>

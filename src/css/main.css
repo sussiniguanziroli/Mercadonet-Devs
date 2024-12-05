@@ -1460,20 +1460,38 @@ main {
 .actual-filters-mobile .filtro-tipos .tipo-boton {
   margin-bottom: 1rem;
   display: flex;
+  justify-content: space-between;
 }
 .actual-filters-mobile .filtro-tipos .tipo-boton button {
   cursor: pointer;
-  margin-left: 1rem;
+  margin-right: 2rem;
   border: none;
   border-radius: 0.5rem;
   background-color: lightgray;
   font-family: "Roboto", system-ui;
-  padding: 0.3rem;
+  padding: 0.3rem 0.8rem;
   transition: all 0.3s;
   font-weight: 500;
 }
 .actual-filters-mobile .filtro-tipos .tipo-boton button:hover {
   background-color: #ff9c39;
+}
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes {
+  overflow: hidden;
+  max-height: 160px;
+  transition: max-height 0.3s ease-in-out;
+}
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes.expanded {
+  max-height: fit-content;
+}
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li.extra-category {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.5s ease, transform 0.3s ease;
+}
+.actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes.expanded li.extra-category {
+  opacity: 1;
+  transform: translateY(0);
 }
 .actual-filters-mobile .filtro-tipos .filtro-tipos-checkboxes li {
   list-style: none;
@@ -1513,8 +1531,22 @@ main {
   border: 2px solid #FF7F00;
   border-radius: 16px;
   position: relative;
-  z-index: 2000;
   transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.actual-filters-mobile .filtro-tipos .toggle-more-btn {
+  cursor: pointer;
+  margin-top: 1rem;
+  border: none;
+  width: 80%;
+  font-size: 18px;
+  background-color: transparent;
+  font-family: "Roboto", system-ui;
+  color: #2c2c2c;
+  background-color: #d8d8d8;
+  height: 25px;
+}
+.actual-filters-mobile .filtro-tipos .toggle-more-btn:hover {
+  color: #242e3d;
 }
 .actual-filters-mobile .filtro-ubicacion {
   margin-top: 1rem;
