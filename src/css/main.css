@@ -1588,6 +1588,7 @@ main {
   padding: 1rem;
 }
 .actual-filters-mobile .filtro-marca {
+  margin-top: 1.5rem;
   position: relative;
   display: flex;
   flex-direction: column;
