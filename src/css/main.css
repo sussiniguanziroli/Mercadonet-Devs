@@ -1388,6 +1388,7 @@ main {
 .main-filters-component .utils-box button {
   font-size: 14px;
   cursor: pointer;
+  color: #2c2c2c;
   border: none;
   border-radius: 0.5rem;
   background-color: lightgray;
@@ -1489,6 +1490,7 @@ main {
   padding: 0.3rem 0.8rem;
   transition: all 0.3s;
   font-weight: 500;
+  color: #2c2c2c;
 }
 .actual-filters-mobile .filtro-tipos .tipo-boton button:hover {
   background-color: #ff9c39;
