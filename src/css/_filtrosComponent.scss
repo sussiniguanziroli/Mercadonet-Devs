@@ -42,12 +42,32 @@
     }
 
     .utils-box {
+        font-family: 'Roboto', system-ui;
         display: flex;
         justify-content: space-between;
         margin: 8px;
         padding: 10px;
         align-items: center;
         border-bottom: 1px solid $text-gray;
+
+        p {
+            font-size: 14px;
+        }
+
+        button {
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 0.5rem;
+            background-color: lightgray;
+            padding: 0.3rem 0.8rem;
+            transition: all 0.3s;
+            font-weight: 500;
+
+            &:hover {
+                background-color: $color-naranja-hover;
+            }
+        }
     }
 }
 

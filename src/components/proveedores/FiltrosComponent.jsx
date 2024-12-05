@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IoClose } from 'react-icons/io5'; // Asegúrate de importar correctamente IoClose
 import { useFiltersContext } from '../../context/FiltersContext';
 import { VscDebugRestart } from 'react-icons/vsc';
-import { FaStar } from 'react-icons/fa';
+import { FaFilter, FaStar } from 'react-icons/fa';
+import { MdFilterAltOff } from "react-icons/md";
+
 
 const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
     const {
@@ -112,8 +114,8 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
                 </button>
             </div>
             <div className='utils-box'>
-                <p>FILTRAR</p>
-                <button onClick={handleResetFilters}>RESTABLECER</button>
+                <p><FaFilter /> Filtrar</p>
+                <button onClick={handleResetFilters}><MdFilterAltOff /> Restablecer</button>
             </div>
             <section className='actual-filters-mobile'>
                 <div className="filtro-servicios">
