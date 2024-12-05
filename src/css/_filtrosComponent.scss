@@ -40,6 +40,14 @@
             font-weight: 500;
         }
     }
+    .utils-box {
+        display: flex;
+        justify-content: space-between;
+        margin: 8px;
+        padding: 10px;
+        align-items: center;
+        border-bottom: 1px solid $text-gray;
+    }
 }
 
 .actual-filters-mobile {
@@ -53,6 +61,84 @@
     gap: 1rem;
     padding: 1rem 1.5rem;
     width: 100%;
+
+    .filtro-servicios {
+        margin-bottom: 2rem;
+
+        h3 {
+            margin-bottom: 1.2rem;
+        }
+
+        .filtro-tipos-checkboxes {
+            li {
+                list-style: none;
+                margin-top: 0.7rem;
+                .switch-label {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.7rem;
+                    font-size: 1rem;
+                    font-family: 'Roboto', system-ui;
+                    color: $text-gray;
+                    cursor: pointer;
+                    font-family: 'Roboto', system-ui;
+                    font-size: 1.4rem;
+                    // Checkbox oculto
+                    .hidden-checkbox {
+                        display: none;
+
+                        &:checked+.custom-switch {
+                            background-color: $color-azul-utils; // Color del switch activado
+                            border-color: $color-azul-utils; // Borde azul cuando está activo
+
+                            &::after {
+                                transform: translateX(18px); // Mueve el "punto" a la derecha
+                                background-color: $main-white; // Cambia el color del círculo
+                            }
+                        }
+                    }
+
+                    // Switch personalizado
+                    .custom-switch {
+                        width: 40px; // Ancho del switch
+                        height: 22px; // Alto del switch
+                        background-color: $main-white; // Fondo apagado
+                        border: 1px solid lightgray; // Borde gris
+                        border-radius: 20px; // Hace el switch redondo
+                        position: relative;
+                        transition: background-color 0.3s ease, border-color 0.3s ease;
+
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            width: 16px;
+                            height: 16px;
+                            background-color: lightgray; // Color del círculo en estado apagado
+                            border-radius: 50%; // Hace el círculo redondo
+                            top: 2px;
+                            left: 2px;
+                            transition: transform 0.3s ease, background-color 0.3s ease;
+                        }
+                    }
+
+                    // Etiqueta de "Fulfillment"
+                    .fulfillment-badge {
+                        position: relative;
+                        top: 12px;
+                        background-color: #84a8e4; // Fondo verdes
+                        font-style: italic;
+                        color: white;
+                        font-size: 1.3rem;
+                        padding: 0.2rem 0.5rem;
+                        border-radius: 5px;
+                        margin-left: auto; // Opcional para alinear a la derecha
+                    }
+                }
+            }
+        }
+
+
+    }
 
     .filtro-tipos {
         .tipo-boton {

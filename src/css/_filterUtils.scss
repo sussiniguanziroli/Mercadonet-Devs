@@ -23,6 +23,8 @@
                 border-radius: 20px;
 
                 .pill-button {
+                    display: flex;
+                    gap: 3px;
                     padding: 20px;
                     border: none;
                     background-color: #f0f0f0;
@@ -42,12 +44,17 @@
                     }
 
                     &:hover {
-                        background-color: #80c4fc;
+                        background-color: rgb(156, 194, 255);
                     }
 
                     &.active {
-                        background-color: #007bff;
+                        background-color: $color-azul-utils;
                         color: #fff;
+                    }
+
+                    .check-icon {
+                        font-size: 16px;
+                        display: inline-block; 
                     }
                 }
             }
@@ -91,9 +98,11 @@
                     overflow: scroll;
                     width: 100%;
                     .filter-badge {
+                        color: #767676;
+                        font-weight: 540;
                         display: flex;
                         align-items: center;
-                        background-color: #e0e0e0;
+                        background-color: #d8d8d8;
                         border-radius: 15px;
                         padding: 5px 10px;
                         font-size: 14px;
@@ -104,7 +113,7 @@
                             margin-left: 8px;
                             font-size: 14px;
                             cursor: pointer;
-                            color: #ff0000;
+                            color: #767676;
 
                             &:hover {
                                 color: #b30000;
