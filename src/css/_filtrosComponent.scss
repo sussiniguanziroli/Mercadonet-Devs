@@ -168,12 +168,12 @@
 
         .filtro-tipos-checkboxes {
 
-            overflow: hidden; 
-            max-height: 160px; 
+            overflow: hidden;
+            max-height: 160px;
             transition: max-height 0.3s ease-in-out;
 
             &.expanded {
-                max-height: fit-content; 
+                max-height: fit-content;
             }
 
             li.extra-category {
@@ -245,6 +245,7 @@
             color: $text-gray;
             background-color: #d8d8d8;
             height: 25px;
+
             &:hover {
                 color: $color-azul-hover;
             }
@@ -260,15 +261,18 @@
             cursor: pointer;
             font-size: 1.3rem;
             border-radius: .7rem;
-            border: none;
+            border: 1px solid #ccc;
             font-family: 'Roboto', system-ui;
             margin-top: 1rem;
             padding: .5rem;
             background-color: $item-white;
             color: $text-gray;
+            width: 80%;
+            height: 30px;
 
             option {
                 .ubicacion-option {
+                    font-family: 'Roboto', system-ui;
                     padding: 1rem;
                 }
             }
@@ -277,23 +281,80 @@
 
     //MARCA--------------------MARCA------------
     .filtro-marca {
-        margin-top: 1rem;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-bottom: 1rem;
 
-        select {
-            cursor: pointer;
-            font-size: 1.3rem;
-            border-radius: .7rem;
-            border: none;
-            font-family: 'Roboto', system-ui;
-            margin-top: 1rem;
-            padding: .5rem;
-            background-color: $item-white;
-            color: $text-gray;
+        .combobox {
 
-            option {
-                .marca-option {
-                    padding: 1rem;
+            display: flex;
+            gap: .3rem;
+
+            button {
+                all: unset;
+                cursor: pointer;
+                transition: all 0.2s ease-in-out;
+                transform-origin: center;
+
+                &:hover {
+                    transform: rotate(-270deg);
                 }
+            }
+
+            .combobox-input {
+                min-width: 180px;
+                width: 80%;
+                font-size: 0.95rem;
+                padding: 8px 12px;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                background-color: #f9f9f9;
+                outline: none;
+                color: #333;
+                transition: border-color 0.3s, box-shadow 0.3s;
+
+                &:focus {
+                    border-color: $color-azul-utils;
+                    box-shadow: 0 0 4px rgba(255, 127, 0, 0.4);
+                }
+
+                &::placeholder {
+                    color: #b0b0b0;
+                    font-style: italic;
+                }
+            }
+
+            .combobox-dropdown {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 80%;
+                background-color: #fff;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                max-height: 200px;
+                overflow-y: auto;
+                z-index: 1000;
+
+                button {
+                    all: unset;
+                    width: 100%;
+                }
+
+                .combobox-option {
+                    padding: 8px 12px;
+                    cursor: pointer;
+                    transition: background-color 0.2s, color 0.2s;
+
+                    &:hover {
+                        background-color: #ff7f00;
+                        color: #fff;
+                    }
+                }
+
             }
         }
     }
