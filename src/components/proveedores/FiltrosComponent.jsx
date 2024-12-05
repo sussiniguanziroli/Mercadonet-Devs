@@ -88,6 +88,15 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
         );
     };
 
+    const handleResetFilters = () => {
+        updateFilters("pproductos", []);
+        updateFilters("servicio", []);
+        updateFilters("extras", '');
+        updateFilters("ubicacion", "");
+        updateFilters("marca", "");
+        updateFilters("categoria", []);
+    };
+
     const isFulfillmentActive =
         checkedServices.includes("Logística/Transporte") &&
         checkedServices.includes("Almacenamiento");
@@ -101,35 +110,35 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
             </div>
             <div className='utils-box'>
                 <p>FILTRAR</p>
-                <button>RESTABLECER</button>
+                <button onClick={handleResetFilters}>RESTABLECER</button>
             </div>
             <section className='actual-filters-mobile'>
-            <div className="filtro-servicios">
-                        {/* Proveedores de SERVICIOS */}
-                        <h3>Proveedores de Servicios</h3>
-                        <ul className="filtro-tipos-checkboxes">
-                            {filtrosOpciones.servicios.map((servicio) => (
-                                <li key={servicio}>
-                                    <label className="switch-label">
-                                        <input
-                                            type="checkbox"
-                                            className="hidden-checkbox"
-                                            value={servicio}
-                                            checked={checkedServices.includes(servicio)}
-                                            onChange={() => handleServicesChange(servicio)}
-                                        />
-                                        <span className="custom-switch"></span>
-                                        {servicio}
-                                        {isFulfillmentActive && servicio === "Logística/Transporte" && (
-                                            <span className="fulfillment-badge">
-                                                <FaStar /> Fulfillment
-                                            </span>
-                                        )}
-                                    </label>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                <div className="filtro-servicios">
+                    {/* Proveedores de SERVICIOS */}
+                    <h3>Proveedores de Servicios</h3>
+                    <ul className="filtro-tipos-checkboxes">
+                        {filtrosOpciones.servicios.map((servicio) => (
+                            <li key={servicio}>
+                                <label className="switch-label">
+                                    <input
+                                        type="checkbox"
+                                        className="hidden-checkbox"
+                                        value={servicio}
+                                        checked={checkedServices.includes(servicio)}
+                                        onChange={() => handleServicesChange(servicio)}
+                                    />
+                                    <span className="custom-switch"></span>
+                                    {servicio}
+                                    {isFulfillmentActive && servicio === "Logística/Transporte" && (
+                                        <span className="fulfillment-badge">
+                                            <FaStar /> Fulfillment
+                                        </span>
+                                    )}
+                                </label>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
                 {/* Filtro de Categoría */}
                 <div className="filtro-tipos">
                     <div className='tipo-boton'>

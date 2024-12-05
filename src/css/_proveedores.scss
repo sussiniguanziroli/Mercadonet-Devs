@@ -89,17 +89,14 @@
 
                 .filterBtn {
                     all: unset;
-                    padding: .3rem;
+                    padding: 6px;
                     align-self: flex-end;
-                    font-family: 'Roboto', system-ui;
                     cursor: pointer;
-                    font-size: 1.7rem;
-                    margin-left: 1.5rem;
-                    font-weight: 400;
-                    color: $dark-gray;
-
+                    color: $main-white;
+                    background-color: $color-azul-utils;
+                    border-radius: 8px;
                     .icon {
-                        font-size: 2rem;
+                        font-size: 20px;
                     }
                 }
             }

@@ -12,6 +12,7 @@ const PillFilter = () => {
         selectedExtras,
         selectedUbicacion,
         selectedMarca,
+        proveedores,
         selectedCategoria,
     } = useFiltersContext();
 
@@ -89,7 +90,7 @@ const PillFilter = () => {
     return (
         <main className="main-pill-filter">
             <div className="pill-filter-container">
-                <h3>Proveedores de Productos</h3>
+                <h3 className="hiddenInMobile">Proveedores de Productos</h3>
                 <div className="pill-filter">
                     <button
                         className={`pill-button ${selectedPProductos.includes("Fabricantes") ? "active" : ""
@@ -174,13 +175,15 @@ const PillFilter = () => {
                             <button onClick={scrollRight} className="arrow-btn">
                                 <IoIosArrowForward />
                             </button>
-                            <button className="reset-flt-btn" onClick={handleResetFilters}>
+                            <button className="reset-flt-btn hiddenInMobile" onClick={handleResetFilters}>
                                 Restablecer Filtros
                             </button>
                         </div>
                     ) :
                     <div></div>
             }
+
+        
 
 
         </main>

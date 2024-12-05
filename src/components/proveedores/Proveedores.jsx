@@ -5,10 +5,10 @@ import HeaderCustomProveedores from './HeaderCustomProveedores';
 import NewsBanner from './NewsBanner';
 
 import filtersIcons from '../proveedores/filtersIcons.json';
-import { MdTune } from "react-icons/md";
 import NewsCarousel from './NewsCarousel';
 import { useFiltersContext } from '../../context/FiltersContext';
-import PillFilter from './PillFilter';
+import { FaFilter } from "react-icons/fa";
+
 
 
 
@@ -79,7 +79,7 @@ const Proveedores = () => {
                                 ))}
                             </div>
 
-                            <button className='filterBtn' onClick={openFilters}><MdTune className='icon' /> Filtrar</button>
+                            <button className='filterBtn' onClick={openFilters}><FaFilter className='icon'/></button>
                             {/* Menu desplegable en mobile */}
                             <FiltrosComponent setIsMenuHidden={setIsMenuHidden} isMenuHidden={isMenuHidden}
                             />
