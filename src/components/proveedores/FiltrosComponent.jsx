@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { IoClose } from 'react-icons/io5'; // Asegúrate de importar correctamente IoClose
+import { IoClose } from 'react-icons/io5';
 import { useFiltersContext } from '../../context/FiltersContext';
 import { VscDebugRestart } from 'react-icons/vsc';
 import { FaFilter, FaStar } from 'react-icons/fa';
@@ -36,7 +36,6 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
         const value = e.target.value;
         setInputValue(value);
 
-        // Filtra las opciones del select
         const filtered = filtrosOpciones.marca.filter((marca) =>
             marca.toLowerCase().includes(value.toLowerCase())
         );
@@ -45,9 +44,9 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
     };
 
     const handleMarcaSelect = (marca) => {
-        setInputValue(marca); // Actualiza el input con la marca seleccionada
-        updateFilters("marca", marca); // Actualiza la marca seleccionada en el contexto
-        setDropdownOpen(false); // Cierra el desplegable
+        setInputValue(marca);
+        updateFilters("marca", marca);
+        setDropdownOpen(false);
     };
 
     const handleMarcaInputFocus = () => {
@@ -67,14 +66,14 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
     }, []);
 
     const handleReset = () => {
-        setInputValue(""); // Limpia el input
-        setFilteredOptions(filtrosOpciones.marca); // Restaura todas las opciones
-        setDropdownOpen(true); // Vuelve a abrir el menú desplegable
-        updateFilters("marca", ""); // Limpia la marca seleccionada
+        setInputValue("");
+        setFilteredOptions(filtrosOpciones.marca);
+        setDropdownOpen(true);
+        updateFilters("marca", "");
     };
 
     const handleExtrasChange = (e) => {
-        updateFilters("extras", e.target.value); // Actualiza los extras seleccionados
+        updateFilters("extras", e.target.value);
     };
 
     const handleUbicacionChange = (e) => {
@@ -88,8 +87,8 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
     const handleServicesChange = (servicio) => {
         updateFilters("servicio", (prevState) =>
             prevState.includes(servicio)
-                ? prevState.filter((item) => item !== servicio) // Elimina el servicio si está activado
-                : [...prevState, servicio] // Agrega el servicio si está desactivado
+                ? prevState.filter((item) => item !== servicio)
+                : [...prevState, servicio]
         );
     };
 
@@ -189,7 +188,7 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
                         {showMore ? '-' : '+'}
                     </button>
                 </div>
-                
+
                 {/* Filtro de Ubicación */}
                 <div className="filtro-ubicacion">
                     <h3>Ubicación</h3>

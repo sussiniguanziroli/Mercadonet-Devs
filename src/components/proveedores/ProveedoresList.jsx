@@ -5,6 +5,8 @@ import { NavLink } from 'react-router-dom';
 import FiltrosComponentDesktop from './FiltrosComponentDesktop';
 import { useFiltersContext } from '../../context/FiltersContext';
 import PillFilter from './PillFilter';
+import CardMobile from './CardMobile';
+import CardDesktop from './CardDesktop';
 
 
 const ProveedoresList = ({ }) => {
@@ -47,23 +49,15 @@ const ProveedoresList = ({ }) => {
             <main className='proveedores-list-container'>
                 <FiltrosComponentDesktop />
                 <div className='proveedores-list'>
-                    <> 
+                    <>
                         {filtrosOpciones.pproductos.length > 0 ? (
                             <PillFilter />
-                            ) : (
-                                <div></div>
-                            )}
+                        ) : (
+                            <div></div>
+                        )}
                         {proveedoresFiltrados.length > 0 ? (
 
-
-                            <div className='proveedores-list-grid'>
-                                {proveedoresFiltrados.map((proveedor) =>
-
-                                    <Proveedor proveedor={proveedor} key={proveedor.id} />
-
-                                )}
-                            </div>
-
+                            <Proveedor />
 
                         ) : selectedUbicacion || selectedMarca || selectedCategoria.length > 0 || searchTerm ? (
                             <div className='no-criteria'><p>No se ha encontrado ningun proveedor.</p></div>

@@ -4,11 +4,6 @@
         width: 100%;
         min-height: 180vh;
 
-        .proveedores-list-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-        }
-
         .loader {
             display: flex;
             justify-content: center;

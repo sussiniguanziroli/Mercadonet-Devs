@@ -1053,10 +1053,6 @@ main {
   width: 100%;
   min-height: 180vh;
 }
-.proveedores-list-container .proveedores-list .proveedores-list-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
 .proveedores-list-container .proveedores-list .loader {
   display: flex;
   justify-content: center;
@@ -1702,127 +1698,11 @@ main {
     height: 16px;
   }
 }
-.proveedor-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #ffffff;
-  border-radius: 0.7rem;
-  padding: 1rem;
-  margin: 1rem;
-  font-size: 1.1rem;
-  min-height: 370px;
-  color: #2c2c2c;
-  gap: 1.3rem;
-}
-.proveedor-item .titulos {
-  align-self: flex-start;
-}
-.proveedor-item h2 {
-  align-self: flex-start;
-  color: #2c2c2c;
-  font-weight: 580;
-  font-size: 1.3rem;
-}
-.proveedor-item .descripcion {
-  align-self: flex-start;
-  font-weight: 450;
-  margin-top: 1rem;
-}
-.proveedor-item strong {
-  margin-top: 0.2rem;
-  font-weight: 480;
-  display: flex;
-  font-size: 1rem;
-  align-items: flex-start;
-  gap: 0.1rem;
-  align-self: flex-start;
-  color: #474747;
-}
-.proveedor-item strong .icon {
-  font-size: 1rem;
-}
-.proveedor-item .proveedor-marcas {
-  display: flex;
-  column-gap: 0.3rem;
-  align-self: flex-start;
-  margin-top: 0.7rem;
-  flex-wrap: wrap;
-}
-.proveedor-item img {
-  object-fit: contain;
-  height: 33%;
-  width: 100%;
-}
-.proveedor-item button {
-  padding: 0.5rem;
-  font-family: "Roboto", system-ui;
-  color: #F5F5F5;
-  background-color: #004787;
-  border: none;
-  border-radius: 0.4rem;
-  width: 98%;
-  transition: 0.3s all;
-}
-.proveedor-item button:hover {
-  background-color: #FF7F00;
+.proveedores-list-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-@media (min-width: 1024px) {
-  .proveedor-item-desktop {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    height: auto;
-    background-color: #ffffff;
-    border-radius: 0.7rem;
-    padding: 1rem;
-    margin: 2rem;
-    width: 96%;
-    font-size: 1rem;
-  }
-  .proveedor-item-desktop img {
-    height: 100%;
-    width: 20em;
-    object-fit: contain;
-  }
-  .proveedor-item-desktop h2 {
-    align-self: flex-start;
-    color: #2c2c2c;
-  }
-  .proveedor-item-desktop .descripcion {
-    align-self: flex-start;
-    font-weight: 450;
-  }
-  .proveedor-item-desktop strong {
-    font-weight: 480;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.1rem;
-    align-self: flex-start;
-    color: #2c2c2c;
-  }
-  .proveedor-item-desktop .proveedor-marcas {
-    display: flex;
-    gap: 0.2rem;
-    align-self: flex-start;
-  }
-  .proveedor-item-desktop button {
-    padding: 0.5rem;
-    font-family: "Roboto", system-ui;
-    color: #F5F5F5;
-    background-color: #004787;
-    border: none;
-    border-radius: 0.4rem;
-    width: 98%;
-    transition: 0.3s all;
-  }
-  .proveedor-item-desktop button:hover {
-    background-color: #242e3d;
-  }
-}
 .admin-panel {
   font-family: "Montserrat", sans-serif;
   max-width: 600px;
@@ -2004,6 +1884,127 @@ main {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+.proveedor-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-radius: 0.7rem;
+  padding: 1rem;
+  margin: 1rem;
+  font-size: 1.1rem;
+  min-height: 370px;
+  color: #2c2c2c;
+  gap: 1.3rem;
+}
+.proveedor-item .titulos {
+  align-self: flex-start;
+}
+.proveedor-item h2 {
+  align-self: flex-start;
+  color: #2c2c2c;
+  font-weight: 580;
+  font-size: 1.3rem;
+}
+.proveedor-item .descripcion {
+  align-self: flex-start;
+  font-weight: 450;
+  margin-top: 1rem;
+}
+.proveedor-item strong {
+  margin-top: 0.2rem;
+  font-weight: 480;
+  display: flex;
+  font-size: 1rem;
+  align-items: flex-start;
+  gap: 0.1rem;
+  align-self: flex-start;
+  color: #474747;
+}
+.proveedor-item strong .icon {
+  font-size: 1rem;
+}
+.proveedor-item .proveedor-marcas {
+  display: flex;
+  column-gap: 0.3rem;
+  align-self: flex-start;
+  margin-top: 0.7rem;
+  flex-wrap: wrap;
+}
+.proveedor-item img {
+  object-fit: contain;
+  height: 33%;
+  width: 100%;
+}
+.proveedor-item button {
+  padding: 0.5rem;
+  font-family: "Roboto", system-ui;
+  color: #F5F5F5;
+  background-color: #004787;
+  border: none;
+  border-radius: 0.4rem;
+  width: 98%;
+  transition: 0.3s all;
+}
+.proveedor-item button:hover {
+  background-color: #FF7F00;
+}
+
+@media (min-width: 1024px) {
+  .proveedor-item-desktop {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: auto;
+    background-color: #ffffff;
+    border-radius: 0.7rem;
+    padding: 1rem;
+    margin: 2rem;
+    width: 96%;
+    font-size: 1rem;
+  }
+  .proveedor-item-desktop img {
+    height: 100%;
+    width: 20em;
+    object-fit: contain;
+  }
+  .proveedor-item-desktop h2 {
+    align-self: flex-start;
+    color: #2c2c2c;
+  }
+  .proveedor-item-desktop .descripcion {
+    align-self: flex-start;
+    font-weight: 450;
+  }
+  .proveedor-item-desktop strong {
+    font-weight: 480;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.1rem;
+    align-self: flex-start;
+    color: #2c2c2c;
+  }
+  .proveedor-item-desktop .proveedor-marcas {
+    display: flex;
+    gap: 0.2rem;
+    align-self: flex-start;
+  }
+  .proveedor-item-desktop button {
+    padding: 0.5rem;
+    font-family: "Roboto", system-ui;
+    color: #F5F5F5;
+    background-color: #004787;
+    border: none;
+    border-radius: 0.4rem;
+    width: 98%;
+    transition: 0.3s all;
+  }
+  .proveedor-item-desktop button:hover {
+    background-color: #242e3d;
+  }
+}
 .main-pill-filter {
   display: flex;
   flex-direction: column;
