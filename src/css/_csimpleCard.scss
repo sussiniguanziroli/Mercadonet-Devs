@@ -77,6 +77,7 @@
 }
 
 //-----DESKTOP SIMPLE CARD---------------------------
+//TERA importante la relacion de aspecto 300px x 300px
 .proveedor-item-desktop {
     display: flex;
     flex-direction: row;
@@ -90,11 +91,105 @@
     border: 1px solid red;
 
     .carousel-box {
+        position: relative;
+        /* Para posicionar los botones y dots */
         height: 100%;
         width: 25%;
+        min-width: 300px;
         max-width: 300px;
         border: 1px solid purple;
         overflow: hidden;
+
+        .carousel-frame {
+            /* Borde decorativo */
+            border-radius: 10px;
+            /* Bordes redondeados */
+            background-color: #d6d6d6;
+            /* Fondo para destacar el carrusel */
+            padding: 10px;
+        }
+
+        .carousel-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            /* Altura fija para las slides */
+        }
+
+        .carousel-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            /* Asegura que la imagen no se deforme */
+            border-radius: 5px;
+            /* Bordes suaves para imágenes */
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            /* Centra verticalmente */
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Fondo oscuro con transparencia */
+            color: white;
+            border: none;
+            width: 30px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s ease;
+        }
+
+        .carousel-button.back {
+            left: 0;
+            /* Botón de "back" a la izquierda */
+        }
+
+        .carousel-button.next {
+            right: 0;
+            /* Botón de "next" a la derecha */
+        }
+
+        .carousel-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            /* Fondo más oscuro al hacer hover */
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 10px;
+            right: 50%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            /* Espaciado entre dots */
+            margin-top: 15px;
+            /* Separación con el slider */
+        }
+
+        .carousel-dots button {
+            width: 6px;
+            height: 6px;
+            background-color: #ccc;
+            /* Color base de los dots */
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .carousel-dots button:hover,
+        .carousel-dots .carousel__dot--selected {
+            background-color: #333;
+            /* Color para el dot activo o hover */
+        }
+
+
 
         img {
             object-fit: contain;

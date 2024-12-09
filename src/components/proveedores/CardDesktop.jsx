@@ -1,11 +1,34 @@
 import React from 'react'
 import { IoLocationOutline } from 'react-icons/io5'
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
+import { FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 
 const CardDesktop = ({ proveedor }) => {
     return (
         <div className='proveedor-item-desktop hiddenInMobile'>
             <div className='carousel-box'>
-                <img src={proveedor.logo} alt={proveedor.nombre} />
+                <CarouselProvider
+                    naturalSlideWidth={10}
+                    naturalSlideHeight={10}
+                    totalSlides={2}
+                    className="carousel-frame"
+                >
+                    <Slider>
+                        <Slide className='carousel-slide' index={0}>
+                            <img className='carousel-image' src={proveedor.logo} alt="Slide 1" />
+                        </Slide>
+                        <Slide className='carousel-slide' index={1}>
+                            <img className='carousel-image' src={proveedor.logo} alt="Slide 2" />
+                        </Slide>
+                    </Slider>
+                    <ButtonBack className="carousel-button back"><FaArrowLeft />
+                    </ButtonBack>
+                    <ButtonNext className="carousel-button next"><FaArrowRight />
+                    </ButtonNext>
+                    <DotGroup className='carousel-dots'/>
+                </CarouselProvider>
             </div>
             <div className='info-box'>
                 <div className='titles-box'>
