@@ -1699,8 +1699,16 @@ main {
   }
 }
 .proveedores-list-grid {
+  margin-top: 16pxD;
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+.proveedores-list-list {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
 .admin-panel {
@@ -1951,60 +1959,76 @@ main {
   background-color: #FF7F00;
 }
 
-@media (min-width: 1024px) {
-  .proveedor-item-desktop {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    height: auto;
-    background-color: #ffffff;
-    border-radius: 0.7rem;
-    padding: 1rem;
-    margin: 2rem;
-    width: 96%;
-    font-size: 1rem;
-  }
-  .proveedor-item-desktop img {
-    height: 100%;
-    width: 20em;
-    object-fit: contain;
-  }
-  .proveedor-item-desktop h2 {
-    align-self: flex-start;
-    color: #2c2c2c;
-  }
-  .proveedor-item-desktop .descripcion {
-    align-self: flex-start;
-    font-weight: 450;
-  }
-  .proveedor-item-desktop strong {
-    font-weight: 480;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.1rem;
-    align-self: flex-start;
-    color: #2c2c2c;
-  }
-  .proveedor-item-desktop .proveedor-marcas {
-    display: flex;
-    gap: 0.2rem;
-    align-self: flex-start;
-  }
-  .proveedor-item-desktop button {
-    padding: 0.5rem;
-    font-family: "Roboto", system-ui;
-    color: #F5F5F5;
-    background-color: #004787;
-    border: none;
-    border-radius: 0.4rem;
-    width: 98%;
-    transition: 0.3s all;
-  }
-  .proveedor-item-desktop button:hover {
-    background-color: #242e3d;
-  }
+.proveedor-item-desktop {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: auto;
+  background-color: #ffffff;
+  border-radius: 3px;
+  width: 96%;
+  font-size: 1rem;
+  border: 1px solid red;
 }
+.proveedor-item-desktop .carousel-box {
+  border: 1px solid purple;
+}
+.proveedor-item-desktop .carousel-box img {
+  height: 100%;
+  width: 20em;
+  object-fit: contain;
+}
+.proveedor-item-desktop .info-box {
+  border: 1px solid green;
+}
+.proveedor-item-desktop .info-box .titles-box {
+  width: fit-content;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "logo-small h3 verificado" "logo-small p p";
+}
+.proveedor-item-desktop .info-box .titles-box .verificado {
+  width: 85px;
+  grid-area: verificado;
+}
+.proveedor-item-desktop .info-box .titles-box .small-logo {
+  border: 1px solid #2c2c2c;
+  border-radius: 5px;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  grid-area: logo-small;
+}
+.proveedor-item-desktop .info-box .titles-box h3 {
+  grid-area: h3;
+}
+.proveedor-item-desktop .info-box .titles-box p {
+  grid-area: p;
+}
+.proveedor-item-desktop .info-box .tags-box {
+  border: none;
+}
+.proveedor-item-desktop .info-box .texts-box .marcas {
+  border: none;
+}
+.proveedor-item-desktop .info-box .texts-box .extras {
+  border: none;
+}
+.proveedor-item-desktop .buttons-box {
+  border: 1px solid brown;
+  display: flex;
+  flex-direction: column;
+}
+.proveedor-item-desktop .alineado-auto {
+  display: flex;
+  column-gap: 0.3rem;
+  align-self: flex-start;
+  margin-top: 0.7rem;
+  flex-wrap: wrap;
+}
+
 .main-pill-filter {
   display: flex;
   flex-direction: column;

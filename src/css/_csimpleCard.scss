@@ -1,3 +1,4 @@
+//Cards MOBILE
 .proveedor-item {
     display: flex;
     flex-direction: column;
@@ -11,6 +12,7 @@
     min-height: 370px;
     color: $text-gray;
     gap: 1.3rem;
+
     .titulos {
         align-self: flex-start;
     }
@@ -30,9 +32,11 @@
 
     strong {
         margin-top: .2rem;
+
         .icon {
             font-size: 1rem;
         }
+
         font-weight: 480;
         display: flex;
         font-size: 1rem;
@@ -65,70 +69,99 @@
         border-radius: .4rem;
         width: 98%;
         transition: .3s all;
+
         &:hover {
             background-color: $color-naranja;
         }
     }
 }
 
-@media (min-width: 1024px) {
-    .proveedor-item-desktop {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        height: auto;
-        background-color: $item-white;
-        border-radius: .7rem;
-        padding: 1rem;
-        margin: 2rem;
-        width: 96%;
-        font-size: 1rem;
+//-----DESKTOP SIMPLE CARD---------------------------
+.proveedor-item-desktop {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: auto;
+    background-color: $item-white;
+    border-radius: 3px;
+    width: 96%;
+    font-size: 1rem;
+    border: 1px solid red;
+
+    .carousel-box {
+        border: 1px solid purple;
 
         img {
             height: 100%;
             width: 20em;
             object-fit: contain;
         }
+    }
 
-        h2 {
-            align-self: flex-start;
-            color: $text-gray;
+    .info-box {
+        border: 1px solid green;
+
+        .titles-box {
+            width: fit-content;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            grid-template-areas:
+                'logo-small h3 verificado'
+                'logo-small p p';
+
+            .verificado {
+                width: 85px;
+                grid-area: verificado;
+            }
+
+            .small-logo {
+                border: 1px solid $text-gray;
+                border-radius: 5px;
+                width: 60px;
+                height: 60px;
+                object-fit: contain;
+                grid-area: logo-small;
+            }
+
+            h3 {
+                grid-area: h3;
+            }
+
+            p {
+                grid-area: p;
+            }
         }
 
-        .descripcion {
-            align-self: flex-start;
-            font-weight: 450;
-        }
-
-        strong {
-            font-weight: 480;
-            display: flex;
-            align-items: flex-start;
-            gap: .1rem;
-            align-self: flex-start;
-            color: $text-gray;
-        }
-
-        .proveedor-marcas {
-            display: flex;
-            gap: .2rem;
-            align-self: flex-start;
-        }
-
-        button {
-            padding: .5rem;
-            font-family: 'Roboto', system-ui;
-            color: $main-white;
-            background-color: $color-azul-light;
+        .tags-box {
             border: none;
-            border-radius: .4rem;
-            width: 98%;
-            transition: .3s all;
+        }
 
-            &:hover {
-                background-color: $color-azul-hover;
+        .texts-box {
+            .marcas {
+                border: none;
+            }
+
+            .extras {
+                border: none;
             }
         }
     }
+
+    .buttons-box {
+        border: 1px solid brown;
+        display: flex;
+        flex-direction: column;
+    }
+
+    // CLASES DE SERVICIO
+    .alineado-auto {
+        display: flex;
+        column-gap: .3rem;
+        align-self: flex-start;
+        margin-top: .7rem;
+        flex-wrap: wrap;
+    }
+
 }
