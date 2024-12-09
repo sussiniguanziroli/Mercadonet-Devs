@@ -82,7 +82,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    height: auto;
+    height: 300px;
     background-color: $item-white;
     border-radius: 3px;
     width: 96%;
@@ -90,16 +90,19 @@
     border: 1px solid red;
 
     .carousel-box {
+        height: 100%;
+        width: 25%;
+        max-width: 300px;
         border: 1px solid purple;
+        overflow: hidden;
 
         img {
-            height: 100%;
-            width: 20em;
             object-fit: contain;
         }
     }
 
     .info-box {
+        width: 75%;
         border: 1px solid green;
 
         .titles-box {
@@ -150,6 +153,7 @@
     }
 
     .buttons-box {
+        width: 10%;
         border: 1px solid brown;
         display: flex;
         flex-direction: column;
