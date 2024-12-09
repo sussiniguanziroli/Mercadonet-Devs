@@ -4,7 +4,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    background-color: $item-white;
+    background-color: #ffffff;
     border-radius: .7rem;
     padding: 1rem;
     margin: 1rem;
@@ -83,29 +83,26 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    height: 300px;
-    background-color: $item-white;
+    height: fit-content;
+    max-height: 330px;
+    background-color: #ffffff;
     border-radius: 3px;
-    width: 96%;
+    width: 100%;
     font-size: 1rem;
-    border: 1px solid red;
-
+    gap: 8px;
     .carousel-box {
+        margin: 3px;
         position: relative;
         /* Para posicionar los botones y dots */
         height: 100%;
         width: 25%;
-        min-width: 300px;
-        max-width: 300px;
-        border: 1px solid purple;
+        min-width: 320px;
+        max-width: 320px;
         overflow: hidden;
 
         .carousel-frame {
-            /* Borde decorativo */
             border-radius: 10px;
-            /* Bordes redondeados */
             background-color: #d6d6d6;
-            /* Fondo para destacar el carrusel */
             padding: 10px;
         }
 
@@ -113,13 +110,17 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 300px;
+            height: 100%;
             /* Altura fija para las slides */
+            iframe {
+                width: 100%;
+                height: 100%;
+            }
         }
 
         .carousel-image {
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
             /* Asegura que la imagen no se deforme */
             border-radius: 5px;
@@ -189,18 +190,18 @@
             /* Color para el dot activo o hover */
         }
 
-
-
-        img {
-            object-fit: contain;
-        }
     }
 
     .info-box {
         width: 75%;
-        border: 1px solid green;
-
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        height: 100%;
+        align-self: flex-start;
         .titles-box {
+            padding-top: 10px;
             width: fit-content;
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -215,7 +216,7 @@
             }
 
             .small-logo {
-                border: 1px solid $text-gray;
+                border: 1px solid #aeaeae;
                 border-radius: 5px;
                 width: 60px;
                 height: 60px;
@@ -233,7 +234,13 @@
         }
 
         .tags-box {
-            border: none;
+            margin: 7px 0;
+            img {
+                margin: 3px;
+                height: 27px;
+                border-radius: 2px;
+            }
+
         }
 
         .texts-box {
@@ -249,9 +256,18 @@
 
     .buttons-box {
         width: 10%;
-        border: 1px solid brown;
         display: flex;
+        gap: 10px;
         flex-direction: column;
+        button {
+            all: unset;
+            background-color: $color-azul-utils;
+            border-radius: 4px;
+            color: $main-white;
+            padding: 8px;
+            font-family: 'Roboto', system-ui;
+            font-weight: 300;
+        }
     }
 
     // CLASES DE SERVICIO

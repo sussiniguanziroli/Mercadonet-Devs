@@ -10,8 +10,8 @@ const CardDesktop = ({ proveedor }) => {
         <div className='proveedor-item-desktop hiddenInMobile'>
             <div className='carousel-box'>
                 <CarouselProvider
-                    naturalSlideWidth={10}
-                    naturalSlideHeight={10}
+                    naturalSlideWidth={5}
+                    naturalSlideHeight={5}
                     totalSlides={2}
                     className="carousel-frame"
                 >
@@ -20,14 +20,14 @@ const CardDesktop = ({ proveedor }) => {
                             <img className='carousel-image' src={proveedor.logo} alt="Slide 1" />
                         </Slide>
                         <Slide className='carousel-slide' index={1}>
-                            <img className='carousel-image' src={proveedor.logo} alt="Slide 2" />
+                            <iframe title="Publicidad" src={proveedor.carousel} frameBorder="0"></iframe>
                         </Slide>
                     </Slider>
                     <ButtonBack className="carousel-button back"><FaArrowLeft />
                     </ButtonBack>
                     <ButtonNext className="carousel-button next"><FaArrowRight />
                     </ButtonNext>
-                    <DotGroup className='carousel-dots'/>
+                    <DotGroup className='carousel-dots' />
                 </CarouselProvider>
             </div>
             <div className='info-box'>
@@ -38,9 +38,27 @@ const CardDesktop = ({ proveedor }) => {
                     <img className="verificado" src='https://i.ibb.co/BsSRKwy/Verificado-HD.jpg' />
                 </div>
                 <div className='tags-box alineado-auto'>
-
-                    <p className='tag-mayorista'>MAYORISTA</p>
-
+                    {proveedor.tags?.includes('Distribuidor Oficial') && (
+                        <img
+                            className='tag-distroficial'
+                            src='https://i.imgur.com/RIN3TB0.png'
+                            alt='Distribuidor Oficial'
+                        />
+                    )}
+                    {proveedor.tags?.includes('Mayorista') && (
+                        <img
+                            className='tag-mayorista'
+                            src='https://i.imgur.com/DiAnzfH.png'
+                            alt='Mayorista'
+                        />
+                    )}
+                    {proveedor.tags?.includes('Fabricante') && (
+                        <img
+                            className='tag-fabricante'
+                            src='https://i.imgur.com/nscxZFG.png'
+                            alt='Fabricante'
+                        />
+                    )}
                 </div>
                 <div className='texts-box'>
                     <p className='description'>{proveedor.descripcion}</p>

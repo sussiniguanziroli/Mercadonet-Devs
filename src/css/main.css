@@ -1964,41 +1964,43 @@ main {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 300px;
+  height: fit-content;
+  max-height: 330px;
   background-color: #ffffff;
   border-radius: 3px;
-  width: 96%;
+  width: 100%;
   font-size: 1rem;
-  border: 1px solid red;
+  gap: 8px;
 }
 .proveedor-item-desktop .carousel-box {
+  margin: 3px;
   position: relative;
   /* Para posicionar los botones y dots */
   height: 100%;
   width: 25%;
-  min-width: 300px;
-  max-width: 300px;
-  border: 1px solid purple;
+  min-width: 320px;
+  max-width: 320px;
   overflow: hidden;
 }
 .proveedor-item-desktop .carousel-box .carousel-frame {
-  /* Borde decorativo */
   border-radius: 10px;
-  /* Bordes redondeados */
   background-color: #d6d6d6;
-  /* Fondo para destacar el carrusel */
   padding: 10px;
 }
 .proveedor-item-desktop .carousel-box .carousel-slide {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 300px;
+  height: 100%;
   /* Altura fija para las slides */
 }
+.proveedor-item-desktop .carousel-box .carousel-slide iframe {
+  width: 100%;
+  height: 100%;
+}
 .proveedor-item-desktop .carousel-box .carousel-image {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   /* Asegura que la imagen no se deforme */
   border-radius: 5px;
@@ -2060,14 +2062,17 @@ main {
   background-color: #333;
   /* Color para el dot activo o hover */
 }
-.proveedor-item-desktop .carousel-box img {
-  object-fit: contain;
-}
 .proveedor-item-desktop .info-box {
   width: 75%;
-  border: 1px solid green;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+  align-self: flex-start;
 }
 .proveedor-item-desktop .info-box .titles-box {
+  padding-top: 10px;
   width: fit-content;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -2079,7 +2084,7 @@ main {
   grid-area: verificado;
 }
 .proveedor-item-desktop .info-box .titles-box .small-logo {
-  border: 1px solid #2c2c2c;
+  border: 1px solid #aeaeae;
   border-radius: 5px;
   width: 60px;
   height: 60px;
@@ -2093,7 +2098,12 @@ main {
   grid-area: p;
 }
 .proveedor-item-desktop .info-box .tags-box {
-  border: none;
+  margin: 7px 0;
+}
+.proveedor-item-desktop .info-box .tags-box img {
+  margin: 3px;
+  height: 27px;
+  border-radius: 2px;
 }
 .proveedor-item-desktop .info-box .texts-box .marcas {
   border: none;
@@ -2103,9 +2113,18 @@ main {
 }
 .proveedor-item-desktop .buttons-box {
   width: 10%;
-  border: 1px solid brown;
   display: flex;
+  gap: 10px;
   flex-direction: column;
+}
+.proveedor-item-desktop .buttons-box button {
+  all: unset;
+  background-color: #084484;
+  border-radius: 4px;
+  color: #F5F5F5;
+  padding: 8px;
+  font-family: "Roboto", system-ui;
+  font-weight: 300;
 }
 .proveedor-item-desktop .alineado-auto {
   display: flex;
