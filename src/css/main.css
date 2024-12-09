@@ -2134,6 +2134,7 @@ main {
   display: flex;
   gap: 10px;
   flex-direction: column;
+  margin-right: 10px;
 }
 .proveedor-item-desktop .buttons-box button {
   all: unset;

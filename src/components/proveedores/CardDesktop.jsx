@@ -20,7 +20,7 @@ const CardDesktop = ({ proveedor }) => {
                             <img className='carousel-image' src={proveedor.logo} alt="Slide 1" />
                         </Slide>
                         <Slide className='carousel-slide' index={1}>
-                            <iframe title="Publicidad" src={proveedor.carousel} frameBorder="0"></iframe>
+                            <iframe title="Publicidad" src={proveedor.carousel} frameborder="0"></iframe>
                         </Slide>
                     </Slider>
                     <ButtonBack className="carousel-button back"><FaArrowLeft />
