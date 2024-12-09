@@ -90,6 +90,7 @@
     width: 100%;
     font-size: 1rem;
     gap: 8px;
+
     .carousel-box {
         margin: 3px;
         position: relative;
@@ -99,6 +100,18 @@
         min-width: 320px;
         max-width: 320px;
         overflow: hidden;
+
+        &:hover .carousel-button {
+            opacity: 1 !important;
+            /* Hacer visibles los botones */
+            pointer-events: auto !important;
+            /* Permitir interacción */
+        }
+
+        &:hover .carousel-dots {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
 
         .carousel-frame {
             border-radius: 10px;
@@ -111,6 +124,7 @@
             justify-content: center;
             align-items: center;
             height: 100%;
+
             /* Altura fija para las slides */
             iframe {
                 width: 100%;
@@ -144,17 +158,24 @@
             cursor: pointer;
             z-index: 10;
             transition: background-color 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            /* Prevenir interacción mientras están ocultos */
+            transition: opacity 0.3s ease;
+
+            /* Transición suave */
+            
         }
 
-        .carousel-button.back {
+        .back {
             left: 0;
-            /* Botón de "back" a la izquierda */
         }
 
-        .carousel-button.next {
+        .next {
             right: 0;
             /* Botón de "next" a la derecha */
         }
+
 
         .carousel-button:hover {
             background-color: rgba(0, 0, 0, 0.8);
@@ -162,6 +183,10 @@
         }
 
         .carousel-dots {
+            pointer-events: none;
+            /* Prevenir interacción mientras están ocultos */
+            transition: opacity 0.3s ease;
+            opacity: 0;
             position: absolute;
             bottom: 10px;
             right: 50%;
@@ -200,6 +225,7 @@
         align-items: flex-start;
         height: 100%;
         align-self: flex-start;
+
         .titles-box {
             padding-top: 10px;
             width: fit-content;
@@ -235,6 +261,7 @@
 
         .tags-box {
             margin: 7px 0;
+
             img {
                 margin: 3px;
                 height: 27px;
@@ -259,6 +286,7 @@
         display: flex;
         gap: 10px;
         flex-direction: column;
+
         button {
             all: unset;
             background-color: $color-azul-utils;

@@ -1982,6 +1982,16 @@ main {
   max-width: 320px;
   overflow: hidden;
 }
+.proveedor-item-desktop .carousel-box:hover .carousel-button {
+  opacity: 1 !important;
+  /* Hacer visibles los botones */
+  pointer-events: auto !important;
+  /* Permitir interacción */
+}
+.proveedor-item-desktop .carousel-box:hover .carousel-dots {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
 .proveedor-item-desktop .carousel-box .carousel-frame {
   border-radius: 10px;
   background-color: #d6d6d6;
@@ -2023,12 +2033,16 @@ main {
   cursor: pointer;
   z-index: 10;
   transition: background-color 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  /* Prevenir interacción mientras están ocultos */
+  transition: opacity 0.3s ease;
+  /* Transición suave */
 }
-.proveedor-item-desktop .carousel-box .carousel-button.back {
+.proveedor-item-desktop .carousel-box .back {
   left: 0;
-  /* Botón de "back" a la izquierda */
 }
-.proveedor-item-desktop .carousel-box .carousel-button.next {
+.proveedor-item-desktop .carousel-box .next {
   right: 0;
   /* Botón de "next" a la derecha */
 }
@@ -2037,6 +2051,10 @@ main {
   /* Fondo más oscuro al hacer hover */
 }
 .proveedor-item-desktop .carousel-box .carousel-dots {
+  pointer-events: none;
+  /* Prevenir interacción mientras están ocultos */
+  transition: opacity 0.3s ease;
+  opacity: 0;
   position: absolute;
   bottom: 10px;
   right: 50%;
