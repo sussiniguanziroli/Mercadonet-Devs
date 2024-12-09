@@ -2138,12 +2138,22 @@ main {
 }
 .proveedor-item-desktop .buttons-box button {
   all: unset;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: start;
   background-color: #084484;
   border-radius: 4px;
   color: #F5F5F5;
   padding: 8px;
   font-family: "Roboto", system-ui;
   font-weight: 300;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+.proveedor-item-desktop .buttons-box button:hover {
+  background-color: #052b54;
+  /* Oscurece al hacer hover */
 }
 .proveedor-item-desktop .alineado-auto {
   display: flex;

@@ -164,7 +164,7 @@
             transition: opacity 0.3s ease;
 
             /* Transición suave */
-            
+
         }
 
         .back {
@@ -287,14 +287,26 @@
         gap: 10px;
         flex-direction: column;
         margin-right: 10px;
+
         button {
             all: unset;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-align: start;
             background-color: $color-azul-utils;
             border-radius: 4px;
             color: $main-white;
             padding: 8px;
             font-family: 'Roboto', system-ui;
             font-weight: 300;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+
+            &:hover {
+                background-color: darken($color-azul-utils, 10%);
+                /* Oscurece al hacer hover */
+            }
         }
     }
 

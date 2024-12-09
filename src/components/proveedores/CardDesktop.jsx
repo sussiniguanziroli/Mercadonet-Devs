@@ -2,8 +2,11 @@ import React from 'react'
 import { IoLocationOutline } from 'react-icons/io5'
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
-import { FaArrowRight } from "react-icons/fa";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowRight, FaArrowLeft, FaWhatsapp, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import { IoGlobeOutline } from "react-icons/io5";
+
+
+
 
 const CardDesktop = ({ proveedor }) => {
     return (
@@ -78,10 +81,10 @@ const CardDesktop = ({ proveedor }) => {
                 </div>
             </div>
             <div className='buttons-box'>
-                <button>Sitio Web</button>
-                <button>WhatsApp</button>
-                <button>Teléfono</button>
-                <button>Email</button>
+                <button><IoGlobeOutline /> Sitio Web</button>
+                <button><FaWhatsapp /> WhatsApp</button>
+                <button><FaPhoneAlt /> Teléfono</button>
+                <button><FaEnvelope /> Email</button>
             </div>
         </div>
     )
