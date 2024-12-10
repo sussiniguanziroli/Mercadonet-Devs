@@ -7,9 +7,13 @@
         .loader {
             display: flex;
             justify-content: center;
-            align-items: center;
             width: 100%;
             height: 60vh;
+            margin-top: 16px;
+            .mobile-loader-box {
+                width: 90%;
+                
+            }
         }
 
         .no-criteria {
@@ -66,7 +70,10 @@
         flex-direction: row;
         justify-content: space-around;
         margin-top: 1rem;
-        
+        .skeleton-filter-loader {
+            width: 25%;
+            margin: 2rem;
+        }
 
         .filtros-desktop {
             font-family: 'Roboto', system-ui;
@@ -81,6 +88,7 @@
             padding: 1rem;
             width: 25%;
             max-width: 410px;
+
             // SERVICIOS ------------
             .filtro-servicios {
                 margin-bottom: 2rem;
@@ -240,15 +248,18 @@
 
                     display: flex;
                     gap: .3rem;
+
                     button {
                         all: unset;
                         cursor: pointer;
                         transition: all 0.2s ease-in-out;
-                        transform-origin: center; 
+                        transform-origin: center;
+
                         &:hover {
-                            transform: rotate(-270deg); 
+                            transform: rotate(-270deg);
                         }
                     }
+
                     .combobox-input {
                         min-width: 180px;
                         width: 68%;
@@ -315,6 +326,7 @@
             max-width: 2400px;
             height: fit-content;
             min-height: auto;
+
             .proveedores-list-grid {
                 display: block;
             }
@@ -342,13 +354,15 @@
             scrollbar-color: #888 #f1f1f1;
 
             /* Color de la barra y del track */
-            .loader {
-                display: flex;
-                justify-content: center;
-                align-items: start;
-                margin-top: 7%;
+            .loader-box {
+                height: fit-content;
                 width: 100%;
-                height: 100vh;
+                margin-top: 25px;
+                
+            }
+
+            .loader {
+                height: fit-content;
             }
 
 

@@ -4,7 +4,7 @@ import FiltrosComponent from './FiltrosComponent';
 import HeaderCustomProveedores from './HeaderCustomProveedores';
 import NewsBanner from './NewsBanner';
 
-import filtersIcons from '../proveedores/filtersIcons.json';
+import filtersIcons from '../proveedores/assets/filtersIcons.json';
 import NewsCarousel from './NewsCarousel';
 import { useFiltersContext } from '../../context/FiltersContext';
 import { FaFilter } from "react-icons/fa";

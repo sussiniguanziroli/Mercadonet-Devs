@@ -7,6 +7,11 @@ import { useFiltersContext } from '../../context/FiltersContext';
 import PillFilter from './PillFilter';
 import CardMobile from './CardMobile';
 import CardDesktop from './CardDesktop';
+import SkeletonLoader from './assets/SkeletonLoader';
+import { Skeleton, Box } from '@mui/material';
+import SkeletonFilterLoader from './assets/SkeletonFilterLoader';
+import SkeletonMobileCardLoader from './assets/SkeletonMobileCardLoader';
+
 
 
 const ProveedoresList = ({ }) => {
@@ -47,7 +52,14 @@ const ProveedoresList = ({ }) => {
             </section>
 
             <main className='proveedores-list-container'>
-                <FiltrosComponentDesktop />
+                {filtrosOpciones.pproductos.length > 0 ? (
+                    <FiltrosComponentDesktop />
+                ) : (
+                    <div className='skeleton-filter-loader hiddenInMobile'>
+                        <SkeletonFilterLoader />
+                    </div>
+                )}
+
                 <div className='proveedores-list'>
                     <>
                         {filtrosOpciones.pproductos.length > 0 ? (
@@ -63,23 +75,20 @@ const ProveedoresList = ({ }) => {
                             <div className='no-criteria'><p>No se ha encontrado ningun proveedor.</p></div>
                         ) : (
                             <div className='loader'>
-                                <div className='hiddenInMobile'>
-                                    <ScaleLoader
-                                        color="#FF7F00"
-                                        height={100}
-                                        margin={7}
-                                        radius={8}
-                                        width={15}
-                                    />
+                                <div className='loader-box hiddenInMobile'>
+                                    <Box
+                                        sx={{
+                                            width: '100%',
+                                            maxWidth: '2400px',
+                                            margin: '0 auto',
+                                            padding: '0 16px',
+                                        }}
+                                    >
+                                        <SkeletonLoader />
+                                    </Box>
                                 </div>
-                                <div className='hiddenInDesktop'>
-                                    <ScaleLoader
-                                        color="#FF7F00"
-                                        height={50}
-                                        margin={2}
-                                        radius={8}
-                                        width={7}
-                                    />
+                                <div className='mobile-loader-box hiddenInDesktop'>
+                                   <SkeletonMobileCardLoader />
                                 </div>
                             </div>
                         )}
