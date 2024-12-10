@@ -207,7 +207,7 @@
     .main-proveedores {
         
         display: flex;
-    flex-direction: column;
+        flex-direction: column;
         .main-search {
             align-self: center;
             width: 48%;
@@ -280,7 +280,6 @@
             z-index: 1;
             margin-top: 350px;
             max-width: 2400px;
-
             .proveedores-filter-section {
                 background: none;
 
