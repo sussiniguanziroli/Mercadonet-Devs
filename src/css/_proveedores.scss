@@ -4,10 +4,11 @@
 }
 
 .main-proveedores {
+    
     display: flex;
     flex-direction: column;
-
     .secondary-proveedores {
+        
 
         .proveedores-filter-section {
             background: linear-gradient(to bottom, $color-azul 22%, #eee 29%);
@@ -168,7 +169,8 @@
         background-repeat: no-repeat;
         background-size: 100% 1500px;
         background-color: $color-azul;
-
+        max-width: 2400px;
+        
 
         .suggestions-list-box {
             display: flex;
@@ -204,8 +206,8 @@
 
     .main-proveedores {
         
-
-
+        display: flex;
+    flex-direction: column;
         .main-search {
             align-self: center;
             width: 48%;
@@ -277,7 +279,7 @@
             margin: 3rem;
             z-index: 1;
             margin-top: 350px;
-            max-width: 2300px;
+            max-width: 2400px;
 
             .proveedores-filter-section {
                 background: none;

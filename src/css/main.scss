@@ -34,7 +34,7 @@
 
 
 * {
-    
+
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -56,30 +56,101 @@
 
 html {
     font-size: 10px;
+    
 }
 
-@media (min-width: 400px)  {
+@media (min-width: 400px) {
     html {
         font-size: 11px;
     }
+    *::-webkit-scrollbar {
+        display: none;
+    }
+    
+    * {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        /* IE y Edge antiguos */
+    }
+    
+    
 }
+
+$scrollbar-width: 8px;
+$scrollbar-track-color: #f4f4f4;
+$scrollbar-thumb-color: #b3b3b3;
+$scrollbar-thumb-hover: #808080;
+$scrollbar-thumb-active: #5c5c5c;
 
 @media (min-width: 1500px) {
     html {
         font-size: 15px;
     }
+    * {
+
+        /* Estilo para navegadores modernos */
+        &::-webkit-scrollbar {
+            width: $scrollbar-width;
+            /* Ancho del scrollbar */
+            height: $scrollbar-width;
+            /* Altura del scrollbar horizontal */
+        }
+    
+        &::-webkit-scrollbar-track {
+            background: $scrollbar-track-color;
+            /* Color de fondo del track */
+            border-radius: 10px;
+            /* Bordes redondeados */
+        }
+    
+        &::-webkit-scrollbar-thumb {
+            background: $scrollbar-thumb-color;
+            /* Color de la barra */
+            border-radius: 10px;
+            /* Bordes redondeados */
+            border: 2px solid $scrollbar-track-color;
+            /* Espaciado entre barra y track */
+        }
+    
+        &::-webkit-scrollbar-thumb:hover {
+            background: $scrollbar-thumb-hover;
+            /* Color más oscuro al pasar el mouse */
+        }
+    
+        &::-webkit-scrollbar-thumb:active {
+            background: $scrollbar-thumb-active;
+            /* Color al hacer clic */
+        }
+    
+        /* Soporte para Firefox y navegadores antiguos */
+        scrollbar-width: thin;
+        /* Ancho de la barra */
+        scrollbar-color: $scrollbar-thumb-color $scrollbar-track-color;
+        /* Colores */
+    }
 }
 
 
 
 
-*::-webkit-scrollbar {
-    display: none;
+
+
+
+
+
+
+/* SCSS para toda la aplicación */
+@media (min-width: 1024px) {
+    .app-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* Ancho máximo */
+        
+    
+        
+    }
 }
 
-* {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    /* IE y Edge antiguos */
-}
 

@@ -9,7 +9,7 @@ const Landing = () => {
 
 
   return (
-    <main>
+    <main className='landing-container'>
         <Header />
         <Categorias />
         <Qsmnet />

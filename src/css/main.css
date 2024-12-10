@@ -99,10 +99,8 @@
   }
 }
 
-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.landing-container {
+  max-width: 2400px;
 }
 
 .main-footer {
@@ -110,6 +108,8 @@ main {
   flex-direction: column;
   font-family: "Montserrat", sans-serif;
   background-color: #131921;
+  width: 100%;
+  max-width: 2400px;
   color: #FFFFFF;
   padding: 1.3rem;
   gap: 3rem;
@@ -266,6 +266,7 @@ main {
     margin-top: 0;
   }
   .last-bit {
+    max-width: 2400px;
     justify-content: center;
     padding: 0.2rem;
   }
@@ -960,6 +961,7 @@ main {
     background-repeat: no-repeat;
     background-size: 100% 1500px;
     background-color: #131921;
+    max-width: 2400px;
   }
   .proveedores-desktop .suggestions-list-box {
     display: flex;
@@ -985,6 +987,10 @@ main {
   }
   .proveedores-desktop .suggestions-list-box .suggestions-list li:hover {
     background-color: #f0f0f0;
+  }
+  .main-proveedores {
+    display: flex;
+    flex-direction: column;
   }
   .main-proveedores .main-search {
     align-self: center;
@@ -1044,7 +1050,7 @@ main {
     margin: 3rem;
     z-index: 1;
     margin-top: 350px;
-    max-width: 2300px;
+    max-width: 2400px;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section {
     background: none;
@@ -1300,7 +1306,7 @@ main {
   .proveedores-list-container .proveedores-list {
     margin: 1rem;
     width: 75%;
-    max-width: 1500px;
+    max-width: 2400px;
     /* Para Firefox */
     scrollbar-width: thin;
     /* Cambia a barra fina */
@@ -1833,6 +1839,7 @@ main {
   width: 100%;
   height: 500px;
   overflow: hidden;
+  max-width: 2400px;
 }
 .carousel-background:hover .carousel-button {
   opacity: 1 !important;
@@ -1846,6 +1853,7 @@ main {
   left: 0;
   width: 100%;
   height: 100%;
+  max-width: 2400px;
   pointer-events: none;
   z-index: 3;
   background: linear-gradient(to bottom, rgba(19, 25, 33, 0) 40%, rgba(19, 25, 33, 0.8) 85%);
@@ -1855,10 +1863,12 @@ main {
   width: 100%;
   height: 500px;
   z-index: 1;
+  max-width: 2400px;
 }
 .carousel-background .carousel-frame .carousel-slide {
   width: 100%;
   height: 500px;
+  max-width: 2400px;
 }
 .carousel-background .carousel-frame .carousel-slide .carousel-image {
   width: 100%;
@@ -2453,20 +2463,65 @@ html {
   html {
     font-size: 11px;
   }
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* IE y Edge antiguos */
+  }
 }
 @media (min-width: 1500px) {
   html {
     font-size: 15px;
   }
+  * {
+    /* Estilo para navegadores modernos */
+    /* Soporte para Firefox y navegadores antiguos */
+    scrollbar-width: thin;
+    /* Ancho de la barra */
+    scrollbar-color: #b3b3b3 #f4f4f4;
+    /* Colores */
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    /* Ancho del scrollbar */
+    height: 8px;
+    /* Altura del scrollbar horizontal */
+  }
+  *::-webkit-scrollbar-track {
+    background: #f4f4f4;
+    /* Color de fondo del track */
+    border-radius: 10px;
+    /* Bordes redondeados */
+  }
+  *::-webkit-scrollbar-thumb {
+    background: #b3b3b3;
+    /* Color de la barra */
+    border-radius: 10px;
+    /* Bordes redondeados */
+    border: 2px solid #f4f4f4;
+    /* Espaciado entre barra y track */
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: #808080;
+    /* Color más oscuro al pasar el mouse */
+  }
+  *::-webkit-scrollbar-thumb:active {
+    background: #5c5c5c;
+    /* Color al hacer clic */
+  }
 }
-*::-webkit-scrollbar {
-  display: none;
-}
-
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  /* IE y Edge antiguos */
+/* SCSS para toda la aplicación */
+@media (min-width: 1024px) {
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* Ancho máximo */
+  }
 }
 
 /*# sourceMappingURL=main.css.map */

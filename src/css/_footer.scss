@@ -3,6 +3,8 @@
     flex-direction: column;
     font-family: 'Montserrat', sans-serif;
     background-color: $color-azul;
+    width: 100%;
+    max-width: 2400px;
     color: $color-blanco;
     padding: 1.3rem;
     gap: 3rem;
@@ -168,6 +170,7 @@
     }
 
     .last-bit {
+        max-width: 2400px;
         justify-content: center;
         padding: .2rem;
         img {

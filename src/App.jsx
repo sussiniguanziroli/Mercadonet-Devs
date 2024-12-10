@@ -16,14 +16,15 @@ function App() {
 
         <FiltersProvider>
             <BrowserRouter>
-                <Menu />
-
-                <Routes>
-                    <Route path="/" element={<Landing />} />
-                    <Route path='/proveedores' element={<Proveedores />} />
-                    <Route path='/admin' element={<AdminPanel />} />
-                </Routes>
-                <Footer />
+                <div className="app-container">
+                    <Menu />
+                    <Routes>
+                        <Route path="/" element={<Landing />} />
+                        <Route path="/proveedores" element={<Proveedores />} />
+                        <Route path="/admin" element={<AdminPanel />} />
+                    </Routes>
+                    <Footer />
+                </div>
             </BrowserRouter>
         </FiltersProvider>
 
