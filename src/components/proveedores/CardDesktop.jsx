@@ -35,10 +35,12 @@ const CardDesktop = ({ proveedor }) => {
             </div>
             <div className='info-box'>
                 <div className='titles-box'>
-                    <img className='small-logo' src={proveedor.logo} alt={proveedor.nombre} />
+                    <div className='small-logo-box'>
+                        <img className='small-logo' src={proveedor.logo} alt={proveedor.nombre} />
+                    </div>
                     <h3>{proveedor.nombre}</h3>
-                    <p><IoLocationOutline />{proveedor.ubicacionDetalle}</p>
                     <img className="verificado" src='https://i.ibb.co/BsSRKwy/Verificado-HD.jpg' />
+                    <p><IoLocationOutline />{proveedor.ubicacionDetalle}</p>
                 </div>
                 <div className='tags-box alineado-auto'>
                     {proveedor.tags?.includes('Distribuidor Oficial') && (
@@ -91,13 +93,3 @@ const CardDesktop = ({ proveedor }) => {
 }
 
 export default CardDesktop
-
-//<div className='title-img'>
-//<img src={proveedor.imagen} alt={proveedor.name} />
-//<div className='title-location'>
-//<h2>{proveedor.nombre}</h2>
-//<strong><IoLocationOutline className='icon' />
-// {proveedor.ubicacionDetalle}</strong>
-//</div>
-//</div>
-//<p className='descripcion'>{proveedor.description}</p>

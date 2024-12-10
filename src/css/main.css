@@ -2093,21 +2093,29 @@ main {
   padding-top: 10px;
   width: fit-content;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 60px 1fr auto;
+  grid-template-rows: auto auto;
   grid-template-areas: "logo-small h3 verificado" "logo-small p p";
+  align-items: center;
+  column-gap: 7px;
+  row-gap: 1px;
 }
 .proveedor-item-desktop .info-box .titles-box .verificado {
   width: 85px;
   grid-area: verificado;
 }
-.proveedor-item-desktop .info-box .titles-box .small-logo {
-  border: 1px solid #aeaeae;
-  border-radius: 5px;
+.proveedor-item-desktop .info-box .titles-box .small-logo-box {
+  grid-area: logo-small;
   width: 60px;
   height: 60px;
+  border: 1px solid #aeaeae;
+  border-radius: 5px;
+}
+.proveedor-item-desktop .info-box .titles-box .small-logo-box .small-logo {
   object-fit: contain;
-  grid-area: logo-small;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
 }
 .proveedor-item-desktop .info-box .titles-box h3 {
   grid-area: h3;
