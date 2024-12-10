@@ -1051,6 +1051,7 @@
     z-index: 1;
     margin-top: 350px;
     max-width: 2400px;
+    height: fit-content;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section {
     background: none;
@@ -1058,7 +1059,7 @@
 }
 .proveedores-list-container .proveedores-list {
   width: 100%;
-  min-height: 180vh;
+  min-height: 150vh;
 }
 .proveedores-list-container .proveedores-list .loader {
   display: flex;
@@ -1307,6 +1308,8 @@
     margin: 1rem;
     width: 75%;
     max-width: 2400px;
+    height: fit-content;
+    min-height: auto;
     /* Para Firefox */
     scrollbar-width: thin;
     /* Cambia a barra fina */
