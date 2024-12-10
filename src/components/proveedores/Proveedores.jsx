@@ -87,7 +87,7 @@ const Proveedores = () => {
                         <ProveedoresList />
 
                     </section>
-
+                    
 
                 </div>
             </main>

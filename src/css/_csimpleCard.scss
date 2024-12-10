@@ -249,7 +249,6 @@
                 height: 60px;
                 border: 1px solid #aeaeae;
                 border-radius: 5px;
-
                 .small-logo {
                     object-fit: contain;
                     width: 100%;
@@ -259,10 +258,13 @@
             }
 
             h3 {
+                font-family: 'Montserrat', sans-serif;
                 grid-area: h3;
+                color: $text-gray;
             }
 
             p {
+                color: $text-gray;
                 grid-area: p;
             }
         }
@@ -295,8 +297,9 @@
         gap: 10px;
         flex-direction: column;
         margin-right: 10px;
-
+        max-width: 120px;
         button {
+            
             all: unset;
             display: flex;
             align-items: center;
@@ -327,4 +330,27 @@
         flex-wrap: wrap;
     }
 
+    @media (min-width: 1920px) {
+        font-size: 0.9rem; // Reduce el tamaño base para pantallas grandes
+
+        h3 {
+            font-size: 1.1rem; // Ajusta el tamaño del título
+        }
+
+        p {
+            font-size: .95rem; // Ajusta el tamaño del párrafo
+        }
+    }
+
+    @media (max-width: 768px) {
+        font-size: 0.8rem; // Reduce el tamaño base para pantallas pequeñas
+
+        h3 {
+            font-size: 1rem; // Ajusta el tamaño del título
+        }
+
+        p {
+            font-size: 0.75rem; // Ajusta el tamaño del párrafo
+        }
+    }
 }

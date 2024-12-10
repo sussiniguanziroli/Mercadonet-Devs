@@ -61,9 +61,10 @@
     }
 
     .proveedores-list-container {
-        overflow: scroll;
+        overflow: auto;
         display: flex;
         flex-direction: row;
+        justify-content: space-around;
         margin-top: 1rem;
         .filtros-desktop {
             font-family: 'Roboto', system-ui;
@@ -309,6 +310,7 @@
         .proveedores-list {
             margin: 1rem;
             width: 75%;
+            max-width: 1500px;
             .proveedores-list-grid {
                 display: block;
             }

@@ -1,5 +1,6 @@
 .proveedores-desktop {
     font-family: 'Montserrat', sans-serif;
+
 }
 
 .main-proveedores {
@@ -45,7 +46,7 @@
                     }
 
 
-                    
+
                     .thumbFilter {
                         display: flex;
                         flex-direction: column;
@@ -53,7 +54,7 @@
                         text-align: center;
                         padding-left: 1rem;
 
-                        
+
 
                         .thumbFilter-icon {
                             width: 5em;
@@ -75,6 +76,7 @@
                             text-align: center;
                         }
                     }
+
                     .active {
 
                         .thumbFilter-icon {
@@ -83,7 +85,7 @@
                             transition: all .2s;
                         }
 
-                    
+
                     }
                 }
 
@@ -95,6 +97,7 @@
                     color: $main-white;
                     background-color: $color-azul-utils;
                     border-radius: 8px;
+
                     .icon {
                         font-size: 20px;
                     }
@@ -200,7 +203,7 @@
     }
 
     .main-proveedores {
-
+        
 
 
         .main-search {
@@ -274,11 +277,17 @@
             margin: 3rem;
             z-index: 1;
             margin-top: 350px;
+            max-width: 2300px;
+
             .proveedores-filter-section {
                 background: none;
 
             }
 
+
+
         }
+
+
     }
 }

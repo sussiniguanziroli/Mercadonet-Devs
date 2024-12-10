@@ -49,7 +49,7 @@ const HeaderCustomProveedores = () => {
 
     // Manejar clic en el botón de búsqueda
     const handleSearchClick = () => {
-        updateFilters("search", tempSearchTerm.toLowerCase()); 
+        updateFilters("search", tempSearchTerm.toLowerCase());
         clearSuggestions();
     };
 
@@ -92,6 +92,8 @@ const HeaderCustomProveedores = () => {
         };
     }, []);
 
+    console.log(suggestions)
+
     return (
         <header className={`header hiddenInMobile ${scrolled ? "scrolled" : ""}`}>
             <img
@@ -122,13 +124,19 @@ const HeaderCustomProveedores = () => {
                                     key={index}
                                     onMouseDown={() => handleSuggestionClick(suggestion)}
                                 >
-                                    {suggestion.nombre} - {suggestion.categoria.join(", ")} -{" "}
+                                    {suggestion.nombre} -
+                                    {/* Verificar si tiene categoria, si no usar tipo */}
+                                    {suggestion.categoria && suggestion.categoria.length > 0
+                                        ? suggestion.categoria.join(", ")
+                                        : suggestion.tipo || "No especificado"}
+                                    {" - "}
                                     {suggestion.ubicacion}
                                 </li>
                             ))}
                         </ul>
                     )}
                 </div>
+
             </div>
             <div className="nav-container">
                 <NavLink activeClassname="active" to="/" className="nav-link">

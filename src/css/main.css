@@ -1044,6 +1044,7 @@ main {
     margin: 3rem;
     z-index: 1;
     margin-top: 350px;
+    max-width: 2300px;
   }
   .main-proveedores .secondary-proveedores .proveedores-filter-section {
     background: none;
@@ -1101,9 +1102,10 @@ main {
     margin: 10px 44px;
   }
   .proveedores-list-container {
-    overflow: scroll;
+    overflow: auto;
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
     margin-top: 1rem;
   }
   .proveedores-list-container .filtros-desktop {
@@ -1298,6 +1300,7 @@ main {
   .proveedores-list-container .proveedores-list {
     margin: 1rem;
     width: 75%;
+    max-width: 1500px;
     /* Para Firefox */
     scrollbar-width: thin;
     /* Cambia a barra fina */
@@ -2118,9 +2121,12 @@ main {
   border-radius: inherit;
 }
 .proveedor-item-desktop .info-box .titles-box h3 {
+  font-family: "Montserrat", sans-serif;
   grid-area: h3;
+  color: #2c2c2c;
 }
 .proveedor-item-desktop .info-box .titles-box p {
+  color: #2c2c2c;
   grid-area: p;
 }
 .proveedor-item-desktop .info-box .tags-box {
@@ -2143,6 +2149,7 @@ main {
   gap: 10px;
   flex-direction: column;
   margin-right: 10px;
+  max-width: 120px;
 }
 .proveedor-item-desktop .buttons-box button {
   all: unset;
@@ -2170,6 +2177,28 @@ main {
   margin-top: 0.7rem;
   flex-wrap: wrap;
 }
+@media (min-width: 1920px) {
+  .proveedor-item-desktop {
+    font-size: 0.9rem;
+  }
+  .proveedor-item-desktop h3 {
+    font-size: 1.1rem;
+  }
+  .proveedor-item-desktop p {
+    font-size: 0.95rem;
+  }
+}
+@media (max-width: 768px) {
+  .proveedor-item-desktop {
+    font-size: 0.8rem;
+  }
+  .proveedor-item-desktop h3 {
+    font-size: 1rem;
+  }
+  .proveedor-item-desktop p {
+    font-size: 0.75rem;
+  }
+}
 
 .main-pill-filter {
   display: flex;
@@ -2184,13 +2213,14 @@ main {
   border-radius: 12px;
 }
 .main-pill-filter .pill-filter .pill-button {
+  color: #2c2c2c;
+  font-family: "Roboto", system-ui;
   font-weight: 500;
   display: flex;
   gap: 3px;
   padding: 10px;
   border: none;
   background-color: #fff;
-  color: #000;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -2286,6 +2316,7 @@ main {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 20px;
+    color: #2c2c2c;
   }
   .main-pill-filter .pill-filter-container .pill-filter {
     width: fit-content;
@@ -2299,7 +2330,7 @@ main {
     padding: 20px;
     border: none;
     background-color: #f0f0f0;
-    color: #000;
+    color: #2c2c2c;
     font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
