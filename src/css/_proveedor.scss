@@ -1,8 +1,8 @@
 //Dentro de proveedor.jsx
 .proveedores-list-grid {
     margin-top: 16pxD;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
 }
 
 .proveedores-list-list {

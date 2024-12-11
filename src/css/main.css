@@ -916,6 +916,7 @@
   font-size: 20px;
 }
 .main-proveedores .secondary-proveedores .proveedores-filter-section .banners-loading {
+  margin-left: 2.2%;
   margin-top: 7rem;
   align-self: center;
   display: flex;
@@ -931,6 +932,7 @@
   margin-top: 7rem;
   align-self: center;
   width: 95%;
+  margin-left: 2.2%;
   height: 100%;
   border-radius: 1.7rem;
 }
@@ -1720,8 +1722,8 @@
 }
 .proveedores-list-grid {
   margin-top: 16pxD;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
 }
 
 .proveedores-list-list {
@@ -1989,12 +1991,17 @@
   align-items: center;
   justify-content: space-between;
   height: fit-content;
-  max-height: 330px;
+  max-height: 400px;
   background-color: #ffffff;
   border-radius: 3px;
   width: 100%;
   font-size: 1rem;
   gap: 8px;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+.proveedor-item-desktop:hover {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15) !important;
+  transform: scale(1.005);
 }
 .proveedor-item-desktop .carousel-box {
   margin: 3px;
@@ -2146,6 +2153,10 @@
   grid-area: h3;
   color: #2c2c2c;
 }
+.proveedor-item-desktop .info-box .titles-box h3:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
 .proveedor-item-desktop .info-box .titles-box p {
   color: #2c2c2c;
   grid-area: p;
@@ -2155,13 +2166,19 @@
 }
 .proveedor-item-desktop .info-box .tags-box img {
   margin: 3px;
-  height: 27px;
+  height: 1.7rem;
   border-radius: 2px;
 }
 .proveedor-item-desktop .info-box .texts-box .marcas {
+  color: #2c2c2c;
   border: none;
 }
+.proveedor-item-desktop .info-box .texts-box .description {
+  color: #2c2c2c;
+  font-weight: 470;
+}
 .proveedor-item-desktop .info-box .texts-box .extras {
+  color: #2c2c2c;
   border: none;
 }
 .proveedor-item-desktop .buttons-box {
@@ -2172,7 +2189,7 @@
   margin-right: 10px;
   max-width: 120px;
 }
-.proveedor-item-desktop .buttons-box button {
+.proveedor-item-desktop .buttons-box a {
   all: unset;
   display: flex;
   align-items: center;
@@ -2187,7 +2204,7 @@
   transition: background-color 0.3s ease;
   cursor: pointer;
 }
-.proveedor-item-desktop .buttons-box button:hover {
+.proveedor-item-desktop .buttons-box a:hover {
   background-color: #052b54;
   /* Oscurece al hacer hover */
 }
@@ -2219,6 +2236,19 @@
   .proveedor-item-desktop p {
     font-size: 0.75rem;
   }
+}
+
+.tag-extra {
+  padding: 5px;
+  color: #2c2c2c;
+  background-color: #f4f4f4;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.extras {
+  display: flex;
+  align-items: center;
 }
 
 .main-pill-filter {

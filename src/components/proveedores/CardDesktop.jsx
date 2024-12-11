@@ -73,9 +73,9 @@ const CardDesktop = ({ proveedor }) => {
                     </div>
                     {proveedor.extras && proveedor.extras.length > 0 && (
                         <div className='extras alineado-auto'>
-                            <h4>Servicios y Capacidades</h4>
+                            <h4>Servicios y Capacidades: </h4>
                             {proveedor.extras.map((extra, index) => (
-                                <p key={index} className='tag-extra'>{extra},</p>
+                                <p key={index} className='tag-extra'>{extra}</p>
                             ))}
                         </div>
                     )}
@@ -83,10 +83,10 @@ const CardDesktop = ({ proveedor }) => {
                 </div>
             </div>
             <div className='buttons-box'>
-                <button><IoGlobeOutline /> Sitio Web</button>
-                <button><FaWhatsapp /> WhatsApp</button>
-                <button><FaPhoneAlt /> Teléfono</button>
-                <button><FaEnvelope /> Email</button>
+                <a><IoGlobeOutline /> Sitio Web</a>
+                <a><FaWhatsapp /> WhatsApp</a>
+                <a><FaPhoneAlt /> Teléfono</a>
+                <a><FaEnvelope /> Email</a>
             </div>
         </div>
     )

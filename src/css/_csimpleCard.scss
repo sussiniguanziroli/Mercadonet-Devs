@@ -84,12 +84,18 @@
     align-items: center;
     justify-content: space-between;
     height: fit-content;
-    max-height: 330px;
+    max-height: 400px;
     background-color: #ffffff;
     border-radius: 3px;
     width: 100%;
     font-size: 1rem;
     gap: 8px;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15) !important;
+        transform: scale(1.005);
+    }
 
     .carousel-box {
         margin: 3px;
@@ -238,6 +244,7 @@
             align-items: center;
             column-gap: 7px;
             row-gap: 1px;
+
             .verificado {
                 width: 85px;
                 grid-area: verificado;
@@ -249,6 +256,7 @@
                 height: 60px;
                 border: 1px solid #aeaeae;
                 border-radius: 5px;
+
                 .small-logo {
                     object-fit: contain;
                     width: 100%;
@@ -261,6 +269,11 @@
                 font-family: 'Montserrat', sans-serif;
                 grid-area: h3;
                 color: $text-gray;
+
+                &:hover {
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
             }
 
             p {
@@ -274,7 +287,7 @@
 
             img {
                 margin: 3px;
-                height: 27px;
+                height: 1.7rem;
                 border-radius: 2px;
             }
 
@@ -282,10 +295,17 @@
 
         .texts-box {
             .marcas {
+                color: $text-gray;
                 border: none;
             }
 
+            .description {
+                color: $text-gray;
+                font-weight: 470;
+            }
+
             .extras {
+                color: $text-gray;
                 border: none;
             }
         }
@@ -298,8 +318,9 @@
         flex-direction: column;
         margin-right: 10px;
         max-width: 120px;
-        button {
-            
+
+        a {
+
             all: unset;
             display: flex;
             align-items: center;
@@ -353,4 +374,19 @@
             font-size: 0.75rem; // Ajusta el tamaño del párrafo
         }
     }
+}
+
+// ------------ Etiquetas en CSS ---------------------------
+
+.tag-extra {
+    padding: 5px;
+    color: $text-gray;
+    background-color: #f4f4f4;
+    border-radius: 3px;
+    font-weight: 500;
+}
+
+.extras {
+    display: flex;
+    align-items: center;
 }
