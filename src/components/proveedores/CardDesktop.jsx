@@ -67,10 +67,12 @@ const CardDesktop = ({ proveedor }) => {
                 </div>
                 <div className='texts-box'>
                     <p className='description'>{proveedor.descripcion}</p>
-                    <div className='marcas alineado-auto'>
-                        <h4>Marcas:</h4>
-                        {proveedor.marca.map((marca) => <p>{marca},</p>)}
-                    </div>
+                    {proveedor.marca && proveedor.marca.length > 0 && (
+                        <div className='marcas alineado-auto'>
+                            <h4>Marcas:</h4>
+                            {proveedor.marca.map((marca) => <p>{marca},</p>)}
+                        </div>
+                    )}
                     {proveedor.extras && proveedor.extras.length > 0 && (
                         <div className='extras alineado-auto'>
                             <h4>Servicios y Capacidades: </h4>

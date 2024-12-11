@@ -7,23 +7,31 @@ import { useFiltersContext } from '../../context/FiltersContext';
 
 
 const Proveedor = ({ }) => {
-    const {proveedoresFiltrados} = useFiltersContext();    
+    const { proveedoresFiltrados } = useFiltersContext();
 
     return (
         <>
             <div className='proveedores-list-grid'>
-                {proveedoresFiltrados.map((proveedor) =>
-                    <CardMobile key={proveedor.id} proveedor={proveedor} />
-                )}
+                {proveedoresFiltrados.map((proveedor) => {
+                    // Decidimos si mostrar CardProductos o CardHistoria
+                    const CardComponent =
+                        proveedor.cardType === "cardProductos" ? CardMobileV2 : CardMobile;
+
+                    return <CardComponent key={proveedor.id} proveedor={proveedor} />;
+                })}
             </div>
 
             <div className='proveedores-list-list'>
-                {proveedoresFiltrados.map((proveedor) =>
-                    <CardDesktop key={proveedor.id} proveedor={proveedor} />
-                )}
+                {proveedoresFiltrados.map((proveedor) => {
+                    // Decidimos si mostrar CardProductos o CardHistoria
+                    const CardComponent =
+                        proveedor.cardType === "cardProductos" ? CardDesktopV2 : CardDesktop;
 
+                    return <CardComponent key={proveedor.id} proveedor={proveedor} />;
+                })}
             </div>
         </>
+
     )
 }
 
