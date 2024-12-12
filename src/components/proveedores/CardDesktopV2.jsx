@@ -4,8 +4,19 @@ import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } fro
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { FaArrowRight, FaArrowLeft, FaWhatsapp, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { IoGlobeOutline } from "react-icons/io5";
+import Tags from './assets/Tags';
+import ProductsCarousel from './assets/ProductsCarousel';
 
 const CardDesktopV2 = ({ proveedor }) => {
+
+    const productos = [
+        { titulo: "Conjunto Sommier", precio: "$80.000 - $160.000", imagen: "https://dcdn.mitiendanube.com/stores/001/365/853/products/pagina-web1-76c2d6c8884195030f16783915187385-1024-1024.jpg" },
+        { titulo: "Samsung A15-A30", precio: "$100.000 c/u", imagen: "https://peruimporta.com/wp-content/uploads/2024/06/samsung-a15-5G-65x65-1.jpg" },
+        { titulo: "Smart TV BGH", precio: "$120mil - $250mil", imagen: "https://arbghprod.vtexassets.com/arquivos/ids/163265/BGH-Android-TV_43.jpg?v=638445734763300000" },
+        { titulo: "Mountain Bike", precio: "$70.000 x10u", imagen: "https://http2.mlstatic.com/D_NQ_NP_682156-MLU77775260580_072024-O.webp" },
+        { titulo: "Notebook EXO", precio: "$120.000", imagen: "https://www.oscarbarbieri.com/pub/media/catalog/product/cache/7baadf0dec41407c7702efdbff940ecb/e/x/exo_t56.jpg" },
+    ];
+
     return (
         <div className='proveedor-item-desktop-v2 hiddenInMobile'>
             <div className='carousel-box'>
@@ -37,98 +48,16 @@ const CardDesktopV2 = ({ proveedor }) => {
                     </div>
                     <h3>{proveedor.nombre}</h3>
                     <img className="verificado" src='https://i.ibb.co/BsSRKwy/Verificado-HD.jpg' />
+                    <div className='tags-box alineado-auto'>
+                        <Tags proveedor={proveedor} />
+                    </div>
                     <p><IoLocationOutline />{proveedor.ubicacionDetalle}</p>
-                </div>
-                <div className='tags-box alineado-auto'>
-                    
-                    {proveedor.tipo?.includes('Servicios') && (
-                        <img
-                            className='tag-distroficial'
-                            src='https://luisgarcia-d.com/wp-content/uploads/2022/05/Pagina-1-1568x474.png'
-                            alt='Servicios'
-                        />
-                    )}
-                    {proveedor.tipo?.includes('Distribuidor Oficial') && (
-                        <img
-                            className='tag-distroficial'
-                            src='https://i.imgur.com/RIN3TB0.png'
-                            alt='Distribuidor Oficial'
-                        />
-                    )}
-                    {proveedor.tipo?.includes('Mayorista') && (
-                        <img
-                            className='tag-mayorista'
-                            src='https://i.imgur.com/DiAnzfH.png'
-                            alt='Mayorista'
-                        />
-                    )}
-                    {proveedor.tipo?.includes('Fabricante') && (
-                        <img
-                            className='tag-fabricante'
-                            src='https://i.imgur.com/nscxZFG.png'
-                            alt='Fabricante'
-                        />
-                    )}
-                    {proveedor.servicios?.includes('Logistica/Transporte') && (
-                        <img
-                            className='tag-distroficial'
-                            src='https://i.ibb.co/Ln4BbrK/Logistica-Transporte.png'
-                            alt='Servicio Logistica'
-                        />
-                    )}
-                    {proveedor.servicios?.includes('Importacion') && (
-                        <img
-                            className='tag-distroficial'
-                            src='https://i.ibb.co/0jGtnnQ/Importacion.png'
-                            alt='Servicio Importacion'
-                        />
-                    )}
-                    {proveedor.servicios?.includes('Exportacion') && (
-                        <img
-                            className='tag-distroficial'
-                            src='https://i.ibb.co/x31CDjS/Exportaci-n.png'
-                            alt='Servicio Exportacion'
-                        />
-                    )}
-                    {proveedor.servicios?.includes('Dropshipping') && (
-                        <img
-                            className='tag-distroficial'
-                            src='https://i.ibb.co/x8cFyrC/Dropshipping.png'
-                            alt='Servicio Dropshipping'
-                        />
-                    )}
-                    {proveedor.servicios?.includes('Almacenamiento') && (
-                        <img
-                            className='tag-distroficial'
-                            src='https://i.ibb.co/x8cFyrC/Dropshipping.png'
-                            alt='Servicio Almacenamiento'
-                        />
-                    )}
-                </div>
-                <div className='texts-box'>
-                    <p className='description'>{proveedor.descripcion}</p>
-                    {proveedor.marca && proveedor.marca.length > 0 && (
-                        <div className='marcas alineado-auto'>
-                            <h4>Marcas:</h4>
-                            {proveedor.marca.map((marca) => <p>{marca},</p>)}
-                        </div>
-                    )}
-                    {proveedor.extras && proveedor.extras.length > 0 && (
-                        <div className='extras alineado-auto'>
-                            <h4>Servicios y Capacidades: </h4>
-                            {proveedor.extras.map((extra, index) => (
-                                <p key={index} className='tag-extra'>{extra}</p>
-                            ))}
-                        </div>
-                    )}
 
                 </div>
-            </div>
-            <div className='buttons-box'>
-                <a><IoGlobeOutline /> Sitio Web</a>
-                <a><FaWhatsapp /> WhatsApp</a>
-                <a><FaPhoneAlt /> Teléfono</a>
-                <a><FaEnvelope /> Email</a>
+                <div className='products-box'>
+                    <ProductsCarousel productos={productos} />
+
+                </div>
             </div>
         </div>
     )

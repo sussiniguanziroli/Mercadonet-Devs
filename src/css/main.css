@@ -2360,6 +2360,7 @@
   border-radius: 10px;
   background-color: #d6d6d6;
   padding: 10px;
+  aspect-ratio: 1/1;
 }
 .proveedor-item-desktop-v2 .carousel-box .carousel-slide {
   display: flex;
@@ -2371,6 +2372,7 @@
 .proveedor-item-desktop-v2 .carousel-box .carousel-slide iframe {
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 .proveedor-item-desktop-v2 .carousel-box .carousel-image {
   width: 100%;
@@ -2452,6 +2454,7 @@
   align-items: flex-start;
   height: 100%;
   align-self: flex-start;
+  gap: 12px;
 }
 .proveedor-item-desktop-v2 .info-box .titles-box {
   padding-top: 10px;
@@ -2459,10 +2462,19 @@
   display: grid;
   grid-template-columns: 60px 1fr auto;
   grid-template-rows: auto auto;
-  grid-template-areas: "logo-small h3 verificado" "logo-small p p";
+  grid-template-areas: "logo-small h3 verificado tags" "logo-small p p p";
   align-items: center;
   column-gap: 7px;
   row-gap: 1px;
+}
+.proveedor-item-desktop-v2 .info-box .titles-box .tags-box {
+  grid-area: tags;
+  margin: 4px 0;
+}
+.proveedor-item-desktop-v2 .info-box .titles-box .tags-box img {
+  margin: 0.5px;
+  height: 1.5rem;
+  border-radius: 2px;
 }
 .proveedor-item-desktop-v2 .info-box .titles-box .verificado {
   width: 85px;
@@ -2494,25 +2506,85 @@
   color: #2c2c2c;
   grid-area: p;
 }
-.proveedor-item-desktop-v2 .info-box .tags-box {
-  margin: 7px 0;
+.proveedor-item-desktop-v2 .products-box {
+  width: 100%;
 }
-.proveedor-item-desktop-v2 .info-box .tags-box img {
-  margin: 3px;
-  height: 1.7rem;
-  border-radius: 2px;
+.proveedor-item-desktop-v2 .products-box .products-carousel {
+  cursor: pointer;
+  width: 98%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1.7rem;
+  box-sizing: border-box;
 }
-.proveedor-item-desktop-v2 .info-box .texts-box .marcas {
-  color: #2c2c2c;
-  border: none;
+.proveedor-item-desktop-v2 .products-box .products-carousel .slick-slider {
+  padding: 0.3rem 0;
 }
-.proveedor-item-desktop-v2 .info-box .texts-box .description {
-  color: #2c2c2c;
-  font-weight: 470;
+.proveedor-item-desktop-v2 .products-box .products-carousel .slick-list {
+  padding: 5px 0;
 }
-.proveedor-item-desktop-v2 .info-box .texts-box .extras {
-  color: #2c2c2c;
-  border: none;
+.proveedor-item-desktop-v2 .products-box .products-carousel .slick-slide {
+  padding: 0 10px;
+  width: auto;
+}
+.proveedor-item-desktop-v2 .products-box .products-carousel .product-item {
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  text-align: start;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.proveedor-item-desktop-v2 .products-box .products-carousel .product-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.proveedor-item-desktop-v2 .products-box .products-carousel .product-item .product-image {
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  width: 100%;
+  height: 135px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+.proveedor-item-desktop-v2 .products-box .products-carousel .product-item .product-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+.proveedor-item-desktop-v2 .products-box .products-carousel .product-item .product-price {
+  font-size: 0.9rem;
+  color: #888;
+}
+.proveedor-item-desktop-v2 .products-box .products-carousel .slick-prev,
+.proveedor-item-desktop-v2 .products-box .products-carousel .slick-next {
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 35px;
+  height: 35px;
+  z-index: 10;
+}
+.proveedor-item-desktop-v2 .products-box .products-carousel .slick-prev::before,
+.proveedor-item-desktop-v2 .products-box .products-carousel .slick-next::before {
+  font-size: 16px;
+  color: #333;
+}
+.proveedor-item-desktop-v2 .products-box .products-carousel .slick-dots {
+  bottom: -15px;
+}
+.proveedor-item-desktop-v2 .products-box .products-carousel .slick-dots li button::before {
+  font-size: 10px;
+  color: #888;
+}
+.proveedor-item-desktop-v2 .products-box .products-carousel .slick-dots li.slick-active button::before {
+  color: #333;
 }
 .proveedor-item-desktop-v2 .buttons-box {
   width: 10%;

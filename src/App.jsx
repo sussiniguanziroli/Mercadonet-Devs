@@ -7,7 +7,8 @@ import Footer from './components/footer/Footer';
 import Proveedores from './components/proveedores/Proveedores';
 import AdminPanel from './components/admin/AdminPanel';
 import { FiltersProvider } from './context/FiltersContext';
-
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function App() {
 
