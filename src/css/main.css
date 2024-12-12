@@ -2473,7 +2473,7 @@
 }
 .proveedor-item-desktop-v2 .info-box .titles-box .tags-box img {
   margin: 0.5px;
-  height: 1.3rem;
+  height: 19px;
   border-radius: 2px;
 }
 .proveedor-item-desktop-v2 .info-box .titles-box .verificado {
@@ -2514,11 +2514,11 @@
   width: 98%;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 0 1.7rem;
+  padding: 0 20px;
   box-sizing: border-box;
 }
 .proveedor-item-desktop-v2 .products-box .products-carousel .slick-slider {
-  padding: 0.3rem 0;
+  padding: 5px 0;
 }
 .proveedor-item-desktop-v2 .products-box .products-carousel .slick-list {
   padding: 5px 0;
@@ -2549,13 +2549,13 @@
   width: 100%;
   height: 135px;
   object-fit: contain;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 }
 .proveedor-item-desktop-v2 .products-box .products-carousel .product-item .product-title {
   font-size: 1rem;
   font-weight: bold;
   color: #333;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
 }
 .proveedor-item-desktop-v2 .products-box .products-carousel .product-item .product-price {
   font-size: 0.9rem;
