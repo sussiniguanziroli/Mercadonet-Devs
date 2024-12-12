@@ -2836,6 +2836,8 @@
     align-items: center;
   }
   .main-pill-filter .filter-list-badges-container .badges-overflow-container .filter-list-badges {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     display: inline-flex;
     align-items: center;
     gap: 8px;

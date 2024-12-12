@@ -3,11 +3,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     .pill-filter {
         width: fit-content;
         display: flex;
         justify-content: center;
         border-radius: 12px;
+
         .pill-button {
             color: $text-gray;
             font-family: 'Roboto', system-ui;
@@ -183,7 +185,6 @@
             justify-content: space-between;
             margin-top: 15px;
             gap: 8px;
-
             max-width: 1400px;
             width: 100%;
 
@@ -197,7 +198,6 @@
             }
 
             .badges-overflow-container {
-
                 overflow-x: auto;
                 overflow-y: hidden;
                 width: 85%;
@@ -207,6 +207,8 @@
                 align-items: center;
 
                 .filter-list-badges {
+                    scrollbar-width: none;
+        -ms-overflow-style: none;
                     display: inline-flex;
                     align-items: center;
                     gap: 8px;
