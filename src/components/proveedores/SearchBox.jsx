@@ -1,91 +1,78 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { FaSearch } from "react-icons/fa";
 import { useFiltersContext } from '../../context/FiltersContext';
 
-const SearchBox = ({ }) => {
-
+const SearchBox = () => {
     const {
         searchTerm,
+        setSearchTerm,
         proveedoresFiltrados,
         filtrosOpciones,
         updateFilters,
-        selectedCategoria,
-        selectedUbicacion,
-        selectedMarca,
-        checkedServices,
-        selectedExtras,
-        isLoading
+        isLoading,
+        proveedores
     } = useFiltersContext();
 
-    const [suggestions, setSuggestions] = useState([]);
     const inputRef = useRef(null);
-    const [tempSearchTerm, setTempSearchTerm] = useState('');
     const searchBoxRef = useRef(null);
-
-    const [filtrosUbicacion, setFiltrosUbicacion] = useState([]);
-    const [filtrosTipo, setFiltrosTipo] = useState([]);
-
-    console.log('filtros opciones', filtrosOpciones);
-
-    useEffect(() => {
-        const determinarFiltros = () => {
-            setFiltrosUbicacion(filtrosOpciones.ubicacion);
-            setFiltrosTipo(filtrosOpciones.tipo);
-        };
-        determinarFiltros();
-
-    }, [filtrosOpciones])
-
-    console.log('filtros ubicacion', filtrosUbicacion);
-    console.log('filtro tipo', filtrosTipo);
+    const [tempSearchTerm, setTempSearchTerm] = useState(searchTerm || "");
+    const [suggestions, setSuggestions] = useState([]);
 
 
-
+    // Función para filtrar proveedores según el término de búsqueda
     const filtrarProveedores = (proveedores, searchTerm) => {
-        return proveedores.filter(proveedor => {
-
-            const cumpleSearchTerm = !searchTerm || proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase());
-
+        return proveedores.filter((proveedor) => {
+            const cumpleSearchTerm =
+                !searchTerm ||
+                proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase());
             return cumpleSearchTerm;
         });
     };
 
+    // Actualizar sugerencias cuando cambie el término de búsqueda temporal
     useEffect(() => {
         if (tempSearchTerm) {
-            const proveedoresFiltrados = filtrarProveedores(proveedores, tempSearchTerm.toLowerCase(), selectedMarca, selectedTipo, selectedUbicacion);
-            setSuggestions(proveedoresFiltrados.slice(0, 5)); // Limitar sugerencias a 3
+            const proveedoresFiltrados = filtrarProveedores(
+                proveedores,
+                tempSearchTerm.toLowerCase()
+            );
+            setSuggestions(proveedoresFiltrados.slice(0, 5)); // Limitar sugerencias
         } else {
             setSuggestions([]);
         }
-    }, [tempSearchTerm, selectedMarca, selectedTipo, selectedUbicacion]);
+    }, [tempSearchTerm]);
 
-
-    const handleSuggestionClick = (suggestions) => {
-        setTempSearchTerm(suggestions.nombre);
-        setSearchTerm(suggestions.nombre.toLowerCase());
+    // Manejar clic en una sugerencia
+    const handleSuggestionClick = (suggestion) => {
+        const updatedSearchTerm = suggestion.nombre;
+        setTempSearchTerm(updatedSearchTerm);
+        updateFilters("search", updatedSearchTerm);
         clearSuggestions();
     };
 
+    // Manejar clic en el botón de búsqueda
     const handleSearchClick = () => {
-        setSearchTerm(tempSearchTerm.toLowerCase());
+        updateFilters("search", tempSearchTerm.toLowerCase());
         clearSuggestions();
     };
 
+    // Limpiar sugerencias
     const clearSuggestions = () => {
         setSuggestions([]);
     };
 
+    // Manejar el enfoque del input
     const handleFocus = () => {
-        setSuggestions(filtrarProveedores(proveedores, tempSearchTerm.toLowerCase()).slice(0, 3));
+        setSuggestions(
+            filtrarProveedores(proveedores, tempSearchTerm.toLowerCase()).slice(0, 3)
+        );
     };
 
     // Manejar clic fuera del input para cerrar el menú de sugerencias
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (
-                !searchBoxRef.current.contains(event.target)
-            ) {
-                setTimeout(() => setSuggestions([]), 0); // Ocultar sugerencias con un pequeño retraso
+            if (!searchBoxRef.current.contains(event.target)) {
+                // Opcional: limpiar sugerencias aquí si se necesita
             }
         };
 
@@ -95,43 +82,47 @@ const SearchBox = ({ }) => {
         };
     }, []);
 
-
-
-
-
     return (
-        <main className='main-search hiddenInMobile'>
-            <div className='search-box' ref={searchBoxRef} >
-                <h1>El directorio B2B líder de Argentina</h1>
-                <section className='search-section' >
+        <main className='main-search hiddenInDesktop'>
+            <div className='search-box' ref={searchBoxRef}>
+            <section className="search-section">
                     <input
                         type="text"
-                        placeholder='Buscá tu proveedor'
+                        placeholder="Buscá tu proveedor"
                         value={tempSearchTerm}
                         onChange={(e) => setTempSearchTerm(e.target.value)}
                         onFocus={handleFocus}
                         aria-label="Buscar proveedores"
                         ref={inputRef}
                     />
-                    <button onClick={() => handleSearchClick()}><FaSearch className='search-icon' /></button>
+                    <button onClick={handleSearchClick}>
+                        <FaSearch className="search-icon" />
+                    </button>
                 </section>
             </div>
 
-            <div className='suggestions-list-box'>
-                {/* Desplegable de sugerencias */}
-                {suggestions.length > 0 && (
-                    <ul className="suggestions-list">
-                        {suggestions.map((suggestion, index) => (
-                            <li key={index} onMouseDown={() => handleSuggestionClick(suggestion)}>
-                                {suggestion.nombre} - {suggestion.tipo.join(", ")} - {suggestion.ubicacion}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-
+            <div className="suggestions-list-box">
+                    {suggestions.length > 0 && (
+                        <ul className="suggestions-list">
+                            {suggestions.map((suggestion, index) => (
+                                <li
+                                    key={index}
+                                    onMouseDown={() => handleSuggestionClick(suggestion)}
+                                >
+                                    {suggestion.nombre} -
+                                    {/* Verificar si tiene categoria, si no usar tipo */}
+                                    {suggestion.categoria && suggestion.categoria.length > 0
+                                        ? suggestion.categoria.join(", ")
+                                        : suggestion.tipo || "No especificado"}
+                                    {" - "}
+                                    {suggestion.ubicacion}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
         </main>
-    )
-}
+    );
+};
 
-export default SearchBox
+export default SearchBox;

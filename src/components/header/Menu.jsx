@@ -66,7 +66,6 @@ const Menu = () => {
                     <div className='burger-mobile-logo'>
                         <img src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png" alt="logo white" />
                     </div>
-                    <h2><HiSearch /></h2>
                 </div>
             </nav>
 

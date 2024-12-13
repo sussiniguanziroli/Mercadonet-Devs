@@ -287,7 +287,7 @@
 
             img {
                 margin: 3px;
-                height: 27px;
+                height: 1.7rem;
                 border-radius: 2px;
             }
 
@@ -363,11 +363,11 @@
         }
     }
 
-    @media (max-width: 768px) {
-        font-size: 0.8rem; // Reduce el tamaño base para pantallas pequeñas
+    @media (max-width: 1600px) {
+        font-size: 0.7rem; // Reduce el tamaño base para pantallas pequeñas
 
         h3 {
-            font-size: 1rem; // Ajusta el tamaño del título
+            font-size: 0.9rem; // Ajusta el tamaño del título
         }
 
         p {

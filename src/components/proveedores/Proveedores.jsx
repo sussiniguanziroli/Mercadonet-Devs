@@ -8,6 +8,7 @@ import filtersIcons from '../proveedores/assets/filtersIcons.json';
 import NewsCarousel from './NewsCarousel';
 import { useFiltersContext } from '../../context/FiltersContext';
 import { FaFilter } from "react-icons/fa";
+import SearchBox from './SearchBox';
 
 
 
@@ -61,6 +62,7 @@ const Proveedores = () => {
                 <div className='secondary-proveedores'>
 
                     <section className='proveedores-filter-section'>
+                        <SearchBox />
                         <NewsBanner />
 
                         <div className='mobile-thumb-filters hiddenInDesktop'>
