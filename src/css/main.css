@@ -3011,13 +3011,13 @@
 
 @media (max-width: 1024px) {
   .hiddenInMobile {
-    display: none;
+    display: none !important;
   }
 }
 
 @media (min-width: 1024px) {
   .hiddenInDesktop {
-    display: none;
+    display: none !important;
   }
 }
 

@@ -28,7 +28,7 @@ const TransformablePillFilter = () => {
 
     return (
         <div
-            className={`transformable-pill-filter-container ${isSticky ? "is-sticky" : ""
+            className={`transformable-pill-filter-container hiddenInDesktop ${isSticky ? "is-sticky" : ""
                 }`}
         >
             <div className="transformable-pill-filter">

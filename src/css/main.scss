@@ -48,13 +48,13 @@
 //-------MOBILE AUTOMATICO---------
 .hiddenInMobile {
     @media (max-width: 1024px) {
-        display: none;
+        display: none !important;
     }
 }
 
 .hiddenInDesktop {
     @media (min-width: 1024px) {
-        display: none;
+        display: none !important;
     }
 }
 

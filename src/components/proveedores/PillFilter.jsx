@@ -94,7 +94,7 @@ const PillFilter = () => {
         <main className="main-pill-filter">
             <div className="pill-filter-container">
                 <h3 className="hiddenInMobile">Proveedores de Productos</h3>
-                <div className='pill-filter'>
+                <div className='pill-filter hiddenInMobile'>
                     <button
                         className={`pill-button ${selectedPProductos.includes("Fabricantes") ? "active" : ""
                             }`}
