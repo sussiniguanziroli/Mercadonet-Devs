@@ -1,52 +1,128 @@
 //Cards MOBILE
 .proveedor-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
     background-color: #ffffff;
     border-radius: .7rem;
-    padding: 1rem;
+    padding: 1rem 0 1rem 1rem;
     margin: 1rem;
     font-size: 1.1rem;
     min-height: 370px;
     color: $text-gray;
     gap: 1.3rem;
+    
+    .top-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .titles-container {
+            width: fit-content;
+            display: grid;
+            grid-template-columns: 90px 1fr auto;
+            grid-template-rows: auto auto auto;
+            grid-template-areas:
+                'logo-small h2 verificado'
+                'logo-small p p'
+                'logo-small tags tags';
+            align-items: center;
+            column-gap: 3px;
+            margin: 8px;
+            .verificado {
+                width: 85px;
+                grid-area: verificado;
+            }
 
-    .titulos {
-        align-self: flex-start;
+            p {
+                color: $text-gray;
+                grid-area: p;
+                font-size: 1.3rem;
+            }
+
+
+            h2 {
+                font-family: 'Montserrat', sans-serif;
+                grid-area: h2;
+                color: $text-gray;
+                font-size: 1.7rem;
+                &:hover {
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
+            }
+    
+            .small-logo-box {
+                grid-area: logo-small;
+                width: 80px;
+                height: 80px;
+                border: 1px solid #aeaeae;
+                border-radius: 5px;
+    
+                .small-logo {
+                    object-fit: contain;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: inherit;
+                }
+            }
+    
+            .tags-box {
+                grid-area: tags;
+                img {
+                    object-fit: contain;
+                    height: 1.8rem;
+                }
+            }
+    
+            
+        }
+        
+        button {
+            padding: 10px;
+            font-family: 'Roboto', system-ui;
+            color: $main-white;
+            background-color: $color-azul-light;
+            border: none;
+            border-radius: .4rem 0 0 .4rem;
+            transition: .3s all;
+            width: 100px;
+            &:hover {
+                background-color: $color-naranja;
+            }
+        }
     }
 
-    h2 {
-        align-self: flex-start;
-        color: $text-gray;
-        font-weight: 580;
-        font-size: 1.3rem;
-    }
-
-    .descripcion {
-        align-self: flex-start;
-        font-weight: 450;
-        margin-top: 1rem;
-    }
-
-    strong {
-        margin-top: .2rem;
-
-        .icon {
-            font-size: 1rem;
+  
+    .texts-box {
+        .marcas {
+            color: $text-gray;
+            border: none;
         }
 
-        font-weight: 480;
-        display: flex;
-        font-size: 1rem;
-        align-items: flex-start;
-        gap: .1rem;
-        align-self: flex-start;
-        color: $dark-gray;
+        .description {
+            color: $text-gray;
+            font-weight: 470;
+        }
+
+        .extras {
+            color: $text-gray;
+            border: none;
+        }
     }
 
-    .proveedor-marcas {
+    
+
+    .tag-extra {
+        padding: 5px;
+        color: $text-gray;
+        background-color: #f4f4f4;
+        border-radius: 3px;
+        font-weight: 500;
+    }
+
+    .extras {
+        display: flex;
+        align-items: center;
+    }
+
+    .alineado-auto {
         display: flex;
         column-gap: .3rem;
         align-self: flex-start;
@@ -54,26 +130,6 @@
         flex-wrap: wrap;
     }
 
-    img {
-        object-fit: contain;
-        height: 33%;
-        width: 100%;
-    }
-
-    button {
-        padding: .5rem;
-        font-family: 'Roboto', system-ui;
-        color: $main-white;
-        background-color: $color-azul-light;
-        border: none;
-        border-radius: .4rem;
-        width: 98%;
-        transition: .3s all;
-
-        &:hover {
-            background-color: $color-naranja;
-        }
-    }
 }
 
 //-----DESKTOP SIMPLE CARD---------------------------

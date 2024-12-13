@@ -1,5 +1,6 @@
 import React from 'react'
 import { IoLocationOutline } from 'react-icons/io5';
+import Tags from './assets/Tags';
 
 const CardMobile = ({ proveedor }) => {
 
@@ -13,18 +14,44 @@ const CardMobile = ({ proveedor }) => {
     return (
 
         <div className='proveedor-item hiddenInDesktop'>
-            <img src={proveedor.imagen} alt={proveedor.name} />
-            <div className='titulos'>
-                <h2>{proveedor.nombre}</h2>
-                <strong><IoLocationOutline className='icon' />
-                    {proveedor.ubicacionDetalle}</strong>
-                <p className='descripcion'>{truncatedDescription}</p>
-                <div className='proveedor-marcas'>
-                    <h4>Marcas:</h4>
-                    {marcasLimitadas.map((marcas) => <p>{marcas},</p>)}
+            <div className='top-container'>
+                <div className='titles-container'>
+
+                    <div className='small-logo-box'>
+                        <img className='small-logo' src={proveedor.logo} alt={proveedor.nombre} />
+                    </div>
+                    <h2>{proveedor.nombre}</h2>
+                    <img className="verificado" src='https://i.ibb.co/BsSRKwy/Verificado-HD.jpg' />
+                    <p><IoLocationOutline />{proveedor.ubicacionDetalle}</p>
+
+                    <div className='tags-box alineado-auto'>
+                        <Tags proveedor={proveedor} />
+                    </div>
                 </div>
+                <button>Ver Detalles</button>
             </div>
-            <button>Ver Detalles</button>
+
+
+            <div className='texts-box'>
+                <p className='description'>{proveedor.descripcion}</p>
+                {proveedor.marca && proveedor.marca.length > 0 && (
+                    <div className='marcas alineado-auto'>
+                        <h4>Marcas:</h4>
+                        {proveedor.marca.map((marca) => <p>{marca},</p>)}
+                    </div>
+                )}
+                {proveedor.extras && proveedor.extras.length > 0 && (
+                    <div className='extras alineado-auto'>
+                        <h4>Servicios y Capacidades: </h4>
+                        {proveedor.extras.map((extra, index) => (
+                            <p key={index} className='tag-extra'>{extra}</p>
+                        ))}
+                    </div>
+                )}
+
+            </div>
+
+
         </div>
     )
 }
