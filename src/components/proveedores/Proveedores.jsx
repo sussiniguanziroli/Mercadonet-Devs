@@ -9,6 +9,7 @@ import NewsCarousel from './NewsCarousel';
 import { useFiltersContext } from '../../context/FiltersContext';
 import { FaFilter } from "react-icons/fa";
 import SearchBox from './SearchBox';
+import TransformablePillFilter from './TransformablePillFilter';
 
 
 
@@ -63,6 +64,7 @@ const Proveedores = () => {
 
                     <section className='proveedores-filter-section'>
                         <SearchBox />
+                        <TransformablePillFilter />
                         <NewsBanner />
 
                         <div className='mobile-thumb-filters hiddenInDesktop'>

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useFiltersContext } from "../../context/FiltersContext";
 import { IoIosArrowForward, IoIosArrowBack, IoMdCheckmark } from "react-icons/io";
 
@@ -15,6 +15,9 @@ const PillFilter = () => {
         proveedores,
         selectedCategoria,
     } = useFiltersContext();
+
+
+   
 
 
     const badgesContainerRef = useRef(null);
@@ -91,7 +94,7 @@ const PillFilter = () => {
         <main className="main-pill-filter">
             <div className="pill-filter-container">
                 <h3 className="hiddenInMobile">Proveedores de Productos</h3>
-                <div className="pill-filter">
+                <div className='pill-filter'>
                     <button
                         className={`pill-button ${selectedPProductos.includes("Fabricantes") ? "active" : ""
                             }`}
@@ -183,7 +186,7 @@ const PillFilter = () => {
                     <div></div>
             }
 
-        
+
 
 
         </main>

@@ -114,7 +114,7 @@ const HeaderCustomProveedores = () => {
                     <button onClick={handleSearchClick}>
                         <FaSearch className="search-icon" />
                     </button>
-                </section>
+                </section>/
 
                 <div className="suggestions-list-box">
                     {suggestions.length > 0 && (

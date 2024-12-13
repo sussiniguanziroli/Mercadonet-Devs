@@ -68,17 +68,30 @@ const SearchBox = () => {
         );
     };
 
-    // Manejar clic fuera del input para cerrar el menú de sugerencias
-    useEffect(() => {
+     // Cerrar sugerencias al hacer clic fuera del input
+     useEffect(() => {
         const handleClickOutside = (event) => {
             if (!searchBoxRef.current.contains(event.target)) {
-                // Opcional: limpiar sugerencias aquí si se necesita
+                setTimeout(() => setSuggestions([]), 0);
             }
         };
 
         document.addEventListener("click", handleClickOutside);
         return () => {
             document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
+
+    // Manejar el scroll para actualizar la clase del header
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 120);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
         };
     }, []);
 

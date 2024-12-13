@@ -10,6 +10,7 @@
         justify-content: center;
         border-radius: 12px;
 
+
         .pill-button {
             color: $text-gray;
             font-family: 'Roboto', system-ui;
@@ -114,6 +115,58 @@
         }
     }
 }
+
+//--------- ESTILOS TRANSFORMABLES-------------------
+
+.transformable-pill-filter-container {
+    position: relative;
+    z-index: 1000;
+    transition: all 0.3s ease;
+
+    &.is-sticky {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background-color: $color-azul;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 5px 0;
+
+        .transformable-pill-filter {
+            justify-content: space-around;
+        }
+    }
+}
+
+.transformable-pill-filter {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 0;
+
+    .transformable-pill-button {
+        font-family: 'Roboto', system-ui;
+        font-weight: 400;
+        font-size: 1rem;
+        color: #ffffff; // Texto blanco por defecto
+        background-color: transparent;
+        padding: 10px 20px;
+        border: none;
+        border-bottom: 2px solid transparent; // Indicador de selección
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+            color: #90caf9; // Azul claro al hover
+        }
+
+        &.is-active {
+            color: #ffffff;
+            font-weight: 500;
+            border-bottom-color: #90caf9; // Indicador azul para el botón activo
+        }
+    }
+}
+
 
 @media (min-width: 1024px) {
     .main-pill-filter {
