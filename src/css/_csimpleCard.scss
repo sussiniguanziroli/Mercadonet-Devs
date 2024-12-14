@@ -5,14 +5,16 @@
     padding: 1rem 0 1rem 1rem;
     margin: 1rem;
     font-size: 1.1rem;
-    min-height: 370px;
+    min-height: 250px;
+    height: fit-content;
     color: $text-gray;
     gap: 1.3rem;
-    
+
     .top-container {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         .titles-container {
             width: fit-content;
             display: grid;
@@ -25,6 +27,7 @@
             align-items: center;
             column-gap: 3px;
             margin: 8px;
+
             .verificado {
                 width: 85px;
                 grid-area: verificado;
@@ -33,7 +36,7 @@
             p {
                 color: $text-gray;
                 grid-area: p;
-                font-size: 1.3rem;
+                font-size: 1.2rem;
             }
 
 
@@ -41,20 +44,21 @@
                 font-family: 'Montserrat', sans-serif;
                 grid-area: h2;
                 color: $text-gray;
-                font-size: 1.7rem;
+                font-size: 1.5rem;
+
                 &:hover {
                     text-decoration: underline;
                     cursor: pointer;
                 }
             }
-    
+
             .small-logo-box {
                 grid-area: logo-small;
                 width: 80px;
                 height: 80px;
                 border: 1px solid #aeaeae;
                 border-radius: 5px;
-    
+
                 .small-logo {
                     object-fit: contain;
                     width: 100%;
@@ -62,18 +66,20 @@
                     border-radius: inherit;
                 }
             }
-    
+
             .tags-box {
+                gap: 2px;
                 grid-area: tags;
+
                 img {
                     object-fit: contain;
                     height: 1.8rem;
                 }
             }
-    
-            
+
+
         }
-        
+
         button {
             padding: 10px;
             font-family: 'Roboto', system-ui;
@@ -83,44 +89,52 @@
             border-radius: .4rem 0 0 .4rem;
             transition: .3s all;
             width: 100px;
+
             &:hover {
                 background-color: $color-naranja;
             }
         }
     }
 
-  
+
     .texts-box {
+        padding: 8px;
+        padding-left: 4px;
         .marcas {
             color: $text-gray;
             border: none;
+
+            h4,
+            p {
+                font-size: 1.2rem;
+            }
+
         }
 
         .description {
             color: $text-gray;
             font-weight: 470;
+            font-size: 1.2rem;
         }
 
         .extras {
+            display: flex;
+            align-items: center;
             color: $text-gray;
             border: none;
+
+            h4 {
+                font-size: 1.2rem;
+            }
+
+            .tag-extra {
+                font-size: 1.2rem;
+                color: $text-gray;
+            }
         }
     }
 
-    
 
-    .tag-extra {
-        padding: 5px;
-        color: $text-gray;
-        background-color: #f4f4f4;
-        border-radius: 3px;
-        font-weight: 500;
-    }
-
-    .extras {
-        display: flex;
-        align-items: center;
-    }
 
     .alineado-auto {
         display: flex;
@@ -361,8 +375,19 @@
             }
 
             .extras {
+                display: flex;
+                align-items: center;
                 color: $text-gray;
                 border: none;
+
+                .tag-extra {
+                    padding: 5px;
+                    color: $text-gray;
+                    background-color: #f4f4f4;
+                    border-radius: 3px;
+                    font-weight: 500;
+                }
+
             }
         }
     }
@@ -433,16 +458,3 @@
 }
 
 // ------------ Etiquetas en CSS ---------------------------
-
-.tag-extra {
-    padding: 5px;
-    color: $text-gray;
-    background-color: #f4f4f4;
-    border-radius: 3px;
-    font-weight: 500;
-}
-
-.extras {
-    display: flex;
-    align-items: center;
-}

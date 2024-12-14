@@ -1998,7 +1998,8 @@
   padding: 1rem 0 1rem 1rem;
   margin: 1rem;
   font-size: 1.1rem;
-  min-height: 370px;
+  min-height: 250px;
+  height: fit-content;
   color: #2c2c2c;
   gap: 1.3rem;
 }
@@ -2024,13 +2025,13 @@
 .proveedor-item .top-container .titles-container p {
   color: #2c2c2c;
   grid-area: p;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
 }
 .proveedor-item .top-container .titles-container h2 {
   font-family: "Montserrat", sans-serif;
   grid-area: h2;
   color: #2c2c2c;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
 }
 .proveedor-item .top-container .titles-container h2:hover {
   text-decoration: underline;
@@ -2050,6 +2051,7 @@
   border-radius: inherit;
 }
 .proveedor-item .top-container .titles-container .tags-box {
+  gap: 2px;
   grid-area: tags;
 }
 .proveedor-item .top-container .titles-container .tags-box img {
@@ -2069,28 +2071,35 @@
 .proveedor-item .top-container button:hover {
   background-color: #FF7F00;
 }
+.proveedor-item .texts-box {
+  padding: 8px;
+  padding-left: 4px;
+}
 .proveedor-item .texts-box .marcas {
   color: #2c2c2c;
   border: none;
 }
+.proveedor-item .texts-box .marcas h4,
+.proveedor-item .texts-box .marcas p {
+  font-size: 1.2rem;
+}
 .proveedor-item .texts-box .description {
   color: #2c2c2c;
   font-weight: 470;
+  font-size: 1.2rem;
 }
 .proveedor-item .texts-box .extras {
+  display: flex;
+  align-items: center;
   color: #2c2c2c;
   border: none;
 }
-.proveedor-item .tag-extra {
-  padding: 5px;
-  color: #2c2c2c;
-  background-color: #f4f4f4;
-  border-radius: 3px;
-  font-weight: 500;
+.proveedor-item .texts-box .extras h4 {
+  font-size: 1.2rem;
 }
-.proveedor-item .extras {
-  display: flex;
-  align-items: center;
+.proveedor-item .texts-box .extras .tag-extra {
+  font-size: 1.2rem;
+  color: #2c2c2c;
 }
 .proveedor-item .alineado-auto {
   display: flex;
@@ -2293,8 +2302,17 @@
   font-weight: 470;
 }
 .proveedor-item-desktop .info-box .texts-box .extras {
+  display: flex;
+  align-items: center;
   color: #2c2c2c;
   border: none;
+}
+.proveedor-item-desktop .info-box .texts-box .extras .tag-extra {
+  padding: 5px;
+  color: #2c2c2c;
+  background-color: #f4f4f4;
+  border-radius: 3px;
+  font-weight: 500;
 }
 .proveedor-item-desktop .buttons-box {
   width: 10%;
@@ -2351,19 +2369,6 @@
   .proveedor-item-desktop p {
     font-size: 0.75rem;
   }
-}
-
-.tag-extra {
-  padding: 5px;
-  color: #2c2c2c;
-  background-color: #f4f4f4;
-  border-radius: 3px;
-  font-weight: 500;
-}
-
-.extras {
-  display: flex;
-  align-items: center;
 }
 
 .proveedor-item-v2 {
@@ -2756,19 +2761,6 @@
   .proveedor-item-desktop-v2 p {
     font-size: 0.75rem;
   }
-}
-
-.tag-extra {
-  padding: 5px;
-  color: #2c2c2c;
-  background-color: #f4f4f4;
-  border-radius: 3px;
-  font-weight: 500;
-}
-
-.extras {
-  display: flex;
-  align-items: center;
 }
 
 .main-pill-filter {
