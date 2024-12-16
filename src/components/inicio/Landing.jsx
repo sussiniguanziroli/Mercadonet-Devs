@@ -3,6 +3,7 @@ import Categorias from './Categorias'
 import Qsmnet from './Qsmnet'
 import Sliders from './Sliders'
 import Header from '../header/Header'
+import Footer from '../footer/Footer'
 
 const Landing = () => {
 
@@ -14,6 +15,7 @@ const Landing = () => {
         <Categorias />
         <Qsmnet />
         <Sliders />
+        <Footer />
     </main>
   )
 }

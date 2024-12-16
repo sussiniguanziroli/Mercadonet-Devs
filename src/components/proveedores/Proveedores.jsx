@@ -10,6 +10,7 @@ import { useFiltersContext } from '../../context/FiltersContext';
 import { FaFilter } from "react-icons/fa";
 import SearchBox from './SearchBox';
 import TransformablePillFilter from './TransformablePillFilter';
+import Footer from '../footer/Footer';
 
 
 
@@ -54,6 +55,7 @@ const Proveedores = () => {
 
 
     return (
+        <>
         <div className='proveedores-desktop'>
             <HeaderCustomProveedores />
             <main className='main-proveedores'>
@@ -96,6 +98,8 @@ const Proveedores = () => {
                 </div>
             </main>
         </div>
+        <Footer />
+        </>
     )
 }
 

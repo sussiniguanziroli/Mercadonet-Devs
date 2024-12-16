@@ -145,7 +145,7 @@ const HeaderCustomProveedores = () => {
                 <NavLink activeClassname="active" to="/proveedores" className="nav-link">
                     Proveedores
                 </NavLink>
-                <NavLink activeClassname="active" className="nav-link">
+                <NavLink to='/registrarme' activeClassname="active" className="nav-link">
                     Registros
                 </NavLink>
                 <NavLink activeClassname="active" className="nav-link">

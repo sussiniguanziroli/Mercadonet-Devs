@@ -9,6 +9,7 @@ import AdminPanel from './components/admin/AdminPanel';
 import { FiltersProvider } from './context/FiltersContext';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import RegisterNavigator from './components/registros/RegisterNavigator';
 
 function App() {
 
@@ -23,8 +24,8 @@ function App() {
                         <Route path="/" element={<Landing />} />
                         <Route path="/proveedores" element={<Proveedores />} />
                         <Route path="/admin" element={<AdminPanel />} />
+                        <Route path="/registrarme" element={<RegisterNavigator/>} />
                     </Routes>
-                    <Footer />
                 </div>
             </BrowserRouter>
         </FiltersProvider>

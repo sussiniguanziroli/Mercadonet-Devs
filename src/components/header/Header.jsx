@@ -44,7 +44,7 @@ const Header = () => {
             <div className='nav-container'>
                 <NavLink activeClassname='active' to='/' className='nav-link'>¿Qué es Mercadonet?</NavLink>
                 <NavLink activeClassname='active' to='/proveedores' className='nav-link'>Proveedores</NavLink>
-                <NavLink activeClassname='active' className='nav-link'>Registros</NavLink>
+                <NavLink to='registrarme' activeClassname='active' className='nav-link'>Registros</NavLink>
                 <NavLink activeClassname='active' className='nav-link'>Ingresar</NavLink>
                 <NavLink activeClassname='active' className='nav-link'>Contacto</NavLink>
             </div>

@@ -3119,6 +3119,265 @@
     color: #0056b3;
   }
 }
+@media (min-width: 1000px) {
+  .navigator-container {
+    background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
+    background-position: 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 1500px;
+    background-color: #131921;
+    max-width: 2400px;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  .navigator-container .logo-container {
+    width: 35%;
+  }
+  .navigator-container .logo-container img {
+    width: 300px;
+  }
+  .navigator-container .forms-container {
+    width: 65%;
+  }
+}
+.container {
+  font-family: "Montserrat", sans-serif;
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.container .title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 1rem;
+}
+.container .text {
+  font-size: 0.9rem;
+  color: #666666;
+  margin-bottom: 4rem;
+}
+.container .text .link {
+  color: #007bff;
+  cursor: pointer;
+}
+.container .text .link:hover {
+  text-decoration: underline;
+}
+.container .form-wrapper {
+  position: relative;
+  overflow: hidden;
+  min-height: 150px;
+}
+.container .form-wrapper .form {
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.5s ease-in-out;
+  display: flex;
+  width: 100%;
+}
+.container .form-wrapper .form label {
+  font-family: "Montserrat", sans-serif;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555555;
+}
+.container .form-wrapper .form input {
+  font-family: "Montserrat", sans-serif;
+  padding: 0.5rem;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+.container .form-wrapper .form input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+.container .form-wrapper .form p {
+  margin: 1rem;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #2c2c2c;
+}
+.container .form-wrapper .form .button {
+  font-family: "Montserrat", sans-serif;
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 8px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: fit-content;
+  align-self: flex-end;
+}
+.container .form-wrapper .form .button:hover {
+  background-color: #0056b3;
+}
+.container .form-wrapper .form .button.back-button {
+  background-color: #6c757d;
+}
+.container .form-wrapper .form .button.back-button:hover {
+  background-color: #5a6268;
+}
+.container .form-wrapper .form .button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.container .form-wrapper .fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.container .social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.container .social-buttons button {
+  font-family: "Montserrat", sans-serif;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+.container .social-buttons button:hover {
+  opacity: 0.9;
+}
+.container .social-buttons button.google {
+  background-color: #ea4335;
+  color: white;
+}
+.container .social-buttons button.facebook {
+  background-color: #1877f2;
+  color: white;
+}
+.container .social-buttons button.apple {
+  background-color: #000000;
+  color: white;
+}
+
+.register-container {
+  font-family: "Montserrat", sans-serif;
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.register-container .title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 1rem;
+}
+.register-container .text {
+  font-size: 0.9rem;
+  color: #666666;
+  margin-bottom: 1.5rem;
+}
+.register-container .text .link {
+  color: #007bff;
+  cursor: pointer;
+}
+.register-container .text .link:hover {
+  text-decoration: underline;
+}
+.register-container .form-wrapper {
+  position: relative;
+  overflow: hidden;
+  min-height: 150px;
+}
+.register-container .form-wrapper .form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.5s ease-in-out;
+}
+.register-container .form-wrapper .form label {
+  text-align: left;
+  font-size: 0.9rem;
+  color: #555555;
+}
+.register-container .form-wrapper .form input {
+  font-family: "Montserrat", sans-serif;
+  padding: 0.8rem;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+.register-container .form-wrapper .form input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+.register-container .form-wrapper .form .button {
+  font-family: "Montserrat", sans-serif;
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 8px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: fit-content;
+  align-self: flex-end;
+}
+.register-container .form-wrapper .form .button:hover {
+  background-color: #0056b3;
+}
+.register-container .form-wrapper .form .button.back-button {
+  background-color: #6c757d;
+}
+.register-container .form-wrapper .form .button.back-button:hover {
+  background-color: #5a6268;
+}
+.register-container .form-wrapper .form .button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.register-container .form-wrapper .fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 * {
   outline: none !important;
   box-shadow: none !important;

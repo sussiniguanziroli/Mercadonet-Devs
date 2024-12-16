@@ -1,0 +1,28 @@
+.navigator-container {
+
+}
+
+@media (min-width: 1000px) {
+    .navigator-container {
+        background-image: url('https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png') ;
+        background-position: 100% ;
+        background-repeat: no-repeat;
+        background-size: 100% 1500px;
+        background-color: $color-azul;
+        max-width: 2400px;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        .logo-container {
+            width: 35%;
+            img {
+                width: 300px;
+            }
+        }
+        .forms-container {
+            width: 65%;
+        }
+    }
+}
