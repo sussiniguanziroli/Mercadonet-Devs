@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 
 const Register = ({ toggleForm }) => {
@@ -72,6 +73,7 @@ const Register = ({ toggleForm }) => {
           </form>
         )}
       </div>
+      <NavLink className='volver-btn'  to="/"><p className='volver-btn'>Volver al inicio</p></NavLink>
     </div>
   );
 };

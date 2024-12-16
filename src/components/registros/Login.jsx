@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 const Login = ({ toggleForm }) => {
   const [email, setEmail] = useState('');
@@ -83,6 +84,8 @@ const Login = ({ toggleForm }) => {
           <button className="apple">Continuar con Apple</button>
         </div>
       )}
+
+      <NavLink className='volver-btn'  to="/"><p className='volver-btn'>Volver al inicio</p></NavLink>
     </div>
   );
 };

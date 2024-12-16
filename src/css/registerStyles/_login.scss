@@ -7,7 +7,8 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
-
+    display: flex;
+    flex-direction: column;
     .title {
         font-size: 1.8rem;
         font-weight: bold;
@@ -160,5 +161,16 @@
                 color: white;
             }
         }
+    }
+    .volver-btn {
+        margin-top: 1rem;
+        color: #007bff;
+        cursor: pointer;
+        text-decoration: none;
+        align-self: flex-start;
+        &:hover {
+            text-decoration: underline;
+        }
+
     }
 }

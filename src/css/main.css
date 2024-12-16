@@ -3152,6 +3152,8 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 .container .title {
   font-size: 1.8rem;
@@ -3281,6 +3283,16 @@
   background-color: #000000;
   color: white;
 }
+.container .volver-btn {
+  margin-top: 1rem;
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: none;
+  align-self: flex-start;
+}
+.container .volver-btn:hover {
+  text-decoration: underline;
+}
 
 .register-container {
   font-family: "Montserrat", sans-serif;
@@ -3291,6 +3303,8 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 .register-container .title {
   font-size: 1.8rem;
@@ -3376,6 +3390,16 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+.register-container .volver-btn {
+  margin-top: 1rem;
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: none;
+  align-self: flex-start;
+}
+.register-container .volver-btn:hover {
+  text-decoration: underline;
 }
 
 * {
