@@ -89,7 +89,7 @@ const Menu = () => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink onClick={closeMenu} to="" className="burger-nav-item" activeclassname="burger-active">
+                            <NavLink onClick={closeMenu} to="/registrarme" className="burger-nav-item" activeclassname="burger-active">
                                 Registros
                             </NavLink>
                         </li>

@@ -46,9 +46,9 @@ const Footer = () => {
 
                 <section className='links-utiles'>
                     <h1>Links útiles</h1>
-                    <NavLink activeClassname='active' className='nav-footer'><MdPlayArrow />¿Qué es Mercadonet?</NavLink>
-                    <NavLink activeClassname='active' className='nav-footer'><MdPlayArrow />Proveedores</NavLink>
-                    <NavLink activeClassname='active' className='nav-footer'><MdPlayArrow />Registros</NavLink>
+                    <NavLink activeClassname='active' to='/' className='nav-footer'><MdPlayArrow />¿Qué es Mercadonet?</NavLink>
+                    <NavLink to='/proveedores'  activeClassname='active' className='nav-footer'><MdPlayArrow />Proveedores</NavLink>
+                    <NavLink to='/registrarme'  activeClassname='active' className='nav-footer'><MdPlayArrow />Registros</NavLink>
                     <NavLink activeClassname='active' className='nav-footer'><MdPlayArrow />Ingresar</NavLink>
                     <NavLink activeClassname='active' className='nav-footer'><MdPlayArrow />Contacto</NavLink>
                 </section>
