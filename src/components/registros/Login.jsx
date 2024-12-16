@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { FaGoogle } from "react-icons/fa";
+
 
 const Login = ({ toggleForm }) => {
   const [email, setEmail] = useState('');
@@ -79,7 +81,7 @@ const Login = ({ toggleForm }) => {
       {/* Botones de redes sociales */}
       {step === 1 && (
         <div className="social-buttons fade-in">
-          <button className="google">Continuar con Google</button>
+          <button className="google"><FaGoogle /> Continuar con Google</button>
           <button className="facebook">Continuar con Facebook</button>
           <button className="apple">Continuar con Apple</button>
         </div>

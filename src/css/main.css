@@ -3262,11 +3262,15 @@
   font-family: "Montserrat", sans-serif;
   padding: 0.8rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   transition: opacity 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 .container .social-buttons button:hover {
   opacity: 0.9;
@@ -3278,10 +3282,12 @@
 .container .social-buttons button.facebook {
   background-color: #1877f2;
   color: white;
+  display: none;
 }
 .container .social-buttons button.apple {
   background-color: #000000;
   color: white;
+  display: none;
 }
 .container .volver-btn {
   margin-top: 1rem;

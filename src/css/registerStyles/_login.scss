@@ -136,11 +136,15 @@
             font-family: 'Montserrat', sans-serif;
             padding: 0.8rem;
             border: none;
-            border-radius: 5px;
+            border-radius: 20px;
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
             transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
 
             &:hover {
                 opacity: 0.9;
@@ -154,11 +158,13 @@
             &.facebook {
                 background-color: #1877f2;
                 color: white;
+                display: none;
             }
 
             &.apple {
                 background-color: #000000;
                 color: white;
+                display: none;
             }
         }
     }
