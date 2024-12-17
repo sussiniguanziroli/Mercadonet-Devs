@@ -75,9 +75,49 @@
   text-decoration: none;
   white-space: nowrap;
   transition: all 0.2s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
 }
 .header .nav-container .nav-link:hover {
   transform: scale(1.06);
+}
+.header .nav-container .soy-proveedor {
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  background-color: #F5F5F5;
+  border: none;
+  border-radius: 6px;
+  color: #084484;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.header .nav-container .soy-proveedor:hover {
+  background-color: #084484;
+  color: #F5F5F5;
+}
+.header .nav-container .soy-proveedor .nav-extra {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+}
+.header .nav-container .soy-proveedor .nav-extra:hover {
+  color: #F5F5F5;
+}
+.header .nav-container .soy-proveedor .nav-extra .proveedorIcon {
+  width: 18px;
+  height: 18px;
+  color: inherit;
+}
+.header .nav-container .soy-proveedor .nav-extra .proveedorIcon:hover {
+  color: inherit;
 }
 @media (max-width: 1440px) {
   .header .search-box {

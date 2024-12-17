@@ -83,11 +83,52 @@
             text-decoration: none;
             white-space: nowrap;
             transition: all 0.2s ease-in-out;
-
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3px;
             &:hover {
                 transform: scale(1.06);
             }
         }
+        .soy-proveedor {
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            background-color: $main-white;
+            border: none;
+            border-radius: 6px;
+            color: $color-azul-utils;
+            cursor: pointer;
+            transition: all .3s;
+            &:hover {
+                background-color:  $color-azul-utils;
+                color: $main-white;
+            }
+            
+            .nav-extra {
+                display: flex;
+                align-items: center;
+                gap: 3px;
+                text-decoration: none;
+                color: inherit;
+                transition: all .3s;
+                font-weight: 500;
+                font-family: 'Montserrat',sans-serif;
+                &:hover {               
+                    color: $main-white;
+                }
+                .proveedorIcon {
+                    width: 18px;
+                    height: 18px;
+                    color: inherit;
+                    &:hover {               
+                        color: inherit;
+                    }
+                }
+            }
+        }
+        
     }
 
     @media (max-width: 1440px) {

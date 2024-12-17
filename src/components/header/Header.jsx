@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { FaSearch } from "react-icons/fa";
+import { BsPersonFill } from "react-icons/bs";
+import ProveedorIcon from '../../assets/ProveedorIcon';
+
 
 
 const Header = () => {
@@ -26,12 +29,12 @@ const Header = () => {
 
     return (
         <header className={`header hiddenInMobile ${scrolled ? 'scrolled' : ''}`}>
-            
-                <img
-                    src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png"
-                    alt="Logo Mercadonet"
-                />
-            
+
+            <img
+                src="https://i.ibb.co/Z24ZXrp/Logo-Mercadonet.png"
+                alt="Logo Mercadonet"
+            />
+
             <div className='search-box'>
                 <section className='search-section' >
                     <input
@@ -44,9 +47,18 @@ const Header = () => {
             <div className='nav-container'>
                 <NavLink activeClassname='active' to='/' className='nav-link'>¿Qué es Mercadonet?</NavLink>
                 <NavLink activeClassname='active' to='/proveedores' className='nav-link'>Proveedores</NavLink>
-                <NavLink to='registrarme' activeClassname='active' className='nav-link'>Registros</NavLink>
-                <NavLink activeClassname='active' className='nav-link'>Ingresar</NavLink>
-                <NavLink activeClassname='active' className='nav-link'>Contacto</NavLink>
+                <NavLink activeClassname='active' className='nav-link'>Productos</NavLink>
+                <NavLink to='/registrarme' activeClassname='active' className='nav-link'><BsPersonFill size={16} /> Ingresar</NavLink>
+
+                <button className="soy-proveedor">
+                    <NavLink
+                        className='nav-extra'
+                    >
+                        <ProveedorIcon />
+                        Soy Proveedor
+                    </NavLink>
+                </button>
+
             </div>
         </header>
     )

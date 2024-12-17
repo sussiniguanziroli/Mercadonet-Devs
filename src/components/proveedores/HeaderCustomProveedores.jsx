@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaSearch } from "react-icons/fa";
 import { useFiltersContext } from '../../context/FiltersContext';
+import ProveedorIcon from '../../assets/ProveedorIcon';
+import { BsPersonFill } from 'react-icons/bs';
 
 const HeaderCustomProveedores = () => {
     const {
@@ -138,22 +140,21 @@ const HeaderCustomProveedores = () => {
                 </div>
 
             </div>
-            <div className="nav-container">
-                <NavLink activeClassname="active" to="/" className="nav-link">
-                    ¿Qué es Mercadonet?
-                </NavLink>
-                <NavLink activeClassname="active" to="/proveedores" className="nav-link">
-                    Proveedores
-                </NavLink>
-                <NavLink to='/registrarme' activeClassname="active" className="nav-link">
-                    Registros
-                </NavLink>
-                <NavLink activeClassname="active" className="nav-link">
-                    Ingresar
-                </NavLink>
-                <NavLink activeClassname="active" className="nav-link">
-                    Contacto
-                </NavLink>
+            <div className='nav-container'>
+                <NavLink activeClassname='active' to='/' className='nav-link'>¿Qué es Mercadonet?</NavLink>
+                <NavLink activeClassname='active' to='/proveedores' className='nav-link'>Proveedores</NavLink>
+                <NavLink activeClassname='active' className='nav-link'>Productos</NavLink>
+                <NavLink to='/registrarme' activeClassname='active' className='nav-link'><BsPersonFill size={16} /> Ingresar</NavLink>
+
+                <button className="soy-proveedor">
+                    <NavLink
+                        className='nav-extra'
+                    >
+                        <ProveedorIcon />
+                        Soy Proveedor
+                    </NavLink>
+                </button>
+
             </div>
         </header>
     );
