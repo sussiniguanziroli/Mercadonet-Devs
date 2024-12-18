@@ -148,6 +148,7 @@ const HeaderCustomProveedores = () => {
 
                 <button className="soy-proveedor">
                     <NavLink
+                    to='/registrar-mi-empresa'
                         className='nav-extra'
                     >
                         <ProveedorIcon />

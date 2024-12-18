@@ -1,0 +1,335 @@
+// Estilos globales
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #007bff;
+        color: white;
+    }
+}
+
+h1,
+h2 {
+    text-align: center;
+    color: #007bff;
+}
+
+// Componentes del flujo
+.landing-registro-proveedor {
+    text-align: center;
+    padding: 20px;
+
+    button {
+        background-color: #007bff;
+        color: white;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+}
+
+// Pantalla de selección de tipo de card
+.seleccion-tipo-card {
+    text-align: center;
+    padding: 20px;
+
+    .card-options {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+
+        button {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background-color: #007bff;
+                color: white;
+            }
+        }
+    }
+}
+
+
+// Selección de plan
+.seleccion-plan {
+    text-align: center;
+    padding: 20px;
+
+    .plan-options {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+
+        .plan-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            text-align: center;
+
+            &:hover {
+                transform: scale(1.05);
+                transition: transform 0.3s ease;
+            }
+        }
+    }
+}
+
+// Resumen del registro
+.resumen-registro {
+    text-align: center;
+    padding: 20px;
+
+    .resumen-datos {
+        margin: 20px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+
+        p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+    }
+
+    button {
+        background-color: #007bff;
+    }
+}
+
+// Formularios generales y personalizados
+.formulario-general,
+.formulario-personalizado {
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 25px;
+        max-width: 500px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        // Estilo para títulos y subtítulos
+        h1,
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333333;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+            color: #555;
+
+            input,
+            select {
+                padding: 10px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+
+                &:focus {
+                    border-color: #007bff;
+                    outline: none;
+                    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+                }
+            }
+
+            input[type="checkbox"] {
+                margin-right: 10px;
+                width: auto;
+            }
+        }
+
+        // Estilos para fieldset y checkboxes
+        fieldset {
+            border: none;
+            margin-top: 10px;
+
+            legend {
+                font-size: 1rem;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+            label {
+                flex-direction: row;
+                align-items: center;
+                margin-bottom: 5px;
+            }
+
+            p {
+                font-size: 12px;
+                color: red;
+                margin-top: 5px;
+            }
+        }
+
+        // Botones de navegación
+        .botones-navegacion {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:first-child {
+                    background-color: #f0f0f0;
+                    color: #333;
+
+                    &:hover {
+                        background-color: #d6d6d6;
+                    }
+                }
+
+                &:last-child {
+                    background-color: #007bff;
+                    color: #fff;
+
+                    &:hover {
+                        background-color: #0056b3;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Formulario Personalizado Tipo A
+.formulario-personalizado-a {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 25px;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    h1 {
+        font-size: 1.8rem;
+        color: #333;
+        border-bottom: 2px solid #f90;
+        padding-bottom: 10px;
+    }
+
+    .form-section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        textarea,
+        input[type="text"],
+        input[type="email"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+
+            &:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+            }
+        }
+
+        // Estilo del input tipo file (logo y multimedia)
+        .input-logo,
+        .input-carrusel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 150px;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            text-align: center;
+
+            input {
+                opacity: 0;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                cursor: pointer;
+            }
+
+            p {
+                font-size: 14px;
+                color: #999;
+                pointer-events: none;
+            }
+        }
+
+        // Input Multimedia Carrusel (sobrescribir estilos)
+        .input-carrusel {
+            height: 200px;
+        }
+    }
+
+    .botones-navegacion {
+        display: flex;
+        justify-content: space-between;
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:first-child {
+                background-color: #f0f0f0;
+                color: #333;
+
+                &:hover {
+                    background-color: #d6d6d6;
+                }
+            }
+
+            &:last-child {
+                background-color: #007bff;
+                color: #fff;
+
+                &:hover {
+                    background-color: #0056b3;
+                }
+            }
+        }
+    }
+}

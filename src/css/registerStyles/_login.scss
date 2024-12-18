@@ -151,8 +151,9 @@
             }
 
             &.google {
-                background-color: #ea4335;
-                color: white;
+                background-color: white;
+                border: 1px solid lightgray;
+                color: $text-gray;
             }
 
             &.facebook {

@@ -10,6 +10,7 @@ import { FiltersProvider } from './context/FiltersContext';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import RegisterNavigator from './components/registros/RegisterNavigator';
+import RegistrosProveedorNavigator from './components/registroProveedor/RegistrosProveedorNavigator';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
                         <Route path="/proveedores" element={<Proveedores />} />
                         <Route path="/admin" element={<AdminPanel />} />
                         <Route path="/registrarme" element={<RegisterNavigator/>} />
+                        <Route path='/registrar-mi-empresa' element={<RegistrosProveedorNavigator />}/>
                     </Routes>
                 </div>
             </BrowserRouter>

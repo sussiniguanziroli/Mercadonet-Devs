@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { IoClose } from "react-icons/io5";
 import { HiSearch } from "react-icons/hi";
+import ProveedorIcon from '../../assets/ProveedorIcon';
 
 const Menu = () => {
     const [menu_class, setMenuClass] = useState('menu slide-left hidden');
@@ -94,13 +95,13 @@ const Menu = () => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink onClick={closeMenu} to="" className="burger-nav-item" activeclassname="burger-active">
+                            <NavLink onClick={closeMenu} to="/registrarme" className="burger-nav-item" activeclassname="burger-active">
                                 Ingresar
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink onClick={closeMenu} to="" className="burger-nav-item" activeclassname="burger-active">
-                                Contacto
+                            <NavLink onClick={closeMenu} to="/registrar-mi-empresa" className="burger-nav-item" activeclassname="burger-active">
+                             Soy Proveedor
                             </NavLink>
                         </li>
                     </ul>

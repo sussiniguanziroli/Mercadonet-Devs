@@ -3316,8 +3316,9 @@
   opacity: 0.9;
 }
 .container .social-buttons button.google {
-  background-color: #ea4335;
-  color: white;
+  background-color: white;
+  border: 1px solid lightgray;
+  color: #2c2c2c;
 }
 .container .social-buttons button.facebook {
   background-color: #1877f2;
@@ -3446,6 +3447,359 @@
 }
 .register-container .volver-btn:hover {
   text-decoration: underline;
+}
+
+@media (min-width: 1024px) {
+  .landing-registro-proveedor {
+    background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
+    background-position: 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 1500px;
+    background-color: #131921;
+    max-width: 2400px;
+    width: 100%;
+    height: 93.3vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    font-family: "Montserrat", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+  }
+  .landing-registro-proveedor h1 {
+    text-align: center;
+    color: #F5F5F5;
+    font-size: 3.4rem;
+  }
+  .landing-registro-proveedor h2 {
+    color: #F5F5F5;
+    font-weight: 400;
+    font-size: 1.7rem;
+    text-align: center;
+  }
+  .landing-registro-proveedor button {
+    all: unset;
+    padding: 0.9rem;
+    font-size: 1.2rem;
+    font-weight: 520;
+    color: #F5F5F5;
+    background-color: #1476e6;
+    font-family: "Montserrat", sans-serif;
+    border-radius: 12px;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .landing-registro-proveedor button:hover {
+    background-color: #0d57ac;
+  }
+}
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+h1,
+h2 {
+  text-align: center;
+  color: #007bff;
+}
+
+.landing-registro-proveedor {
+  text-align: center;
+  padding: 20px;
+}
+.landing-registro-proveedor button {
+  background-color: #007bff;
+  color: white;
+}
+.landing-registro-proveedor button:hover {
+  background-color: #0056b3;
+}
+
+.seleccion-tipo-card {
+  text-align: center;
+  padding: 20px;
+}
+.seleccion-tipo-card .card-options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.seleccion-tipo-card .card-options button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease;
+}
+.seleccion-tipo-card .card-options button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.seleccion-plan {
+  text-align: center;
+  padding: 20px;
+}
+.seleccion-plan .plan-options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.seleccion-plan .plan-options .plan-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  text-align: center;
+}
+.seleccion-plan .plan-options .plan-card:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.resumen-registro {
+  text-align: center;
+  padding: 20px;
+}
+.resumen-registro .resumen-datos {
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+}
+.resumen-registro .resumen-datos p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+.resumen-registro button {
+  background-color: #007bff;
+}
+
+.formulario-general form,
+.formulario-personalizado form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 25px;
+  max-width: 500px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.formulario-general form h1,
+.formulario-general form h3,
+.formulario-personalizado form h1,
+.formulario-personalizado form h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333333;
+}
+.formulario-general form label,
+.formulario-personalizado form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #555;
+}
+.formulario-general form label input,
+.formulario-general form label select,
+.formulario-personalizado form label input,
+.formulario-personalizado form label select {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.formulario-general form label input:focus,
+.formulario-general form label select:focus,
+.formulario-personalizado form label input:focus,
+.formulario-personalizado form label select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}
+.formulario-general form label input[type=checkbox],
+.formulario-personalizado form label input[type=checkbox] {
+  margin-right: 10px;
+  width: auto;
+}
+.formulario-general form fieldset,
+.formulario-personalizado form fieldset {
+  border: none;
+  margin-top: 10px;
+}
+.formulario-general form fieldset legend,
+.formulario-personalizado form fieldset legend {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.formulario-general form fieldset label,
+.formulario-personalizado form fieldset label {
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.formulario-general form fieldset p,
+.formulario-personalizado form fieldset p {
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
+}
+.formulario-general form .botones-navegacion,
+.formulario-personalizado form .botones-navegacion {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.formulario-general form .botones-navegacion button,
+.formulario-personalizado form .botones-navegacion button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.formulario-general form .botones-navegacion button:first-child,
+.formulario-personalizado form .botones-navegacion button:first-child {
+  background-color: #f0f0f0;
+  color: #333;
+}
+.formulario-general form .botones-navegacion button:first-child:hover,
+.formulario-personalizado form .botones-navegacion button:first-child:hover {
+  background-color: #d6d6d6;
+}
+.formulario-general form .botones-navegacion button:last-child,
+.formulario-personalizado form .botones-navegacion button:last-child {
+  background-color: #007bff;
+  color: #fff;
+}
+.formulario-general form .botones-navegacion button:last-child:hover,
+.formulario-personalizado form .botones-navegacion button:last-child:hover {
+  background-color: #0056b3;
+}
+
+.formulario-personalizado-a {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 25px;
+  max-width: 600px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.formulario-personalizado-a h1 {
+  font-size: 1.8rem;
+  color: #333;
+  border-bottom: 2px solid #f90;
+  padding-bottom: 10px;
+}
+.formulario-personalizado-a .form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.formulario-personalizado-a .form-section label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.formulario-personalizado-a .form-section textarea,
+.formulario-personalizado-a .form-section input[type=text],
+.formulario-personalizado-a .form-section input[type=email] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.formulario-personalizado-a .form-section textarea:focus,
+.formulario-personalizado-a .form-section input[type=text]:focus,
+.formulario-personalizado-a .form-section input[type=email]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}
+.formulario-personalizado-a .form-section .input-logo,
+.formulario-personalizado-a .form-section .input-carrusel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  text-align: center;
+}
+.formulario-personalizado-a .form-section .input-logo input,
+.formulario-personalizado-a .form-section .input-carrusel input {
+  opacity: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.formulario-personalizado-a .form-section .input-logo p,
+.formulario-personalizado-a .form-section .input-carrusel p {
+  font-size: 14px;
+  color: #999;
+  pointer-events: none;
+}
+.formulario-personalizado-a .form-section .input-carrusel {
+  height: 200px;
+}
+.formulario-personalizado-a .botones-navegacion {
+  display: flex;
+  justify-content: space-between;
+}
+.formulario-personalizado-a .botones-navegacion button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.formulario-personalizado-a .botones-navegacion button:first-child {
+  background-color: #f0f0f0;
+  color: #333;
+}
+.formulario-personalizado-a .botones-navegacion button:first-child:hover {
+  background-color: #d6d6d6;
+}
+.formulario-personalizado-a .botones-navegacion button:last-child {
+  background-color: #007bff;
+  color: #fff;
+}
+.formulario-personalizado-a .botones-navegacion button:last-child:hover {
+  background-color: #0056b3;
+}
+
+.unset {
+  all: unset;
 }
 
 * {

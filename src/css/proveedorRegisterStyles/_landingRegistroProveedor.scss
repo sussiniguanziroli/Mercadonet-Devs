@@ -1,0 +1,49 @@
+@media (min-width: 1024px) {
+    .landing-registro-proveedor {
+        background-image: url('https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png') ;
+        background-position: 100% ;
+        background-repeat: no-repeat;
+        background-size: 100% 1500px;
+        background-color: $color-azul;
+        max-width: 2400px;
+        width: 100%;
+        height: 93.3vh;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        font-family: 'Montserrat', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3rem;
+        h1 {
+            text-align: center;
+            color: $main-white;
+            font-size: 3.4rem;
+        }
+        h2 {
+            color: $main-white;
+            font-weight: 400;
+            font-size: 1.7rem;
+            text-align: center;
+        }
+        button {
+            all: unset;
+            padding: .9rem;
+            font-size: 1.2rem;
+            font-weight: 520;
+            color: $main-white;
+            background-color: #1476e6;
+            font-family: 'Montserrat', sans-serif;
+            border-radius: 12px;
+            transition: all .3s;
+            cursor: pointer;
+            &:hover {
+                background-color: #0d57ac;
+            }
+            
+        }
+    }
+}
+

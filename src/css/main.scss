@@ -20,9 +20,13 @@
 @import "../css/registerStyles/registerNavigator";
 @import "../css/registerStyles/login";
 @import "../css/registerStyles/register";
+@import "../css/proveedorRegisterStyles/landingRegistroProveedor.scss";
+@import '../css/proveedorRegisterStyles/estilosRegistroFormulario.scss';
 
 
-
+.unset {
+    all: unset;
+}
 
 * {
     outline: none !important;
