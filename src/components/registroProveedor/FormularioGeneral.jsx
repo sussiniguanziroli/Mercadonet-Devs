@@ -51,7 +51,6 @@ const FormularioGeneral = ({ nextStep, prevStep, updateFormData }) => {
     <form onSubmit={handleSubmit} className="formulario-general">
       <h1>Datos Generales del Proveedor</h1>
 
-      {/* País */}
       <label>
         País / Región:
         <select name="pais" defaultValue="Argentina" required>
@@ -61,13 +60,11 @@ const FormularioGeneral = ({ nextStep, prevStep, updateFormData }) => {
         </select>
       </label>
 
-      {/* Nombre del proveedor */}
       <label>
         Nombre del Proveedor:
         <input type="text" name="nombreProveedor" required />
       </label>
 
-      {/* Tipo de proveedor */}
       <label>
         Tipo de Proveedor:
         <select name="tipoProveedor" required>
@@ -78,7 +75,6 @@ const FormularioGeneral = ({ nextStep, prevStep, updateFormData }) => {
         </select>
       </label>
 
-      {/* Categoría principal */}
       <label>
         Categoría Principal:
         <select name="categoriaPrincipal" required>
@@ -91,7 +87,6 @@ const FormularioGeneral = ({ nextStep, prevStep, updateFormData }) => {
         </select>
       </label>
 
-      {/* Otras categorías */}
       <fieldset>
         <legend>Otras categorías (Elige hasta 5)</legend>
         {categorias.map((cat, index) => (
@@ -105,10 +100,9 @@ const FormularioGeneral = ({ nextStep, prevStep, updateFormData }) => {
             {cat}
           </label>
         ))}
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p>{error}</p>}
       </fieldset>
 
-      {/* Ubicación */}
       <label>
         Ciudad:
         <input type="text" name="ciudad" />
@@ -118,7 +112,6 @@ const FormularioGeneral = ({ nextStep, prevStep, updateFormData }) => {
         <input type="text" name="provincia" />
       </label>
 
-      {/* Información Personal */}
       <h3>Cuéntanos sobre ti</h3>
       <label>
         Nombre:
@@ -137,7 +130,6 @@ const FormularioGeneral = ({ nextStep, prevStep, updateFormData }) => {
         <input type="text" name="whatsapp" required />
       </label>
 
-      {/* Información Legal Opcional */}
       <h3>Información Legal y Financiera (Opcional)</h3>
       <label>
         CUIT:
@@ -152,7 +144,6 @@ const FormularioGeneral = ({ nextStep, prevStep, updateFormData }) => {
         <input type="number" name="facturacion" min="0" />
       </label>
 
-      {/* Botones */}
       <div className="botones-navegacion">
         <button type="button" onClick={prevStep}>
           Atrás

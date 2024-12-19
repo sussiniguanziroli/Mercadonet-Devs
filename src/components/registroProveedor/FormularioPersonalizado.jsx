@@ -1,4 +1,6 @@
 import React from "react";
+import FormularioPersonalizadoTipoA from "./FormularioPersonalizadoTipoA";
+import FormularioPersonalizadoTipoB from "./FormularioPersonalizadoTipoB";
 
 const FormularioPersonalizado = ({ nextStep, prevStep, selectedCard, updateFormData }) => {
   const handleSubmit = (e) => {
@@ -12,16 +14,10 @@ const FormularioPersonalizado = ({ nextStep, prevStep, selectedCard, updateFormD
     <form onSubmit={handleSubmit} className="formulario-personalizado">
       <h1>Formulario Personalizado para {selectedCard}</h1>
       {selectedCard === "tipoA" && (
-        <label>
-          Campo A1:
-          <input type="text" name="campoA1" />
-        </label>
+        <FormularioPersonalizadoTipoA />
       )}
       {selectedCard === "tipoB" && (
-        <label>
-          Campo B1:
-          <input type="text" name="campoB1" />
-        </label>
+       <FormularioPersonalizadoTipoB />
       )}
       <button type="button" onClick={prevStep}>
         Volver

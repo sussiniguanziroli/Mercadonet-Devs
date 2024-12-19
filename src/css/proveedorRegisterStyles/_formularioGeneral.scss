@@ -1,0 +1,111 @@
+// Estilos del formulario general
+.formulario-general {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+    h1,
+    h3 {
+      color: #333;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  
+    label {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      font-weight: bold;
+      color: #444;
+  
+      input,
+      select,
+      fieldset {
+        margin-top: 8px;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #f9f9f9;
+  
+        &:focus {
+          border-color: #007bff;
+          outline: none;
+          box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+        }
+      }
+  
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+  
+    fieldset {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      border: none;
+  
+      legend {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #444;
+      }
+  
+      label {
+        flex: 1 1 calc(50% - 10px); // Dos columnas en pantallas grandes
+        input {
+          margin-right: 8px;
+        }
+      }
+  
+      p {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+      }
+    }
+  
+    .botones-navegacion {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+  
+      button {
+        padding: 10px 20px;
+        font-size: 14px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+  
+        &:first-child {
+          background-color: #f0f0f0;
+          color: #333;
+  
+          &:hover {
+            background-color: #ccc;
+          }
+        }
+  
+        &:last-child {
+          background-color: #007bff;
+          color: #fff;
+  
+          &:hover {
+            background-color: #0056b3;
+          }
+        }
+      }
+    }
+  }
+  
