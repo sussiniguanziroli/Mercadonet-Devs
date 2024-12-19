@@ -9,6 +9,9 @@ const FormularioPersonalizadoTipoB = ({ nextStep, prevStep, updateFormData }) =>
   };
 
   return (
+    <div className="formulario-personalizado-b-container">
+
+    
     <form onSubmit={handleSubmit} className="formulario-personalizado-b">
       <h1>Proveedor</h1>
 
@@ -76,6 +79,10 @@ const FormularioPersonalizadoTipoB = ({ nextStep, prevStep, updateFormData }) =>
         <button type="submit">Continuar</button>
       </div>
     </form>
+    <div className="card-productos-simulator-container">
+
+    </div>
+    </div>
   );
 };
 

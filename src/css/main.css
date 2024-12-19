@@ -3497,7 +3497,7 @@
   }
 }
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Montserrat", sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f9f9f9;
@@ -3515,12 +3515,6 @@ button {
 button:hover {
   background-color: #007bff;
   color: white;
-}
-
-h1,
-h2 {
-  text-align: center;
-  color: #007bff;
 }
 
 .landing-registro-proveedor {
@@ -3597,7 +3591,16 @@ h2 {
 }
 
 @media (min-width: 1024px) {
-  .formulario-personalizado-b {
+  .formulario-personalizado {
+    background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
+    background-position: 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 1500px;
+    background-color: #131921;
+    max-width: 2400px;
+    width: 100%;
+  }
+  .formulario-personalizado-b-container .formulario-personalizado-b {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -3608,38 +3611,38 @@ h2 {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  .formulario-personalizado-b h1 {
+  .formulario-personalizado-b-container .formulario-personalizado-b h1 {
     font-size: 1.8rem;
     color: #333;
     border-bottom: 2px solid #f90;
     padding-bottom: 10px;
   }
-  .formulario-personalizado-b .form-section {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
-  .formulario-personalizado-b .form-section label {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section label {
     font-weight: bold;
     margin-bottom: 5px;
   }
-  .formulario-personalizado-b .form-section textarea,
-  .formulario-personalizado-b .form-section input[type=text],
-  .formulario-personalizado-b .form-section input[type=email] {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section textarea,
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section input[type=text],
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section input[type=email] {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
   }
-  .formulario-personalizado-b .form-section textarea:focus,
-  .formulario-personalizado-b .form-section input[type=text]:focus,
-  .formulario-personalizado-b .form-section input[type=email]:focus {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section textarea:focus,
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section input[type=text]:focus,
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section input[type=email]:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
   }
-  .formulario-personalizado-b .form-section .input-logo,
-  .formulario-personalizado-b .form-section .input-carrusel {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section .input-logo,
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section .input-carrusel {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3648,29 +3651,29 @@ h2 {
     border-radius: 10px;
     text-align: center;
   }
-  .formulario-personalizado-b .form-section .input-logo input,
-  .formulario-personalizado-b .form-section .input-carrusel input {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section .input-logo input,
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section .input-carrusel input {
     opacity: 0;
     position: absolute;
     width: 100%;
     height: 100%;
     cursor: pointer;
   }
-  .formulario-personalizado-b .form-section .input-logo p,
-  .formulario-personalizado-b .form-section .input-carrusel p {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section .input-logo p,
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section .input-carrusel p {
     font-size: 14px;
     color: #999;
     pointer-events: none;
   }
-  .formulario-personalizado-b .form-section .input-carrusel {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section .input-carrusel {
     height: 200px;
   }
-  .formulario-personalizado-b .form-section.galeria-productos .galeria-grid {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section.galeria-productos .galeria-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 15px;
   }
-  .formulario-personalizado-b .form-section.galeria-productos .galeria-grid .producto-card {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section.galeria-productos .galeria-grid .producto-card {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -3679,24 +3682,24 @@ h2 {
     border-radius: 8px;
     text-align: center;
   }
-  .formulario-personalizado-b .form-section.galeria-productos .galeria-grid .producto-card input[type=file] {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section.galeria-productos .galeria-grid .producto-card input[type=file] {
     opacity: 0;
     position: absolute;
     width: 100%;
     height: 50px;
   }
-  .formulario-personalizado-b .form-section.galeria-productos .galeria-grid .producto-card input[type=text],
-  .formulario-personalizado-b .form-section.galeria-productos .galeria-grid .producto-card textarea {
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section.galeria-productos .galeria-grid .producto-card input[type=text],
+  .formulario-personalizado-b-container .formulario-personalizado-b .form-section.galeria-productos .galeria-grid .producto-card textarea {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 12px;
   }
-  .formulario-personalizado-b .botones-navegacion {
+  .formulario-personalizado-b-container .formulario-personalizado-b .botones-navegacion {
     display: flex;
     justify-content: space-between;
   }
-  .formulario-personalizado-b .botones-navegacion button {
+  .formulario-personalizado-b-container .formulario-personalizado-b .botones-navegacion button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -3704,21 +3707,21 @@ h2 {
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  .formulario-personalizado-b .botones-navegacion button:first-child {
+  .formulario-personalizado-b-container .formulario-personalizado-b .botones-navegacion button:first-child {
     background-color: #f0f0f0;
     color: #333;
   }
-  .formulario-personalizado-b .botones-navegacion button:first-child:hover {
+  .formulario-personalizado-b-container .formulario-personalizado-b .botones-navegacion button:first-child:hover {
     background-color: #d6d6d6;
   }
-  .formulario-personalizado-b .botones-navegacion button:last-child {
+  .formulario-personalizado-b-container .formulario-personalizado-b .botones-navegacion button:last-child {
     background-color: #007bff;
     color: #fff;
   }
-  .formulario-personalizado-b .botones-navegacion button:last-child:hover {
+  .formulario-personalizado-b-container .formulario-personalizado-b .botones-navegacion button:last-child:hover {
     background-color: #0056b3;
   }
-  .formulario-personalizado-a {
+  .formulario-personalizado-a-container .formulario-personalizado-a {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -3729,38 +3732,38 @@ h2 {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  .formulario-personalizado-a h1 {
+  .formulario-personalizado-a-container .formulario-personalizado-a h1 {
     font-size: 1.8rem;
     color: #333;
     border-bottom: 2px solid #f90;
     padding-bottom: 10px;
   }
-  .formulario-personalizado-a .form-section {
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
-  .formulario-personalizado-a .form-section label {
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section label {
     font-weight: bold;
     margin-bottom: 5px;
   }
-  .formulario-personalizado-a .form-section textarea,
-  .formulario-personalizado-a .form-section input[type=text],
-  .formulario-personalizado-a .form-section input[type=email] {
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section textarea,
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section input[type=text],
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section input[type=email] {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
   }
-  .formulario-personalizado-a .form-section textarea:focus,
-  .formulario-personalizado-a .form-section input[type=text]:focus,
-  .formulario-personalizado-a .form-section input[type=email]:focus {
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section textarea:focus,
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section input[type=text]:focus,
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section input[type=email]:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
   }
-  .formulario-personalizado-a .form-section .input-logo,
-  .formulario-personalizado-a .form-section .input-carrusel {
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-logo,
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-carrusel {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3769,28 +3772,28 @@ h2 {
     border-radius: 10px;
     text-align: center;
   }
-  .formulario-personalizado-a .form-section .input-logo input,
-  .formulario-personalizado-a .form-section .input-carrusel input {
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-logo input,
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-carrusel input {
     opacity: 0;
     position: absolute;
     width: 100%;
     height: 100%;
     cursor: pointer;
   }
-  .formulario-personalizado-a .form-section .input-logo p,
-  .formulario-personalizado-a .form-section .input-carrusel p {
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-logo p,
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-carrusel p {
     font-size: 14px;
     color: #999;
     pointer-events: none;
   }
-  .formulario-personalizado-a .form-section .input-carrusel {
+  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-carrusel {
     height: 200px;
   }
-  .formulario-personalizado-a .botones-navegacion {
+  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion {
     display: flex;
     justify-content: space-between;
   }
-  .formulario-personalizado-a .botones-navegacion button {
+  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -3798,48 +3801,66 @@ h2 {
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  .formulario-personalizado-a .botones-navegacion button:first-child {
+  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion button:first-child {
     background-color: #f0f0f0;
     color: #333;
   }
-  .formulario-personalizado-a .botones-navegacion button:first-child:hover {
+  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion button:first-child:hover {
     background-color: #d6d6d6;
   }
-  .formulario-personalizado-a .botones-navegacion button:last-child {
+  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion button:last-child {
     background-color: #007bff;
     color: #fff;
   }
-  .formulario-personalizado-a .botones-navegacion button:last-child:hover {
+  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion button:last-child:hover {
     background-color: #0056b3;
   }
 }
-.formulario-general {
+.formulario-general-container {
+  background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
+  background-position: cover;
+  background-repeat: no-repeat;
+  background-size: 100% 1500px;
+  background-color: #131921;
+  max-width: 2400px;
+  width: 100%;
+}
+.formulario-general-container .form-card-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 50px;
+}
+.formulario-general-container .form-card-container .general-card-simulator {
+  border: 1px solid white;
+  width: 500px;
+  height: 200px;
+}
+.formulario-general-container .form-card-container .formulario-general {
   display: flex;
   flex-direction: column;
   gap: 20px;
   max-width: 600px;
-  margin: 0 auto;
   padding: 25px;
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.formulario-general h1,
-.formulario-general h3 {
+.formulario-general-container .form-card-container .formulario-general h1,
+.formulario-general-container .form-card-container .formulario-general h3 {
   color: #333;
   font-weight: bold;
   margin-bottom: 10px;
 }
-.formulario-general label {
+.formulario-general-container .form-card-container .formulario-general label {
   display: flex;
   flex-direction: column;
   font-size: 14px;
   font-weight: bold;
   color: #444;
 }
-.formulario-general label input,
-.formulario-general label select,
-.formulario-general label fieldset {
+.formulario-general-container .form-card-container .formulario-general label input,
+.formulario-general-container .form-card-container .formulario-general label select,
+.formulario-general-container .form-card-container .formulario-general label fieldset {
   margin-top: 8px;
   padding: 10px;
   font-size: 14px;
@@ -3847,47 +3868,47 @@ h2 {
   border-radius: 5px;
   background: #f9f9f9;
 }
-.formulario-general label input:focus,
-.formulario-general label select:focus,
-.formulario-general label fieldset:focus {
+.formulario-general-container .form-card-container .formulario-general label input:focus,
+.formulario-general-container .form-card-container .formulario-general label select:focus,
+.formulario-general-container .form-card-container .formulario-general label fieldset:focus {
   border-color: #007bff;
   outline: none;
   box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
 }
-.formulario-general label input[type=number]::-webkit-inner-spin-button,
-.formulario-general label input[type=number]::-webkit-outer-spin-button {
+.formulario-general-container .form-card-container .formulario-general label input[type=number]::-webkit-inner-spin-button,
+.formulario-general-container .form-card-container .formulario-general label input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-.formulario-general fieldset {
+.formulario-general-container .form-card-container .formulario-general fieldset {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   border: none;
 }
-.formulario-general fieldset legend {
+.formulario-general-container .form-card-container .formulario-general fieldset legend {
   font-size: 14px;
   font-weight: bold;
   margin-bottom: 10px;
   color: #444;
 }
-.formulario-general fieldset label {
+.formulario-general-container .form-card-container .formulario-general fieldset label {
   flex: 1 1 calc(50% - 10px);
 }
-.formulario-general fieldset label input {
+.formulario-general-container .form-card-container .formulario-general fieldset label input {
   margin-right: 8px;
 }
-.formulario-general fieldset p {
+.formulario-general-container .form-card-container .formulario-general fieldset p {
   color: red;
   font-size: 12px;
   margin-top: 5px;
 }
-.formulario-general .botones-navegacion {
+.formulario-general-container .form-card-container .formulario-general .botones-navegacion {
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
 }
-.formulario-general .botones-navegacion button {
+.formulario-general-container .form-card-container .formulario-general .botones-navegacion button {
   padding: 10px 20px;
   font-size: 14px;
   border: none;
@@ -3895,18 +3916,18 @@ h2 {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-.formulario-general .botones-navegacion button:first-child {
+.formulario-general-container .form-card-container .formulario-general .botones-navegacion button:first-child {
   background-color: #f0f0f0;
   color: #333;
 }
-.formulario-general .botones-navegacion button:first-child:hover {
+.formulario-general-container .form-card-container .formulario-general .botones-navegacion button:first-child:hover {
   background-color: #ccc;
 }
-.formulario-general .botones-navegacion button:last-child {
+.formulario-general-container .form-card-container .formulario-general .botones-navegacion button:last-child {
   background-color: #007bff;
   color: #fff;
 }
-.formulario-general .botones-navegacion button:last-child:hover {
+.formulario-general-container .form-card-container .formulario-general .botones-navegacion button:last-child:hover {
   background-color: #0056b3;
 }
 
