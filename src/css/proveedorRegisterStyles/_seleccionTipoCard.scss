@@ -1,0 +1,88 @@
+// Pantalla de selección de tipo de card
+@media (min-width: 1024px) {
+    .seleccion-card-container {
+        background-image: url('https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png');
+        background-position: 100%;
+        background-repeat: no-repeat;
+        background-size: 100% 1500px;
+        background-color: $color-azul;
+        max-width: 2400px;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .seleccion-tipo-card {
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 100px;
+
+            h1 {
+                color: #cccccc;
+                font-family: 'Roboto', system-ui;
+                font-weight: 400;
+            }
+
+            .card-options {
+                display: flex;
+                justify-content: center;
+                gap: 100px;
+
+                .button-and-text-div {
+                    max-width: min-content;
+                    display: inline-block;
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+                    h2 {
+                        text-align: start;
+                        font-family: 'Montserrat', sans-serif;
+                        color: #cccccc;
+                        margin-bottom: 10px;
+                    }
+
+                    p {
+                        font-size: 1.2rem;
+                        text-align: start;
+                        color: #cccccc;
+                        font-family: 'Roboto', system-ui;
+                        line-height: 120%;
+                        margin-top: 20px;
+                        letter-spacing: 3%;
+                        visibility: hidden;
+                        opacity: 0;
+                        transition: opacity 0.3s ease, visibility 0.3s ease;
+                    }
+
+                    strong {
+                        color: $color-naranja;
+                        font-weight: 550;
+                        font-family: 'Roboto', system-ui;
+                    }
+
+                    .card-button {
+                        all: unset;
+                        cursor: pointer;
+                    }
+
+                    &:hover p {
+                        visibility: visible;
+                        opacity: 1; 
+                    }
+
+                    &:hover {
+                        transform: scale(1.1);
+
+
+                    }
+                }
+
+
+
+            }
+        }
+    }
+}

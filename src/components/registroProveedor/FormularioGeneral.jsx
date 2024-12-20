@@ -73,7 +73,7 @@ const FormularioGeneral = ({ nextStep, prevStep, updateFormData }) => {
                         <option value="">Selecciona...</option>
                         <option value="Distribuidor">Distribuidor</option>
                         <option value="Fabricante">Fabricante</option>
-                        <option value="Minorista">Minorista</option>
+                        <option value="Minorista">Mayorista</option>
                     </select>
                 </label>
 

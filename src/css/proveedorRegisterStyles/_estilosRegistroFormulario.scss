@@ -1,26 +1,3 @@
-// Estilos globales
-body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
-}
-
-button {
-    padding: 10px 20px;
-    margin: 10px;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-
-    &:hover {
-        background-color: #007bff;
-        color: white;
-    }
-}
-
 
 // Componentes del flujo
 .landing-registro-proveedor {
@@ -37,28 +14,7 @@ button {
     }
 }
 
-// Pantalla de selección de tipo de card
-.seleccion-tipo-card {
-    text-align: center;
-    padding: 20px;
 
-    .card-options {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-
-        button {
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            transition: all 0.3s ease;
-
-            &:hover {
-                background-color: #007bff;
-                color: white;
-            }
-        }
-    }
-}
 
 
 // Selección de plan

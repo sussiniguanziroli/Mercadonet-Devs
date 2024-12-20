@@ -8,7 +8,6 @@ const FormularioPersonalizado = ({ nextStep, prevStep, selectedCard, updateFormD
     //a es historia b productos
     return (
         <div className="formulario-personalizado">
-            <h1>Formulario Personalizado para {selectedCard}</h1>
             {selectedCard === "tipoA" && (
                 <FormularioPersonalizadoTipoA prevStep={prevStep} nextStep={nextStep} />
             )}
