@@ -3560,12 +3560,15 @@
     z-index: -1;
     width: 100%;
   }
+  .formulario-personalizado-b-container .card-productos-simulator-container {
+    border: 1px solid red;
+  }
   .formulario-personalizado-b-container .formulario-personalizado-b {
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding: 25px;
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
     background: #ffffff;
     border-radius: 10px;
@@ -3685,12 +3688,13 @@
     display: flex;
     justify-content: space-around;
     padding-top: 45px;
+    padding-bottom: 45px;
   }
   .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 650px;
+    width: 700px;
     padding: 25px;
     background: #ffffff;
     border-radius: 10px;
