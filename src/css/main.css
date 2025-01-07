@@ -3552,12 +3552,12 @@
 
 @media (min-width: 1024px) {
   .formulario-personalizado {
-    background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
-    background-position: 100%;
-    background-repeat: no-repeat;
-    background-size: 100% 1500px;
-    background-color: #131921;
     max-width: 2400px;
+    width: 100%;
+  }
+  .formulario-personalizado .formulario-bg {
+    position: fixed;
+    z-index: -1;
     width: 100%;
   }
   .formulario-personalizado-b-container .formulario-personalizado-b {
@@ -3681,49 +3681,61 @@
   .formulario-personalizado-b-container .formulario-personalizado-b .botones-navegacion button:last-child:hover {
     background-color: #0056b3;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a {
+  .formulario-personalizado-a-container {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 45px;
+  }
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 650px;
     padding: 25px;
-    max-width: 600px;
-    margin: 0 auto;
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a h1 {
-    font-size: 1.8rem;
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a h1,
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a h3 {
+    font-family: "Montserrat", sans-serif;
     color: #333;
-    border-bottom: 2px solid #f90;
-    padding-bottom: 10px;
+    font-weight: bold;
+    margin: 5px;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a h1 {
+    font-size: 2.5rem;
+  }
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a h3 {
+    font-weight: 550;
+  }
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section textarea,
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section input[type=text],
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section input[type=email] {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section textarea,
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section input {
     padding: 10px;
+    font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px;
+    background: #f9f9f9;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section textarea:focus,
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section input[type=text]:focus,
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section input[type=email]:focus {
-    outline: none;
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section textarea:focus,
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section input:focus {
     border-color: #007bff;
+    outline: none;
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-logo,
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-carrusel {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label {
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+  }
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-logo,
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-carrusel {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3731,29 +3743,43 @@
     border: 2px dashed #ccc;
     border-radius: 10px;
     text-align: center;
+    position: relative;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-logo input,
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-carrusel input {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-logo input,
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-carrusel input {
     opacity: 0;
     position: absolute;
     width: 100%;
     height: 100%;
     cursor: pointer;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-logo p,
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-carrusel p {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-logo p,
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-carrusel p {
     font-size: 14px;
     color: #999;
     pointer-events: none;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .form-section .input-carrusel {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-carrusel {
     height: 200px;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .ubicacion-label-box,
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .nombre-label-box {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .ubicacion-label-box label,
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .nombre-label-box label {
+    width: 100%;
+  }
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion {
     display: flex;
     justify-content: space-between;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion button {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -3761,136 +3787,235 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion button:first-child {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion button:first-child {
+    background-color: inherit;
+    color: #1473e6;
+  }
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion button:first-child:hover {
     background-color: #f0f0f0;
-    color: #333;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion button:first-child:hover {
-    background-color: #d6d6d6;
-  }
-  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion button:last-child {
-    background-color: #007bff;
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion button:last-child {
+    background-color: #1473e6;
     color: #fff;
+    border-radius: 2rem;
   }
-  .formulario-personalizado-a-container .formulario-personalizado-a .botones-navegacion button:last-child:hover {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion button:last-child:hover {
     background-color: #0056b3;
   }
+  .formulario-personalizado-a-container .card-historia-simulator-container {
+    border: 1px solid white;
+    position: sticky;
+    top: 50px;
+    width: 500px;
+    height: 200px;
+  }
 }
-.formulario-general-container {
-  background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
-  background-position: cover;
-  background-repeat: no-repeat;
-  background-size: 100% 1500px;
-  background-color: #131921;
-  max-width: 2400px;
+.formulario-bg {
+  position: fixed;
+  z-index: -1;
   width: 100%;
 }
-.formulario-general-container .form-card-container {
-  display: flex;
-  justify-content: space-around;
-  margin: 50px;
-}
-.formulario-general-container .form-card-container .general-card-simulator {
-  border: 1px solid white;
-  width: 500px;
-  height: 200px;
-}
-.formulario-general-container .form-card-container .formulario-general {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  max-width: 600px;
-  padding: 25px;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-.formulario-general-container .form-card-container .formulario-general h1,
-.formulario-general-container .form-card-container .formulario-general h3 {
-  color: #333;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-.formulario-general-container .form-card-container .formulario-general label {
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-  font-weight: bold;
-  color: #444;
-}
-.formulario-general-container .form-card-container .formulario-general label input,
-.formulario-general-container .form-card-container .formulario-general label select,
-.formulario-general-container .form-card-container .formulario-general label fieldset {
-  margin-top: 8px;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background: #f9f9f9;
-}
-.formulario-general-container .form-card-container .formulario-general label input:focus,
-.formulario-general-container .form-card-container .formulario-general label select:focus,
-.formulario-general-container .form-card-container .formulario-general label fieldset:focus {
-  border-color: #007bff;
-  outline: none;
-  box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
-}
-.formulario-general-container .form-card-container .formulario-general label input[type=number]::-webkit-inner-spin-button,
-.formulario-general-container .form-card-container .formulario-general label input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.formulario-general-container .form-card-container .formulario-general fieldset {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  border: none;
-}
-.formulario-general-container .form-card-container .formulario-general fieldset legend {
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #444;
-}
-.formulario-general-container .form-card-container .formulario-general fieldset label {
-  flex: 1 1 calc(50% - 10px);
-}
-.formulario-general-container .form-card-container .formulario-general fieldset label input {
-  margin-right: 8px;
-}
-.formulario-general-container .form-card-container .formulario-general fieldset p {
-  color: red;
-  font-size: 12px;
-  margin-top: 5px;
-}
-.formulario-general-container .form-card-container .formulario-general .botones-navegacion {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-.formulario-general-container .form-card-container .formulario-general .botones-navegacion button {
-  padding: 10px 20px;
-  font-size: 14px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.formulario-general-container .form-card-container .formulario-general .botones-navegacion button:first-child {
-  background-color: #f0f0f0;
-  color: #333;
-}
-.formulario-general-container .form-card-container .formulario-general .botones-navegacion button:first-child:hover {
-  background-color: #ccc;
-}
-.formulario-general-container .form-card-container .formulario-general .botones-navegacion button:last-child {
-  background-color: #007bff;
-  color: #fff;
-}
-.formulario-general-container .form-card-container .formulario-general .botones-navegacion button:last-child:hover {
-  background-color: #0056b3;
-}
 
+@media (min-width: 1000px) {
+  .formulario-general-container {
+    width: 100%;
+  }
+  .formulario-general-container .form-card-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 50px;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 700px;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown label {
+    font-family: Arial, sans-serif;
+    color: #cccccc;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown label select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown label select:hover {
+    border-color: #888;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown label select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown label select option {
+    padding: 5px;
+    background-color: #fff;
+    color: #333;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown label select option:hover {
+    background-color: #f5f5f5;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general h1,
+  .formulario-general-container .form-card-container .form-container .formulario-general h3 {
+    font-family: "Montserrat", sans-serif;
+    color: #333;
+    font-weight: bold;
+    margin: 5px;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general h1 {
+    font-size: 2.5rem;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general h3 {
+    font-weight: 550;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .ubicacion-label-box {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .ubicacion-label-box label {
+    width: 100%;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .nombre-label-box {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .nombre-label-box label {
+    width: 100%;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .orange-prop {
+    border: 2px solid #FF7F00;
+    margin-bottom: 10px;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general label {
+    font-family: "Montserrat", sans-serif;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general label input,
+  .formulario-general-container .form-card-container .form-container .formulario-general label select,
+  .formulario-general-container .form-card-container .form-container .formulario-general label fieldset {
+    font-family: "Montserrat", sans-serif;
+    margin-top: 8px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f9f9f9;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general label input:focus,
+  .formulario-general-container .form-card-container .form-container .formulario-general label select:focus,
+  .formulario-general-container .form-card-container .form-container .formulario-general label fieldset:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general label input[type=number]::-webkit-inner-spin-button,
+  .formulario-general-container .form-card-container .form-container .formulario-general label input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general fieldset {
+    border: none;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general fieldset .cat-label-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general fieldset .cat-label-container .cat-label {
+    font-size: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 3px;
+    gap: 3px;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general fieldset .cat-label-container .cat-label input {
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general fieldset .cat-label-container .cat-label p {
+    color: #474747;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general fieldset legend {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #444;
+    font-family: "Montserrat", sans-serif;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general fieldset label {
+    flex: 1 1 calc(50% - 10px);
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general fieldset label input {
+    font-family: "Roboto", system-ui;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general fieldset strong {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .botones-navegacion {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .botones-navegacion button {
+    font-family: "Roboto", system-ui;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .botones-navegacion button:first-child {
+    background-color: inherit;
+    color: #1473e6;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .botones-navegacion button:last-child {
+    background-color: #1473e6;
+    color: #fff;
+    border-radius: 2rem;
+  }
+  .formulario-general-container .form-card-container .form-container .formulario-general .botones-navegacion button:last-child:hover {
+    background-color: #0056b3;
+  }
+  .formulario-general-container .form-card-container .general-card-simulator {
+    border: 1px solid white;
+    position: sticky;
+    top: 50px;
+    width: 500px;
+    height: 200px;
+  }
+}
 @media (min-width: 1024px) {
   .seleccion-card-container {
     background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
