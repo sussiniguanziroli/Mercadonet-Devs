@@ -33,8 +33,7 @@
                         gap: 5px;
 
                         label {
-                            font-family: Arial, sans-serif;
-                            color: #cccccc;
+                            
 
                             select {
                                 padding: 10px;
@@ -79,7 +78,7 @@
                     }
 
                     h1 {
-                        font-size: 2.5rem;
+                        font-size: 2.2rem;
                     }
 
                     h3 {
@@ -128,6 +127,7 @@
                         input,
                         select,
                         fieldset {
+                            cursor: pointer;
                             font-family: 'Montserrat', sans-serif;
                             margin-top: 8px;
                             padding: 10px;
@@ -135,12 +135,22 @@
                             border: 1px solid #ccc;
                             border-radius: 5px;
                             background: #f9f9f9;
+                            transition: all .3s;
 
                             &:focus {
                                 border-color: #007bff;
                                 outline: none;
                                 box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
                             }
+
+                            &:hover {
+                                border-color: #888;
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                            }
+                        }
+
+                        input {
+                            cursor: auto;
                         }
 
                         input[type="number"]::-webkit-inner-spin-button,

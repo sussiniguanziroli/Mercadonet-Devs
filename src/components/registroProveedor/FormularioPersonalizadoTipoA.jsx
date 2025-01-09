@@ -114,7 +114,7 @@ const FormularioPersonalizadoTipoA = ({ nextStep, prevStep, updateFormData }) =>
                             >
                                 Atrás
                             </button>
-                            <button type="submit">Continuar</button>
+                            <button onClick={nextStep} type="submit">Continuar</button>
                         </div>
                     </form>
                 </div>
