@@ -3700,23 +3700,25 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a h1,
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a h3 {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a h1 {
     font-family: "Montserrat", sans-serif;
+    font-size: 2rem;
     color: #333;
     font-weight: bold;
-    margin: 5px;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a h1 {
-    font-size: 2.5rem;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a h3 {
-    font-weight: 550;
+    margin-bottom: 20px;
+    border-bottom: 4px solid #f90;
+    padding-bottom: 10px;
   }
   .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section {
     display: flex;
     flex-direction: column;
     gap: 10px;
+  }
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label {
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
   }
   .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section textarea,
   .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section input {
@@ -3725,6 +3727,7 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     background: #f9f9f9;
+    resize: none;
   }
   .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section textarea:focus,
   .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section input:focus {
@@ -3732,52 +3735,56 @@
     outline: none;
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
   }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label {
-    font-family: "Montserrat", sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #444;
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section textarea {
+    width: 100%;
+    height: 120px;
+    box-sizing: border-box;
   }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-logo,
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-carrusel {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-carrusel {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 150px;
     border: 2px dashed #ccc;
     border-radius: 10px;
     text-align: center;
     position: relative;
+    height: 200px;
   }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-logo input,
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-carrusel input {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-carrusel input {
     opacity: 0;
     position: absolute;
     width: 100%;
     height: 100%;
     cursor: pointer;
   }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-logo p,
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-carrusel p {
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-carrusel p {
+    font-size: 14px;
+    color: #474747;
+    pointer-events: none;
+    font-family: "Montserrat", sans-serif;
+  }
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    width: 20%;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+  }
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-logo input {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-logo p {
     font-size: 14px;
     color: #999;
     pointer-events: none;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label .input-carrusel {
-    height: 200px;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .ubicacion-label-box,
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .nombre-label-box {
-    display: flex;
-    gap: 10px;
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .ubicacion-label-box label,
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .nombre-label-box label {
-    width: 100%;
   }
   .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion {
     display: flex;

@@ -165,14 +165,12 @@
     }
 
     .formulario-personalizado-a-container {
-
         display: flex;
         justify-content: space-around;
         padding-top: 45px;
         padding-bottom: 45px;
 
         .for-per-container {
-
             .formulario-personalizado-a {
                 display: flex;
                 flex-direction: column;
@@ -182,27 +180,29 @@
                 background: #ffffff;
                 border-radius: 10px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    
-                h1,
-                h3 {
+
+                h1 {
                     font-family: 'Montserrat', sans-serif;
+                    font-size: 2rem;
                     color: #333;
                     font-weight: bold;
-                    margin: 5px;
+                    margin-bottom: 20px;
+                    border-bottom: 4px solid #f90;
+                    padding-bottom: 10px;
                 }
-    
-                h1 {
-                    font-size: 2.5rem;
-                }
-    
-                h3 {
-                    font-weight: 550;
-                }
-    
+
                 .form-section {
                     display: flex;
                     flex-direction: column;
                     gap: 10px;
+
+                    label {
+                        font-family: 'Montserrat', sans-serif;
+                        font-size: 14px;
+                        font-weight: 500;
+                        color: #444;
+                    }
+
                     textarea,
                     input {
                         padding: 10px;
@@ -210,6 +210,7 @@
                         border: 1px solid #ccc;
                         border-radius: 5px;
                         background: #f9f9f9;
+                        resize: none;
 
                         &:focus {
                             border-color: #007bff;
@@ -217,65 +218,72 @@
                             box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
                         }
                     }
-    
-                    label {
-                        font-family: 'Montserrat', sans-serif;
-                        font-size: 14px;
-                        font-weight: 500;
-                        color: #444;
-    
-                       
-    
-                        .input-logo,
-                        .input-carrusel {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            height: 150px;
-                            border: 2px dashed #ccc;
-                            border-radius: 10px;
-                            text-align: center;
-                            position: relative;
-    
-                            input {
-                                opacity: 0;
-                                position: absolute;
-                                width: 100%;
-                                height: 100%;
-                                cursor: pointer;
-                            }
-    
-                            p {
-                                font-size: 14px;
-                                color: #999;
-                                pointer-events: none;
-                            }
-                        }
-    
-                        .input-carrusel {
-                            height: 200px;
-                        }
-                    }
-                }
-    
-                .ubicacion-label-box,
-                .nombre-label-box {
-                    display: flex;
-                    gap: 10px;
-                    width: 100%;
-                    flex-direction: row;
-                    align-items: center;
-                    justify-content: center;
-    
-                    label {
+
+                    textarea {
                         width: 100%;
+                        height: 120px;
+                        box-sizing: border-box;
+                    }
+
+                    .input-carrusel {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border: 2px dashed #ccc;
+                        border-radius: 10px;
+                        text-align: center;
+                        position: relative;
+                        height: 200px;
+                        input {
+                            opacity: 0;
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            cursor: pointer;
+                        }
+
+                        p {
+                            font-size: 14px;
+                            color: $dark-gray;
+                            pointer-events: none;
+                            font-family: 'Montserrat',sans-serif;
+                        }
+
+                    }
+
+                   
+
+                    .input-logo {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 120px;
+                        width: 20%;
+                        border: 2px dashed #ccc;
+                        border-radius: 10px;
+                        text-align: center;
+                        position: relative;
+
+                        input {
+                            opacity: 0;
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            cursor: pointer;
+                        }
+
+                        p {
+                            font-size: 14px;
+                            color: #999;
+                            pointer-events: none;
+                        }
                     }
                 }
-    
+
                 .botones-navegacion {
                     display: flex;
                     justify-content: space-between;
-    
+
                     button {
                         padding: 10px 20px;
                         border: none;
@@ -283,21 +291,21 @@
                         font-size: 14px;
                         cursor: pointer;
                         transition: background-color 0.3s ease;
-    
+
                         &:first-child {
                             background-color: inherit;
                             color: #1473e6;
-    
+
                             &:hover {
                                 background-color: #f0f0f0;
                             }
                         }
-    
+
                         &:last-child {
                             background-color: #1473e6;
                             color: #fff;
                             border-radius: 2rem;
-    
+
                             &:hover {
                                 background-color: #0056b3;
                             }
@@ -307,8 +315,6 @@
             }
         }
 
-        
-
         .card-historia-simulator-container {
             border: 1px solid white;
             position: sticky;
@@ -316,7 +322,7 @@
             width: 500px;
             height: 200px;
         }
-
     }
+
 
 }
