@@ -36,6 +36,7 @@
   width: 32%;
   max-width: 580px;
   margin: 0.4rem 0;
+  max-height: 40px;
 }
 .header .search-box .search-section {
   display: flex;
@@ -44,6 +45,7 @@
   padding: 0.25rem;
   border-radius: 2rem;
   background-color: #F5F5F5;
+  max-height: 40px;
 }
 .header .search-box .search-section input {
   all: unset;
@@ -3573,22 +3575,28 @@
     width: 500px;
     height: 200px;
   }
+  .formulario-personalizado-b-container .for-per-container {
+    width: 100%;
+    max-width: 700px;
+  }
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b {
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding: 25px;
-    max-width: 700px;
     margin: 0 auto;
     background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b h1 {
-    font-size: 1.8rem;
+    font-family: "Montserrat", sans-serif;
+    font-size: 2.2rem;
     color: #333;
-    border-bottom: 2px solid #f90;
-    padding-bottom: 10px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 4px solid #f90;
+    padding-bottom: 20px;
   }
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section {
     display: flex;
@@ -3596,8 +3604,10 @@
     gap: 10px;
   }
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section label {
-    font-weight: bold;
-    margin-bottom: 5px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
   }
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section textarea,
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=text],
@@ -3605,18 +3615,25 @@
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=url],
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=tel] {
     padding: 10px;
+    font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px;
+    background: #f9f9f9;
+    resize: none;
   }
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section textarea:focus,
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=text]:focus,
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=email]:focus,
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=url]:focus,
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=tel]:focus {
-    outline: none;
     border-color: #007bff;
+    outline: none;
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+  }
+  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section textarea {
+    width: 100%;
+    height: 120px;
+    box-sizing: border-box;
   }
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .input-logo,
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .input-carrusel {
@@ -3642,6 +3659,45 @@
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
+  }
+  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card input {
+    margin: 2px;
+    width: 100%;
+  }
+  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 15px;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload:hover {
+    border-color: #003a79;
+    background-color: #f7faff;
+  }
+  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload .file-label {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload .file-label .file-icon {
+    font-size: 24px;
+    color: #003369;
+  }
+  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload .file-label span {
+    font-size: 14px;
+    color: #666;
+  }
+  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload .file-label .input-file {
+    display: none;
   }
   .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .botones-navegacion {
     display: flex;
@@ -3673,11 +3729,14 @@
     padding-top: 45px;
     padding-bottom: 45px;
   }
+  .formulario-personalizado-a-container .for-per-container {
+    width: 100%;
+    max-width: 700px;
+  }
   .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 700px;
     padding: 25px;
     background: #ffffff;
     border-radius: 10px;

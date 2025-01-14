@@ -1,4 +1,5 @@
 import React from "react";
+import { FaFileCirclePlus } from "react-icons/fa6";
 
 const FormularioPersonalizadoTipoB = ({ nextStep, prevStep, updateFormData }) => {
     const handleSubmit = (e) => {
@@ -104,22 +105,31 @@ const FormularioPersonalizadoTipoB = ({ nextStep, prevStep, updateFormData }) =>
                                 {[...Array(6)].map((_, i) => (
                                     <div key={i} className="producto-card">
                                         <label htmlFor={`producto_imagen_${i}`}>Imagen {i + 1}</label>
-                                        <input
-                                            id={`producto_imagen_${i}`}
-                                            type="file"
-                                            name={`producto_imagen_${i}`}
-                                            accept="image/*"
-                                        />
+                                        <div className="custom-file-upload">
+                                            <label htmlFor={`producto_imagen_${i}`} className="file-label">
+                                                <div className="file-icon">
+                                                <FaFileCirclePlus size={30} />
+                                                </div>
+                                                <span>Selecciona o arrastra una imagen</span>
+                                                <input
+                                                    className="input-file"
+                                                    id={`producto_imagen_${i}`}
+                                                    type="file"
+                                                    name={`producto_imagen_${i}`}
+                                                    accept="image/*"
+                                                />
+                                            </label>
+                                        </div>
                                         <input
                                             type="text"
                                             name={`producto_titulo_${i}`}
-                                            placeholder="Título o Precio"
+                                            placeholder="Título"
                                         />
-                                        <textarea
-                                            name={`producto_descripcion_${i}`}
-                                            placeholder="Descripción del producto"
-                                            rows="2"
-                                        ></textarea>
+                                        <input
+                                            name={`producto_precio_${i}`}
+                                            type="text"
+                                            placeholder="Precio o Rango"
+                                        />
                                     </div>
                                 ))}
                             </div>

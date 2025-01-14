@@ -15,7 +15,6 @@
 
 
     .formulario-personalizado-b-container {
-
         display: flex;
         justify-content: space-around;
         padding-top: 45px;
@@ -31,22 +30,26 @@
 
         // Formulario Personalizado Tipo B
         .for-per-container {
+            width: 100%;
+            max-width: 700px;
             .formulario-personalizado-b {
                 display: flex;
                 flex-direction: column;
                 gap: 20px;
                 padding: 25px;
-                max-width: 700px;
                 margin: 0 auto;
                 background: #ffffff;
                 border-radius: 10px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
                 h1 {
-                    font-size: 1.8rem;
+                    font-family: 'Montserrat', sans-serif;
+                    font-size: 2.2rem;
                     color: #333;
-                    border-bottom: 2px solid #f90;
-                    padding-bottom: 10px;
+                    font-weight: bold;
+                    margin-bottom: 20px;
+                    border-bottom: 4px solid #f90;
+                    padding-bottom: 20px;
                 }
 
                 .form-section {
@@ -55,8 +58,10 @@
                     gap: 10px;
 
                     label {
-                        font-weight: bold;
-                        margin-bottom: 5px;
+                        font-family: 'Montserrat', sans-serif;
+                        font-size: 14px;
+                        font-weight: 500;
+                        color: #444;
                     }
 
                     textarea,
@@ -65,15 +70,23 @@
                     input[type="url"],
                     input[type="tel"] {
                         padding: 10px;
+                        font-size: 14px;
                         border: 1px solid #ccc;
                         border-radius: 5px;
-                        font-size: 14px;
+                        background: #f9f9f9;
+                        resize: none;
 
                         &:focus {
-                            outline: none;
                             border-color: #007bff;
+                            outline: none;
                             box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
                         }
+                    }
+
+                    textarea {
+                        width: 100%;
+                        height: 120px;
+                        box-sizing: border-box;
                     }
 
                     .input-logo,
@@ -101,6 +114,56 @@
                             padding: 10px;
                             border: 1px solid #ddd;
                             border-radius: 8px;
+
+                            input {
+                                margin: 2px;
+                                width: 100%;
+                            }
+
+
+                            .custom-file-upload {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                width: 100%;
+                                padding: 15px;
+                                border: 2px dashed #ccc;
+                                border-radius: 10px;
+                                cursor: pointer;
+                                transition: border-color 0.3s ease, background-color 0.3s ease;
+
+                                &:hover {
+                                    border-color: #003a79;
+                                    background-color: #f7faff;
+                                }
+
+                                .file-label {
+                                    cursor: pointer;
+                                    display: flex;
+                                    flex-direction: column;
+                                    align-items: center;
+                                    text-align: center;
+                                    gap: 10px;
+
+                                    .file-icon {
+                                        font-size: 24px;
+                                        color: #003369;
+
+
+                                    }
+
+                                    span {
+                                        font-size: 14px;
+                                        color: #666;
+                                    }
+
+                                    .input-file {
+                                        display: none;
+                                    }
+                                }
+                            }
+
                         }
                     }
                 }
@@ -121,7 +184,7 @@
                             background-color: inherit;
                             color: #1473e6;
 
-                            
+
                         }
 
                         &:last-child {
@@ -149,11 +212,13 @@
         padding-bottom: 45px;
 
         .for-per-container {
+            width: 100%;
+            max-width: 700px;
             .formulario-personalizado-a {
                 display: flex;
                 flex-direction: column;
                 gap: 20px;
-                width: 700px;
+                
                 padding: 25px;
                 background: #ffffff;
                 border-radius: 10px;
