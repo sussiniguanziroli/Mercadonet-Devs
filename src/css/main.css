@@ -1,7 +1,10 @@
 @charset "UTF-8";
 /* Definición de colores principales */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined");
 .header {
   position: -webkit-sticky;
   position: sticky;
@@ -20,6 +23,7 @@
 .header.scrolled {
   background-color: #474747;
   padding: 0.2rem 0.6rem;
+  width: 100%;
 }
 .header.scrolled img {
   width: 10%;
@@ -3451,700 +3455,1949 @@
   text-decoration: underline;
 }
 
-@media (min-width: 1024px) {
-  .landing-registro-proveedor {
-    background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
-    background-position: 100%;
-    background-repeat: no-repeat;
-    background-size: 100% 1500px;
-    background-color: #131921;
-    max-width: 2400px;
-    width: 100%;
-    height: 93.3vh;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    font-family: "Montserrat", sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3rem;
-  }
-  .landing-registro-proveedor h1 {
-    text-align: center;
-    color: #F5F5F5;
-    font-size: 3.4rem;
-  }
-  .landing-registro-proveedor h2 {
-    color: #F5F5F5;
-    font-weight: 400;
-    font-size: 1.7rem;
-    text-align: center;
-  }
-  .landing-registro-proveedor button {
-    all: unset;
-    padding: 0.9rem;
-    font-size: 1.2rem;
-    font-weight: 520;
-    color: #F5F5F5;
-    background-color: #1476e6;
-    font-family: "Montserrat", sans-serif;
-    border-radius: 12px;
-    transition: all 0.3s;
-    cursor: pointer;
-  }
-  .landing-registro-proveedor button:hover {
-    background-color: #0d57ac;
-  }
+.main-landing {
+  display: block;
 }
+
 .landing-registro-proveedor {
+  background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #00052D;
+  width: 100%;
+  min-height: 80vh;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 20px;
+  gap: 2rem;
+  font-family: "Montserrat", sans-serif;
+}
+.landing-registro-proveedor h1 {
+  color: #FFFFFF;
+  font-size: 2.5rem;
+  font-weight: bold;
+  max-width: 90%;
+}
+.landing-registro-proveedor h2 {
+  color: #FFFFFF;
+  font-weight: 400;
+  font-size: 1.2rem;
+  max-width: 90%;
 }
 .landing-registro-proveedor button {
-  background-color: #007bff;
-  color: white;
-}
-.landing-registro-proveedor button:hover {
-  background-color: #0056b3;
-}
-
-.seleccion-plan {
-  text-align: center;
-  padding: 20px;
-}
-.seleccion-plan .plan-options {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-.seleccion-plan .plan-options .plan-card {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 200px;
+  all: unset;
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #FFFFFF;
+  background-color: #1476e6;
+  font-family: "Montserrat", sans-serif;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
   text-align: center;
 }
-.seleccion-plan .plan-options .plan-card:hover {
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
+.landing-registro-proveedor button:hover, .landing-registro-proveedor button:focus {
+  background-color: #0d57ac;
+  outline: none;
 }
 
-.resumen-registro {
+.steps-graph {
+  background-color: #000510;
+  margin: 0;
+  padding: 40px 20px;
+  font-family: "Roboto", sans-serif;
+  color: #FFFFFF;
+}
+.steps-graph .paso-a-paso {
+  max-width: 1100px;
+  margin: 0 auto;
   text-align: center;
-  padding: 20px;
 }
-.resumen-registro .resumen-datos {
-  margin: 20px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+.steps-graph .paso-a-paso p {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  color: #FFFFFF;
 }
-.resumen-registro .resumen-datos p {
-  margin: 10px 0;
-  font-size: 16px;
-}
-.resumen-registro button {
-  background-color: #007bff;
-}
-
-@media (min-width: 1024px) {
-  .formulario-personalizado {
-    max-width: 2400px;
-    width: 100%;
-  }
-  .formulario-personalizado .formulario-bg {
-    position: fixed;
-    z-index: -1;
-    width: 100%;
-  }
-  .formulario-personalizado-b-container {
-    display: flex;
-    justify-content: space-around;
-    padding-top: 45px;
-    padding-bottom: 45px;
-  }
-  .formulario-personalizado-b-container .card-productos-simulator-container {
-    border: 1px solid white;
-    position: sticky;
-    top: 50px;
-    width: 500px;
-    height: 200px;
-  }
-  .formulario-personalizado-b-container .for-per-container {
-    width: 100%;
-    max-width: 700px;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 25px;
-    margin: 0 auto;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b h1 {
-    font-family: "Montserrat", sans-serif;
-    font-size: 2.2rem;
-    color: #333;
-    font-weight: bold;
-    margin-bottom: 20px;
-    border-bottom: 4px solid #f90;
-    padding-bottom: 20px;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section label {
-    font-family: "Montserrat", sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #444;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section textarea,
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=text],
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=email],
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=url],
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=tel] {
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background: #f9f9f9;
-    resize: none;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section textarea:focus,
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=text]:focus,
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=email]:focus,
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=url]:focus,
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section input[type=tel]:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section textarea {
-    width: 100%;
-    height: 120px;
-    box-sizing: border-box;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .input-logo,
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .input-carrusel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 150px;
-    border: 2px dashed #ccc;
-    border-radius: 10px;
-    text-align: center;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .input-logo p,
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .input-carrusel p {
-    font-size: 14px;
-    color: #999;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card input {
-    margin: 2px;
-    width: 100%;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 15px;
-    border: 2px dashed #ccc;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload:hover {
-    border-color: #003a79;
-    background-color: #f7faff;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload .file-label {
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 10px;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload .file-label .file-icon {
-    font-size: 24px;
-    color: #003369;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload .file-label span {
-    font-size: 14px;
-    color: #666;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .form-section .galeria-grid .producto-card .custom-file-upload .file-label .input-file {
-    display: none;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .botones-navegacion {
-    display: flex;
-    justify-content: space-between;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .botones-navegacion button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .botones-navegacion button:first-child {
-    background-color: inherit;
-    color: #1473e6;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .botones-navegacion button:last-child {
-    background-color: #1473e6;
-    color: #fff;
-    border-radius: 2rem;
-  }
-  .formulario-personalizado-b-container .for-per-container .formulario-personalizado-b .botones-navegacion button:last-child:hover {
-    background-color: #0056b3;
-  }
-  .formulario-personalizado-a-container {
-    display: flex;
-    justify-content: space-around;
-    padding-top: 45px;
-    padding-bottom: 45px;
-  }
-  .formulario-personalizado-a-container .for-per-container {
-    width: 100%;
-    max-width: 700px;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 25px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a h1 {
-    font-family: "Montserrat", sans-serif;
-    font-size: 2.2rem;
-    color: #333;
-    font-weight: bold;
-    margin-bottom: 20px;
-    border-bottom: 4px solid #f90;
-    padding-bottom: 20px;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section label {
-    font-family: "Montserrat", sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #444;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section textarea,
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section input {
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background: #f9f9f9;
-    resize: none;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section textarea:focus,
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section input:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section textarea {
-    width: 100%;
-    height: 120px;
-    box-sizing: border-box;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-carrusel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed #ccc;
-    border-radius: 10px;
-    text-align: center;
-    position: relative;
-    height: 200px;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-carrusel input {
-    opacity: 0;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-carrusel p {
-    font-size: 14px;
-    color: #474747;
-    pointer-events: none;
-    font-family: "Montserrat", sans-serif;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 120px;
-    width: 20%;
-    border: 2px dashed #ccc;
-    border-radius: 10px;
-    text-align: center;
-    position: relative;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-logo input {
-    opacity: 0;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .form-section .input-logo p {
-    font-size: 14px;
-    color: #999;
-    pointer-events: none;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion {
-    display: flex;
-    justify-content: space-between;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion button:first-child {
-    background-color: inherit;
-    color: #1473e6;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion button:last-child {
-    background-color: #1473e6;
-    color: #fff;
-    border-radius: 2rem;
-  }
-  .formulario-personalizado-a-container .for-per-container .formulario-personalizado-a .botones-navegacion button:last-child:hover {
-    background-color: #0056b3;
-  }
-  .formulario-personalizado-a-container .card-historia-simulator-container {
-    border: 1px solid white;
-    position: sticky;
-    top: 50px;
-    width: 500px;
-    height: 200px;
-  }
-}
-.formulario-bg {
-  position: fixed;
-  z-index: -1;
+.steps-graph .progreso {
   width: 100%;
 }
 
-@media (min-width: 1000px) {
-  .formulario-general-container {
-    width: 100%;
+.features-section {
+  background-color: #000510;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 30px 20px 50px;
+}
+.features-section div {
+  width: 90%;
+  max-width: 400px;
+  height: auto;
+}
+.features-section div img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+@media (min-width: 1024px) {
+  .landing-registro-proveedor {
+    min-height: 90vh;
+    padding: 60px 20px;
+    gap: 3rem;
   }
-  .formulario-general-container .form-card-container {
-    display: flex;
-    justify-content: space-around;
-    margin: 50px;
+  .landing-registro-proveedor h1 {
+    font-size: 3.4rem;
+    max-width: 80%;
   }
-  .formulario-general-container .form-card-container .form-container .formulario-general {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 700px;
-    padding: 25px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  .landing-registro-proveedor h2 {
+    font-size: 1.7rem;
+    max-width: 70%;
   }
-  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  .landing-registro-proveedor button {
+    padding: 0.9rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 12px;
   }
-  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown label select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  .steps-graph {
+    padding: 60px 40px;
   }
-  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown label select:hover {
-    border-color: #888;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  .steps-graph .paso-a-paso p {
+    font-size: 1.3rem;
   }
-  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown label select:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown label select option {
-    padding: 5px;
-    background-color: #fff;
-    color: #333;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general .custom-dropdown label select option:hover {
-    background-color: #f5f5f5;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general h1,
-  .formulario-general-container .form-card-container .form-container .formulario-general h3 {
-    font-family: "Montserrat", sans-serif;
-    color: #333;
-    font-weight: bold;
-    margin: 5px;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general h1 {
-    font-size: 2.2rem;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general h3 {
-    font-weight: 550;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general .ubicacion-label-box {
-    display: flex;
-    gap: 10px;
-    width: 100%;
+  .features-section {
     flex-direction: row;
-    align-items: center;
     justify-content: center;
+    align-items: stretch;
+    gap: 24px;
+    padding: 40px 50px 60px;
   }
-  .formulario-general-container .form-card-container .form-container .formulario-general .ubicacion-label-box label {
+  .features-section div {
     width: 100%;
+    max-width: 350px;
   }
-  .formulario-general-container .form-card-container .form-container .formulario-general .nombre-label-box {
-    display: flex;
-    gap: 10px;
-    width: 100%;
+  .features-section div img {
+    height: 100%;
+    object-fit: cover;
+  }
+}
+.button-and-text-div {
+  max-width: 320px;
+  width: 90%;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+.button-and-text-div .card-image-button {
+  cursor: pointer;
+  border-radius: 8px;
+  display: block;
+}
+.button-and-text-div .card-image-button img {
+  pointer-events: none;
+  display: block;
+}
+.button-and-text-div .card-image-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(100, 150, 255, 0.6);
+}
+.button-and-text-div p.card-description-hover {
+  font-size: 0.85rem;
+  text-align: center;
+  font-family: "Roboto", system-ui;
+  line-height: 1.45;
+  margin-top: 12px;
+  letter-spacing: normal;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.button-and-text-div:hover {
+  transform: scale(1.05);
+}
+.button-and-text-div:hover p.card-description-hover {
+  visibility: visible;
+  opacity: 0.85;
+}
+
+.proveedor-item-desktop.simulator {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: fit-content;
+  max-height: 400px;
+  background-color: rgba(255, 255, 255, 0.67);
+  border-radius: 3px;
+  width: 100%;
+  max-width: 50vw;
+  font-size: 1rem;
+  gap: 8px;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+.proveedor-item-desktop.simulator:hover {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15) !important;
+  transform: scale(1.005);
+}
+.proveedor-item-desktop.simulator .carousel-box {
+  margin: 3px;
+  position: relative;
+  height: 100%;
+  width: 25%;
+  min-width: 250px;
+  max-width: 250px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.proveedor-item-desktop.simulator .carousel-box .carousel-frame {
+  border-radius: 10px;
+  background-color: #d6d6d6;
+  padding: 10px;
+  height: 100%;
+}
+.proveedor-item-desktop.simulator .carousel-box .carousel-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.proveedor-item-desktop.simulator .carousel-box .carousel-slide iframe {
+  width: 100%;
+  height: 100%;
+}
+.proveedor-item-desktop.simulator .carousel-box .carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 5px;
+}
+.proveedor-item-desktop.simulator .carousel-box .carousel-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #555;
+  font-size: 1.2rem;
+}
+.proveedor-item-desktop.simulator .carousel-box .carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  width: 30px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.proveedor-item-desktop.simulator .carousel-box .carousel-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.proveedor-item-desktop.simulator .carousel-box:hover .carousel-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+.proveedor-item-desktop.simulator .carousel-box .back {
+  left: 0;
+}
+.proveedor-item-desktop.simulator .carousel-box .next {
+  right: 0;
+}
+.proveedor-item-desktop.simulator .carousel-box .carousel-dots {
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  position: absolute;
+  bottom: 10px;
+  right: 50%;
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+.proveedor-item-desktop.simulator .carousel-box:hover .carousel-dots {
+  opacity: 1;
+  pointer-events: auto;
+}
+.proveedor-item-desktop.simulator .carousel-box .carousel-dots button {
+  width: 6px;
+  height: 6px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.proveedor-item-desktop.simulator .carousel-box .carousel-dots button:hover,
+.proveedor-item-desktop.simulator .carousel-box .carousel-dots .carousel__dot--selected {
+  background-color: #333;
+}
+.proveedor-item-desktop.simulator .info-box {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+  padding: 0 10px;
+  overflow: hidden;
+}
+.proveedor-item-desktop.simulator .info-box .titles-box {
+  padding-top: 10px;
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  grid-template-rows: auto auto;
+  grid-template-areas: "logo-small h3 verificado" "logo-small p p";
+  align-items: center;
+  column-gap: 7px;
+  row-gap: 1px;
+  width: 100%;
+}
+.proveedor-item-desktop.simulator .info-box .titles-box .small-logo-box {
+  grid-area: logo-small;
+  width: 60px;
+  height: 60px;
+  border: 1px solid #aeaeae;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+.proveedor-item-desktop.simulator .info-box .titles-box .small-logo-box .small-logo {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+.proveedor-item-desktop.simulator .info-box .titles-box h3 {
+  grid-area: h3;
+  font-family: "Montserrat", sans-serif;
+  color: #333;
+  font-size: 1.5rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.proveedor-item-desktop.simulator .info-box .titles-box h3:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.proveedor-item-desktop.simulator .info-box .titles-box .verificado {
+  grid-area: verificado;
+  width: 85px;
+  height: auto;
+}
+.proveedor-item-desktop.simulator .info-box .titles-box p {
+  grid-area: p;
+  color: #666;
+  font-size: 1.2rem;
+  font-family: "Montserrat", sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  margin: 0;
+}
+.proveedor-item-desktop.simulator .info-box .tags-box {
+  margin: 7px 0;
+  width: 100%;
+  overflow: hidden;
+}
+.proveedor-item-desktop.simulator .info-box .tags-box img {
+  margin: 3px;
+  height: 1.7rem;
+  border-radius: 2px;
+}
+.proveedor-item-desktop.simulator .info-box .texts-box {
+  width: 100%;
+}
+.proveedor-item-desktop.simulator .info-box .texts-box .description {
+  color: #666;
+  font-weight: 400;
+  font-size: 1.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.proveedor-item-desktop.simulator .info-box .texts-box .marcas, .proveedor-item-desktop.simulator .info-box .texts-box .extras {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.proveedor-item-desktop.simulator .info-box .texts-box .marcas h4, .proveedor-item-desktop.simulator .info-box .texts-box .extras h4 {
+  font-size: 1.2rem;
+  margin-right: 5px;
+  color: #666;
+}
+.proveedor-item-desktop.simulator .info-box .texts-box .marcas p, .proveedor-item-desktop.simulator .info-box .texts-box .extras p {
+  font-size: 1.2rem;
+  color: #666;
+  margin: 0;
+}
+.proveedor-item-desktop.simulator .info-box .texts-box .marcas .tag-extra, .proveedor-item-desktop.simulator .info-box .texts-box .extras .tag-extra {
+  padding: 5px;
+  background-color: #f4f4f4;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: #666;
+}
+.proveedor-item-desktop.simulator .buttons-box {
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-right: 10px;
+  max-width: 120px;
+}
+.proveedor-item-desktop.simulator .buttons-box a {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: start;
+  background-color: #1473e6;
+  border-radius: 4px;
+  color: #fff;
+  padding: 8px;
+  font-family: "Roboto", system-ui;
+  font-weight: 300;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+.proveedor-item-desktop.simulator .buttons-box a:hover {
+  background-color: #0056b3;
+}
+.proveedor-item-desktop.simulator .alineado-auto {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-self: flex-start;
+  margin-top: 0.7rem;
+}
+
+@media (min-width: 1920px) {
+  .proveedor-item-desktop.simulator {
+    font-size: 0.9rem;
+  }
+  .proveedor-item-desktop.simulator .titles-box h3 {
+    font-size: 1.1rem;
+  }
+  .proveedor-item-desktop.simulator .texts-box p {
+    font-size: 0.95rem;
+  }
+}
+@media (max-width: 1600px) {
+  .proveedor-item-desktop.simulator {
+    font-size: 0.7rem;
+  }
+  .proveedor-item-desktop.simulator .titles-box h3 {
+    font-size: 0.9rem;
+  }
+  .proveedor-item-desktop.simulator .texts-box p {
+    font-size: 0.75rem;
+  }
+}
+.proveedor-item-desktop.simulatorProductos {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: fit-content;
+  max-height: 400px;
+  background-color: rgba(255, 255, 255, 0.67);
+  border-radius: 3px;
+  width: 100%;
+  max-width: 50vw;
+  font-size: 1rem;
+  gap: 8px;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+.proveedor-item-desktop.simulatorProductos:hover {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15) !important;
+  transform: scale(1.005);
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box {
+  margin: 3px;
+  position: relative;
+  height: 100%;
+  width: 25%;
+  min-width: 250px;
+  max-width: 250px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .carousel-frame {
+  border-radius: 10px;
+  background-color: #d6d6d6;
+  padding: 10px;
+  height: 100%;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .carousel-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .carousel-slide iframe {
+  width: 100%;
+  height: 100%;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 5px;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .carousel-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #555;
+  font-size: 1.2rem;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  width: 30px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .carousel-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box:hover .carousel-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .back {
+  left: 0;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .next {
+  right: 0;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .carousel-dots {
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  position: absolute;
+  bottom: 10px;
+  right: 50%;
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box:hover .carousel-dots {
+  opacity: 1;
+  pointer-events: auto;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .carousel-dots button {
+  width: 6px;
+  height: 6px;
+  background-color: #ccc;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.proveedor-item-desktop.simulatorProductos .carousel-box .carousel-dots button:hover,
+.proveedor-item-desktop.simulatorProductos .carousel-box .carousel-dots .carousel__dot--selected {
+  background-color: #333;
+}
+.proveedor-item-desktop.simulatorProductos .info-box {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+  padding: 0 10px;
+  overflow: hidden;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .titles-box {
+  padding-top: 10px;
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  grid-template-rows: auto auto;
+  grid-template-areas: "logo-small h3 verificado" "logo-small p p";
+  align-items: center;
+  column-gap: 7px;
+  row-gap: 1px;
+  width: 100%;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .titles-box .small-logo-box {
+  grid-area: logo-small;
+  width: 60px;
+  height: 60px;
+  border: 1px solid #aeaeae;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .titles-box .small-logo-box .small-logo {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .titles-box h3 {
+  grid-area: h3;
+  font-family: "Montserrat", sans-serif;
+  color: #333;
+  font-size: 1.5rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .titles-box h3:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .titles-box .verificado {
+  grid-area: verificado;
+  width: 85px;
+  height: auto;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .titles-box p {
+  grid-area: p;
+  color: #666;
+  font-size: 1.2rem;
+  font-family: "Montserrat", sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  margin: 0;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .tags-box {
+  margin: 7px 0;
+  width: 100%;
+  overflow: hidden;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .tags-box img {
+  margin: 3px;
+  height: 1.7rem;
+  border-radius: 2px;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .texts-box {
+  width: 100%;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .texts-box .description {
+  color: #666;
+  font-weight: 400;
+  font-size: 1.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .texts-box .marcas, .proveedor-item-desktop.simulatorProductos .info-box .texts-box .extras {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .texts-box .marcas h4, .proveedor-item-desktop.simulatorProductos .info-box .texts-box .extras h4 {
+  font-size: 1.2rem;
+  margin-right: 5px;
+  color: #666;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .texts-box .marcas p, .proveedor-item-desktop.simulatorProductos .info-box .texts-box .extras p {
+  font-size: 1.2rem;
+  color: #666;
+  margin: 0;
+}
+.proveedor-item-desktop.simulatorProductos .info-box .texts-box .marcas .tag-extra, .proveedor-item-desktop.simulatorProductos .info-box .texts-box .extras .tag-extra {
+  padding: 5px;
+  background-color: #f4f4f4;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: #666;
+}
+.proveedor-item-desktop.simulatorProductos .buttons-box {
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-right: 10px;
+  max-width: 120px;
+}
+.proveedor-item-desktop.simulatorProductos .buttons-box a {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: start;
+  background-color: #1473e6;
+  border-radius: 4px;
+  color: #fff;
+  padding: 8px;
+  font-family: "Roboto", system-ui;
+  font-weight: 300;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+.proveedor-item-desktop.simulatorProductos .buttons-box a:hover {
+  background-color: #0056b3;
+}
+.proveedor-item-desktop.simulatorProductos .alineado-auto {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-self: flex-start;
+  margin-top: 0.7rem;
+}
+
+@media (min-width: 1920px) {
+  .proveedor-item-desktop.simulator {
+    font-size: 0.9rem;
+  }
+  .proveedor-item-desktop.simulator .titles-box h3 {
+    font-size: 1.1rem;
+  }
+  .proveedor-item-desktop.simulator .texts-box p {
+    font-size: 0.95rem;
+  }
+}
+@media (max-width: 1600px) {
+  .proveedor-item-desktop.simulator {
+    font-size: 0.7rem;
+  }
+  .proveedor-item-desktop.simulator .titles-box h3 {
+    font-size: 0.9rem;
+  }
+  .proveedor-item-desktop.simulator .texts-box p {
+    font-size: 0.75rem;
+  }
+}
+.registro-step-layout {
+  /* Sin cambios de color aquí */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .registro-step-layout {
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general .nombre-label-box label {
-    width: 100%;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general .orange-prop {
-    border: 2px solid #FF7F00;
-    margin-bottom: 10px;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general label {
-    font-family: "Montserrat", sans-serif;
-    display: flex;
-    flex-direction: column;
-    font-size: 14px;
-    font-weight: 500;
-    color: #444;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general label input,
-  .formulario-general-container .form-card-container .form-container .formulario-general label select,
-  .formulario-general-container .form-card-container .form-container .formulario-general label fieldset {
-    cursor: pointer;
-    font-family: "Montserrat", sans-serif;
-    margin-top: 8px;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background: #f9f9f9;
-    transition: all 0.3s;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general label input:focus,
-  .formulario-general-container .form-card-container .form-container .formulario-general label select:focus,
-  .formulario-general-container .form-card-container .form-container .formulario-general label fieldset:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general label input:hover,
-  .formulario-general-container .form-card-container .form-container .formulario-general label select:hover,
-  .formulario-general-container .form-card-container .form-container .formulario-general label fieldset:hover {
-    border-color: #888;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general label input {
-    cursor: auto;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general label input[type=number]::-webkit-inner-spin-button,
-  .formulario-general-container .form-card-container .form-container .formulario-general label input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general fieldset {
-    border: none;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general fieldset .cat-label-container {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general fieldset .cat-label-container .cat-label {
-    font-size: 1rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    margin: 3px;
-    gap: 3px;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general fieldset .cat-label-container .cat-label input {
-    margin: 0;
-    padding: 0;
-    cursor: pointer;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general fieldset .cat-label-container .cat-label p {
-    color: #474747;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general fieldset legend {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #444;
-    font-family: "Montserrat", sans-serif;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general fieldset label {
-    flex: 1 1 calc(50% - 10px);
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general fieldset label input {
-    font-family: "Roboto", system-ui;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general fieldset strong {
-    color: red;
-    font-size: 12px;
-    margin-top: 5px;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general .botones-navegacion {
-    display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    align-items: flex-start;
+    gap: 5%;
   }
-  .formulario-general-container .form-card-container .form-container .formulario-general .botones-navegacion button {
-    font-family: "Roboto", system-ui;
-    padding: 10px 20px;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+}
+
+.form-wrapper {
+  /* Sin cambios de color aquí */
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .form-wrapper {
+    width: 100%;
+    max-width: 1000px;
   }
-  .formulario-general-container .form-card-container .form-container .formulario-general .botones-navegacion button:first-child {
-    background-color: inherit;
-    color: #1473e6;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general .botones-navegacion button:last-child {
-    background-color: #1473e6;
-    color: #fff;
-    border-radius: 2rem;
-  }
-  .formulario-general-container .form-card-container .form-container .formulario-general .botones-navegacion button:last-child:hover {
-    background-color: #0056b3;
-  }
-  .formulario-general-container .form-card-container .general-card-simulator {
-    border: 1px solid white;
-    position: sticky;
-    top: 50px;
-    width: 500px;
-    height: 200px;
+}
+
+.registro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  background-color: #FFFFFF;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 35px 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.registro-form h1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.8rem;
+  color: #212529;
+  font-weight: 600;
+  margin: -10px 0 10px 0;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #F2994A;
+}
+.registro-form h3 {
+  font-family: "Montserrat", sans-serif;
+  color: #212529;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: -8px;
+  font-size: 1.1rem;
+  border-left: 3px solid #F2994A;
+  padding-left: 10px;
+}
+.registro-form .form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.registro-form label {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.registro-form input[type=text],
+.registro-form input[type=email],
+.registro-form input[type=url],
+.registro-form input[type=tel],
+.registro-form input[type=number],
+.registro-form textarea,
+.registro-form select {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background: #FFFFFF;
+  font-family: "Montserrat", sans-serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+  color: #212529;
+}
+.registro-form input[type=text]::placeholder,
+.registro-form input[type=email]::placeholder,
+.registro-form input[type=url]::placeholder,
+.registro-form input[type=tel]::placeholder,
+.registro-form input[type=number]::placeholder,
+.registro-form textarea::placeholder,
+.registro-form select::placeholder {
+  color: #a9b1ba;
+  opacity: 0.9;
+}
+.registro-form input[type=text]:focus,
+.registro-form input[type=email]:focus,
+.registro-form input[type=url]:focus,
+.registro-form input[type=tel]:focus,
+.registro-form input[type=number]:focus,
+.registro-form textarea:focus,
+.registro-form select:focus {
+  border-color: #85b7f4;
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(20, 115, 230, 0.25);
+}
+.registro-form input[type=text]:hover,
+.registro-form input[type=email]:hover,
+.registro-form input[type=url]:hover,
+.registro-form input[type=tel]:hover,
+.registro-form input[type=number]:hover,
+.registro-form textarea:hover,
+.registro-form select:hover {
+  border-color: #b1bbc4;
+}
+.registro-form textarea {
+  min-height: 100px;
+}
+.registro-form select {
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+.registro-form fieldset {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 15px 20px;
+  margin-top: 5px;
+}
+.registro-form legend {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6c757d;
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  padding: 0 8px;
+  margin-left: 0px;
+  letter-spacing: 0.5px;
+}
+.registro-form .input-row {
+  /* Sin cambios de color */
+}
+.registro-form .botones-navegacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #dee2e6;
+}
+.registro-form .botones-navegacion button {
+  padding: 10px 28px;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  font-family: "Roboto", system-ui;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.registro-form .botones-navegacion button[type=button] {
+  background-color: transparent;
+  color: #1473e6;
+  border: 1px solid #1473e6;
+}
+.registro-form .botones-navegacion button[type=button]:hover {
+  background-color: rgba(20, 115, 230, 0.08);
+}
+.registro-form .botones-navegacion button[type=button]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(20, 115, 230, 0.3);
+}
+.registro-form .botones-navegacion button[type=submit] {
+  background-color: #1473e6;
+  color: #FFFFFF;
+  border: 1px solid #1473e6;
+}
+.registro-form .botones-navegacion button[type=submit]:hover {
+  background-color: #1160c0;
+  border-color: #1160c0;
+}
+.registro-form .botones-navegacion button[type=submit]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(20, 115, 230, 0.3);
+}
+.registro-form .botones-navegacion button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.registro-form .error-message {
+  color: #dc3545;
+  font-size: 12px;
+  width: 100%;
+  margin-top: -10px;
+  margin-bottom: 5px;
+}
+
+.simulator-wrapper {
+  /* Sin cambios de color aquí, pero el h1 interno sí */
+  width: 100%;
+  min-height: 250px;
+}
+.simulator-wrapper h1 {
+  font-size: 1.5rem;
+  color: #212529;
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+@media (min-width: 1024px) {
+  .simulator-wrapper h1 {
+    text-align: left;
   }
 }
 @media (min-width: 1024px) {
-  .seleccion-card-container {
-    background-image: url("https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png");
-    background-position: 100%;
-    background-repeat: no-repeat;
-    background-size: 100% 1500px;
-    background-color: #131921;
-    max-width: 2400px;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .seleccion-card-container .seleccion-tipo-card {
-    text-align: center;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 100px;
-  }
-  .seleccion-card-container .seleccion-tipo-card h1 {
-    color: #cccccc;
-    font-family: "Roboto", system-ui;
-    font-weight: 400;
-  }
-  .seleccion-card-container .seleccion-tipo-card .card-options {
-    display: flex;
-    justify-content: center;
-    gap: 100px;
-  }
-  .seleccion-card-container .seleccion-tipo-card .card-options .button-and-text-div {
-    max-width: min-content;
-    display: inline-block;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .seleccion-card-container .seleccion-tipo-card .card-options .button-and-text-div h2 {
-    text-align: start;
-    font-family: "Montserrat", sans-serif;
-    color: #cccccc;
-    margin-bottom: 10px;
-  }
-  .seleccion-card-container .seleccion-tipo-card .card-options .button-and-text-div p {
-    font-size: 1.2rem;
-    text-align: start;
-    color: #cccccc;
-    font-family: "Roboto", system-ui;
-    line-height: 120%;
-    margin-top: 20px;
-    letter-spacing: 3%;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-  .seleccion-card-container .seleccion-tipo-card .card-options .button-and-text-div strong {
-    color: #FF7F00;
-    font-weight: 550;
-    font-family: "Roboto", system-ui;
-  }
-  .seleccion-card-container .seleccion-tipo-card .card-options .button-and-text-div .card-button {
-    all: unset;
-    cursor: pointer;
-  }
-  .seleccion-card-container .seleccion-tipo-card .card-options .button-and-text-div:hover p {
-    visibility: visible;
-    opacity: 1;
-  }
-  .seleccion-card-container .seleccion-tipo-card .card-options .button-and-text-div:hover {
-    transform: scale(1.1);
+  .simulator-wrapper {
+    /* ... estilos sticky ... */
   }
 }
+
+.registro-step-layout {
+  /* Sin cambios de color aquí */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .registro-step-layout {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 5%;
+  }
+}
+
+.form-wrapper {
+  /* Sin cambios de color aquí */
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .form-wrapper {
+    width: 100%;
+    max-width: 1000px;
+  }
+}
+
+.registro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  background-color: #FFFFFF;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 35px 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.registro-form h1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.8rem;
+  color: #212529;
+  font-weight: 600;
+  margin: -10px 0 10px 0;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #F2994A;
+}
+.registro-form h3 {
+  font-family: "Montserrat", sans-serif;
+  color: #212529;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: -8px;
+  font-size: 1.1rem;
+  border-left: 3px solid #F2994A;
+  padding-left: 10px;
+}
+.registro-form .form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.registro-form label {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.registro-form input[type=text],
+.registro-form input[type=email],
+.registro-form input[type=url],
+.registro-form input[type=tel],
+.registro-form input[type=number],
+.registro-form textarea,
+.registro-form select {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background: #FFFFFF;
+  font-family: "Montserrat", sans-serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+  color: #212529;
+}
+.registro-form input[type=text]::placeholder,
+.registro-form input[type=email]::placeholder,
+.registro-form input[type=url]::placeholder,
+.registro-form input[type=tel]::placeholder,
+.registro-form input[type=number]::placeholder,
+.registro-form textarea::placeholder,
+.registro-form select::placeholder {
+  color: #a9b1ba;
+  opacity: 0.9;
+}
+.registro-form input[type=text]:focus,
+.registro-form input[type=email]:focus,
+.registro-form input[type=url]:focus,
+.registro-form input[type=tel]:focus,
+.registro-form input[type=number]:focus,
+.registro-form textarea:focus,
+.registro-form select:focus {
+  border-color: #85b7f4;
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(20, 115, 230, 0.25);
+}
+.registro-form input[type=text]:hover,
+.registro-form input[type=email]:hover,
+.registro-form input[type=url]:hover,
+.registro-form input[type=tel]:hover,
+.registro-form input[type=number]:hover,
+.registro-form textarea:hover,
+.registro-form select:hover {
+  border-color: #b1bbc4;
+}
+.registro-form textarea {
+  min-height: 100px;
+}
+.registro-form select {
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+.registro-form fieldset {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 15px 20px;
+  margin-top: 5px;
+}
+.registro-form legend {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6c757d;
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  padding: 0 8px;
+  margin-left: 0px;
+  letter-spacing: 0.5px;
+}
+.registro-form .input-row {
+  /* Sin cambios de color */
+}
+.registro-form .botones-navegacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #dee2e6;
+}
+.registro-form .botones-navegacion button {
+  padding: 10px 28px;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  font-family: "Roboto", system-ui;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.registro-form .botones-navegacion button[type=button] {
+  background-color: transparent;
+  color: #1473e6;
+  border: 1px solid #1473e6;
+}
+.registro-form .botones-navegacion button[type=button]:hover {
+  background-color: rgba(20, 115, 230, 0.08);
+}
+.registro-form .botones-navegacion button[type=button]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(20, 115, 230, 0.3);
+}
+.registro-form .botones-navegacion button[type=submit] {
+  background-color: #1473e6;
+  color: #FFFFFF;
+  border: 1px solid #1473e6;
+}
+.registro-form .botones-navegacion button[type=submit]:hover {
+  background-color: #1160c0;
+  border-color: #1160c0;
+}
+.registro-form .botones-navegacion button[type=submit]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(20, 115, 230, 0.3);
+}
+.registro-form .botones-navegacion button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.registro-form .error-message {
+  color: #dc3545;
+  font-size: 12px;
+  width: 100%;
+  margin-top: -10px;
+  margin-bottom: 5px;
+}
+
+.simulator-wrapper {
+  /* Sin cambios de color aquí, pero el h1 interno sí */
+  width: 100%;
+  min-height: 250px;
+}
+.simulator-wrapper h1 {
+  font-size: 1.5rem;
+  color: #212529;
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+@media (min-width: 1024px) {
+  .simulator-wrapper h1 {
+    text-align: left;
+  }
+}
+@media (min-width: 1024px) {
+  .simulator-wrapper {
+    /* ... estilos sticky ... */
+  }
+}
+
+.cat-label-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px 15px;
+}
+
+label.cat-label {
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: 400;
+  color: #6c757d;
+  text-transform: none;
+  cursor: pointer;
+  gap: 8px;
+}
+label.cat-label input[type=checkbox] {
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  width: auto;
+}
+label.cat-label span {
+  line-height: 1.3;
+}
+label.cat-label input[disabled] + span {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.registro-step-layout {
+  /* Sin cambios de color aquí */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .registro-step-layout {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 5%;
+  }
+}
+
+.form-wrapper {
+  /* Sin cambios de color aquí */
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .form-wrapper {
+    width: 100%;
+    max-width: 1000px;
+  }
+}
+
+.registro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  background-color: #FFFFFF;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 35px 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.registro-form h1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.8rem;
+  color: #212529;
+  font-weight: 600;
+  margin: -10px 0 10px 0;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #F2994A;
+}
+.registro-form h3 {
+  font-family: "Montserrat", sans-serif;
+  color: #212529;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: -8px;
+  font-size: 1.1rem;
+  border-left: 3px solid #F2994A;
+  padding-left: 10px;
+}
+.registro-form .form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.registro-form label {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.registro-form input[type=text],
+.registro-form input[type=email],
+.registro-form input[type=url],
+.registro-form input[type=tel],
+.registro-form input[type=number],
+.registro-form textarea,
+.registro-form select {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background: #FFFFFF;
+  font-family: "Montserrat", sans-serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+  color: #212529;
+}
+.registro-form input[type=text]::placeholder,
+.registro-form input[type=email]::placeholder,
+.registro-form input[type=url]::placeholder,
+.registro-form input[type=tel]::placeholder,
+.registro-form input[type=number]::placeholder,
+.registro-form textarea::placeholder,
+.registro-form select::placeholder {
+  color: #a9b1ba;
+  opacity: 0.9;
+}
+.registro-form input[type=text]:focus,
+.registro-form input[type=email]:focus,
+.registro-form input[type=url]:focus,
+.registro-form input[type=tel]:focus,
+.registro-form input[type=number]:focus,
+.registro-form textarea:focus,
+.registro-form select:focus {
+  border-color: #85b7f4;
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(20, 115, 230, 0.25);
+}
+.registro-form input[type=text]:hover,
+.registro-form input[type=email]:hover,
+.registro-form input[type=url]:hover,
+.registro-form input[type=tel]:hover,
+.registro-form input[type=number]:hover,
+.registro-form textarea:hover,
+.registro-form select:hover {
+  border-color: #b1bbc4;
+}
+.registro-form textarea {
+  min-height: 100px;
+}
+.registro-form select {
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+.registro-form fieldset {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 15px 20px;
+  margin-top: 5px;
+}
+.registro-form legend {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6c757d;
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  padding: 0 8px;
+  margin-left: 0px;
+  letter-spacing: 0.5px;
+}
+.registro-form .input-row {
+  /* Sin cambios de color */
+}
+.registro-form .botones-navegacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #dee2e6;
+}
+.registro-form .botones-navegacion button {
+  padding: 10px 28px;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  font-family: "Roboto", system-ui;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.registro-form .botones-navegacion button[type=button] {
+  background-color: transparent;
+  color: #1473e6;
+  border: 1px solid #1473e6;
+}
+.registro-form .botones-navegacion button[type=button]:hover {
+  background-color: rgba(20, 115, 230, 0.08);
+}
+.registro-form .botones-navegacion button[type=button]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(20, 115, 230, 0.3);
+}
+.registro-form .botones-navegacion button[type=submit] {
+  background-color: #1473e6;
+  color: #FFFFFF;
+  border: 1px solid #1473e6;
+}
+.registro-form .botones-navegacion button[type=submit]:hover {
+  background-color: #1160c0;
+  border-color: #1160c0;
+}
+.registro-form .botones-navegacion button[type=submit]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(20, 115, 230, 0.3);
+}
+.registro-form .botones-navegacion button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.registro-form .error-message {
+  color: #dc3545;
+  font-size: 12px;
+  width: 100%;
+  margin-top: -10px;
+  margin-bottom: 5px;
+}
+
+.simulator-wrapper {
+  /* Sin cambios de color aquí, pero el h1 interno sí */
+  width: 100%;
+  min-height: 250px;
+}
+.simulator-wrapper h1 {
+  font-size: 1.5rem;
+  color: #212529;
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+@media (min-width: 1024px) {
+  .simulator-wrapper h1 {
+    text-align: left;
+  }
+}
+@media (min-width: 1024px) {
+  .simulator-wrapper {
+    /* ... estilos sticky ... */
+  }
+}
+
+.form-section .input-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ced4da;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  padding: 15px;
+  background-color: #f1f3f4;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  height: 140px;
+  width: 180px;
+  padding: 10px;
+}
+.form-section .input-logo:hover {
+  border-color: #b1bbc4;
+  background-color: #ebeef0;
+}
+.form-section .input-logo .file-input-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  color: #6c757d;
+}
+.form-section .input-logo .file-input-content svg {
+  font-size: 30px;
+  color: #1473e6;
+}
+.form-section .input-logo .file-input-content p,
+.form-section .input-logo .file-input-content span {
+  font-size: 13px;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.3;
+}
+.form-section .input-logo .file-input-content strong {
+  color: #212529;
+  font-weight: 500;
+}
+.form-section .input-logo input[type=file] {
+  display: none;
+}
+.form-section .input-carrusel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ced4da;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  padding: 15px;
+  background-color: #f1f3f4;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  height: 180px;
+  width: 100%;
+  padding: 15px;
+}
+.form-section .input-carrusel:hover {
+  border-color: #b1bbc4;
+  background-color: #ebeef0;
+}
+.form-section .input-carrusel .file-input-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  color: #6c757d;
+}
+.form-section .input-carrusel .file-input-content svg {
+  font-size: 30px;
+  color: #1473e6;
+}
+.form-section .input-carrusel .file-input-content p,
+.form-section .input-carrusel .file-input-content span {
+  font-size: 13px;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.3;
+}
+.form-section .input-carrusel .file-input-content strong {
+  color: #212529;
+  font-weight: 500;
+}
+.form-section .input-carrusel input[type=file] {
+  display: none;
+}
+.form-section .input-carrusel .file-input-content svg {
+  font-size: 35px;
+}
+
+.registro-step-layout {
+  /* Sin cambios de color aquí */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .registro-step-layout {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 5%;
+  }
+}
+
+.form-wrapper {
+  /* Sin cambios de color aquí */
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .form-wrapper {
+    width: 100%;
+    max-width: 1000px;
+  }
+}
+
+.registro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  background-color: #FFFFFF;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 35px 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.registro-form h1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.8rem;
+  color: #212529;
+  font-weight: 600;
+  margin: -10px 0 10px 0;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #F2994A;
+}
+.registro-form h3 {
+  font-family: "Montserrat", sans-serif;
+  color: #212529;
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: -8px;
+  font-size: 1.1rem;
+  border-left: 3px solid #F2994A;
+  padding-left: 10px;
+}
+.registro-form .form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.registro-form label {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.registro-form input[type=text],
+.registro-form input[type=email],
+.registro-form input[type=url],
+.registro-form input[type=tel],
+.registro-form input[type=number],
+.registro-form textarea,
+.registro-form select {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background: #FFFFFF;
+  font-family: "Montserrat", sans-serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+  color: #212529;
+}
+.registro-form input[type=text]::placeholder,
+.registro-form input[type=email]::placeholder,
+.registro-form input[type=url]::placeholder,
+.registro-form input[type=tel]::placeholder,
+.registro-form input[type=number]::placeholder,
+.registro-form textarea::placeholder,
+.registro-form select::placeholder {
+  color: #a9b1ba;
+  opacity: 0.9;
+}
+.registro-form input[type=text]:focus,
+.registro-form input[type=email]:focus,
+.registro-form input[type=url]:focus,
+.registro-form input[type=tel]:focus,
+.registro-form input[type=number]:focus,
+.registro-form textarea:focus,
+.registro-form select:focus {
+  border-color: #85b7f4;
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(20, 115, 230, 0.25);
+}
+.registro-form input[type=text]:hover,
+.registro-form input[type=email]:hover,
+.registro-form input[type=url]:hover,
+.registro-form input[type=tel]:hover,
+.registro-form input[type=number]:hover,
+.registro-form textarea:hover,
+.registro-form select:hover {
+  border-color: #b1bbc4;
+}
+.registro-form textarea {
+  min-height: 100px;
+}
+.registro-form select {
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+.registro-form fieldset {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 15px 20px;
+  margin-top: 5px;
+}
+.registro-form legend {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6c757d;
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  padding: 0 8px;
+  margin-left: 0px;
+  letter-spacing: 0.5px;
+}
+.registro-form .input-row {
+  /* Sin cambios de color */
+}
+.registro-form .botones-navegacion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #dee2e6;
+}
+.registro-form .botones-navegacion button {
+  padding: 10px 28px;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  font-family: "Roboto", system-ui;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.registro-form .botones-navegacion button[type=button] {
+  background-color: transparent;
+  color: #1473e6;
+  border: 1px solid #1473e6;
+}
+.registro-form .botones-navegacion button[type=button]:hover {
+  background-color: rgba(20, 115, 230, 0.08);
+}
+.registro-form .botones-navegacion button[type=button]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(20, 115, 230, 0.3);
+}
+.registro-form .botones-navegacion button[type=submit] {
+  background-color: #1473e6;
+  color: #FFFFFF;
+  border: 1px solid #1473e6;
+}
+.registro-form .botones-navegacion button[type=submit]:hover {
+  background-color: #1160c0;
+  border-color: #1160c0;
+}
+.registro-form .botones-navegacion button[type=submit]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(20, 115, 230, 0.3);
+}
+.registro-form .botones-navegacion button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.registro-form .error-message {
+  color: #dc3545;
+  font-size: 12px;
+  width: 100%;
+  margin-top: -10px;
+  margin-bottom: 5px;
+}
+
+.simulator-wrapper {
+  /* Sin cambios de color aquí, pero el h1 interno sí */
+  width: 100%;
+  min-height: 250px;
+}
+.simulator-wrapper h1 {
+  font-size: 1.5rem;
+  color: #212529;
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+@media (min-width: 1024px) {
+  .simulator-wrapper h1 {
+    text-align: left;
+  }
+}
+@media (min-width: 1024px) {
+  .simulator-wrapper {
+    /* ... estilos sticky ... */
+  }
+}
+
+.form-section.galeria-productos label:first-of-type {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #6c757d;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+@media (min-width: 1024px) {
+  .galeria-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+.producto-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.producto-card > label:first-of-type {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6c757d;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  text-align: left;
+}
+.producto-card .custom-file-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ced4da;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  padding: 15px;
+  background-color: #f1f3f4;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  height: 100px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+.producto-card .custom-file-upload:hover {
+  border-color: #b1bbc4;
+  background-color: #ebeef0;
+}
+.producto-card .custom-file-upload .file-input-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  color: #6c757d;
+}
+.producto-card .custom-file-upload .file-input-content svg {
+  font-size: 30px;
+  color: #1473e6;
+}
+.producto-card .custom-file-upload .file-input-content p,
+.producto-card .custom-file-upload .file-input-content span {
+  font-size: 13px;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.3;
+}
+.producto-card .custom-file-upload .file-input-content strong {
+  color: #212529;
+  font-weight: 500;
+}
+.producto-card .custom-file-upload input[type=file] {
+  display: none;
+}
+.producto-card .custom-file-upload .file-input-content {
+  gap: 5px;
+}
+.producto-card .custom-file-upload .file-input-content svg {
+  font-size: 25px;
+}
+.producto-card .custom-file-upload .file-input-content span {
+  font-size: 11px;
+  line-height: 1.2;
+}
+.producto-card .custom-file-upload .image-preview-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.producto-card .custom-file-upload .image-preview-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.producto-card .custom-file-upload .image-preview-container button.remove-image-button {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 18px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease;
+}
+.producto-card .custom-file-upload .image-preview-container button.remove-image-button:hover {
+  background-color: rgba(255, 0, 0, 0.9);
+}
+.producto-card input[type=text] {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background: #FFFFFF;
+  font-family: "Montserrat", sans-serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+  color: #212529;
+  font-size: 13px;
+  padding: 8px 10px;
+}
+.producto-card input[type=text]::placeholder {
+  color: #a9b1ba;
+  opacity: 0.9;
+}
+.producto-card input[type=text]:focus {
+  border-color: #85b7f4;
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(20, 115, 230, 0.25);
+}
+.producto-card input[type=text]:hover {
+  border-color: #b1bbc4;
+}
+
 .unset {
   all: unset;
 }

@@ -21,11 +21,15 @@
 @import "../css/registerStyles/login";
 @import "../css/registerStyles/register";
 @import "../css/proveedorRegisterStyles/landingRegistroProveedor.scss";
-@import '../css/proveedorRegisterStyles/estilosRegistroFormulario.scss';
-@import '../css/proveedorRegisterStyles/formularioPersonalizado.scss';
-@import "../css/proveedorRegisterStyles/formularioGeneral.scss";
 @import "../css/proveedorRegisterStyles/seleccionTipoCard.scss";
-
+@import "../css/cardSimulators/cardHistoria.scss";
+@import "../css/cardSimulators/cardProductos.scss";
+@import "../css/cardSimulators/cardProductosBis.scss";
+@import "../css/cardSimulators/cardHistoriaBis.scss";
+@import "../css/proveedorRegisterStyles/registroFormBase.scss";
+@import "../css/proveedorRegisterStyles/formularioGeneral.scss";
+@import "../css/proveedorRegisterStyles/formPersonalizadoA.scss";
+@import "../css/proveedorRegisterStyles/formPersonalizadoB.scss";
 
 .unset {
     all: unset;
@@ -44,6 +48,8 @@
 
 //roboto font-family: "Roboto", sans-serif;
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 
 
 * {

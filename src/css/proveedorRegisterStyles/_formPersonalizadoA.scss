@@ -1,0 +1,44 @@
+// src/styles/partials/_formPersonalizadoA.scss
+// Estilos específicos para FormularioPersonalizadoTipoA
+
+// Importar la base común
+@import '../proveedorRegisterStyles/registroFormBase';
+
+// --- Estilos Únicos para Formulario Tipo A ---
+
+// Ajustes específicos (si los hay) para el contenedor del form Tipo A
+.form-wrapper > .registro-form { // Target más específico si es necesario
+    // Algún estilo específico SÓLO para este form si hiciera falta
+}
+
+// Estilos específicos para las áreas de carga de archivos en Tipo A
+// Heredan de file-input-container, pero podemos ajustar tamaño
+.form-section {
+    .input-logo {
+        @include file-input-container-visual; // Aplica base
+        // Ajustes específicos de tamaño para logo en Form A
+        height: 140px;
+        width: 180px; // O un % si prefieres
+        padding: 10px;
+    }
+
+    .input-carrusel {
+         @include file-input-container-visual; // Aplica base
+         // Ajustes específicos de tamaño para carrusel en Form A
+         height: 180px;
+         width: 100%; // Ocupa todo el ancho
+         padding: 15px;
+
+          // Estilo específico para el contenido visual del input carrusel
+         .file-input-content {
+             // Puedes ajustar el tamaño del icono o texto aquí si es necesario
+             svg { font-size: 35px; }
+         }
+    }
+}
+
+// Estilos para el simulador específico de Historia (si difieren del base)
+.simulator-wrapper { // Target general del simulador
+     // Puedes añadir estilos específicos para el CONTENIDO del simulador de historia aquí
+     // Ej: .simulador-historia-content { ... }
+}

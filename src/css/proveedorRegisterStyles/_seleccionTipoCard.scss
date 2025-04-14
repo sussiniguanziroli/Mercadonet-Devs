@@ -1,88 +1,67 @@
-// Pantalla de selección de tipo de card
-@media (min-width: 1024px) {
-    .seleccion-card-container {
-        background-image: url('https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png');
-        background-position: 100%;
-        background-repeat: no-repeat;
-        background-size: 100% 1500px;
-        background-color: $color-azul;
-        max-width: 2400px;
-        width: 100%;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+// src/styles/partials/_seleccionTipoCard.scss
+// Estilos específicos para SeleccionTipoCard, con animación de hover original.
 
-        .seleccion-tipo-card {
-            text-align: center;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 100px;
+// --- Variables ---
+// $breakpoint-desktop: 1024px;
 
-            h1 {
-                color: #cccccc;
-                font-family: 'Roboto', system-ui;
-                font-weight: 400;
-            }
+// --- Estilos para el Contenedor de cada opción ---
+.button-and-text-div {
+    max-width: 320px;
+    width: 90%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    // Transición SÓLO para la transformación (escala) del div completo
+    transition: transform 0.3s ease; // Como en tu original
 
-            .card-options {
-                display: flex;
-                justify-content: center;
-                gap: 100px;
+    // Botón/Imagen clickeable (ButtonBase)
+    .card-image-button {
+        cursor: pointer;
+        border-radius: 8px;
+        display: block; // Asegura que ocupe su espacio
 
-                .button-and-text-div {
-                    max-width: min-content;
-                    display: inline-block;
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+        img {
+             pointer-events: none;
+             display: block;
+        }
+        // No necesita :hover aquí si el hover se aplica al div padre
+         &:focus-visible { // Mantener estilo de focus
+             outline: none;
+             box-shadow: 0 0 0 3px rgba(100, 150, 255, 0.6); // Ejemplo
+         }
+    }
 
-                    h2 {
-                        text-align: start;
-                        font-family: 'Montserrat', sans-serif;
-                        color: #cccccc;
-                        margin-bottom: 10px;
-                    }
+    // Párrafos descriptivos
+    p.card-description-hover {
+        font-size: 0.85rem;
+        text-align: center;
+        // Color definido por `sx` en React
+        font-family: 'Roboto', system-ui;
+        line-height: 1.45;
+        margin-top: 12px; // Margen superior cuando visible
+        letter-spacing: normal;
+        // Estado inicial oculto
+        visibility: hidden; // Oculto
+        opacity: 0;       // Transparente
+        // Transición SÓLO para opacidad y visibilidad (como en tu original)
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+         // Quitar height: 0 y overflow: hidden para evitar complejidad,
+         // el párrafo simplemente aparecerá/desaparecerá.
+         // Si causa salto de layout, podemos añadirlos de nuevo, pero sin transición.
+    }
 
-                    p {
-                        font-size: 1.2rem;
-                        text-align: start;
-                        color: #cccccc;
-                        font-family: 'Roboto', system-ui;
-                        line-height: 120%;
-                        margin-top: 20px;
-                        letter-spacing: 3%;
-                        visibility: hidden;
-                        opacity: 0;
-                        transition: opacity 0.3s ease, visibility 0.3s ease;
-                    }
+    // Efecto Hover sobre el contenedor COMPLETO (.button-and-text-div)
+    &:hover {
+        transform: scale(1.05); // Escala el div completo (puedes usar 1.1 si prefieres)
 
-                    strong {
-                        color: $color-naranja;
-                        font-weight: 550;
-                        font-family: 'Roboto', system-ui;
-                    }
-
-                    .card-button {
-                        all: unset;
-                        cursor: pointer;
-                    }
-
-                    &:hover p {
-                        visibility: visible;
-                        opacity: 1; 
-                    }
-
-                    &:hover {
-                        transform: scale(1.1);
-
-
-                    }
-                }
-
-
-
-            }
+        // Muestra los párrafos descriptivos
+        p.card-description-hover {
+            visibility: visible; // Hacer visible
+            opacity: 0.85;       // Hacer opaco (o 1 si prefieres)
+            // No necesitamos cambiar height/margin aquí si no los animamos
         }
     }
-}
+
+} // Fin .button-and-text-div

@@ -1,49 +1,177 @@
-@media (min-width: 1024px) {
-    .landing-registro-proveedor {
-        background-image: url('https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png') ;
-        background-position: 100% ;
-        background-repeat: no-repeat;
-        background-size: 100% 1500px;
-        background-color: $color-azul;
-        max-width: 2400px;
-        width: 100%;
-        height: 93.3vh;
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
+// src/styles/partials/_landingRegistroProveedor.scss
+// (Asumiendo que lo ubicas en una estructura de estilos)
+
+// --- Variables (Asegúrate que estén definidas globalmente o importadas) ---
+ $color-azul: #00052D; // Ejemplo, usa tu valor real
+ $main-white: #FFFFFF; // Ejemplo
+ $dark-background: #000510; // Para sections .steps-graph y .features-section
+ $primary-button-bg: #1476e6;
+ $primary-button-hover-bg: #0d57ac;
+$breakpoint-desktop: 1024px; // Definir punto de quiebre
+
+// --- Estilos Base (Mobile-First) ---
+.main-landing {
+    display: block;
+    // Estilos generales para el contenedor <main> si son necesarios
+}
+
+.landing-registro-proveedor {
+    // Fondo y layout para la sección principal (hero)
+    background-image: url('https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png');
+    background-position: center center; // Centrado es más seguro que 100%
+    background-repeat: no-repeat;
+    background-size: cover; // 'cover' adapta mejor a diferentes aspect ratios
+    background-color: $color-azul; // Color de fallback
+    width: 100%;
+    min-height: 80vh; // Altura mínima en móvil, puede ajustarse
+    padding: 40px 20px; // Padding generoso
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 2rem; // Espacio entre elementos
+    font-family: 'Montserrat', sans-serif;
+
+    h1 {
+        color: $main-white;
+        font-size: 2.5rem; // Tamaño base para móvil
+        font-weight: bold; // Añadido para más impacto
+        max-width: 90%; // Evitar que sea demasiado ancho en móvil
+    }
+
+    h2 {
+        color: $main-white;
+        font-weight: 400;
+        font-size: 1.2rem; // Tamaño base para móvil
+        max-width: 90%;
+    }
+
+    // Botón principal CTA
+    button {
+        all: unset; // Reseteo base
+        box-sizing: border-box; // Incluir padding/border en tamaño total
+        display: inline-block; // Comportamiento de bloque pero en línea
+        padding: 0.8rem 1.5rem; // Padding base
+        font-size: 1.1rem; // Tamaño base
+        font-weight: 500; // Peso ajustado
+        color: $main-white;
+        background-color: $primary-button-bg;
         font-family: 'Montserrat', sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 3rem;
-        h1 {
-            text-align: center;
-            color: $main-white;
-            font-size: 3.4rem;
-        }
-        h2 {
-            color: $main-white;
-            font-weight: 400;
-            font-size: 1.7rem;
-            text-align: center;
-        }
-        button {
-            all: unset;
-            padding: .9rem;
-            font-size: 1.2rem;
-            font-weight: 520;
-            color: $main-white;
-            background-color: #1476e6;
-            font-family: 'Montserrat', sans-serif;
-            border-radius: 12px;
-            transition: all .3s;
-            cursor: pointer;
-            &:hover {
-                background-color: #0d57ac;
-            }
-            
+        border-radius: 8px; // Radio estándar
+        transition: background-color 0.3s ease; // Transición solo al background
+        cursor: pointer;
+        text-align: center;
+
+        &:hover, &:focus { // Añadir focus para accesibilidad
+            background-color: $primary-button-hover-bg;
+            outline: none; // Quitar outline por defecto si se maneja de otra forma
         }
     }
 }
 
+.steps-graph {
+    // Sección oscura para mostrar el stepper preview
+    background-color: $dark-background;
+    margin: 0;
+    padding: 40px 20px; // Padding base
+    font-family: 'Roboto', sans-serif;
+    color: $main-white;
+
+    .paso-a-paso {
+        max-width: 1100px; // Mantiene el ancho máximo
+        margin: 0 auto; // Centrado
+        text-align: center; // Centra el texto y el stepper
+
+        p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem; // Tamaño ajustado
+            margin-bottom: 30px;
+            color: $main-white;
+        }
+    }
+
+    .progreso {
+        // Contenedor del CustomStepper
+        width: 100%;
+        // Ya no necesitamos el estilo para img
+    }
+}
+
+.features-section {
+    // Sección oscura para mostrar imágenes de features
+    background-color: $dark-background;
+    display: flex;
+    flex-direction: column; // Mobile: Apilado vertical
+    align-items: center; // Centra items en layout de columna
+    gap: 20px; // Espacio entre imágenes en móvil
+    width: 100%;
+    padding: 30px 20px 50px; // Padding base
+
+    div { // Contenedor de cada imagen
+        width: 90%; // Ancho en móvil
+        max-width: 400px; // Ancho máximo en móvil/tableta
+        height: auto; // Altura automática basada en imagen
+
+        img {
+            display: block; // Evita espacio extra bajo la imagen
+            width: 100%;
+            height: auto; // Mantiene proporción
+            border-radius: 8px; // Opcional: suavizar bordes
+        }
+    }
+}
+
+// --- Estilos para Desktop (Sobrescriben o añaden a los base) ---
+@media (min-width: $breakpoint-desktop) {
+    .landing-registro-proveedor {
+        min-height: 90vh; // Más altura en desktop
+        padding: 60px 20px;
+        gap: 3rem;
+
+        h1 {
+            font-size: 3.4rem; // Tamaño original para desktop
+            max-width: 80%;
+        }
+
+        h2 {
+            font-size: 1.7rem; // Tamaño original para desktop
+            max-width: 70%;
+        }
+
+        button {
+            padding: 0.9rem 2rem; // Más padding en desktop
+            font-size: 1.2rem;
+            border-radius: 12px; // Radio original
+        }
+    }
+
+    .steps-graph {
+        padding: 60px 40px;
+
+        .paso-a-paso {
+            p {
+                font-size: 1.3rem; // Texto un poco más grande
+            }
+        }
+    }
+
+    .features-section {
+        flex-direction: row; // Desktop: Layout horizontal
+        justify-content: center; // Centra las imágenes horizontalmente
+        align-items: stretch; // Estira los divs si tienen alturas diferentes
+        gap: 24px; // Espacio original
+        padding: 40px 50px 60px;
+
+        div {
+            width: 100%; // Ocupa espacio disponible en la fila flex
+            max-width: 350px; // Ajustar ancho máximo si es necesario
+            // height: 250px; // Altura fija original (opcional, auto puede ser mejor)
+
+            img {
+               height: 100%; // Llena la altura del div si se fija
+               object-fit: cover; // Evita distorsión si se fija altura
+            }
+        }
+    }
+}
