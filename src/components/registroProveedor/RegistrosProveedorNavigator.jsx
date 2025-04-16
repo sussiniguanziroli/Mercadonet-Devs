@@ -13,18 +13,9 @@ import FormularioPersonalizado from './steps/FormularioPersonalizado';
 import SeleccionPlan from './steps/SeleccionPlan';
 import ResumenRegistro from './steps/ResumenRegistro';
 
-// --- Constantes ---
-// TODO: Mover a un archivo /src/components/registroProveedor/constants.js e importar
-const STEPS = [
-    "Tipo de Card", "Datos Generales", "Datos Personalizados", "Plan", "Resumen"
-];
-const CATEGORIAS = [
-    "Constructores y Corralones", "Ropa y calzado", "Electro e iluminación",
-    "Farmacias e Insumos Médicos", "Muebles y colchonería", "Hecho en Argentina",
-    "Supermercados y Kioscos", "Librería y Mercería", "Industria y otros",
-    "Crea tu propia marca", "Nueva Categoria"
-];
-const backgroundImageURL = 'https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png';
+//importo constantes del archivo js
+
+import { STEPS, CATEGORIAS, backgroundImageURL} from "../registroProveedor/assetsRegistro/Constants.js"
 
 // Estructura inicial detallada para el estado del formulario
 const initialFormData = {

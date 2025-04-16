@@ -1,6 +1,6 @@
 // src/styles/partials/_registroFormBase.scss
 // Contiene estilos comunes para los formularios dentro del flujo de registro (MODO CLARO)
-
+@import "../variables.scss";
 // --- Variables (Ajustadas para tema claro) ---
 $breakpoint-desktop: 1024px;
 $color-naranja: #F2994A; // Naranja (puedes ajustar)
@@ -240,8 +240,8 @@ $error-color: #dc3545; // Rojo estándar para errores
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.2s ease, 
-            box-shadow 0.2s ease, border-color 0.2s ease; // Añadir border-color
+            transition: background-color 0.2s ease,
+                box-shadow 0.2s ease, border-color 0.2s ease; // Añadir border-color
             font-family: 'Roboto', system-ui;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Sombra más suave
 
@@ -304,12 +304,12 @@ $error-color: #dc3545; // Rojo estándar para errores
     min-height: 250px;
 
     h1 {
-        font-size: 1.5rem;
-        color: $text-color-primary; // Texto oscuro
+        font-size: 1.6rem;
+        color: $main-white; // Texto oscuro
         font-family: "Montserrat", sans-serif;
         margin-bottom: 20px;
         text-align: center;
-        font-weight: 500;
+        font-weight: 600;
 
         @media (min-width: $breakpoint-desktop) {
             text-align: left;
@@ -318,5 +318,7 @@ $error-color: #dc3545; // Rojo estándar para errores
 
     @media (min-width: $breakpoint-desktop) {
         /* ... estilos sticky ... */
+        position: sticky;
+        top: 100px;
     }
 }
