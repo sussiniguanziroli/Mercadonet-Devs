@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Typography } from '@mui/material'; // No necesitamos Paper aquí
+import { Box, Button, Typography, CircularProgress } from '@mui/material';
 
 // Componentes Reutilizables y de Pasos
 import CustomStepper from './assetsRegistro/CustomStepper'; // Ajusta ruta si es necesario
@@ -13,11 +13,13 @@ import FormularioPersonalizado from './steps/FormularioPersonalizado';
 import SeleccionPlan from './steps/SeleccionPlan';
 import ResumenRegistro from './steps/ResumenRegistro';
 
-//importo constantes del archivo js
+// Importa SOLO las constantes estáticas necesarias
+import { STEPS, backgroundImageURL } from "../registroProveedor/assetsRegistro/Constants.js"; // SIN CATEGORIAS
 
-import { STEPS, CATEGORIAS, backgroundImageURL} from "../registroProveedor/assetsRegistro/Constants.js"
+// --- Importa la función del servicio ---
+import { fetchCategoriasPrincipales } from '../../services/firestoreService'; // <-- ¡¡AJUSTA ESTA RUTA!!
 
-// Estructura inicial detallada para el estado del formulario
+// Estructura inicial detallada para el estado del formulario (copiada de tu original)
 const initialFormData = {
     tipoCard: null,
     datosGenerales: {
@@ -26,7 +28,6 @@ const initialFormData = {
         rol: '', whatsapp: '', cuit: '', antiguedad: '', facturacion: '',
     },
     datosPersonalizados: {
-        // Las claves 'tipoA' y 'tipoB' se llenarán según la selección
         tipoA: {
             descripcion: '', sitioWeb: '', whatsapp: '', telefono: '', email: '',
             marca: [], extras: [], logoFile: null, carruselFiles: [],
@@ -40,11 +41,46 @@ const initialFormData = {
     planSeleccionado: null,
 };
 
+
 // --- Componente Principal del Navegador ---
 const RegistrosProveedorNavigator = () => {
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(0);
     const [formData, setFormData] = useState(initialFormData);
+
+    // Estado para las categorías y su carga/error
+    const [categoriasFirestore, setCategoriasFirestore] = useState([]);
+    const [loadingCategorias, setLoadingCategorias] = useState(true);
+    const [errorCategorias, setErrorCategorias] = useState(null);
+
+    // --- useEffect para llamar al servicio y cargar categorías ---
+    useEffect(() => {
+        const cargarCategorias = async () => {
+            setLoadingCategorias(true);
+            setErrorCategorias(null);
+            console.log("[Navigator] Llamando al servicio para cargar categorías...");
+            try {
+                const datosCategorias = await fetchCategoriasPrincipales(); // Llama al servicio
+
+                if (datosCategorias.length === 0 && !errorCategorias) { // Verifica si está vacío sin un error previo explícito
+                     console.warn("[Navigator] El servicio devolvió una lista de categorías vacía.");
+                     // Podrías establecer un error si la lista vacía no es esperada
+                     // setErrorCategorias("No se encontraron categorías disponibles.");
+                }
+                setCategoriasFirestore(datosCategorias);
+
+            } catch (err) {
+                // Captura errores si el servicio *lanzara* una excepción
+                console.error("[Navigator] Error al llamar al servicio de categorías:", err);
+                setErrorCategorias("Ocurrió un error inesperado al cargar las categorías.");
+                setCategoriasFirestore([]);
+            } finally {
+                setLoadingCategorias(false);
+                console.log("[Navigator] Carga de categorías finalizada (desde el servicio).");
+            }
+        };
+        cargarCategorias();
+    }, []); // Se ejecuta solo una vez al montar
 
     // --- Navegación ---
     const nextStep = () => {
@@ -56,8 +92,7 @@ const RegistrosProveedorNavigator = () => {
         setCurrentStep(prev => Math.max(prev - 1, 0));
     }
     const cancelRegistration = () => {
-        // Opcional: Añadir confirmación
-        setFormData(initialFormData); // Resetea el formulario al cancelar
+        setFormData(initialFormData);
         navigate("/registrar-mi-empresa");
     };
 
@@ -91,7 +126,6 @@ const RegistrosProveedorNavigator = () => {
             datosPersonalizados: {
                 ...prev.datosPersonalizados,
                 [tipo]: prev.datosPersonalizados?.[tipo] || initialFormData.datosPersonalizados[tipo],
-                // Opcional: Resetear el otro tipo: [tipo === 'tipoA' ? 'tipoB' : 'tipoA']: initialFormData.datosPersonalizados[tipo === 'tipoA' ? 'tipoB' : 'tipoA']
             }
         }));
         nextStep();
@@ -100,34 +134,61 @@ const RegistrosProveedorNavigator = () => {
     // --- Renderizado del Paso Actual ---
     const renderCurrentStep = () => {
         const stepProps = { onBack: prevStep, onCancel: cancelRegistration };
-        // El color del texto deberá manejarse dentro de cada componente o con un tema oscuro global
-        // const textColor = 'common.white';
 
         switch (currentStep) {
             case 0:
-                return <SeleccionTipoCard onSelectCard={handleTipoCardSelection} onCancel={cancelRegistration}  />;
+                return <SeleccionTipoCard onSelectCard={handleTipoCardSelection} onCancel={cancelRegistration} />;
             case 1:
+                // Manejo de carga y error para categorías
+                if (loadingCategorias) {
+                    return (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5 }}>
+                            <CircularProgress sx={{ color: 'common.white' }}/>
+                            <Typography sx={{ ml: 2, color: 'common.white' }}>Cargando categorías...</Typography>
+                        </Box>
+                    );
+                }
+                if (errorCategorias) {
+                     return (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}>
+                             <Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>
+                                {errorCategorias}
+                             </Typography>
+                             <Button onClick={cancelRegistration} variant="outlined" color="warning">Volver</Button>
+                        </Box>
+                    );
+                }
+                if (!loadingCategorias && !errorCategorias && categoriasFirestore.length === 0) {
+                     return (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}>
+                             <Typography sx={{ color: 'warning.main', textAlign: 'center', mb: 2 }}>
+                                No hay categorías disponibles en este momento.
+                             </Typography>
+                             <Button onClick={cancelRegistration} variant="outlined" color="warning">Volver</Button>
+                        </Box>
+                     );
+                 }
+
+                // Renderiza el formulario si todo está bien
                 return <FormularioGeneral {...stepProps}
                     initialData={formData.datosGenerales}
                     onNext={(localData) => handleStepCompletion('datosGenerales', localData)}
-                    categorias={CATEGORIAS}
+                    categorias={categoriasFirestore} // Pasa las categorías cargadas
                     selectedCard={formData.tipoCard}
                     /* textColor={textColor} */ />;
             case 2:
-                if (!formData.tipoCard) return <Typography sx={{ color: 'error.main', textAlign: 'center', mt: 5 }}>Error: Tipo de card no seleccionado. Vuelve al paso anterior.</Typography>;
+                 if (!formData.tipoCard) return <Typography sx={{ color: 'error.main', textAlign: 'center', mt: 5 }}>Error: Tipo de card no seleccionado. Vuelve al paso anterior.</Typography>;
                 return <FormularioPersonalizado {...stepProps}
                     initialData={formData.datosPersonalizados[formData.tipoCard] || {}}
                     onNext={(localData) => handleStepCompletion('datosPersonalizados', { [formData.tipoCard]: localData })}
                     selectedCard={formData.tipoCard}
-                    /* textColor={textColor} */ />;
+                     /* textColor={textColor} */ />;
             case 3:
-                // Asumiendo que SeleccionPlan existe
-                return <SeleccionPlan {...stepProps}
+                 return <SeleccionPlan {...stepProps}
                     initialData={formData.planSeleccionado}
                     onNext={(plan) => handleStepCompletion('planSeleccionado', plan)}
                     /* textColor={textColor} */ />;
             case 4:
-                // Asumiendo que ResumenRegistro existe
                 return <ResumenRegistro
                     formData={formData}
                     onBack={prevStep}
@@ -136,7 +197,6 @@ const RegistrosProveedorNavigator = () => {
                         console.log("[Navigator] Iniciando Confirmación de Registro:", JSON.stringify(formData, null, 2));
                         alert("Registro Finalizado (Simulación). Subida de archivos y guardado final pendiente.");
                         console.log("TODO: Implementar subida de archivos (logo, carrusel, galería) desde formData y guardado final en onConfirm.");
-                        // Lógica async para subir archivos, obtener URLs, crear objeto final, enviar a API...
                         // navigate("/registro-exitoso");
                     }}
                     /* textColor={textColor} */ />;
@@ -160,77 +220,51 @@ const RegistrosProveedorNavigator = () => {
                     <CustomStepper
                         activeStep={currentStep}
                         steps={STEPS}
-                        sx={{ // Estilos para que el Stepper se vea bien sobre fondo oscuro
-                             padding: 1,
-                             backgroundColor: 'transparent', // Fondo transparente
-                             borderRadius: 0,
-                             '& .MuiStepLabel-label': {
-                                 color: 'rgba(255, 255, 255, 0.7)', // Blanco semi-transparente (inactivo)
-                                 '&.Mui-active': {
-                                     color: '#FFFFFF', // Blanco (activo)
-                                     fontWeight: 'bold',
-                                 },
-                                 '&.Mui-completed': {
-                                     color: 'rgba(255, 255, 255, 0.9)', // Blanco más opaco (completado)
-                                 }
-                             },
-                             '& .MuiStepIcon-root': {
-                                 color: 'rgba(255, 255, 255, 0.5)', // Grisáceo (inactivo)
-                                 '&.Mui-active': {
-                                     color: '#FFA500', // Naranja (activo - ajusta tu color)
-                                 },
-                                 '&.Mui-completed': {
-                                     color: '#FFFFFF', // Blanco (completado)
-                                 }
-                             },
-                             '& .MuiStepConnector-line': {
-                                borderColor: 'rgba(255, 255, 255, 0.3)', // Línea grisácea
-                             }
+                        sx={{ // Estilos para fondo oscuro
+                             padding: 1, backgroundColor: 'transparent', borderRadius: 0,
+                             '& .MuiStepLabel-label': { color: 'rgba(255, 255, 255, 0.7)', '&.Mui-active': { color: '#FFFFFF', fontWeight: 'bold', }, '&.Mui-completed': { color: 'rgba(255, 255, 255, 0.9)', } },
+                             '& .MuiStepIcon-root': { color: 'rgba(255, 255, 255, 0.5)', '&.Mui-active': { color: '#FFA500', /* Naranja */ }, '&.Mui-completed': { color: '#FFFFFF', } },
+                             '& .MuiStepConnector-line': { borderColor: 'rgba(255, 255, 255, 0.3)', }
                         }}
                     />
                 </Box>
             </Box>
 
-            {/* Área Principal con Fondo y Contenido Directo (SIN Paper) */}
+            {/* Área Principal con Fondo */}
             <Box sx={{
                 flexGrow: 1, width: '100%',
-                pt: { xs: 4, md: 6 }, pb: { xs: 4, md: 6 }, px: { xs: 2, md: 3 }, // Paddings ajustados
+                pt: { xs: 4, md: 6 }, pb: { xs: 4, md: 6 }, px: { xs: 2, md: 3 },
                 backgroundImage: `url(${backgroundImageURL})`,
                 backgroundSize: 'cover', backgroundPosition: 'center center',
                 backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed',
-                display: 'flex', flexDirection: 'column', // Centra el Box interior
-                alignItems: 'center', justifyContent: 'flex-start', // Alinea contenido arriba
+                display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'flex-start',
             }}>
                 {/* Contenedor para limitar ancho del contenido */}
                  <Box sx={{
-                     width: '100%',
-                     maxWidth: '1500px', // Ancho máximo como en diseño
-                     position: 'relative', // Para botón cancelar
+                     width: '100%', maxWidth: '1500px', // Ancho máximo
+                     position: 'relative',
                      display: 'flex', flexDirection: 'column', alignItems: 'center',
                  }}>
-                    {/* Botón Cancelar Absoluto (Estilo para fondo oscuro) */}
-                    {currentStep < STEPS.length && (
+                    {/* Botón Cancelar Absoluto */}
+                    {currentStep < STEPS.length && ( // Asumo que no quieres mostrarlo en el último paso (resumen)
                         <Button
                             onClick={cancelRegistration}
                             variant="outlined"
                             size="small"
                             sx={{
-                                position: 'absolute', top: 0, right: 0, zIndex: 1,
+                                position: 'absolute', top: { xs: -25, md: -35 }, right: 0, zIndex: 1, // Ajustado para no superponerse tanto con padding superior
                                 color: 'common.white', borderColor: 'rgba(255, 255, 255, 0.5)',
-                                '&:hover': {
-                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                    borderColor: 'common.white',
-                                }
+                                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)', borderColor: 'common.white', }
                             }}
                         > Cancelar </Button>
                     )}
 
-                    {/* Renderiza el componente del paso actual directamente */}
+                    {/* Renderiza el componente del paso actual */}
                     {renderCurrentStep()}
 
                 </Box>
             </Box>
-             {/* Footer podría ir aquí fuera del Box principal si es necesario */}
         </Box>
     );
 };
