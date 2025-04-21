@@ -7,57 +7,51 @@
 // --- Estilos Únicos para FormularioGeneral ---
 
 // Contenedor para los checkboxes de categorías
+// Contenedor de las etiquetas
 .cat-label-container {
-    display: grid; // Usar grid para mejor control de columnas
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); // Columnas responsivas
-    gap: 10px 15px; // Espacio vertical y horizontal
-}
-
-// Estilo para cada label de categoría (checkbox + texto)
-label.cat-label {
-    font-size: 0.85rem; // Tamaño de texto ajustado
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  
+  // Aumentamos la especificidad aquí añadiendo .registro-form antes
+  .registro-form .cat-label { // <--- SELECTOR MÁS ESPECÍFICO
+    // Estilos que quieres que apliquen específicamente a estos labels:
+    
     display: flex;
-    flex-direction: row; // Checkbox al lado del texto
-    align-items: center;
-    font-weight: 400; // Peso normal
-    color: $text-color-secondary; // Usar color secundario claro
-    text-transform: none; // Sin mayúsculas aquí
+    flex-direction: row !important;    // <--- Fila horizontal (añadimos !important por si acaso, aunque con la especificidad debería bastar)
+    align-items: center;   // <--- Centrado vertical
+    gap: 8px;              // Espacio entre checkbox y texto
+  
+    // Sobrescribir estilos heredados de la regla base 'label' que no queremos:
+    font-size: 1rem;     // Tu tamaño deseado (base era 0.8rem)
+    font-weight: 500;       // Tu peso deseado (base era 500)
+    color: $text-color-secondary; // Ya lo tenías
+    text-transform: none;   // <--- Anula el 'uppercase' de la base
+    letter-spacing: normal; // <--- Anula el 'letter-spacing' de la base
     cursor: pointer;
-    gap: 8px; // Espacio entre checkbox y texto
-
+  
+    // Estilos anidados (no necesitan cambio de selector)
     input[type="checkbox"] {
-        margin: 0;
-        padding: 0;
-        cursor: pointer;
-        width: auto; // Ancho automático para checkbox
-        // Opcional: Estilizar el checkbox
-        // appearance: none;
-        // border: ... etc ...
+      margin: 0;
+      padding: 0;
+      cursor: pointer;
+      width: auto;
+      flex-shrink: 0; // Buena idea para evitar que se encoja
     }
-
-    span { // Si usaste span en lugar de p dentro del label
-        line-height: 1.3;
+  
+    span {
+      line-height: 1.3;
     }
-
-     // Estilo cuando está deshabilitado (límite alcanzado)
-     input[disabled] + span {
-         opacity: 0.6;
-         cursor: not-allowed;
-     }
-}
-
+  
+    input[disabled] + span {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+  
+  
+  // Asegúrate de que la variable $text-color-secondary esté definida
+  // en algún lugar de tu archivo SCSS principal o de variables, por ejemplo:
+  // $text-color-secondary: #6c757d; // Un gris como ejemplo
 // Estilos para el dropdown de País (si necesita algo diferente a <select> base)
-.custom-dropdown {
-    // Si tiene estilos específicos, van aquí.
-    // Por ejemplo, si quieres añadir la bandera como background:
-    // select {
-    //    padding-left: 35px; // Espacio para la bandera
-    //    background-repeat: no-repeat;
-    //    background-position: 8px center;
-    //    background-size: 20px;
-    // }
-    // select[name="pais"][value="Argentina"] { background-image: url(...); }
-    // select[name="pais"][value="Chile"] { background-image: url(...); }
-}
-
-// Ya no se necesita .orange-prop si usamos border en h1

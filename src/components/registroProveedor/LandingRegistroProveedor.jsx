@@ -19,10 +19,8 @@ const LandingRegistroProveedor = () => {
 
     return (
         <>
-            {/* Header puede ser global en App.jsx, si no, está bien aquí */}
             <Header />
 
-            {/* Usar <main> es semánticamente correcto */}
             <main className='main-landing'>
 
                 {/* Sección Hero */}
@@ -43,7 +41,7 @@ const LandingRegistroProveedor = () => {
                             <CustomStepper
                                 activeStep={-1} // Sin paso activo inicial
                                 steps={STEPS_PREVIEW}
-                                sx={{ backgroundColor: 'transparent', padding: 0, boxShadow: 'none' }} // Sobrescribe estilos base del stepper para que se integre al fondo oscuro
+                                sx={{ backgroundColor: 'transparent', padding: 0, boxShadow: 'none', color: 'white' }} // Sobrescribe estilos base del stepper para que se integre al fondo oscuro
                             />
                         </div>
                     </div>

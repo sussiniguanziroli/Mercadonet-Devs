@@ -1,5 +1,7 @@
 import react from 'react'
 import '../src/css/main.css';
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import theme from './theme';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Landing from './components/inicio/Landing';
 import Menu from './components/header/Menu';
@@ -17,22 +19,24 @@ function App() {
 
 
     return (
-
-        <FiltersProvider>
-            <BrowserRouter>
-                <div className="app-container">
-                    <Menu />
-                    <Routes>
-                        <Route path="/" element={<Landing />} />
-                        <Route path="/proveedores" element={<Proveedores />} />
-                        <Route path="/admin" element={<AdminPanel />} />
-                        <Route path="/registrarme" element={<RegisterNavigator/>} />
-                        <Route path='/registrar-mi-empresa/flujo' element={<RegistrosProveedorNavigator />}/>
-                        <Route path="/registrar-mi-empresa" element={<LandingRegistroProveedor />} />
-                    </Routes>
-                </div>
-            </BrowserRouter>
-        </FiltersProvider>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <FiltersProvider>
+                <BrowserRouter>
+                    <div className="app-container">
+                        <Menu />
+                        <Routes>
+                            <Route path="/" element={<Landing />} />
+                            <Route path="/proveedores" element={<Proveedores />} />
+                            <Route path="/admin" element={<AdminPanel />} />
+                            <Route path="/registrarme" element={<RegisterNavigator />} />
+                            <Route path='/registrar-mi-empresa/flujo' element={<RegistrosProveedorNavigator />} />
+                            <Route path="/registrar-mi-empresa" element={<LandingRegistroProveedor />} />
+                        </Routes>
+                    </div>
+                </BrowserRouter>
+            </FiltersProvider>
+        </ThemeProvider>
 
     )
 }

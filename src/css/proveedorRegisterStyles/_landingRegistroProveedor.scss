@@ -125,7 +125,7 @@ $breakpoint-desktop: 1024px; // Definir punto de quiebre
 // --- Estilos para Desktop (Sobrescriben o añaden a los base) ---
 @media (min-width: $breakpoint-desktop) {
     .landing-registro-proveedor {
-        min-height: 90vh; // Más altura en desktop
+        min-height: 86vh; // Más altura en desktop
         padding: 60px 20px;
         gap: 3rem;
 
