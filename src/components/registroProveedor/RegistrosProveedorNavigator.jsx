@@ -211,7 +211,7 @@ const RegistrosProveedorNavigator = () => {
         <Box sx={{ width: '100%', minHeight: '100vh', position: 'relative', display: 'flex', flexDirection: 'column' }}>
             {/* Stepper Fijo Arriba */}
             <Box sx={{
-                position: 'sticky', top: 0, zIndex: 1100,
+                position: 'relative', top: 0, zIndex: 1100,
                 backgroundColor: 'rgba(0, 5, 16, 0.85)', // Fondo oscuro semi-transparente
                 backdropFilter: 'blur(4px)',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.3)'

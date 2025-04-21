@@ -113,12 +113,14 @@ $error-color: #dc3545; // Rojo estándar para errores
     flex-direction: column;
     gap: 30px;
     width: 100%;
-
+    
     @media (min-width: $breakpoint-desktop) {
         flex-direction: row;
         justify-content: space-between;
         align-items: flex-start;
         gap: 5%;
+        max-width: 1500px;
+        width: 100vw;
     }
 }
 
@@ -128,7 +130,6 @@ $error-color: #dc3545; // Rojo estándar para errores
 
     @media (min-width: $breakpoint-desktop) {
         width: 100%;
-        max-width: 1000px;
     }
 }
 
@@ -143,7 +144,7 @@ $error-color: #dc3545; // Rojo estándar para errores
     border-radius: 8px;
     padding: 35px 40px;
     box-shadow: $form-shadow; // Sombra sutil
-
+    
     h1 {
         font-family: 'Montserrat', sans-serif;
         font-size: 1.8rem;
