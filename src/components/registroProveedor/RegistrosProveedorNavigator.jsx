@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, CircularProgress } from '@mui/material';
 
+import { scrollToTop } from '../../utils/scrollHelper.js';
+
 // Componentes Reutilizables y de Pasos
 import CustomStepper from './assetsRegistro/CustomStepper'; // Ajusta ruta si es necesario
 import SeleccionTipoCard from './steps/SeleccionTipoCard';
@@ -53,6 +55,27 @@ const RegistrosProveedorNavigator = () => {
     const [loadingCategorias, setLoadingCategorias] = useState(true);
     const [errorCategorias, setErrorCategorias] = useState(null);
 
+    // --- useEffect para Scroll con Retraso ---
+    useEffect(() => {
+        // Se ejecuta cada vez que 'currentStep' cambia.
+        console.log(`Navigator: Step cambió a ${currentStep}. Programando scroll...`);
+
+        // Añadimos un pequeño retraso antes de intentar el scroll.
+        // Esto le da tiempo a React para terminar de actualizar el DOM.
+        const scrollTimeoutId = setTimeout(() => {
+            console.log("Navigator: Ejecutando scrollToTop desde setTimeout.");
+            scrollToTop(); // Llama a tu función original sin modificarla
+        }, 20); // Retraso de 100 milisegundos (puedes ajustar este valor, ej: 50, 150)
+
+        // Es BUENA PRÁCTICA limpiar el timeout si el componente se desmonta
+        // o si el efecto se vuelve a ejecutar antes de que el timeout termine.
+        return () => {
+            console.log("Navigator: Limpiando timeout de scroll.");
+            clearTimeout(scrollTimeoutId);
+        };
+
+    }, [currentStep]); 
+
     // --- useEffect para llamar al servicio y cargar categorías ---
     useEffect(() => {
         const cargarCategorias = async () => {
@@ -84,11 +107,9 @@ const RegistrosProveedorNavigator = () => {
 
     // --- Navegación ---
     const nextStep = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
         setCurrentStep(prev => Math.min(prev + 1, STEPS.length - 1));
     }
     const prevStep = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
         setCurrentStep(prev => Math.max(prev - 1, 0));
     }
     const cancelRegistration = () => {

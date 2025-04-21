@@ -1,6 +1,7 @@
 // src/components/registroProveedor/steps/FormularioGeneral.jsx
 
 import React, { useState, useEffect } from 'react';
+import { scrollToTop } from '../../../utils/scrollHelper';
 
 // Simuladores
 import CardHistoriaSimulator from '../card_simulators/CardHistoriaSimulator';
@@ -48,7 +49,7 @@ const FormularioGeneral = ({
     }, [initialData]);
 
     // --- Manejadores de Eventos (handleCheckboxChange sin cambios) ---
-     const handleCheckboxChange = (e) => {
+    const handleCheckboxChange = (e) => {
         const { value, checked } = e.target;
         let updated = [...selectedCategories];
         if (checked) {
@@ -67,12 +68,15 @@ const FormularioGeneral = ({
     // --- Submit (Sin cambios en lógica interna) ---
     const handleSubmit = (e) => {
         e.preventDefault();
+        
         const stepData = { /* ...recolectar estado local... */
-             pais, nombreProveedor, tipoProveedor, categoriaPrincipal,
-             categoriasAdicionales: selectedCategories, ciudad, provincia,
-             nombre, apellido, rol, whatsapp, cuit, antiguedad, facturacion
+            pais, nombreProveedor, tipoProveedor, categoriaPrincipal,
+            categoriasAdicionales: selectedCategories, ciudad, provincia,
+            nombre, apellido, rol, whatsapp, cuit, antiguedad, facturacion
         };
         onNext(stepData);
+
+        
     };
 
     // --- Datos para el Simulador (Sin cambios) ---
@@ -97,7 +101,7 @@ const FormularioGeneral = ({
                     {/* Usa la clase específica si necesita estilos únicos */}
                     <div className="custom-dropdown form-section"> {/* Añadido form-section si aplica gap */}
                         <label>País / Región:</label> {/* Label estilado por base */}
-                         {/* Select estilado por base */}
+                        {/* Select estilado por base */}
                         <select name="pais" value={pais} onChange={e => setPais(e.target.value)}>
                             <option value="Argentina">🇦🇷 Argentina</option>
                         </select>
@@ -108,7 +112,7 @@ const FormularioGeneral = ({
                         <label> Nombre del Proveedor:
                             <input type="text" name="nombreProveedor" value={nombreProveedor} onChange={e => setNombreProveedor(e.target.value)} required />
                         </label>
-                         <label> Tipo de Proveedor:
+                        <label> Tipo de Proveedor:
                             <select name="tipoProveedor" value={tipoProveedor} onChange={e => setTipoProveedor(e.target.value)} required>
                                 <option value="" disabled>Selecciona...</option>
                                 <option value="Distribuidor">Distribuidor</option>
@@ -116,7 +120,7 @@ const FormularioGeneral = ({
                                 <option value="Mayorista">Mayorista</option>
                             </select>
                         </label>
-                         <label> Categoría Principal:
+                        <label> Categoría Principal:
                             <select name="categoriaPrincipal" value={categoriaPrincipal} onChange={e => setCategoriaPrincipal(e.target.value)} required>
                                 <option value="" disabled>Selecciona...</option>
                                 {(categorias || []).map((cat, i) => <option key={i} value={cat}>{cat}</option>)}
@@ -129,7 +133,7 @@ const FormularioGeneral = ({
                     {/* Fieldset estilado por base */}
                     <fieldset className='form-section'>
                         <legend>Otras categorías (Elige hasta 5)</legend>
-                         {/* Clase específica para estilos de layout/apariencia de checkboxes */}
+                        {/* Clase específica para estilos de layout/apariencia de checkboxes */}
                         <div className="cat-label-container">
                             {(categorias || []).map((cat, i) => (
                                 // Clase específica para estilos del label del checkbox
@@ -149,7 +153,7 @@ const FormularioGeneral = ({
 
                     {/* Ubicación (usando input-row para layout) */}
                     <div className="form-section">
-                         <label>Ubicación</label> {/* Label general para la fila */}
+                        <label>Ubicación</label> {/* Label general para la fila */}
                         <div className="input-row"> {/* Clase base para poner inputs lado a lado en desktop */}
                             <label> {/* No necesita texto si el placeholder es claro */}
                                 <input type="text" name="ciudad" placeholder="Ciudad" value={ciudad} onChange={e => setCiudad(e.target.value)} />
@@ -166,7 +170,7 @@ const FormularioGeneral = ({
                         <h3>Cuéntanos sobre ti (Contacto Principal)</h3>
                         <div className="input-row"> {/* Clase base para Nombre/Apellido */}
                             <label>
-                                 <input type="text" name="nombre" placeholder="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} required />
+                                <input type="text" name="nombre" placeholder="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} required />
                             </label>
                             <label>
                                 <input type="text" name="apellido" placeholder="Apellido" value={apellido} onChange={e => setApellido(e.target.value)} required />
@@ -184,8 +188,8 @@ const FormularioGeneral = ({
                     {/* Información Opcional */}
                     <div className='form-section'>
                         <h3>Información Legal y Financiera (Opcional)</h3>
-                         <label> CUIT / RUT / Tax ID:
-                             <input type="text" name="cuit" value={cuit} onChange={e => setCuit(e.target.value)} />
+                        <label> CUIT / RUT / Tax ID:
+                            <input type="text" name="cuit" value={cuit} onChange={e => setCuit(e.target.value)} />
                         </label>
                         <div className="input-row"> {/* Antigüedad y Facturación lado a lado */}
                             <label> Antigüedad (años):
@@ -193,7 +197,7 @@ const FormularioGeneral = ({
                             </label>
                             <label> Facturación anual (USD):
                                 <input type="number" min="0" name="facturacion" value={facturacion} onChange={e => setFacturacion(e.target.value)} />
-                             </label>
+                            </label>
                         </div>
                     </div>
 
@@ -207,11 +211,11 @@ const FormularioGeneral = ({
 
             {/* Contenedor del Simulador (usa clase base) */}
             <div className="simulator-wrapper">
-                 {/* Título estilado por base */}
-                 <h1>{selectedCard === 'tipoA' ? 'Card Historia' : 'Card Producto'}</h1>
+                {/* Título estilado por base */}
+                <h1>{selectedCard === 'tipoA' ? 'Card Historia' : 'Card Producto'}</h1>
                 {selectedCard === 'tipoA' && <CardHistoriaSimulator data={simulatorData} />}
                 {selectedCard === 'tipoB' && <CardProductoSimulator data={simulatorData} />}
-                {!selectedCard && <p style={{color: 'white', textAlign: 'center'}}>Selecciona un tipo de card.</p>}
+                {!selectedCard && <p style={{ color: 'white', textAlign: 'center' }}>Selecciona un tipo de card.</p>}
             </div>
         </div>
     );

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FaFileCirclePlus } from 'react-icons/fa6';
+import { scrollToTop } from '../../../utils/scrollHelper';
 
 // Estado inicial para un producto vacío en la galería
 const initialProductState = { imagenFile: null, imagenPreview: null, titulo: '', precio: '' };
