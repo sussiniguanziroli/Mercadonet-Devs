@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, CircularProgress } from '@mui/material';
 
+// Asumo que esta utilidad existe en tu proyecto
 import { scrollToTop } from '../../utils/scrollHelper.js';
 
 // Componentes Reutilizables y de Pasos
@@ -18,8 +19,8 @@ import ResumenRegistro from './steps/ResumenRegistro';
 // Importa SOLO las constantes estáticas necesarias
 import { STEPS, backgroundImageURL } from "../registroProveedor/assetsRegistro/Constants.js"; // SIN CATEGORIAS
 
-// --- Importa la función del servicio ---
-import { fetchCategoriasPrincipales } from '../../services/firestoreService'; // <-- ¡¡AJUSTA ESTA RUTA!!
+// --- MODIFICADO: Importa la función del servicio que trae TODO ---
+import { fetchFiltrosGlobales } from '../../services/firestoreService'; // <-- ¡VERIFICA ESTA RUTA!
 
 // Estructura inicial detallada para el estado del formulario (copiada de tu original)
 const initialFormData = {
@@ -30,11 +31,11 @@ const initialFormData = {
         rol: '', whatsapp: '', cuit: '', antiguedad: '', facturacion: '',
     },
     datosPersonalizados: {
-        tipoA: {
+        tipoA: { // Historia
             descripcion: '', sitioWeb: '', whatsapp: '', telefono: '', email: '',
             marca: [], extras: [], logoFile: null, carruselFiles: [],
         },
-        tipoB: {
+        tipoB: { // Productos
             descripcion: '', sitioWeb: '', whatsapp: '', telefono: '', email: '',
             marcas: [], servicios: [], logoFile: null, carruselFiles: [],
             galeria: [], // Array de { titulo: '', precio: '', imagenFile: null }
@@ -50,168 +51,178 @@ const RegistrosProveedorNavigator = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [formData, setFormData] = useState(initialFormData);
 
-    // Estado para las categorías y su carga/error
+    // --- Mantenemos el estado como si solo cargáramos categorías por ahora ---
     const [categoriasFirestore, setCategoriasFirestore] = useState([]);
-    const [loadingCategorias, setLoadingCategorias] = useState(true);
-    const [errorCategorias, setErrorCategorias] = useState(null);
+    // Usaremos estos mismos estados de carga/error para la llamada global
+    const [loadingFiltros, setLoadingFiltros] = useState(true); // Renombrado para claridad
+    const [errorFiltros, setErrorFiltros] = useState(null);     // Renombrado para claridad
 
     // --- useEffect para Scroll con Retraso ---
     useEffect(() => {
-        // Se ejecuta cada vez que 'currentStep' cambia.
         console.log(`Navigator: Step cambió a ${currentStep}. Programando scroll...`);
-
-        // Añadimos un pequeño retraso antes de intentar el scroll.
-        // Esto le da tiempo a React para terminar de actualizar el DOM.
         const scrollTimeoutId = setTimeout(() => {
             console.log("Navigator: Ejecutando scrollToTop desde setTimeout.");
-            scrollToTop(); // Llama a tu función original sin modificarla
-        }, 20); // Retraso de 100 milisegundos (puedes ajustar este valor, ej: 50, 150)
-
-        // Es BUENA PRÁCTICA limpiar el timeout si el componente se desmonta
-        // o si el efecto se vuelve a ejecutar antes de que el timeout termine.
+            scrollToTop();
+        }, 20);
         return () => {
             console.log("Navigator: Limpiando timeout de scroll.");
             clearTimeout(scrollTimeoutId);
         };
+    }, [currentStep]);
 
-    }, [currentStep]); 
-
-    // --- useEffect para llamar al servicio y cargar categorías ---
+    // --- MODIFICADO: useEffect para llamar al servicio GLOBAL pero SOLO USAR CATEGORÍAS ---
     useEffect(() => {
-        const cargarCategorias = async () => {
-            setLoadingCategorias(true);
-            setErrorCategorias(null);
-            console.log("[Navigator] Llamando al servicio para cargar categorías...");
+        const cargarFiltros = async () => {
+            setLoadingFiltros(true);
+            setErrorFiltros(null);
+            console.log("[Navigator] Llamando al servicio fetchFiltrosGlobales...");
             try {
-                const datosCategorias = await fetchCategoriasPrincipales(); // Llama al servicio
+                const datosGlobales = await fetchFiltrosGlobales(); // Llama a la función que trae TODO
+                console.log("[Navigator] Datos globales recibidos:", datosGlobales);
 
-                if (datosCategorias.length === 0 && !errorCategorias) { // Verifica si está vacío sin un error previo explícito
-                     console.warn("[Navigator] El servicio devolvió una lista de categorías vacía.");
-                     // Podrías establecer un error si la lista vacía no es esperada
-                     // setErrorCategorias("No se encontraron categorías disponibles.");
+                // Extraemos SOLO las categorías del objeto resultado
+                const categoriasExtraidas = datosGlobales.categorias || [];
+                setCategoriasFirestore(categoriasExtraidas); // Actualiza solo el estado de categorías
+
+                if (categoriasExtraidas.length === 0) {
+                     console.warn("[Navigator] La lista de categorías extraída está vacía.");
+                     // setErrorFiltros("No se pudieron cargar las categorías esenciales."); // Opcional
                 }
-                setCategoriasFirestore(datosCategorias);
-
             } catch (err) {
-                // Captura errores si el servicio *lanzara* una excepción
-                console.error("[Navigator] Error al llamar al servicio de categorías:", err);
-                setErrorCategorias("Ocurrió un error inesperado al cargar las categorías.");
+                console.error("[Navigator] Error al llamar al servicio fetchFiltrosGlobales:", err);
+                setErrorFiltros("Ocurrió un error inesperado al cargar la configuración.");
                 setCategoriasFirestore([]);
             } finally {
-                setLoadingCategorias(false);
-                console.log("[Navigator] Carga de categorías finalizada (desde el servicio).");
+                setLoadingFiltros(false); // Finaliza la carga
+                console.log("[Navigator] Carga de filtros globales finalizada.");
             }
         };
-        cargarCategorias();
+        cargarFiltros();
     }, []); // Se ejecuta solo una vez al montar
 
-    // --- Navegación ---
+    // --- Navegación (Completa) ---
     const nextStep = () => {
+        // El scroll ahora se maneja en el useEffect [currentStep]
         setCurrentStep(prev => Math.min(prev + 1, STEPS.length - 1));
     }
     const prevStep = () => {
+        // El scroll ahora se maneja en el useEffect [currentStep]
         setCurrentStep(prev => Math.max(prev - 1, 0));
     }
     const cancelRegistration = () => {
-        setFormData(initialFormData);
-        navigate("/registrar-mi-empresa");
+        setFormData(initialFormData); // Resetea el formulario
+        navigate("/registrar-mi-empresa"); // Navega fuera
     };
 
-    // --- Manejo de Datos ---
+    // --- Manejo de Datos (Completo) ---
     const updateStepData = (stepKey, newData) => {
         setFormData(prev => {
+            // Si la clave es simple (tipoCard, planSeleccionado)
             if (stepKey === 'tipoCard' || stepKey === 'planSeleccionado') {
                 return { ...prev, [stepKey]: newData };
             }
+            // Si la clave es un objeto anidado (datosGenerales, datosPersonalizados)
             return {
                 ...prev,
                 [stepKey]: {
+                    // Asegura mantener los datos previos del objeto si existen
                     ...(typeof prev[stepKey] === 'object' && prev[stepKey] !== null ? prev[stepKey] : {}),
+                    // Fusiona los nuevos datos
                     ...newData
                 }
             };
         });
     };
 
+    // Función llamada por los componentes de paso al completarse
     const handleStepCompletion = (stepKey, stepLocalData) => {
         console.log(`[Navigator] Datos recibidos de ${stepKey}:`, stepLocalData);
-        updateStepData(stepKey, stepLocalData);
-        nextStep();
+        updateStepData(stepKey, stepLocalData); // Actualiza el estado central
+        nextStep(); // Avanza al siguiente paso
     };
 
+    // Función específica para el primer paso (SeleccionTipoCard)
     const handleTipoCardSelection = (tipo) => {
         console.log(`[Navigator] Tipo Card seleccionado:`, tipo);
+        // Actualiza tipoCard y pre-inicializa la rama correspondiente en datosPersonalizados
         setFormData(prev => ({
             ...prev,
             tipoCard: tipo,
             datosPersonalizados: {
                 ...prev.datosPersonalizados,
+                // Asegura que la estructura para el tipo seleccionado exista
                 [tipo]: prev.datosPersonalizados?.[tipo] || initialFormData.datosPersonalizados[tipo],
+                 // Opcional: Podrías resetear la data del OTRO tipo de card si quisieras
+                 // [tipo === 'tipoA' ? 'tipoB' : 'tipoA']: initialFormData.datosPersonalizados[tipo === 'tipoA' ? 'tipoB' : 'tipoA']
             }
         }));
-        nextStep();
+        console.log('[Navigator] handleTipoCardSelection - Llamando a nextStep. Tipo seleccionado:', tipo);
+        nextStep(); // Avanza al siguiente paso
     };
 
-    // --- Renderizado del Paso Actual ---
+    // --- Renderizado del Paso Actual (Usa estados de carga/error globales) ---
     const renderCurrentStep = () => {
+        console.log('[Navigator] renderCurrentStep - currentStep es:', currentStep, '¿Está cargando filtros?', loadingFiltros); // Log
         const stepProps = { onBack: prevStep, onCancel: cancelRegistration };
 
         switch (currentStep) {
             case 0:
                 return <SeleccionTipoCard onSelectCard={handleTipoCardSelection} onCancel={cancelRegistration} />;
             case 1:
-                // Manejo de carga y error para categorías
-                if (loadingCategorias) {
+                // Manejo de carga y error
+                if (loadingFiltros) {
                     return (
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5 }}>
                             <CircularProgress sx={{ color: 'common.white' }}/>
-                            <Typography sx={{ ml: 2, color: 'common.white' }}>Cargando categorías...</Typography>
+                            <Typography sx={{ ml: 2, color: 'common.white' }}>Cargando opciones...</Typography>
                         </Box>
                     );
                 }
-                if (errorCategorias) {
+                if (errorFiltros) {
                      return (
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}>
-                             <Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>
-                                {errorCategorias}
-                             </Typography>
-                             <Button onClick={cancelRegistration} variant="outlined" color="warning">Volver</Button>
-                        </Box>
-                    );
-                }
-                if (!loadingCategorias && !errorCategorias && categoriasFirestore.length === 0) {
-                     return (
-                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}>
-                             <Typography sx={{ color: 'warning.main', textAlign: 'center', mb: 2 }}>
-                                No hay categorías disponibles en este momento.
-                             </Typography>
+                             <Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>{errorFiltros}</Typography>
                              <Button onClick={cancelRegistration} variant="outlined" color="warning">Volver</Button>
                         </Box>
                      );
                  }
-
-                // Renderiza el formulario si todo está bien
+                 if (!loadingFiltros && !errorFiltros && categoriasFirestore.length === 0) {
+                      return (
+                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}>
+                              <Typography sx={{ color: 'warning.main', textAlign: 'center', mb: 2 }}>No hay categorías disponibles en este momento.</Typography>
+                              <Button onClick={cancelRegistration} variant="outlined" color="warning">Volver</Button>
+                         </Box>
+                      );
+                  }
+                // Renderiza FormularioGeneral pasando solo categorías por ahora
                 return <FormularioGeneral {...stepProps}
                     initialData={formData.datosGenerales}
                     onNext={(localData) => handleStepCompletion('datosGenerales', localData)}
-                    categorias={categoriasFirestore} // Pasa las categorías cargadas
+                    categorias={categoriasFirestore}
+                    // Asegúrate de añadir aquí props para las otras listas (ubicaciones, pproductos, etc.)
+                    // cuando las necesites en FormularioGeneral, ej:
+                    // ubicaciones={filtrosData.ubicaciones}
                     selectedCard={formData.tipoCard}
-                    /* textColor={textColor} */ />;
+                     />;
             case 2:
                  if (!formData.tipoCard) return <Typography sx={{ color: 'error.main', textAlign: 'center', mt: 5 }}>Error: Tipo de card no seleccionado. Vuelve al paso anterior.</Typography>;
-                return <FormularioPersonalizado {...stepProps}
+                 // Renderiza FormularioPersonalizado (aún sin pasarle las listas de filtros)
+                 return <FormularioPersonalizado {...stepProps}
                     initialData={formData.datosPersonalizados[formData.tipoCard] || {}}
                     onNext={(localData) => handleStepCompletion('datosPersonalizados', { [formData.tipoCard]: localData })}
                     selectedCard={formData.tipoCard}
-                     /* textColor={textColor} */ />;
+                    // Asegúrate de añadir aquí props para las listas que necesite este componente
+                    // ej: marcas={filtrosData.marcas}, extras={filtrosData.extras}, etc.
+                     />;
             case 3:
                  return <SeleccionPlan {...stepProps}
                     initialData={formData.planSeleccionado}
                     onNext={(plan) => handleStepCompletion('planSeleccionado', plan)}
-                    /* textColor={textColor} */ />;
+                    />;
             case 4:
                 return <ResumenRegistro
                     formData={formData}
+                    // filtrosData={filtrosData} // Podrías pasar todos los filtros si el resumen los necesita
                     onBack={prevStep}
                     onCancel={cancelRegistration}
                     onConfirm={async () => {
@@ -220,20 +231,22 @@ const RegistrosProveedorNavigator = () => {
                         console.log("TODO: Implementar subida de archivos (logo, carrusel, galería) desde formData y guardado final en onConfirm.");
                         // navigate("/registro-exitoso");
                     }}
-                    /* textColor={textColor} */ />;
+                    />;
             default:
                 console.error("Error: Paso desconocido", currentStep);
                 return <Typography sx={{ color: 'error.main', textAlign: 'center', mt: 5 }}>Error: Paso desconocido.</Typography>;
         }
     };
 
-    // --- Renderizado del Navegador ---
+    // --- Renderizado del Navegador (Completo) ---
     return (
         <Box sx={{ width: '100%', minHeight: '100vh', position: 'relative', display: 'flex', flexDirection: 'column' }}>
             {/* Stepper Fijo Arriba */}
             <Box sx={{
-                position: 'relative', top: 0, zIndex: 1100,
-                backgroundColor: 'rgba(0, 5, 16, 0.85)', // Fondo oscuro semi-transparente
+                position: 'sticky', // Cambiado de 'relative' a 'sticky' para que se pegue arriba
+                top: 0, // Necesario para sticky
+                zIndex: 1100,
+                backgroundColor: 'rgba(0, 5, 16, 0.85)',
                 backdropFilter: 'blur(4px)',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
             }}>
@@ -259,22 +272,22 @@ const RegistrosProveedorNavigator = () => {
                 backgroundSize: 'cover', backgroundPosition: 'center center',
                 backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed',
                 display: 'flex', flexDirection: 'column',
-                alignItems: 'center', justifyContent: 'flex-start',
+                alignItems: 'center', justifyContent: 'flex-start', // Alinea arriba
             }}>
                 {/* Contenedor para limitar ancho del contenido */}
                  <Box sx={{
-                     width: '100%', maxWidth: '1500px', // Ancho máximo
-                     position: 'relative',
+                     width: '100%', maxWidth: '1500px',
+                     position: 'relative', // Para el botón cancelar
                      display: 'flex', flexDirection: 'column', alignItems: 'center',
                  }}>
                     {/* Botón Cancelar Absoluto */}
-                    {currentStep < STEPS.length && ( // Asumo que no quieres mostrarlo en el último paso (resumen)
+                    {currentStep < STEPS.length -1 && ( // Ocultar en el último paso (Resumen)
                         <Button
                             onClick={cancelRegistration}
                             variant="outlined"
                             size="small"
                             sx={{
-                                position: 'absolute', top: { xs: -25, md: -35 }, right: 0, zIndex: 1, // Ajustado para no superponerse tanto con padding superior
+                                position: 'absolute', top: { xs: -25, md: -35 }, right: 0, zIndex: 1,
                                 color: 'common.white', borderColor: 'rgba(255, 255, 255, 0.5)',
                                 '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)', borderColor: 'common.white', }
                             }}

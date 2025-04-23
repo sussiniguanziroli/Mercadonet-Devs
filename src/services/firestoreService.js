@@ -1,56 +1,141 @@
 // src/services/firestoreService.js
 import { doc, getDoc } from "firebase/firestore";
-import { db } from '../firebase/config.js'; // <-- ¡Asegúrate que la ruta a tu config sea correcta!
+// Asegúrate que la ruta a tu config sea correcta, la ajusté asumiendo una estructura común
+import { db } from '../firebase/config';
 
-// ID del documento y nombre de la colección según tu captura
-const CATEGORIAS_DOC_ID = "aksjeiX4pQZXtU1OKgyI";
+// --- Definiciones de Filtros ---
 const FILTROS_COLLECTION_NAME = "filtros";
 
+// 1. Categorías (Mapa)
+const CATEGORIAS_DOC_ID = "aksjeiX4pQZXtU1OKgyI";
+const CATEGORIAS_FIELD_NAME = "categorias"; // Campo es un Mapa/Objeto
+
+// 2. PProductos (Array)
+const PPRODUCTOS_DOC_ID = "4HxfJnKzceGKJ52xk99C";
+const PPRODUCTOS_FIELD_NAME = "pproductos"; // Campo es un Array
+
+// 3. Ubicación (Provincias) (Array)
+const UBICACION_DOC_ID = "BIrx8fw1tPji1SUb1NCa";
+const UBICACION_FIELD_NAME = "ubicacion"; // Campo es un Array
+
+// 4. Extras (Array)
+const EXTRAS_DOC_ID = "FXcoaTymfqELM19bdJpa";
+const EXTRAS_FIELD_NAME = "extras"; // Campo es un Array
+
+// 5. Servicios (Array)
+const SERVICIOS_DOC_ID = "VeT6KON7y2f6THN4wv6t";
+const SERVICIOS_FIELD_NAME = "servicios"; // Campo es un Array
+
+// 6. Marca (Array)
+const MARCAS_DOC_ID = "uvs44BL6bVHKFXTgmIXv";
+const MARCAS_FIELD_NAME = "marca"; // Campo es un Array
+
 /**
- * Obtiene la lista de categorías principales desde Firestore.
- * Extrae las claves del mapa 'categorias' del documento específico en la colección 'filtros'.
- * Añade categorías manuales al final.
- * @returns {Promise<string[]>} Una promesa que resuelve a un array de strings con los nombres de las categorías. Devuelve un array vacío en caso de error.
+ * Obtiene todos los datos de filtros globales necesarios para los formularios.
+ * Lee los documentos específicos de la colección 'filtros' y extrae las listas/mapas.
+ * @returns {Promise<object>} Una promesa que resuelve a un objeto con todas las listas:
+ * {
+ * categorias: string[],
+ * pproductos: string[],
+ * ubicaciones: string[],
+ * extras: string[],
+ * servicios: string[],
+ * marcas: string[]
+ * }
+ * Devuelve un objeto con arrays vacíos si hay errores o faltan datos.
  */
-export const fetchCategoriasPrincipales = async () => {
-    console.log(`[Service] Intentando obtener categorías desde ${FILTROS_COLLECTION_NAME}/${CATEGORIAS_DOC_ID}...`);
-    const docRef = doc(db, FILTROS_COLLECTION_NAME, CATEGORIAS_DOC_ID);
+export const fetchFiltrosGlobales = async () => {
+    console.log(`[Service] Iniciando carga de todos los filtros desde '${FILTROS_COLLECTION_NAME}'...`);
+
+    // Crear referencias a todos los documentos necesarios
+    const docRefs = [
+        doc(db, FILTROS_COLLECTION_NAME, CATEGORIAS_DOC_ID),    // Index 0
+        doc(db, FILTROS_COLLECTION_NAME, PPRODUCTOS_DOC_ID),   // Index 1
+        doc(db, FILTROS_COLLECTION_NAME, UBICACION_DOC_ID),    // Index 2
+        doc(db, FILTROS_COLLECTION_NAME, EXTRAS_DOC_ID),       // Index 3
+        doc(db, FILTROS_COLLECTION_NAME, SERVICIOS_DOC_ID),    // Index 4
+        doc(db, FILTROS_COLLECTION_NAME, MARCAS_DOC_ID),       // Index 5
+    ];
+
+    // Objeto inicial para los resultados (importante para devolver algo en caso de error)
+    const resultados = {
+        categorias: [],
+        pproductos: [],
+        ubicaciones: [],
+        extras: [],
+        servicios: [],
+        marcas: []
+    };
 
     try {
-        const docSnap = await getDoc(docRef);
+        // Realizar todas las lecturas en paralelo
+        const snapshots = await Promise.all(docRefs.map(ref => getDoc(ref)));
+        console.log(`[Service] Se obtuvieron ${snapshots.length} snapshots.`);
 
-        if (docSnap.exists()) {
-            console.log("[Service] Documento de filtros encontrado.");
-            const data = docSnap.data();
+        // --- Procesar cada snapshot (el orden se mantiene como en docRefs) ---
 
-            if (data.categorias && typeof data.categorias === 'object') {
-                const mainCategories = Object.keys(data.categorias);
-                mainCategories.sort(); // Ordenar alfabéticamente
-
-                // Añadir manualmente las categorías especiales si es necesario
-                const finalCategoryList = [
+        // 1. Categorías (Index 0) - Mapa
+        const categoriasDocSnap = snapshots[0];
+        if (categoriasDocSnap.exists()) {
+            const data = categoriasDocSnap.data();
+            if (data[CATEGORIAS_FIELD_NAME] && typeof data[CATEGORIAS_FIELD_NAME] === 'object') {
+                const mainCategories = Object.keys(data[CATEGORIAS_FIELD_NAME]);
+                mainCategories.sort();
+                resultados.categorias = [
                     ...mainCategories,
-                    "Crea tu propia marca",
-                    "Nueva Categoria"
+                    
                 ];
-
-                console.log("[Service] Categorías principales procesadas:", finalCategoryList);
-                return finalCategoryList; // Devuelve la lista exitosamente
+                console.log(`[Service] Procesado: Categorías (${resultados.categorias.length})`);
             } else {
-                console.error("[Service] El documento existe pero falta el campo 'categorias' o no es un objeto.");
-                return []; // Devuelve vacío si el formato es incorrecto
+                console.warn(`[Service] Campo '${CATEGORIAS_FIELD_NAME}' no encontrado o no es objeto en Doc ID: ${CATEGORIAS_DOC_ID}`);
             }
         } else {
-            console.error(`[Service] No se encontró el documento con ID ${CATEGORIAS_DOC_ID}`);
-            return []; // Devuelve vacío si el documento no existe
+            console.warn(`[Service] No se encontró Documento para Categorías (ID: ${CATEGORIAS_DOC_ID})`);
         }
+
+        // Función auxiliar para procesar los campos de tipo Array de forma segura
+        const processArrayField = (snapshot, fieldName, docId) => {
+            if (snapshot.exists()) {
+                const data = snapshot.data();
+                if (data[fieldName] && Array.isArray(data[fieldName])) {
+                    const stringArray = data[fieldName].filter(item => typeof item === 'string'); // Asegurar que sean strings
+                    stringArray.sort(); // Ordenar alfabéticamente
+                    console.log(`[Service] Procesado: ${fieldName} (${stringArray.length})`);
+                    return stringArray;
+                } else {
+                    console.warn(`[Service] Campo '${fieldName}' no encontrado o no es array en Doc ID: ${docId}`);
+                    return [];
+                }
+            } else {
+                console.warn(`[Service] No se encontró Documento para ${fieldName} (ID: ${docId})`);
+                return [];
+            }
+        };
+
+        // 2. PProductos (Index 1) - Array
+        resultados.pproductos = processArrayField(snapshots[1], PPRODUCTOS_FIELD_NAME, PPRODUCTOS_DOC_ID);
+
+        // 3. Ubicación (Index 2) - Array
+        resultados.ubicaciones = processArrayField(snapshots[2], UBICACION_FIELD_NAME, UBICACION_DOC_ID);
+
+        // 4. Extras (Index 3) - Array
+        resultados.extras = processArrayField(snapshots[3], EXTRAS_FIELD_NAME, EXTRAS_DOC_ID);
+
+        // 5. Servicios (Index 4) - Array
+        resultados.servicios = processArrayField(snapshots[4], SERVICIOS_FIELD_NAME, SERVICIOS_DOC_ID);
+
+        // 6. Marcas (Index 5) - Array
+        resultados.marcas = processArrayField(snapshots[5], MARCAS_FIELD_NAME, MARCAS_DOC_ID);
+
+        console.log("[Service] Todos los filtros globales procesados.");
+        return resultados; // Devuelve el objeto con todas las listas
+
     } catch (error) {
-        console.error("[Service] Error al obtener categorías desde Firestore:", error);
-        // En lugar de lanzar el error, devolvemos un array vacío.
-        // El componente que llama manejará el estado de error si es necesario.
-        return []; // Devuelve vacío en caso de error de conexión/lectura
+        console.error("[Service] Error general al obtener filtros globales desde Firestore:", error);
+        // Devuelve el objeto con arrays vacíos en caso de error en Promise.all o similar
+        return resultados;
     }
 };
 
-// --- Podrías añadir aquí otras funciones de servicio para Firestore ---
-// export const otraFuncionFirestore = async () => { ... };
+// La función fetchCategoriasPrincipales ya no es necesaria si solo usarás fetchFiltrosGlobales
+// export const fetchCategoriasPrincipales = async () => { ... };

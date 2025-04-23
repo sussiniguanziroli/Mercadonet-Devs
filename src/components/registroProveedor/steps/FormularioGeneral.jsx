@@ -68,15 +68,15 @@ const FormularioGeneral = ({
     // --- Submit (Sin cambios en lógica interna) ---
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
         const stepData = { /* ...recolectar estado local... */
             pais, nombreProveedor, tipoProveedor, categoriaPrincipal,
             categoriasAdicionales: selectedCategories, ciudad, provincia,
             nombre, apellido, rol, whatsapp, cuit, antiguedad, facturacion
         };
-        onNext(stepData);
+        console.log('[FormularioGeneral] handleSubmit enviando:', stepData);
+        onNext(stepData); // Llama al callback del padre (handleStepCompletion)
 
-        
     };
 
     // --- Datos para el Simulador (Sin cambios) ---
