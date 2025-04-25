@@ -3634,294 +3634,6 @@
   opacity: 0.85;
 }
 
-.proveedor-item-desktop.simulator {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  height: fit-content;
-  max-height: 400px;
-  background-color: rgba(255, 255, 255, 0.67);
-  border-radius: 3px;
-  width: 100%;
-  max-width: 50vw;
-  font-size: 1rem;
-  gap: 8px;
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-.proveedor-item-desktop.simulator:hover {
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15) !important;
-  transform: scale(1.005);
-}
-.proveedor-item-desktop.simulator .carousel-box {
-  margin: 3px;
-  position: relative;
-  height: 100%;
-  width: 25%;
-  min-width: 250px;
-  max-width: 250px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-.proveedor-item-desktop.simulator .carousel-box .carousel-frame {
-  border-radius: 10px;
-  background-color: #d6d6d6;
-  padding: 10px;
-  height: 100%;
-}
-.proveedor-item-desktop.simulator .carousel-box .carousel-slide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-}
-.proveedor-item-desktop.simulator .carousel-box .carousel-slide iframe {
-  width: 100%;
-  height: 100%;
-}
-.proveedor-item-desktop.simulator .carousel-box .carousel-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 5px;
-}
-.proveedor-item-desktop.simulator .carousel-box .carousel-placeholder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  color: #555;
-  font-size: 1.2rem;
-}
-.proveedor-item-desktop.simulator .carousel-box .carousel-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  width: 30px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 10;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-.proveedor-item-desktop.simulator .carousel-box .carousel-button:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}
-.proveedor-item-desktop.simulator .carousel-box:hover .carousel-button {
-  opacity: 1;
-  pointer-events: auto;
-}
-.proveedor-item-desktop.simulator .carousel-box .back {
-  left: 0;
-}
-.proveedor-item-desktop.simulator .carousel-box .next {
-  right: 0;
-}
-.proveedor-item-desktop.simulator .carousel-box .carousel-dots {
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  opacity: 0;
-  position: absolute;
-  bottom: 10px;
-  right: 50%;
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-.proveedor-item-desktop.simulator .carousel-box:hover .carousel-dots {
-  opacity: 1;
-  pointer-events: auto;
-}
-.proveedor-item-desktop.simulator .carousel-box .carousel-dots button {
-  width: 6px;
-  height: 6px;
-  background-color: #ccc;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.proveedor-item-desktop.simulator .carousel-box .carousel-dots button:hover,
-.proveedor-item-desktop.simulator .carousel-box .carousel-dots .carousel__dot--selected {
-  background-color: #333;
-}
-.proveedor-item-desktop.simulator .info-box {
-  width: 75%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  height: 100%;
-  padding: 0 10px;
-  overflow: hidden;
-}
-.proveedor-item-desktop.simulator .info-box .titles-box {
-  padding-top: 10px;
-  display: grid;
-  grid-template-columns: 60px 1fr auto;
-  grid-template-rows: auto auto;
-  grid-template-areas: "logo-small h3 verificado" "logo-small p p";
-  align-items: center;
-  column-gap: 7px;
-  row-gap: 1px;
-  width: 100%;
-}
-.proveedor-item-desktop.simulator .info-box .titles-box .small-logo-box {
-  grid-area: logo-small;
-  width: 60px;
-  height: 60px;
-  border: 1px solid #aeaeae;
-  border-radius: 5px;
-  flex-shrink: 0;
-}
-.proveedor-item-desktop.simulator .info-box .titles-box .small-logo-box .small-logo {
-  object-fit: contain;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-}
-.proveedor-item-desktop.simulator .info-box .titles-box h3 {
-  grid-area: h3;
-  font-family: "Montserrat", sans-serif;
-  color: #333;
-  font-size: 1.5rem;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-.proveedor-item-desktop.simulator .info-box .titles-box h3:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-.proveedor-item-desktop.simulator .info-box .titles-box .verificado {
-  grid-area: verificado;
-  width: 85px;
-  height: auto;
-}
-.proveedor-item-desktop.simulator .info-box .titles-box p {
-  grid-area: p;
-  color: #666;
-  font-size: 1.2rem;
-  font-family: "Montserrat", sans-serif;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;
-  margin: 0;
-}
-.proveedor-item-desktop.simulator .info-box .tags-box {
-  margin: 7px 0;
-  width: 100%;
-  overflow: hidden;
-}
-.proveedor-item-desktop.simulator .info-box .tags-box img {
-  margin: 3px;
-  height: 1.7rem;
-  border-radius: 2px;
-}
-.proveedor-item-desktop.simulator .info-box .texts-box {
-  width: 100%;
-}
-.proveedor-item-desktop.simulator .info-box .texts-box .description {
-  color: #666;
-  font-weight: 400;
-  font-size: 1.2rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.proveedor-item-desktop.simulator .info-box .texts-box .marcas, .proveedor-item-desktop.simulator .info-box .texts-box .extras {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-.proveedor-item-desktop.simulator .info-box .texts-box .marcas h4, .proveedor-item-desktop.simulator .info-box .texts-box .extras h4 {
-  font-size: 1.2rem;
-  margin-right: 5px;
-  color: #666;
-}
-.proveedor-item-desktop.simulator .info-box .texts-box .marcas p, .proveedor-item-desktop.simulator .info-box .texts-box .extras p {
-  font-size: 1.2rem;
-  color: #666;
-  margin: 0;
-}
-.proveedor-item-desktop.simulator .info-box .texts-box .marcas .tag-extra, .proveedor-item-desktop.simulator .info-box .texts-box .extras .tag-extra {
-  padding: 5px;
-  background-color: #f4f4f4;
-  border-radius: 3px;
-  font-weight: 500;
-  font-size: 1.2rem;
-  color: #666;
-}
-.proveedor-item-desktop.simulator .buttons-box {
-  width: 15%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-right: 10px;
-  max-width: 120px;
-}
-.proveedor-item-desktop.simulator .buttons-box a {
-  all: unset;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-align: start;
-  background-color: #1473e6;
-  border-radius: 4px;
-  color: #fff;
-  padding: 8px;
-  font-family: "Roboto", system-ui;
-  font-weight: 300;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-}
-.proveedor-item-desktop.simulator .buttons-box a:hover {
-  background-color: #0056b3;
-}
-.proveedor-item-desktop.simulator .alineado-auto {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-  align-self: flex-start;
-  margin-top: 0.7rem;
-}
-
-@media (min-width: 1920px) {
-  .proveedor-item-desktop.simulator {
-    font-size: 0.9rem;
-  }
-  .proveedor-item-desktop.simulator .titles-box h3 {
-    font-size: 1.1rem;
-  }
-  .proveedor-item-desktop.simulator .texts-box p {
-    font-size: 0.95rem;
-  }
-}
-@media (max-width: 1600px) {
-  .proveedor-item-desktop.simulator {
-    font-size: 0.7rem;
-  }
-  .proveedor-item-desktop.simulator .titles-box h3 {
-    font-size: 0.9rem;
-  }
-  .proveedor-item-desktop.simulator .texts-box p {
-    font-size: 0.75rem;
-  }
-}
 .proveedor-item-desktop.simulatorProductos {
   display: flex;
   flex-direction: row;
@@ -4208,6 +3920,428 @@
   }
   .proveedor-item-desktop.simulator .texts-box p {
     font-size: 0.75rem;
+  }
+}
+.proveedor-item-desktop.simulator.card-historia-preview {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: fit-content;
+  min-height: 300px;
+  max-height: 400px;
+  background-color: rgba(255, 255, 255, 0.67);
+  border-radius: 5px;
+  width: 100%;
+  max-width: 900px;
+  font-size: 1rem;
+  gap: 15px;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+.proveedor-item-desktop.simulator.card-historia-preview:hover {
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15) !important;
+  transform: scale(1.005);
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box {
+  position: relative;
+  height: 100%;
+  width: 250px;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background-color: #e9e9e9;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-frame {
+  border-radius: inherit;
+  height: 100%;
+  width: 100%;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-slide iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-placeholder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  color: #adb5bd;
+  font-size: 0.9rem;
+  background-color: #e9ecef;
+  border-radius: inherit;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-placeholder svg {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.4);
+  color: white;
+  border: none;
+  padding: 10px 5px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, background-color 0.2s ease;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box:hover .carousel-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .back {
+  left: 5px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .next {
+  right: 5px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-dots {
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 0;
+  padding-bottom: 5px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box:hover .carousel-dots {
+  opacity: 1;
+  pointer-events: auto;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-dots button {
+  width: 8px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-dots button:hover,
+.proveedor-item-desktop.simulator.card-historia-preview .carousel-box .carousel-dots .carousel__dot--selected {
+  background-color: #ffffff;
+  border-color: rgba(0, 0, 0, 0.4);
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+  padding: 0 15px;
+  overflow: hidden;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box {
+  padding-top: 0;
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  grid-template-rows: auto auto;
+  grid-template-areas: "logo-small h3 verificado" "logo-small p p";
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 2px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box .small-logo-box {
+  grid-area: logo-small;
+  width: 60px;
+  height: 60px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background-color: #fff;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box .small-logo-box .small-logo {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box .small-logo-box .logo-placeholder {
+  font-size: 0.8rem;
+  color: #adb5bd;
+  text-align: center;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box .small-logo-box .logo-placeholder svg {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+  opacity: 0.7;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box h3 {
+  grid-area: h3;
+  font-family: "Montserrat", sans-serif;
+  color: #212529;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box .verificado {
+  grid-area: verificado;
+  width: 70px;
+  height: auto;
+  align-self: center;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box p {
+  grid-area: p;
+  color: #6c757d;
+  font-size: 0.9rem;
+  font-family: "Montserrat", sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box p svg {
+  flex-shrink: 0;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .tags-box {
+  margin: 5px 0 10px 0;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .tags-box .tag-extra {
+  padding: 3px 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: #495057;
+  white-space: nowrap;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box {
+  width: 100%;
+  flex-grow: 1;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .placeholder-text {
+  font-style: italic;
+  font-size: 0.85rem;
+  margin-top: 10px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .placeholder-text.small {
+  font-size: 0.75rem;
+  text-align: center;
+  width: 100%;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .description {
+  color: #495057;
+  font-weight: 400;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .marcas, .proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .extras {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .marcas h4, .proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .extras h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 5px 0 0;
+  color: #495057;
+  flex-shrink: 0;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .marcas p, .proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .extras p {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.4;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .marcas .tag-extra, .proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .extras .tag-extra {
+  padding: 3px 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: #495057;
+  white-space: nowrap;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .buttons-box {
+  width: auto;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .buttons-box .placeholder-text {
+  font-style: italic;
+  font-size: 0.85rem;
+  margin-top: 10px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .buttons-box .placeholder-text.small {
+  font-size: 0.75rem;
+  text-align: center;
+  width: 100%;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .buttons-box a {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  background-color: #0d6efd;
+  border-radius: 5px;
+  color: #fff;
+  padding: 6px 12px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .buttons-box a svg {
+  font-size: 1em;
+  margin-right: 2px;
+}
+.proveedor-item-desktop.simulator.card-historia-preview .buttons-box a:hover {
+  background-color: #0b5ed7;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.proveedor-item-desktop.simulator.card-historia-preview .buttons-box a:active {
+  background-color: #0a58ca;
+}
+
+@media (max-width: 1200px) {
+  .proveedor-item-desktop.simulator.card-historia-preview {
+    max-width: 95%;
+    flex-direction: column;
+    max-height: none;
+    height: auto;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .carousel-box {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 15px;
+    aspect-ratio: 16/9;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .info-box {
+    width: 100%;
+    padding: 0 5px;
+    height: auto;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .buttons-box {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    margin-top: 15px;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .buttons-box a {
+    flex-grow: 1;
+    text-align: center;
+    min-width: 120px;
+    justify-content: center;
+  }
+}
+@media (max-width: 768px) {
+  .proveedor-item-desktop.simulator.card-historia-preview {
+    font-size: 0.9rem;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box {
+    grid-template-columns: 50px 1fr auto;
+    column-gap: 8px;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box h3 {
+    font-size: 1.1rem;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box p {
+    font-size: 0.8rem;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box .small-logo-box {
+    width: 50px;
+    height: 50px;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .info-box .titles-box .verificado {
+    width: 60px;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .info-box .tags-box .tag-extra {
+    font-size: 0.7rem;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .description {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 4;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .marcas h4, .proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .marcas p, .proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .extras h4, .proveedor-item-desktop.simulator.card-historia-preview .info-box .texts-box .extras .tag-extra {
+    font-size: 0.8rem;
+  }
+  .proveedor-item-desktop.simulator.card-historia-preview .buttons-box a {
+    font-size: 0.75rem;
+    padding: 5px 10px;
   }
 }
 /* Definición de colores principales */

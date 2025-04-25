@@ -15,7 +15,7 @@ const PPRODUCTOS_DOC_ID = "4HxfJnKzceGKJ52xk99C";
 const PPRODUCTOS_FIELD_NAME = "pproductos"; // Campo es un Array
 
 // 3. Ubicación (Provincias) (Array)
-const UBICACION_DOC_ID = "BIrx8fw1tPji1SUb1NCa";
+const UBICACION_DOC_ID = "BIrx8fwltPjI1SUblNCa";
 const UBICACION_FIELD_NAME = "ubicacion"; // Campo es un Array
 
 // 4. Extras (Array)

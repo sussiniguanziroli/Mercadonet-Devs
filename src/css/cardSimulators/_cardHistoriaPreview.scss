@@ -1,0 +1,498 @@
+// src/components/registroProveedor/card_simulators/_cardHistoriaPreview.scss
+// (Contenido idéntico al CardHistoria.scss que proporcionaste)
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+
+// Clase base aplicada al div principal del componente React
+.proveedor-item-desktop.simulator.card-historia-preview { // Añadida especificidad si es necesario
+    display: flex;
+    flex-direction: row;
+    align-items: center; // Centra verticalmente si las alturas difieren
+    justify-content: space-between;
+    height: fit-content; // Ajusta altura al contenido
+    min-height: 300px; // Altura mínima para evitar colapso
+    max-height: 400px; // Limita altura máxima
+    background-color: rgba(255, 255, 255, 0.67);
+    border-radius: 5px; // Bordes más suaves
+    width: 100%;
+    max-width: 900px; // Ajusta el ancho máximo según necesidad
+    font-size: 1rem; // Tamaño base de fuente
+    gap: 15px; // Espacio entre carrusel e info
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    padding: 1rem; // Padding interno
+    box-sizing: border-box;
+    margin-bottom: 1rem; // Espacio debajo
+
+    &:hover {
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15) !important;
+      transform: scale(1.005);
+    }
+
+    // --- Estilos del Carrusel ---
+    .carousel-box {
+        // margin: 3px; // Puede no ser necesario con gap en el contenedor principal
+        position: relative;
+        height: 100%; // Ocupa altura disponible
+        // width: 35%; // Ajusta proporción
+        // min-width: 250px; // Ancho mínimo
+        // max-width: 300px; // Ancho máximo
+        width: 250px; // Ancho fijo para consistencia
+        aspect-ratio: 1 / 1; // Fuerza a ser cuadrado
+        overflow: hidden;
+        flex-shrink: 0; // Evita que se encoja
+        border-radius: 10px; // Bordes redondeados para el contenedor
+        background-color: #e9e9e9; // Fondo mientras carga
+
+        .carousel-frame {
+            border-radius: inherit; // Hereda bordes redondeados
+            // background-color: #d6d6d6; // Puede quitarse si el box ya tiene fondo
+            // padding: 10px; // Puede no ser necesario
+            height: 100%;
+            width: 100%; // Asegura que ocupe todo el box
+        }
+
+        .carousel-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            overflow: hidden; // Evita desbordes del contenido del slide
+
+            iframe { // Si usaras iframes para videos
+                width: 100%;
+                height: 100%;
+                border: none; // Quita borde por defecto
+            }
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; // Cubre el espacio manteniendo relación de aspecto
+            // object-fit: contain; // Muestra imagen completa, puede dejar barras
+            border-radius: 0; // Imagen sin bordes redondeados propios
+            display: block; // Evita espacio extra debajo
+        }
+
+        .carousel-placeholder {
+            display: flex;
+            flex-direction: column; // Apila ícono y texto
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            color: #adb5bd; // Gris más claro
+            font-size: 0.9rem;
+            background-color: #e9ecef; // Fondo muy claro
+            border-radius: inherit; // Hereda bordes del frame
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+          
+            svg { // Estilo para el ícono dentro del placeholder
+              font-size: 2.5rem; // Tamaño del ícono
+              margin-bottom: 8px; // Espacio debajo del ícono
+              opacity: 0.7;
+            }
+          }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.4); // Un poco más sutil
+            color: white;
+            border: none;
+            // width: 35px; // Ligeramente más grande
+            // height: 60px; // Ligeramente más grande
+            padding: 10px 5px; // Padding vertical y horizontal
+            border-radius: 4px; // Bordes suaves
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            opacity: 0; // Oculto por defecto
+            pointer-events: none;
+            transition: opacity 0.3s ease, background-color 0.2s ease;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.7); // Más oscuro al pasar el mouse
+            }
+        }
+
+        // Mostrar botones al hacer hover sobre el carrusel-box
+        &:hover .carousel-button {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .back { left: 5px; } // Un poco de espacio desde el borde
+        .next { right: 5px; } // Un poco de espacio desde el borde
+
+        .carousel-dots {
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            position: absolute;
+            bottom: 10px;
+            left: 0; // Alinear a la izquierda o centro
+            right: 0; // Alinear a la derecha o centro
+            // left: 50%; transform: translateX(-50%); // Centrado clásico
+            width: 100%;
+            display: flex;
+            justify-content: center; // Centra los puntos
+            gap: 8px; // Espacio entre puntos
+            margin-top: 0; // Quitar margen superior si no es necesario
+            padding-bottom: 5px; // Espacio desde abajo si es necesario
+        }
+
+         &:hover .carousel-dots {
+            opacity: 1;
+            pointer-events: auto;
+         }
+
+        .carousel-dots button {
+            width: 8px; // Puntos un poco más grandes
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.5); // Puntos blancos semi-transparentes
+            border: 1px solid rgba(0, 0, 0, 0.2); // Borde sutil
+            border-radius: 50%;
+            padding: 0; // Quitar padding por defecto
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .carousel-dots button:hover,
+        .carousel-dots .carousel__dot--selected { // pure-react-carousel usa esta clase para el seleccionado
+            background-color: #ffffff; // Punto blanco sólido al seleccionar/hover
+            border-color: rgba(0, 0, 0, 0.4);
+        }
+    }
+
+    // --- Estilos del Info Box ---
+    .info-box {
+        // width: 65%; // Ajusta proporción
+        flex-grow: 1; // Ocupa el espacio restante
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; // Distribuye espacio verticalmente
+        align-items: flex-start; // Alinea contenido a la izquierda
+        height: 100%; // Ocupa altura disponible
+        padding: 0 15px; // Padding horizontal
+        overflow: hidden; // Previene desbordes
+
+        .titles-box {
+            padding-top: 0; // Quitar padding si no es necesario
+            display: grid;
+            grid-template-columns: 60px 1fr auto; // Logo, Nombre, Verificado
+            grid-template-rows: auto auto; // Dos filas para nombre y ubicación
+            grid-template-areas:
+              "logo-small h3 verificado"
+              "logo-small p p";
+            align-items: center; // Centra verticalmente dentro de las celdas
+            column-gap: 10px; // Espacio entre columnas
+            row-gap: 2px; // Espacio entre filas
+            width: 100%;
+            margin-bottom: 10px; // Espacio antes de los tags
+
+            .small-logo-box {
+              grid-area: logo-small;
+              width: 60px;
+              height: 60px;
+              border: 1px solid #ccc; // Borde más claro
+              border-radius: 5px;
+              flex-shrink: 0;
+              overflow: hidden; // Asegura que la imagen no se salga
+              background-color: #fff; // Fondo blanco para el logo
+
+              .small-logo {
+                object-fit: contain; // Muestra logo completo dentro del espacio
+                width: 100%;
+                height: 100%;
+                display: block; // Evita espacio extra
+                // border-radius: inherit; // No necesario si el contenedor tiene overflow:hidden
+              }
+
+              .logo-placeholder {
+                font-size: 0.8rem;
+                color: #adb5bd; // Gris claro
+                text-align: center;
+                font-weight: 500;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+              
+                svg {
+                  font-size: 1.5rem; // Tamaño ícono logo
+                  margin-bottom: 4px;
+                  opacity: 0.7;
+                }
+              }
+            }
+
+            h3 {
+              grid-area: h3;
+              font-family: 'Montserrat', sans-serif;
+              color: #212529; // Negro más suave
+              font-size: 1.3rem; // Tamaño adecuado
+              font-weight: 600; // Un poco más de peso
+              margin: 0;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 100%; // Asegura que no se desborde
+
+              // &:hover { // Hover solo si es un enlace real
+              //   text-decoration: underline;
+              //   cursor: pointer;
+              // }
+            }
+
+            .verificado {
+              grid-area: verificado;
+              width: 70px; // Ajusta tamaño si es necesario
+              height: auto;
+              align-self: center; // Centra verticalmente en su celda
+            }
+
+            p { // Estilo para la ubicación
+              grid-area: p;
+              color: #6c757d; // Gris estándar
+              font-size: 0.9rem; // Ligeramente más pequeño
+              font-family: 'Montserrat', sans-serif;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              width: 100%;
+              margin: 0;
+              display: flex; // Para alinear ícono y texto
+              align-items: center; // Centra ícono y texto verticalmente
+              gap: 5px; // Espacio entre ícono y texto
+
+              svg { // Estilo para el ícono de ubicación
+                  flex-shrink: 0; // Evita que el ícono se encoja
+              }
+            }
+        }
+
+        .tags-box {
+            margin: 5px 0 10px 0; // Ajusta márgenes
+            width: 100%;
+            overflow: hidden;
+            // Usar flexbox para los tags
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px; // Espacio entre tags
+
+            // Quitar img si no se usan imágenes de tags
+            // img { margin: 3px; height: 1.7rem; border-radius: 2px; }
+
+            .tag-extra { // Estilo unificado para todos los tags/categorías
+                padding: 3px 8px; // Padding más ajustado
+                background-color: #e9ecef; // Fondo gris claro
+                border-radius: 4px;
+                font-weight: 500;
+                font-size: 0.75rem; // Más pequeño
+                color: #495057; // Color de texto oscuro
+                white-space: nowrap; // Evita que el tag se rompa en dos líneas
+            }
+        }
+
+        .texts-box {
+            width: 100%;
+            flex-grow: 1; // Ocupa espacio disponible antes de los botones
+            overflow: hidden; // Oculta desbordes
+            margin-bottom: 10px; // Espacio antes de los botones
+
+            .placeholder-text {
+                font-style: italic;
+                font-size: 0.85rem;
+                margin-top: 10px;
+                &.small {
+                    font-size: 0.75rem;
+                    text-align: center;
+                    width: 100%; // Para centrar en buttons-box si está vacío
+                }
+            }
+
+            .description {
+              color: #495057; // Texto más oscuro
+              font-weight: 400;
+              font-size: 0.9rem; // Tamaño estándar
+              line-height: 1.5; // Espaciado entre líneas
+              margin-bottom: 10px; // Espacio después de la descripción
+
+              // Lógica de truncamiento (si es necesaria)
+              display: -webkit-box;
+              -webkit-line-clamp: 3; // Limita a N líneas
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+            }
+
+            .marcas, .extras {
+              display: flex;
+              align-items: baseline; // Alinea texto base
+              flex-wrap: wrap;
+              gap: 6px; // Espacio entre elementos
+              margin-bottom: 5px; // Espacio entre secciones
+
+              h4 {
+                font-size: 0.9rem; // Mismo tamaño que texto normal
+                font-weight: 600; // Resaltar título
+                margin: 0 5px 0 0; // Margen solo a la derecha
+                color: #495057;
+                flex-shrink: 0; // Evita que se encoja
+              }
+
+              p { // Estilo para items de marca (si no son tags)
+                font-size: 0.9rem;
+                color: #6c757d;
+                margin: 0;
+                line-height: 1.4; // Ajusta interlineado si es necesario
+              }
+
+              // Usar el mismo estilo de tag que en tags-box si aplica
+              .tag-extra {
+                 padding: 3px 8px;
+                 background-color: #e9ecef;
+                 border-radius: 4px;
+                 font-weight: 500;
+                 font-size: 0.75rem;
+                 color: #495057;
+                 white-space: nowrap;
+              }
+            }
+        }
+    } // Fin de .info-box
+
+    // --- Estilos de los Botones de Contacto ---
+    .buttons-box {
+        // width: 15%; // Ancho relativo puede ser problemático, usar flex-shrink o ancho fijo
+        width: auto; // Ancho automático basado en contenido
+        flex-shrink: 0; // Evita que se encoja si info-box crece
+        display: flex;
+        flex-direction: column; // Apilados verticalmente
+        gap: 8px; // Espacio entre botones
+        // margin-right: 10px; // Puede no ser necesario con padding en info-box
+        // max-width: 120px; // Limita ancho si es necesario
+
+        .placeholder-text {
+            font-style: italic;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            &.small {
+                font-size: 0.75rem;
+                text-align: center;
+                width: 100%; // Para centrar en buttons-box si está vacío
+            }
+        }
+
+        a { // Estilo base para todos los botones
+          all: unset; // Resetea estilos por defecto de <a>
+          box-sizing: border-box; // Incluye padding/border en el tamaño
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          text-align: left; // Alineación de texto
+          background-color: #0d6efd; // Azul Bootstrap primario
+          border-radius: 5px;
+          color: #fff;
+          padding: 6px 12px; // Padding estándar
+          font-family: 'Montserrat', sans-serif; // Consistencia fuente
+          font-size: 0.8rem; // Tamaño de fuente botones
+          font-weight: 500;
+          transition: background-color 0.2s ease, box-shadow 0.2s ease;
+          cursor: pointer;
+          text-decoration: none; // Quita subrayado
+          white-space: nowrap; // Evita que el texto se parta
+
+          svg { // Estilo para íconos dentro de los botones
+              font-size: 1em; // Tamaño relativo al texto del botón
+              margin-right: 2px; // Pequeño espacio adicional
+          }
+
+          &:hover {
+            background-color: #0b5ed7; // Azul más oscuro al pasar el mouse
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Sombra sutil
+          }
+
+          &:active {
+              background-color: #0a58ca; // Azul aún más oscuro al hacer clic
+          }
+
+          // Colores específicos si quieres diferenciar botones (opcional)
+          // &.whatsapp { background-color: #25D366; &:hover { background-color: #1DAE51; } }
+          // &.email { background-color: #6c757d; &:hover { background-color: #5a6268; } }
+        }
+    }
+
+    // Quitar .alineado-auto si ya no se usa o integrar sus estilos
+    // .alineado-auto { ... }
+
+} // Fin de .proveedor-item-desktop.simulator
+
+// --- Media Queries (Ajustadas) ---
+@media (max-width: 1200px) { // Ajuste para pantallas más pequeñas que 'desktop' grande
+    .proveedor-item-desktop.simulator.card-historia-preview {
+        max-width: 95%; // Ocupa más ancho
+        flex-direction: column; // Apilar carrusel e info
+        max-height: none; // Permitir altura automática
+        height: auto;
+
+        .carousel-box {
+            width: 100%; // Carrusel ocupa todo el ancho
+            max-width: 400px; // Limitar ancho máximo del carrusel
+            margin-bottom: 15px; // Espacio debajo del carrusel
+            aspect-ratio: 16 / 9; // Ratio más panorámico para móvil
+        }
+
+        .info-box {
+            width: 100%; // Info ocupa todo el ancho
+            padding: 0 5px; // Menos padding horizontal
+            height: auto; // Altura automática
+        }
+
+        .buttons-box {
+           flex-direction: row; // Botones en fila
+           flex-wrap: wrap; // Permitir que pasen a la siguiente línea
+           width: 100%; // Ocupar ancho disponible
+           justify-content: center; // Centrar botones
+           margin-top: 15px; // Espacio sobre los botones
+
+           a {
+               flex-grow: 1; // Botones crecen para llenar espacio
+               text-align: center; // Texto centrado en botones
+               min-width: 120px; // Ancho mínimo por botón
+               justify-content: center;
+           }
+        }
+    }
+}
+
+@media (max-width: 768px) { // Ajustes para tablets/móviles grandes
+    .proveedor-item-desktop.simulator.card-historia-preview {
+        font-size: 0.9rem; // Ligeramente más pequeño
+
+        .info-box {
+            .titles-box {
+                 grid-template-columns: 50px 1fr auto; // Logo más pequeño
+                 column-gap: 8px;
+                 h3 { font-size: 1.1rem; }
+                 p { font-size: 0.8rem; }
+                 .small-logo-box { width: 50px; height: 50px; }
+                 .verificado { width: 60px; }
+            }
+            .tags-box .tag-extra { font-size: 0.7rem; }
+            .texts-box {
+                .description { font-size: 0.85rem; -webkit-line-clamp: 4; }
+                .marcas h4, .marcas p, .extras h4, .extras .tag-extra { font-size: 0.8rem; }
+            }
+        }
+         .buttons-box a { font-size: 0.75rem; padding: 5px 10px;}
+    }
+}
