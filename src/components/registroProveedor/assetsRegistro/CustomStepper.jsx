@@ -49,7 +49,7 @@ const CustomStepper = ({ activeStep, steps, sx = {} }) => {
                 // color: 'custom.blanco',
                 color: '#FFFFFF',
                 fontWeight: activeStep === index ? "bold" : "normal",
-                // '&.Mui-active': { ... }, // Estilos opcionales comentados
+                '&.Mui-active': { color: '#FAFAFA' }, // Estilos opcionales comentados
                 // '&.Mui-completed': { ... },
               },
             }}

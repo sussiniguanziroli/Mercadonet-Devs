@@ -2,21 +2,25 @@
 
 import React, { useState, useEffect } from 'react';
 import { scrollToTop } from '../../../utils/scrollHelper';
+
+// --- MODIFICADO: Importa el simulador unificado ---
 import CardHistoriaPreview from '../card_simulators/CardHistoriaPreview';
 // TODO: Importar CardProductosPreview cuando esté unificado
-import CardProductoSimulator from '../card_simulators/CardProductosSimulator'; // Placeholder
+import CardProductoSimulator from '../card_simulators/CardProductosSimulator'; // Placeholder mientras unificas Productos
 
+// --- Componente del Paso: Formulario General ---
 const FormularioGeneral = ({
+    // Props esperadas del Navigator
     initialData,
     onNext,
     onBack,
     onCancel,
-    categorias = [],   // <= Recibe categorías
-    selectedCard,
-    ubicaciones = [], // <= Recibe ubicaciones (provincias)
-    pproductos = []   // <= Recibe tipos de proveedor
+    categorias = [],   // Lista de categorías para los select/checkbox (con default)
+    selectedCard, // 'tipoA' o 'tipoB'
+    ubicaciones = [], // Lista de ubicaciones (con default)
+    pproductos = []   // Lista de tipos de proveedor (con default)
 }) => {
-    // --- Estados locales ---
+    // --- Estados locales para cada campo del formulario ---
     const [pais, setPais] = useState('Argentina');
     const [nombreProveedor, setNombreProveedor] = useState('');
     const [tipoProveedor, setTipoProveedor] = useState('');
@@ -35,6 +39,7 @@ const FormularioGeneral = ({
 
     // --- Efecto para inicializar desde initialData ---
     useEffect(() => {
+        // Inicializa estado local cuando initialData cambia
         if (initialData) {
             setPais(initialData.pais || 'Argentina');
             setNombreProveedor(initialData.nombreProveedor || '');
@@ -42,7 +47,7 @@ const FormularioGeneral = ({
             setCategoriaPrincipal(initialData.categoriaPrincipal || '');
             setSelectedCategories(initialData.categoriasAdicionales || []);
             setCiudad(initialData.ciudad || '');
-            setProvincia(initialData.provincia || ''); // Inicializa el estado de provincia
+            setProvincia(initialData.provincia || '');
             setNombre(initialData.nombre || '');
             setApellido(initialData.apellido || '');
             setRol(initialData.rol || '');
@@ -53,32 +58,50 @@ const FormularioGeneral = ({
         }
     }, [initialData]);
 
-    // --- Manejador para checkboxes ---
-    const handleCheckboxChange = (e) => { /* ... (sin cambios) ... */ };
+    // --- Manejador para checkboxes de categorías adicionales ---
+    const handleCheckboxChange = (e) => {
+        const { value, checked } = e.target;
+        let updated = [...selectedCategories];
+        if (checked) {
+            if (updated.length < 5) {
+                updated.push(value); setCategoryError('');
+            } else {
+                setCategoryError("Solo puedes seleccionar hasta 5 categorías.");
+                e.preventDefault(); return;
+            }
+        } else {
+            updated = updated.filter(cat => cat !== value); setCategoryError('');
+        }
+        setSelectedCategories(updated);
+    };
 
-    // --- Submit ---
+    // --- Submit del formulario de este paso ---
     const handleSubmit = (e) => {
         e.preventDefault();
+        // Recolecta todos los estados locales
         const stepData = {
             pais, nombreProveedor, tipoProveedor, categoriaPrincipal,
             categoriasAdicionales: selectedCategories, ciudad, provincia,
             nombre, apellido, rol, whatsapp, cuit, antiguedad, facturacion
         };
+        // Log para depurar qué se envía
         console.log('[FormularioGeneral] handleSubmit enviando:', stepData);
-        onNext(stepData);
+        onNext(stepData); // Envía los datos al Navigator
     };
 
-    // --- Datos para el Simulador (Sin categorías) ---
+    // --- Construcción de Datos para el Simulador (SOLO de este paso y SIN categorías) ---
     const buildPreviewDataForStep1 = () => {
         const ubicacionDetalle = `${ciudad}${ciudad && provincia ? ', ' : ''}${provincia}`;
+        // Ya no pasamos categorías a la preview
         return {
             nombre: nombreProveedor,
             ubicacionDetalle: ubicacionDetalle,
+            // CardHistoriaPreview usará defaults/placeholders para lo demás
         };
     };
-    const previewData = buildPreviewDataForStep1();
+    const previewData = buildPreviewDataForStep1(); // Calcula en cada render
 
-    // --- Renderizado ---
+    // --- Renderizado del Componente ---
     return (
         <div className="registro-step-layout">
             {/* Contenedor del Formulario */}
@@ -88,10 +111,10 @@ const FormularioGeneral = ({
 
                     {/* País / Región */}
                     <div className="custom-dropdown form-section">
-                       <label>País / Región:</label>
-                       <select name="pais" value={pais} onChange={e => setPais(e.target.value)}>
-                           <option value="Argentina">🇦🇷 Argentina</option>
-                       </select>
+                        <label>País / Región:</label>
+                        <select name="pais" value={pais} onChange={e => setPais(e.target.value)}>
+                            <option value="Argentina">🇦🇷 Argentina</option>
+                        </select>
                     </div>
 
                     {/* Nombre Proveedor, Tipo, Categoría Principal */}
@@ -99,16 +122,20 @@ const FormularioGeneral = ({
                         <label> Nombre del Proveedor:
                             <input type="text" name="nombreProveedor" value={nombreProveedor} onChange={e => setNombreProveedor(e.target.value)} required />
                         </label>
-                        <label> Tipo de Proveedor: {/* Usa prop 'pproductos' */}
+                        <label> Tipo de Proveedor: {/* TODO: Usar prop 'pproductos' */}
                             <select name="tipoProveedor" value={tipoProveedor} onChange={e => setTipoProveedor(e.target.value)} required>
                                 <option value="" disabled>Selecciona...</option>
-                                {/* Mapea los tipos de proveedor recibidos */}
+                                {/* Reemplazar con: */}
                                 {(pproductos || []).map((tipo, i) => <option key={i} value={tipo}>{tipo}</option>)}
+                                {/* <option value="Distribuidor">Distribuidor</option> */}
+                                {/* <option value="Fabricante">Fabricante</option> */}
+                                {/* <option value="Mayorista">Mayorista</option> */}
                             </select>
                         </label>
                         <label> Categoría Principal:
                             <select name="categoriaPrincipal" value={categoriaPrincipal} onChange={e => setCategoriaPrincipal(e.target.value)} required>
                                 <option value="" disabled>Selecciona...</option>
+                                {/* Usa la prop 'categorias' */}
                                 {(categorias || []).map((cat, i) => <option key={i} value={cat}>{cat}</option>)}
                             </select>
                         </label>
@@ -116,28 +143,31 @@ const FormularioGeneral = ({
 
                     {/* Otras Categorías */}
                     <fieldset className='form-section'>
-                         <legend>Otras categorías (Elige hasta 5)</legend>
-                         <div className="cat-label-container">
-                             {(categorias || []).map((cat, i) => (
-                                 <label className="cat-label" key={i}>
-                                     <input type="checkbox" value={cat} onChange={handleCheckboxChange} checked={selectedCategories.includes(cat)} disabled={selectedCategories.length >= 5 && !selectedCategories.includes(cat)} />
-                                     <span>{cat}</span>
-                                 </label>
-                             ))}
-                         </div>
-                         {categoryError && <p className="error-message">{categoryError}</p>}
-                     </fieldset>
+                        <legend>Otras categorías (Elige hasta 5)</legend>
+                        <div className="cat-label-container">
+                            {/* Usa la prop 'categorias' */}
+                            {(categorias || []).map((cat, i) => (
+                                <label className="cat-label" key={i}>
+                                    <input type="checkbox" value={cat} onChange={handleCheckboxChange}
+                                        checked={selectedCategories.includes(cat)}
+                                        disabled={selectedCategories.length >= 5 && !selectedCategories.includes(cat)}
+                                    />
+                                    <span>{cat}</span>
+                                </label>
+                            ))}
+                        </div>
+                        {categoryError && <p className="error-message">{categoryError}</p>}
+                    </fieldset>
 
                     {/* Ubicación */}
                     <div className="form-section">
                         <label>Ubicación</label>
                         <div className="input-row">
                             <label>
-                                {/* *** PLACEHOLDER CAMBIADO *** */}
-                                <input type="text" name="ciudad" placeholder="Ciudad / Localidad" value={ciudad} onChange={e => setCiudad(e.target.value)} />
+                                <input type="text" name="ciudad" placeholder="Ciudad" value={ciudad} onChange={e => setCiudad(e.target.value)} />
                             </label>
-                            <label>
-                                {/* *** USA SELECT CON PROP 'ubicaciones' *** */}
+                            <label> {/* TODO: Reemplazar input por Select usando prop 'ubicaciones' */}
+                                {/* <input type="text" name="provincia" placeholder="Provincia / Estado" value={provincia} onChange={e => setProvincia(e.target.value)} /> */}
                                 <select name="provincia" value={provincia} onChange={e => setProvincia(e.target.value)}>
                                      <option value="" disabled>Provincia / Estado</option>
                                      {(ubicaciones || []).map((loc, i) => <option key={i} value={loc}>{loc}</option>)}
@@ -148,24 +178,24 @@ const FormularioGeneral = ({
 
                     {/* Datos de Contacto */}
                     <div className='form-section'>
-                         <h3>Cuéntanos sobre ti (Contacto Principal)</h3>
-                         <div className="input-row">
-                              <label><input type="text" name="nombre" placeholder="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} required /></label>
-                              <label><input type="text" name="apellido" placeholder="Apellido" value={apellido} onChange={e => setApellido(e.target.value)} required /></label>
-                         </div>
-                         <label> Rol en la Empresa: <input type="text" name="rol" placeholder="Ej: Gerente de Ventas" value={rol} onChange={e => setRol(e.target.value)} required /></label>
-                         <label> Whatsapp (con código de país): <input type="text" name="whatsapp" placeholder="Ej: +5491122223333" value={whatsapp} onChange={e => setWhatsapp(e.target.value)} required /></label>
-                     </div>
+                        <h3>Cuéntanos sobre ti (Contacto Principal)</h3>
+                        <div className="input-row">
+                             <label><input type="text" name="nombre" placeholder="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} required /></label>
+                             <label><input type="text" name="apellido" placeholder="Apellido" value={apellido} onChange={e => setApellido(e.target.value)} required /></label>
+                        </div>
+                        <label> Rol en la Empresa: <input type="text" name="rol" placeholder="Ej: Gerente de Ventas" value={rol} onChange={e => setRol(e.target.value)} required /></label>
+                        <label> Whatsapp (con código de país): <input type="text" name="whatsapp" placeholder="Ej: +5491122223333" value={whatsapp} onChange={e => setWhatsapp(e.target.value)} required /></label>
+                    </div>
 
                     {/* Información Opcional */}
                     <div className='form-section'>
-                         <h3>Información Legal y Financiera (Opcional)</h3>
-                         <label> CUIT / RUT / Tax ID: <input type="text" name="cuit" value={cuit} onChange={e => setCuit(e.target.value)} /></label>
-                         <div className="input-row">
-                             <label> Antigüedad (años): <input type="number" min="0" name="antiguedad" value={antiguedad} onChange={e => setAntiguedad(e.target.value)} /></label>
-                             <label> Facturación anual (USD): <input type="number" min="0" name="facturacion" value={facturacion} onChange={e => setFacturacion(e.target.value)} /></label>
-                         </div>
-                     </div>
+                        <h3>Información Legal y Financiera (Opcional)</h3>
+                        <label> CUIT / RUT / Tax ID: <input type="text" name="cuit" value={cuit} onChange={e => setCuit(e.target.value)} /></label>
+                        <div className="input-row">
+                            <label> Antigüedad (años): <input type="number" min="0" name="antiguedad" value={antiguedad} onChange={e => setAntiguedad(e.target.value)} /></label>
+                            <label> Facturación anual (USD): <input type="number" min="0" name="facturacion" value={facturacion} onChange={e => setFacturacion(e.target.value)} /></label>
+                        </div>
+                    </div>
 
                     {/* Botones de Navegación */}
                     <div className="botones-navegacion">
@@ -175,11 +205,12 @@ const FormularioGeneral = ({
                 </form>
             </div>
 
-            {/* Contenedor del Simulador */}
+            {/* Contenedor del Simulador (AJUSTADO - Usa previewData) */}
             <div className="simulator-wrapper">
                 <h1>{selectedCard === 'tipoA' ? 'Card Historia' : 'Card Producto'}</h1>
                 {selectedCard === 'tipoA' && <CardHistoriaPreview proveedor={previewData} />}
-                {selectedCard === 'tipoB' && <CardProductoSimulator data={previewData} />} {/* TODO: Cambiar a CardProductosPreview */}
+                {/* TODO: Reemplazar con CardProductosPreview cuando se unifique */}
+                {selectedCard === 'tipoB' && <CardProductoSimulator data={previewData} />}
                 {!selectedCard && <p style={{ color: 'white', textAlign: 'center' }}>Selecciona un tipo de card.</p>}
             </div>
         </div>

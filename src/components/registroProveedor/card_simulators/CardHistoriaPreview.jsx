@@ -24,7 +24,7 @@ const CardHistoriaPreview = ({ proveedor }) => {
     const tieneLogo = logoPreview && typeof logoPreview === 'string'; // Verifica que sea un string (URL blob o https)
 
     return (
-        <div className="proveedor-item-desktop simulator card-historia-preview">
+        <div className="proveedor-item-simulator simulator card-historia-preview">
             {/* --- Carrusel: Muestra preview o placeholder --- */}
             <div className="carousel-box">
                 <CarouselProvider
