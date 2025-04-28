@@ -1,0 +1,12 @@
+{/* --- Botones de Contacto (si existen) --- */}
+                <div className="buttons-box">
+                   {/* Renderizado condicional de botones como antes */}
+                   {sitioWeb && ( <a href={sitioWeb.startsWith('http') ? sitioWeb : `https://${sitioWeb}`} target="_blank" rel="noopener noreferrer"><IoGlobeOutline /> Sitio Web</a> )}
+                   {whatsapp && ( <a href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer"><FaWhatsapp /> WhatsApp</a> )}
+                   {telefono && ( <a href={`tel:${telefono}`}><FaPhoneAlt /> Teléfono</a> )}
+                   {email && ( <a href={`mailto:${email}`}><FaEnvelope /> Email</a> )}
+                    {/* Placeholder si no hay botones? */}
+                    {!sitioWeb && !whatsapp && !telefono && !email && (
+                         <p className='placeholder-text small'>(Botones de contacto)</p>
+                    )}
+                </div>

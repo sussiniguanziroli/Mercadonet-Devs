@@ -199,7 +199,7 @@ const FormularioGeneral = ({
 
                     {/* Botones de Navegación */}
                     <div className="botones-navegacion">
-                         <button type="button" onClick={onBack} disabled={true}>Atrás</button>
+                         <button type="button" onClick={onBack} disabled={false}>Atrás</button>
                          <button type="submit">Continuar</button>
                     </div>
                 </form>
