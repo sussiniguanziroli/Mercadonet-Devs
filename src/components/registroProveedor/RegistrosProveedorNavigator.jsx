@@ -26,7 +26,7 @@ import { fetchFiltrosGlobales } from '../../services/firestoreService'; // <-- �
 const initialFormData = {
     tipoCard: null,
     datosGenerales: {
-        pais: 'Argentina', nombreProveedor: '', tipoProveedor: '', categoriaPrincipal: '',
+        pais: 'Argentina', tipoRegistro: '', nombreProveedor: '', tipoProveedor: '', categoriaPrincipal: '',
         categoriasAdicionales: [], ciudad: '', provincia: '', nombre: '', apellido: '',
         rol: '', whatsapp: '', cuit: '', antiguedad: '', facturacion: '',
     },
@@ -90,9 +90,9 @@ const RegistrosProveedorNavigator = () => {
 
                 // Chequeo básico post-carga (opcional)
                 if (!datosGlobales.categorias?.length || !datosGlobales.ubicaciones?.length) {
-                     console.warn("[Navigator] Advertencia: Categorías o Ubicaciones llegaron vacías desde el servicio.");
-                     // Podrías querer setear un error si son cruciales y fallaron silenciosamente
-                     // setErrorFiltros("Fallo al cargar datos esenciales de configuración.");
+                    console.warn("[Navigator] Advertencia: Categorías o Ubicaciones llegaron vacías desde el servicio.");
+                    // Podrías querer setear un error si son cruciales y fallaron silenciosamente
+                    // setErrorFiltros("Fallo al cargar datos esenciales de configuración.");
                 }
             } catch (err) { // Error en la llamada misma
                 console.error("[Navigator] Error CRÍTICO al llamar fetchFiltrosGlobales:", err);
@@ -185,7 +185,7 @@ const RegistrosProveedorNavigator = () => {
         if (loadingFiltros) {
             return (
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5 }}>
-                    <CircularProgress sx={{ color: 'common.white' }}/>
+                    <CircularProgress sx={{ color: 'common.white' }} />
                     <Typography sx={{ ml: 2, color: 'common.white' }}>Cargando configuración...</Typography>
                 </Box>
             );
@@ -198,19 +198,20 @@ const RegistrosProveedorNavigator = () => {
                 </Box>
             );
         }
-         // Si pasó la carga inicial y no hay error, renderiza el paso actual
+        // Si pasó la carga inicial y no hay error, renderiza el paso actual
         switch (currentStep) {
             case 0:
                 return <SeleccionTipoCard onSelectCard={handleTipoCardSelection} onCancel={cancelRegistration} />;
             case 1: // FormularioGeneral
-                 // Chequeo específico si las categorías (necesarias aquí) están vacías
+                // Chequeo específico si las categorías (necesarias aquí) están vacías
                 if (!filtrosData.categorias?.length) {
-                     return ( <Box sx={{/*...*/}}><Typography color="warning.main">No se pudieron cargar las categorías.</Typography>{/*...*/}</Box> );
+                    return (<Box sx={{/*...*/ }}><Typography color="warning.main">No se pudieron cargar las categorías.</Typography>{/*...*/}</Box>);
                 }
                 return <FormularioGeneral {...stepProps}
                     initialData={formData.datosGenerales}
                     onNext={(localData) => handleStepCompletion('datosGenerales', localData)}
                     // --- Pasando listas de filtros ---
+                    servicios={filtrosData.servicios}
                     categorias={filtrosData.categorias}
                     ubicaciones={filtrosData.ubicaciones}
                     pproductos={filtrosData.pproductos}
@@ -219,12 +220,12 @@ const RegistrosProveedorNavigator = () => {
             case 2: // FormularioPersonalizado (Dispatcher)
                 if (!formData.tipoCard) return <Typography color="error.main">Error: Tipo de card no seleccionado...</Typography>;
 
-                 // Prepara datos del paso anterior para la preview del paso 2
-                 const datosPasoAnterior = {
+                // Prepara datos del paso anterior para la preview del paso 2
+                const datosPasoAnterior = {
                     nombreProveedor: formData.datosGenerales.nombreProveedor,
                     ciudad: formData.datosGenerales.ciudad,
                     provincia: formData.datosGenerales.provincia,
-                 };
+                };
 
                 return <FormularioPersonalizado {...stepProps}
                     initialData={formData.datosPersonalizados[formData.tipoCard] || {}}
@@ -240,7 +241,7 @@ const RegistrosProveedorNavigator = () => {
                 return <SeleccionPlan {...stepProps}
                     initialData={formData.planSeleccionado}
                     onNext={(plan) => handleStepCompletion('planSeleccionado', plan)}
-                    />;
+                />;
             case 4: // ResumenRegistro
                 return <ResumenRegistro
                     formData={formData}
@@ -253,7 +254,7 @@ const RegistrosProveedorNavigator = () => {
                         alert("Registro Finalizado (Simulación). Subida de archivos y guardado final pendiente.");
                         console.log("TODO: Implementar subida de archivos y guardado final en onConfirm.");
                     }}
-                    />;
+                />;
             default:
                 console.error("Error: Paso desconocido", currentStep);
                 return <Typography sx={{ color: 'error.main', textAlign: 'center', mt: 5 }}>Error: Paso desconocido.</Typography>;
@@ -290,13 +291,13 @@ const RegistrosProveedorNavigator = () => {
                 alignItems: 'center', justifyContent: 'flex-start',
             }}>
                 {/* Contenedor para limitar ancho del contenido */}
-                 <Box sx={{
-                     width: '100%', maxWidth: '1500px',
-                     position: 'relative',
-                     display: 'flex', flexDirection: 'column', alignItems: 'center',
-                 }}>
+                <Box sx={{
+                    width: '100%', maxWidth: '1500px',
+                    position: 'relative',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center',
+                }}>
                     {/* Botón Cancelar Absoluto */}
-                    {currentStep > 0 && currentStep < STEPS.length -1 && ( // Mostrar desde paso 1 hasta antes del último
+                    {currentStep > 0 && currentStep < STEPS.length - 1 && ( // Mostrar desde paso 1 hasta antes del último
                         <Button
                             onClick={cancelRegistration}
                             variant="outlined"

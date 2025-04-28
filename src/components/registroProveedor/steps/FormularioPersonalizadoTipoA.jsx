@@ -3,8 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { FaFileCirclePlus } from 'react-icons/fa6';
 import { scrollToTop } from '../../../utils/scrollHelper';
-// --- MODIFICADO: Usa el simulador unificado ---
 import CardHistoriaPreview from '../card_simulators/CardHistoriaPreview';
+
+// --- NUEVO: Importaciones de Material UI ---
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Chip from '@mui/material/Chip'; // Importa Chip por si quieres personalizar renderTags 
 
 // --- Componente del Paso: Formulario Personalizado Tipo A (Historia) ---
 const FormularioPersonalizadoTipoA = ({
@@ -16,23 +20,24 @@ const FormularioPersonalizadoTipoA = ({
     nombreProveedor = '', // Nombre de la empresa desde FormularioGeneral
     ciudad = '',          // Ciudad desde FormularioGeneral
     provincia = '',       // Provincia desde FormularioGeneral
-    // categoriasCompletas = [], // No se usa en esta preview
     marcas = [],          // Lista de filtros (AÚN NO USADA EN INPUTS)
     extras = []           // Lista de filtros (AÚN NO USADA EN INPUTS)
 }) => {
 
-    // --- Estados locales para los campos de ESTE formulario ---
+    // --- Estados locales ---
     const [descripcion, setDescripcion] = useState('');
     const [sitioWeb, setSitioWeb] = useState('');
     const [whatsapp, setWhatsapp] = useState('');
     const [telefono, setTelefono] = useState('');
     const [email, setEmail] = useState('');
-    const [marcaStr, setMarcaStr] = useState(''); // TODO: Reemplazar por estado para selección múltiple usando 'marcas' prop
-    const [extrasStr, setExtrasStr] = useState(''); // TODO: Reemplazar por estado para selección múltiple usando 'extras' prop
+    // --- MODIFICADO: Estados para selecciones múltiples (arrays) ---
+    const [selectedMarcas, setSelectedMarcas] = useState([]);
+    const [selectedExtras, setSelectedExtras] = useState([]);
+    // Estados de archivos y previews (sin cambios)
     const [logoFile, setLogoFile] = useState(null);
     const [carruselFiles, setCarruselFiles] = useState([]);
-    const [logoPreview, setLogoPreview] = useState(null); // Puede ser blob URL o https URL (si viene de initialData)
-    const [carruselPreviews, setCarruselPreviews] = useState([]); // Array de blob URLs o https URLs
+    const [logoPreview, setLogoPreview] = useState(null);
+    const [carruselPreviews, setCarruselPreviews] = useState([]);
 
     // --- Efecto para inicializar estado local desde initialData ---
     useEffect(() => {
@@ -45,11 +50,10 @@ const FormularioPersonalizadoTipoA = ({
             setWhatsapp(initialData.whatsapp || '');
             setTelefono(initialData.telefono || '');
             setEmail(initialData.email || '');
-            // Sigue inicializando desde initialData para los campos de texto de tags
-            setMarcaStr(Array.isArray(initialData.marca) ? initialData.marca.join(', ') : '');
-            setExtrasStr(Array.isArray(initialData.extras) ? initialData.extras.join(', ') : '');
+            // --- MODIFICADO: Inicializa los arrays seleccionados ---
+            setSelectedMarcas(Array.isArray(initialData.marca) ? initialData.marca : []);
+            setSelectedExtras(Array.isArray(initialData.extras) ? initialData.extras : []);
 
-            // Si initialData viene con URLs (datos ya guardados), las usamos para la preview inicial
             // Si no, las ponemos a null/[] para que se usen las locales si se sube archivo.
             setLogoPreview(initialData.logoURL || null); // Asume que si existe, es una URL de Storage
             setCarruselPreviews(initialData.carruselURLs || []); // Asume que si existe, es array de URLs de Storage
@@ -59,34 +63,34 @@ const FormularioPersonalizadoTipoA = ({
             setCarruselFiles([]);
 
         } else {
-             // Si no hay initialData, resetea todo (caso de primer ingreso a este paso)
-             setDescripcion(''); setSitioWeb(''); setWhatsapp(''); setTelefono(''); setEmail('');
-             setMarcaStr(''); setExtrasStr(''); setLogoFile(null); setLogoPreview(null);
-             setCarruselFiles([]); setCarruselPreviews([]);
+            // Resetear todo si no hay initialData
+            setDescripcion(''); setSitioWeb(''); setWhatsapp(''); setTelefono(''); setEmail('');
+            setSelectedMarcas([]); setSelectedExtras([]); // <= Resetea arrays
+            setLogoFile(null); setLogoPreview(null);
+            setCarruselFiles([]); setCarruselPreviews([]);
         }
     }, [initialData]);
 
     // --- Efecto para Limpiar ObjectURLs de Previews Locales ---
-     useEffect(() => {
-         // Función de limpieza que se ejecuta al desmontar o ANTES de la siguiente ejecución del efecto
-         return () => {
-             console.log("[TipoA] Limpiando ObjectURLs locales (si existen y son blob)");
-             // Solo revoca si es una URL blob local generada por este componente
-             if (logoPreview && logoPreview.startsWith('blob:')) {
-                 URL.revokeObjectURL(logoPreview);
-                 console.log("[TipoA] Revocada URL de logo:", logoPreview);
-             }
-             carruselPreviews.forEach((url, index) => {
-                 if (url && url.startsWith('blob:')) {
-                     URL.revokeObjectURL(url);
-                     console.log(`[TipoA] Revocada URL de carrusel ${index}:`, url);
-                 }
-             });
-         };
-     }, [logoPreview, carruselPreviews]); // Ejecutar SOLO si las previews locales cambian
+    useEffect(() => {
+        // Función de limpieza que se ejecuta al desmontar o ANTES de la siguiente ejecución del efecto
+        return () => {
+            console.log("[TipoA] Limpiando ObjectURLs locales (si existen y son blob)");
+            // Solo revoca si es una URL blob local generada por este componente
+            if (logoPreview && logoPreview.startsWith('blob:')) {
+                URL.revokeObjectURL(logoPreview);
+                console.log("[TipoA] Revocada URL de logo:", logoPreview);
+            }
+            carruselPreviews.forEach((url, index) => {
+                if (url && url.startsWith('blob:')) {
+                    URL.revokeObjectURL(url);
+                    console.log(`[TipoA] Revocada URL de carrusel ${index}:`, url);
+                }
+            });
+        };
+    }, [logoPreview, carruselPreviews]); // Ejecutar SOLO si las previews locales cambian
 
-    // --- Manejadores de Eventos Locales ---
-    const handleInputChange = (e) => {
+    const handleInputChange = (e) => { // Para inputs de texto simples
         const { name, value } = e.target;
         switch (name) {
             case 'descripcion': setDescripcion(value); break;
@@ -94,8 +98,7 @@ const FormularioPersonalizadoTipoA = ({
             case 'whatsapp': setWhatsapp(value); break;
             case 'telefono': setTelefono(value); break;
             case 'email': setEmail(value); break;
-            case 'marcaStr': setMarcaStr(value); break; // TODO: Reemplazar
-            case 'extrasStr': setExtrasStr(value); break; // TODO: Reemplazar
+            // --- ELIMINADO: Casos para marcaStr/extrasStr ---
             default: break;
         }
     };
@@ -104,7 +107,7 @@ const FormularioPersonalizadoTipoA = ({
         const { name, files } = e.target;
         if (name === "logo") {
             const file = files?.[0];
-             // Limpia la preview ANTERIOR si era una URL local (blob)
+            // Limpia la preview ANTERIOR si era una URL local (blob)
             if (logoPreview && logoPreview.startsWith('blob:')) {
                 URL.revokeObjectURL(logoPreview);
             }
@@ -124,18 +127,15 @@ const FormularioPersonalizadoTipoA = ({
     // --- Submit de este paso ---
     const handleSubmit = (e) => {
         e.preventDefault();
-        // 1. Parsear tags (mientras se usan inputs de texto)
-        const marcaArray = marcaStr.split(',').map(s => s.trim()).filter(Boolean); // TODO: Obtener de estado de selección múltiple
-        const extrasArray = extrasStr.split(',').map(s => s.trim()).filter(Boolean); // TODO: Obtener de estado de selección múltiple
 
-        // 2. Recolectar datos locales (incluyendo los File objects para subida posterior)
+        // Recolecta datos locales, usando los arrays de estado directamente
         const stepData = {
             descripcion, sitioWeb, whatsapp, telefono, email,
-            marca: marcaArray,
-            extras: extrasArray,
-            logoFile: logoFile,       // Se envía el File o null
-            carruselFiles: carruselFiles // Se envía el array de Files
-            // NO se envían las previews (logoPreview, carruselPreviews)
+            // --- MODIFICADO: Usa los arrays de estado ---
+            marca: selectedMarcas,
+            extras: selectedExtras,
+            logoFile: logoFile,
+            carruselFiles: carruselFiles
         };
         console.log("[TipoA] Enviando Datos:", stepData);
         onNext(stepData); // Llama al callback del Navigator
@@ -144,21 +144,18 @@ const FormularioPersonalizadoTipoA = ({
     // --- Construcción de Datos COMBINADOS para el Simulador ---
     const buildPreviewData = () => {
         const ubicacionDetalle = `${ciudad}${ciudad && provincia ? ', ' : ''}${provincia}`;
-        const marcaArray = marcaStr.split(',').map(s => s.trim()).filter(Boolean); // Parseado para preview
-        const extrasArray = extrasStr.split(',').map(s => s.trim()).filter(Boolean); // Parseado para preview
 
         return {
-            // Datos de pasos anteriores (recibidos como props)
+            // Datos de pasos anteriores (props)
             nombre: nombreProveedor,
             ubicacionDetalle: ubicacionDetalle,
-            // No pasamos categorías a la preview
-
-            // Datos de ESTE paso (leídos del estado local)
+            // Datos de ESTE paso (estado local)
             descripcion: descripcion,
-            marca: marcaArray,
-            extras: extrasArray,
-            logoPreview: logoPreview,       // Pasa la preview local o la URL de initialData
-            carrusel: carruselPreviews,     // Pasa las previews locales o las URLs de initialData
+            // --- MODIFICADO: Usa los arrays de estado ---
+            marca: selectedMarcas,
+            extras: selectedExtras,
+            logoPreview: logoPreview,
+            carrusel: carruselPreviews,
             sitioWeb: sitioWeb,
             whatsapp: whatsapp,
             telefono: telefono,
@@ -172,36 +169,36 @@ const FormularioPersonalizadoTipoA = ({
         <div className="registro-step-layout">
             {/* Contenedor del Formulario */}
             <div className="form-wrapper">
-                 <form onSubmit={handleSubmit} className="registro-form" noValidate>
+                <form onSubmit={handleSubmit} className="registro-form" noValidate>
                     <h1>Personaliza tu Card Historia</h1>
 
                     {/* Logo Input */}
                     <div className="form-section">
-                         <label>Logo</label>
-                         {logoPreview && ( <div className='preview-image-container solo'><img src={logoPreview} alt="Vista previa Logo"/></div> )}
-                         <div className="input-logo">
-                             <label htmlFor="logo-upload-a" className="file-input-content">
-                                 <FaFileCirclePlus />
-                                 <p><strong>{logoFile ? logoFile.name : 'Seleccionar Logo'}</strong></p>
-                             </label>
-                             <input id="logo-upload-a" type="file" name="logo" accept="image/*" onChange={handleFileChange} />
-                         </div>
-                         {logoFile && <button type='button' onClick={() => handleFileChange({ target: { name: 'logo', files: null } })} className="remove-button-link">Quitar</button>}
-                     </div>
+                        <label>Logo</label>
+                        {logoPreview && (<div className='preview-image-container solo'><img src={logoPreview} alt="Vista previa Logo" /></div>)}
+                        <div className="input-logo">
+                            <label htmlFor="logo-upload-a" className="file-input-content">
+                                <FaFileCirclePlus />
+                                <p><strong>{logoFile ? logoFile.name : 'Seleccionar Logo'}</strong></p>
+                            </label>
+                            <input id="logo-upload-a" type="file" name="logo" accept="image/*" onChange={handleFileChange} />
+                        </div>
+                        {logoFile && <button type='button' onClick={() => handleFileChange({ target: { name: 'logo', files: null } })} className="remove-button-link">Quitar</button>}
+                    </div>
 
                     {/* Carrusel Input */}
                     <div className="form-section">
-                         <label>Carrusel Multimedia (Imágenes)</label>
-                         {carruselPreviews.length > 0 && ( <div className='preview-image-container multiple'> {carruselPreviews.map((previewUrl, index) => ( <img key={index} src={previewUrl} alt={`Vista previa ${index + 1}`} /> ))} </div> )}
-                         <div className="input-carrusel">
-                             <label htmlFor="carrusel-upload-a" className="file-input-content">
-                                 <FaFileCirclePlus />
-                                 <p><strong>Agregar imágenes</strong><br />O arrastra y suelta</p>
-                             </label>
-                             <input id="carrusel-upload-a" type="file" name="carrusel" accept="image/*" multiple onChange={handleFileChange} />
-                         </div>
-                         {carruselFiles.length > 0 && <button type='button' onClick={() => handleFileChange({ target: { name: 'carrusel', files: null } })} className="remove-button-link">Quitar {carruselFiles.length} archivo(s)</button>}
-                     </div>
+                        <label>Carrusel Multimedia (Imágenes)</label>
+                        {carruselPreviews.length > 0 && (<div className='preview-image-container multiple'> {carruselPreviews.map((previewUrl, index) => (<img key={index} src={previewUrl} alt={`Vista previa ${index + 1}`} />))} </div>)}
+                        <div className="input-carrusel">
+                            <label htmlFor="carrusel-upload-a" className="file-input-content">
+                                <FaFileCirclePlus />
+                                <p><strong>Agregar imágenes</strong><br />O arrastra y suelta</p>
+                            </label>
+                            <input id="carrusel-upload-a" type="file" name="carrusel" accept="image/*" multiple onChange={handleFileChange} />
+                        </div>
+                        {carruselFiles.length > 0 && <button type='button' onClick={() => handleFileChange({ target: { name: 'carrusel', files: null } })} className="remove-button-link">Quitar {carruselFiles.length} archivo(s)</button>}
+                    </div>
 
                     {/* Descripción */}
                     <div className="form-section">
@@ -209,16 +206,61 @@ const FormularioPersonalizadoTipoA = ({
                         <textarea id="descripcion-a" name="descripcion" value={descripcion} onChange={handleInputChange} rows="5" placeholder="Describe tu empresa, historia, valores..." />
                     </div>
 
-                    {/* Marcas y Servicios/Extras */}
+                    {/* --- REEMPLAZADO: Marcas y Extras con Autocomplete --- */}
                     <div className="form-section">
-                        {/* TODO: Reemplazar input por componente (ej: Autocomplete multiple de MUI) usando 'marcas' prop */}
-                        <label htmlFor="marcaStr-a">Marcas que trabajas (separadas por coma)</label>
-                        <input id="marcaStr-a" type="text" name="marcaStr" value={marcaStr} onChange={handleInputChange} placeholder="Ej: Marca A, Marca B, Otra Marca" />
+                        {/* Marcas con Autocomplete */}
+                        <Autocomplete
+                            multiple // Habilita selección múltiple
+                            id="marcas-tags"
+                            options={marcas} // La lista completa de marcas disponibles (prop)
+                            value={selectedMarcas} // El array de estado con las marcas seleccionadas
+                            onChange={(event, newValue) => {
+                                setSelectedMarcas(newValue); // Actualiza el estado directamente
+                            }}
+                            getOptionLabel={(option) => option} // Muestra el string de la opción
+                            filterSelectedOptions // Oculta opciones ya seleccionadas del dropdown
+                            // renderTags={(value, getTagProps) => // Opcional: personalizar cómo se ven los chips
+                            //     value.map((option, index) => (
+                            //         <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                            //     ))
+                            // }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="outlined" // O el estilo que prefieras (standard, filled)
+                                    label="Marcas que trabajas"
+                                    placeholder="Selecciona o escribe para buscar..."
+                                // Añadir sx prop para estilos si es necesario
+                                // sx={{ /* Tus estilos MUI aquí */ }}
+                                />
+                            )}
+                            // Estilo para el contenedor del Autocomplete si es necesario
+                            sx={{ mb: 2 }} // Ejemplo: Margen inferior
+                        />
 
-                        {/* TODO: Reemplazar input por componente (ej: Checkboxes o Autocomplete multiple) usando 'extras' prop */}
-                        <label htmlFor="extrasStr-a">Servicios extra y capacidades (separadas por coma)</label>
-                        <input id="extrasStr-a" type="text" name="extrasStr" value={extrasStr} onChange={handleInputChange} placeholder="Ej: Envíos a todo el país, Instalación..." />
+                        {/* Extras con Autocomplete */}
+                        <Autocomplete
+                            multiple
+                            id="extras-tags"
+                            options={extras} // La lista completa de extras disponibles (prop)
+                            value={selectedExtras} // El array de estado con los extras seleccionados
+                            onChange={(event, newValue) => {
+                                setSelectedExtras(newValue); // Actualiza el estado directamente
+                            }}
+                            getOptionLabel={(option) => option}
+                            filterSelectedOptions
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="outlined"
+                                    label="Servicios extra y capacidades"
+                                    placeholder="Selecciona o escribe..."
+                                />
+                            )}
+                        // sx={{ /* Estilos adicionales si se necesitan */ }}
+                        />
                     </div>
+                    {/* --- FIN REEMPLAZO --- */}
 
                     {/* Contacto */}
                     <div className="form-section">

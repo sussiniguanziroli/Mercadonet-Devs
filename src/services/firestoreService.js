@@ -19,7 +19,7 @@ const UBICACION_DOC_ID = "BIrx8fwltPjI1SUblNCa";
 const UBICACION_FIELD_NAME = "ubicacion"; // Campo es un Array
 
 // 4. Extras (Array)
-const EXTRAS_DOC_ID = "FXcoaTymfqELM19bdJpa";
+const EXTRAS_DOC_ID = "FXcoATymfqELMl9bdJpa";
 const EXTRAS_FIELD_NAME = "extras"; // Campo es un Array
 
 // 5. Servicios (Array)

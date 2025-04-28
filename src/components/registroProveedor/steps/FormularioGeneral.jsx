@@ -18,10 +18,12 @@ const FormularioGeneral = ({
     categorias = [],   // Lista de categorías para los select/checkbox (con default)
     selectedCard, // 'tipoA' o 'tipoB'
     ubicaciones = [], // Lista de ubicaciones (con default)
-    pproductos = []   // Lista de tipos de proveedor (con default)
+    pproductos = [],   // Lista de tipos de proveedor (con default)
+    servicios = []
 }) => {
     // --- Estados locales para cada campo del formulario ---
     const [pais, setPais] = useState('Argentina');
+    const [tipoRegistro, setTipoRegistro] = useState('');
     const [nombreProveedor, setNombreProveedor] = useState('');
     const [tipoProveedor, setTipoProveedor] = useState('');
     const [categoriaPrincipal, setCategoriaPrincipal] = useState('');
@@ -42,6 +44,8 @@ const FormularioGeneral = ({
         // Inicializa estado local cuando initialData cambia
         if (initialData) {
             setPais(initialData.pais || 'Argentina');
+            // --- MODIFICADO: Inicializa tipoRegistro ---
+            setTipoRegistro(initialData.tipoRegistro || '');
             setNombreProveedor(initialData.nombreProveedor || '');
             setTipoProveedor(initialData.tipoProveedor || '');
             setCategoriaPrincipal(initialData.categoriaPrincipal || '');
@@ -58,35 +62,83 @@ const FormularioGeneral = ({
         }
     }, [initialData]);
 
-    // --- Manejador para checkboxes de categorías adicionales ---
+    // --- [NUEVO]! Determina qué lista usar para categorías/servicios ---
+    const esProveedorDeServicios = tipoRegistro === 'servicios';
+    const categoriasDisponibles = esProveedorDeServicios ? servicios : categorias;
+    const labelCategoriaPrincipal = esProveedorDeServicios ? 'Tipo de Servicio Principal' : 'Categoría Principal';
+    const leyendaOtrasCategorias = esProveedorDeServicios ? 'Otros Servicios Ofrecidos (Hasta 5)' : 'Otras categorías (Elige hasta 5)';
+
+
+    // --- Handlers ---
+    // NUEVO: Handler para cambio de Tipo de Registro
+    const handleTipoRegistroChange = (e) => {
+        const newType = e.target.value;
+        setTipoRegistro(newType);
+        // Resetea campos dependientes al cambiar el tipo principal
+        setTipoProveedor('');
+        setCategoriaPrincipal('');
+        setSelectedCategories([]);
+        setCategoryError('');
+        console.log("Tipo de Registro cambiado a:", newType);
+    };
+
+    // Modificado para usar la lista correcta
     const handleCheckboxChange = (e) => {
         const { value, checked } = e.target;
+        // Usamos una copia del estado actual para trabajar
         let updated = [...selectedCategories];
+
         if (checked) {
+            // Verifica el límite antes de añadir
             if (updated.length < 5) {
-                updated.push(value); setCategoryError('');
+                updated.push(value);
+                setCategoryError(''); // Limpia error si había
             } else {
-                setCategoryError("Solo puedes seleccionar hasta 5 categorías.");
-                e.preventDefault(); return;
+                setCategoryError("Solo puedes seleccionar hasta 5 opciones.");
+                // Evita que el checkbox cambie visualmente si se supera el límite
+                e.preventDefault();
+                return; // No actualiza el estado si se supera el límite
             }
         } else {
-            updated = updated.filter(cat => cat !== value); setCategoryError('');
+            // Elimina el valor si se desmarca
+            updated = updated.filter(cat => cat !== value);
+            setCategoryError(''); // Limpia error si había
         }
+        // Actualiza el estado con el array modificado
         setSelectedCategories(updated);
     };
 
-    // --- Submit del formulario de este paso ---
+
+    // Submit: Añade tipoRegistro a los datos enviados
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Recolecta todos los estados locales
         const stepData = {
-            pais, nombreProveedor, tipoProveedor, categoriaPrincipal,
-            categoriasAdicionales: selectedCategories, ciudad, provincia,
-            nombre, apellido, rol, whatsapp, cuit, antiguedad, facturacion
+            pais,
+            tipoRegistro, // <= AÑADIDO
+            nombreProveedor,
+            // Incluye tipoProveedor solo si es relevante
+            tipoProveedor: tipoRegistro === 'productos' ? tipoProveedor : '',
+            categoriaPrincipal,
+            categoriasAdicionales: selectedCategories,
+            ciudad, provincia, nombre, apellido, rol, whatsapp,
+            cuit, antiguedad, facturacion
         };
-        // Log para depurar qué se envía
+        // Validaciones básicas antes de enviar (ejemplo)
+        if (!tipoRegistro) {
+            alert("Por favor, selecciona si eres proveedor de Productos o Servicios.");
+            return;
+        }
+        if (tipoRegistro === 'productos' && !tipoProveedor) {
+            alert("Por favor, selecciona el Tipo de Proveedor.");
+            return;
+        }
+        if (!categoriaPrincipal) {
+            alert(`Por favor, selecciona ${labelCategoriaPrincipal}.`);
+            return;
+        }
+
         console.log('[FormularioGeneral] handleSubmit enviando:', stepData);
-        onNext(stepData); // Envía los datos al Navigator
+        onNext(stepData);
     };
 
     // --- Construcción de Datos para el Simulador (SOLO de este paso y SIN categorías) ---
@@ -117,47 +169,65 @@ const FormularioGeneral = ({
                         </select>
                     </div>
 
-                    {/* Nombre Proveedor, Tipo, Categoría Principal */}
+                    {/* --- NUEVO: Selector Tipo de Registro --- */}
+                    <fieldset className='form-section'>
+                        <legend>Tipo de Registro <span style={{ color: 'red' }}>*</span></legend>
+                        <div className="radio-group" style={{ display: 'flex', gap: '15px' }}> {/* Estilo simple */}
+                            <label style={{ cursor: 'pointer' }}>
+                                <input type="radio" name="tipoRegistro" value="productos" checked={tipoRegistro === 'productos'} onChange={handleTipoRegistroChange} required /> Proveedor de Productos
+                            </label>
+                            <label style={{ cursor: 'pointer' }}>
+                                <input type="radio" name="tipoRegistro" value="servicios" checked={tipoRegistro === 'servicios'} onChange={handleTipoRegistroChange} required /> Proveedor de Servicios
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    {/* Nombre Proveedor y Tipo Proveedor (condicional) */}
                     <div className='form-section'>
-                        <label> Nombre del Proveedor:
-                            <input type="text" name="nombreProveedor" value={nombreProveedor} onChange={e => setNombreProveedor(e.target.value)} required />
-                        </label>
-                        <label> Tipo de Proveedor: {/* TODO: Usar prop 'pproductos' */}
-                            <select name="tipoProveedor" value={tipoProveedor} onChange={e => setTipoProveedor(e.target.value)} required>
-                                <option value="" disabled>Selecciona...</option>
-                                {/* Reemplazar con: */}
-                                {(pproductos || []).map((tipo, i) => <option key={i} value={tipo}>{tipo}</option>)}
-                                {/* <option value="Distribuidor">Distribuidor</option> */}
-                                {/* <option value="Fabricante">Fabricante</option> */}
-                                {/* <option value="Mayorista">Mayorista</option> */}
-                            </select>
-                        </label>
-                        <label> Categoría Principal:
-                            <select name="categoriaPrincipal" value={categoriaPrincipal} onChange={e => setCategoriaPrincipal(e.target.value)} required>
-                                <option value="" disabled>Selecciona...</option>
-                                {/* Usa la prop 'categorias' */}
-                                {(categorias || []).map((cat, i) => <option key={i} value={cat}>{cat}</option>)}
-                            </select>
-                        </label>
+                        <label> Nombre del Proveedor: <input type="text" name="nombreProveedor" value={nombreProveedor} onChange={e => setNombreProveedor(e.target.value)} required /> </label>
+
+                        {/* --- CONDICIONAL: Mostrar solo si es proveedor de productos --- */}
+                        {tipoRegistro === 'productos' && (
+                            <label> Tipo de Proveedor:
+                                <select name="tipoProveedor" value={tipoProveedor} onChange={e => setTipoProveedor(e.target.value)} required={tipoRegistro === 'productos'}>
+                                    <option value="" disabled>Selecciona...</option>
+                                    {(pproductos || []).map((tipo, i) => <option key={i} value={tipo}>{tipo}</option>)}
+                                </select>
+                            </label>
+                        )}
                     </div>
 
-                    {/* Otras Categorías */}
-                    <fieldset className='form-section'>
-                        <legend>Otras categorías (Elige hasta 5)</legend>
-                        <div className="cat-label-container">
-                            {/* Usa la prop 'categorias' */}
-                            {(categorias || []).map((cat, i) => (
-                                <label className="cat-label" key={i}>
-                                    <input type="checkbox" value={cat} onChange={handleCheckboxChange}
-                                        checked={selectedCategories.includes(cat)}
-                                        disabled={selectedCategories.length >= 5 && !selectedCategories.includes(cat)}
-                                    />
-                                    <span>{cat}</span>
+                    {/* --- CONDICIONAL: Categorías / Servicios (Mostrar solo si se eligió tipoRegistro) --- */}
+                    {tipoRegistro && (
+                        <>
+                            {/* Categoría/Servicio Principal */}
+                            <div className='form-section'>
+                                <label> {labelCategoriaPrincipal}:
+                                    <select name="categoriaPrincipal" value={categoriaPrincipal} onChange={e => setCategoriaPrincipal(e.target.value)} required>
+                                        <option value="" disabled>Selecciona...</option>
+                                        {/* Usa la lista correcta */}
+                                        {(categoriasDisponibles).map((cat, i) => <option key={i} value={cat}>{cat}</option>)}
+                                    </select>
                                 </label>
-                            ))}
-                        </div>
-                        {categoryError && <p className="error-message">{categoryError}</p>}
-                    </fieldset>
+                            </div>
+
+                            {/* Otras Categorías/Servicios */}
+                            <fieldset className='form-section'>
+                                <legend>{leyendaOtrasCategorias}</legend>
+                                <div className="cat-label-container">
+                                    {/* Usa la lista correcta */}
+                                    {(categoriasDisponibles).map((cat, i) => (
+                                        <label className="cat-label" key={i}>
+                                            <input type="checkbox" value={cat} onChange={handleCheckboxChange} checked={selectedCategories.includes(cat)} disabled={selectedCategories.length >= 5 && !selectedCategories.includes(cat)} />
+                                            <span>{cat}</span>
+                                        </label>
+                                    ))}
+                                    {categoriasDisponibles.length === 0 && <p className='placeholder-text small'>(No hay opciones disponibles)</p>}
+                                </div>
+                                {categoryError && <p className="error-message">{categoryError}</p>}
+                            </fieldset>
+                        </>
+                    )}
 
                     {/* Ubicación */}
                     <div className="form-section">
@@ -169,8 +239,8 @@ const FormularioGeneral = ({
                             <label> {/* TODO: Reemplazar input por Select usando prop 'ubicaciones' */}
                                 {/* <input type="text" name="provincia" placeholder="Provincia / Estado" value={provincia} onChange={e => setProvincia(e.target.value)} /> */}
                                 <select name="provincia" value={provincia} onChange={e => setProvincia(e.target.value)}>
-                                     <option value="" disabled>Provincia / Estado</option>
-                                     {(ubicaciones || []).map((loc, i) => <option key={i} value={loc}>{loc}</option>)}
+                                    <option value="" disabled>Provincia / Estado</option>
+                                    {(ubicaciones || []).map((loc, i) => <option key={i} value={loc}>{loc}</option>)}
                                 </select>
                             </label>
                         </div>
@@ -180,8 +250,8 @@ const FormularioGeneral = ({
                     <div className='form-section'>
                         <h3>Cuéntanos sobre ti (Contacto Principal)</h3>
                         <div className="input-row">
-                             <label><input type="text" name="nombre" placeholder="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} required /></label>
-                             <label><input type="text" name="apellido" placeholder="Apellido" value={apellido} onChange={e => setApellido(e.target.value)} required /></label>
+                            <label><input type="text" name="nombre" placeholder="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} required /></label>
+                            <label><input type="text" name="apellido" placeholder="Apellido" value={apellido} onChange={e => setApellido(e.target.value)} required /></label>
                         </div>
                         <label> Rol en la Empresa: <input type="text" name="rol" placeholder="Ej: Gerente de Ventas" value={rol} onChange={e => setRol(e.target.value)} required /></label>
                         <label> Whatsapp (con código de país): <input type="text" name="whatsapp" placeholder="Ej: +5491122223333" value={whatsapp} onChange={e => setWhatsapp(e.target.value)} required /></label>
@@ -199,8 +269,8 @@ const FormularioGeneral = ({
 
                     {/* Botones de Navegación */}
                     <div className="botones-navegacion">
-                         <button type="button" onClick={onBack} disabled={false}>Atrás</button>
-                         <button type="submit">Continuar</button>
+                        <button type="button" onClick={onBack} disabled={false}>Atrás</button>
+                        <button type="submit">Continuar</button>
                     </div>
                 </form>
             </div>
