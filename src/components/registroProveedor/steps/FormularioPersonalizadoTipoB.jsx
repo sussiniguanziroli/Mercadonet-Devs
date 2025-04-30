@@ -3,100 +3,101 @@
 import React, { useState, useEffect } from 'react';
 import { FaFileCirclePlus } from 'react-icons/fa6';
 import { scrollToTop } from '../../../utils/scrollHelper';
+import CardProductosPreview from '../card_simulators/CardProductosPreview';
+import { Autocomplete, TextField } from '@mui/material';
 
 // Estado inicial para un producto vacío en la galería
 const initialProductState = { imagenFile: null, imagenPreview: null, titulo: '', precio: '' };
 
-// --- Componente del Paso: Formulario Personalizado Tipo B (Productos) ---
 const FormularioPersonalizadoTipoB = ({
-    initialData,    // Datos iniciales para este paso (objeto específico de TipoB)
-    onNext,         // Función para llamar al completar el paso
-    onBack,         // Función para ir al paso anterior
-    onCancel        // Función para cancelar el registro
+    initialData,
+    onNext,
+    onBack,
+    onCancel,
+    // --- PROPS RECIBIDAS DEL NAVIGATOR ---
+    nombreProveedor = '',
+    ciudad = '',
+    provincia = '',
+    marcas = [],     // <= Lista de filtros Marcas
+    servicios = [],   // <= Lista de filtros Servicios
+    extras = []
 }) => {
 
     // --- Estado Local del Formulario ---
-    // Campos de texto
+    // --- Estados locales (Incluyendo galería) ---
     const [descripcion, setDescripcion] = useState('');
     const [sitioWeb, setSitioWeb] = useState('');
     const [whatsapp, setWhatsapp] = useState('');
     const [telefono, setTelefono] = useState('');
     const [email, setEmail] = useState('');
-    // Campos de tags (strings para input)
-    const [marcasStr, setMarcasStr] = useState('');
-    const [serviciosStr, setServiciosStr] = useState('');
-    // Archivos Logo y Carrusel
+    const [selectedMarcas, setSelectedMarcas] = useState([]);
+    const [selectedExtras, setSelectedExtras] = useState([]);
     const [logoFile, setLogoFile] = useState(null);
     const [logoPreview, setLogoPreview] = useState(null);
     const [carruselFiles, setCarruselFiles] = useState([]);
     const [carruselPreviews, setCarruselPreviews] = useState([]);
-    // Galería de Productos (Array de objetos)
     const [galeria, setGaleria] = useState(
-        // Inicializa con 6 slots vacíos
         Array(6).fill(null).map(() => ({ ...initialProductState }))
     );
 
-    // --- Efecto para Inicializar/Actualizar Estado Local desde Props ---
     useEffect(() => {
-        console.log("[TipoB] InitialData:", initialData);
+        scrollToTop();
+        console.log("[TipoB] useEffect - Recibiendo initialData:", initialData);
         if (initialData) {
             setDescripcion(initialData.descripcion || '');
             setSitioWeb(initialData.sitioWeb || '');
             setWhatsapp(initialData.whatsapp || '');
             setTelefono(initialData.telefono || '');
             setEmail(initialData.email || '');
-            setMarcasStr(Array.isArray(initialData.marcas) ? initialData.marcas.join(', ') : '');
-            setServiciosStr(Array.isArray(initialData.servicios) ? initialData.servicios.join(', ') : '');
+            // Inicializa strings de tags (serán reemplazados)
+            
 
-            // Inicializar Galería desde initialData si existe
+            // Inicializar Galería desde initialData si existe y tiene el formato esperado
             if (Array.isArray(initialData.galeria) && initialData.galeria.length > 0) {
                 const initialGaleriaState = Array(6).fill(null).map((_, index) => {
                     const productData = initialData.galeria[index];
-                    return {
-                        imagenFile: null, // Asumimos que no pasamos File objects en initialData
-                        imagenPreview: productData?.imagenURL || null, // Usar URL si viene
-                        titulo: productData?.titulo || '',
-                        precio: productData?.precio || '',
-                    };
+                    // Asume que initialData.galeria contiene objetos con titulo, precio, imagenURL
+                    return productData ? {
+                        imagenFile: null, // No podemos reconstruir el File
+                        imagenPreview: productData.imagenURL || null, // Usa la URL guardada para preview
+                        titulo: productData.titulo || '',
+                        precio: productData.precio || '',
+                    } : { ...initialProductState }; // Slot vacío si no hay datos
                 });
                 setGaleria(initialGaleriaState);
             } else {
-                // Resetear si no hay datos iniciales para la galería
-                setGaleria(Array(6).fill(null).map(() => ({ ...initialProductState })));
+                setGaleria(Array(6).fill(null).map(() => ({ ...initialProductState }))); // Resetear
             }
 
-            // Resetear logo/carousel (o cargar previews si initialData tuviera URLs)
-            setLogoFile(null);
-            setLogoPreview(initialData.logoURL || null); // Ejemplo si viniera URL
-            setCarruselFiles([]);
-            setCarruselPreviews(initialData.carruselURLs || []); // Ejemplo
+            // Previews de logo/carrusel desde URLs guardadas
+            setLogoPreview(initialData.logoURL || null);
+            setCarruselPreviews(initialData.carruselURLs || []);
+            setLogoFile(null); // Resetea siempre el File
+            setCarruselFiles([]); // Resetea siempre los Files
 
         } else {
-            // Si initialData es null/undefined, resetea todo a valores por defecto
+            // Resetea todo si no hay initialData
             setDescripcion(''); setSitioWeb(''); setWhatsapp(''); setTelefono(''); setEmail('');
-            setMarcasStr(''); setServiciosStr(''); setLogoFile(null); setLogoPreview(null);
+             setLogoFile(null); setLogoPreview(null);
             setCarruselFiles([]); setCarruselPreviews([]);
             setGaleria(Array(6).fill(null).map(() => ({ ...initialProductState })));
         }
-
-        // Cleanup de ObjectURLs generadas en ESTE efecto (si hubiera) va en return
-        // return () => { /* revoke initialData preview URLs */ }
-
     }, [initialData]);
 
-    // --- Efecto para Limpiar ObjectURLs ---
+    /// --- Efecto para Limpiar ObjectURLs (IMPORTANTE: Incluir galería) ---
     useEffect(() => {
         return () => {
-            console.log("[TipoB] Limpiando ObjectURLs");
+            console.log("[TipoB] Limpiando ObjectURLs locales (si existen y son blob)");
             if (logoPreview && logoPreview.startsWith('blob:')) URL.revokeObjectURL(logoPreview);
-            carruselPreviews.forEach(url => { if (url.startsWith('blob:')) URL.revokeObjectURL(url) });
+            carruselPreviews.forEach(url => { if (url && url.startsWith('blob:')) URL.revokeObjectURL(url) });
+            // --- Limpieza para galería ---
             galeria.forEach(item => {
                 if (item.imagenPreview && item.imagenPreview.startsWith('blob:')) {
                     URL.revokeObjectURL(item.imagenPreview);
                 }
             });
         };
-        // Dependencias: Se ejecuta cuando CUALQUIER preview cambie O al desmontar
+        // Dependencias: Todas las previews que podrían ser ObjectURLs
     }, [logoPreview, carruselPreviews, galeria]);
 
     // --- Manejadores de Eventos Locales ---
@@ -108,8 +109,6 @@ const FormularioPersonalizadoTipoB = ({
             case 'whatsapp': setWhatsapp(value); break;
             case 'telefono': setTelefono(value); break;
             case 'email': setEmail(value); break;
-            case 'marcasStr': setMarcasStr(value); break;
-            case 'serviciosStr': setServiciosStr(value); break;
             default: break;
         }
     };
@@ -186,9 +185,8 @@ const FormularioPersonalizadoTipoB = ({
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // 1. Parsear tags
-        const marcasArray = marcasStr.split(',').map(s => s.trim()).filter(Boolean);
-        const serviciosArray = serviciosStr.split(',').map(s => s.trim()).filter(Boolean);
+        
+        
 
         // 2. Procesar galería: Incluir solo los datos relevantes (File object incluido)
         const galeriaDataToSend = galeria.map(item => ({
@@ -199,20 +197,11 @@ const FormularioPersonalizadoTipoB = ({
 
         // 3. Recolectar todos los datos locales
         const stepData = {
-            // Datos de texto
-            descripcion,
-            sitioWeb,
-            whatsapp,
-            telefono,
-            email,
-            // Datos de tags (arrays)
-            marcas: marcasArray,
-            servicios: serviciosArray,
-            // Archivos principales (File objects o null/[])
+            descripcion, sitioWeb, whatsapp, telefono, email,
+            
             logoFile: logoFile,
             carruselFiles: carruselFiles,
-            // Galería procesada
-            galeria: galeriaDataToSend,
+            galeria: galeriaDataToSend, // <= Array procesado con Files
         };
 
         console.log("[TipoB] Enviando Datos:", stepData);
@@ -221,8 +210,37 @@ const FormularioPersonalizadoTipoB = ({
         onNext(stepData);
     };
 
-    // --- Renderizado ---
-    // --- Renderizado Corregido ---
+    // --- Construcción de Datos COMBINADOS para el Simulador ---
+    const buildPreviewData = () => {
+        const ubicacionDetalle = `${ciudad}${ciudad && provincia ? ', ' : ''}${provincia}`;
+        
+
+        // Prepara la galería para la preview (solo necesita titulo, precio, imagenPreview)
+        const galeriaForPreview = galeria.map(item => ({
+            titulo: item.titulo,
+            precio: item.precio,
+            imagenPreview: item.imagenPreview // Pasa la URL de preview (blob o https)
+        })).filter(item => item.titulo || item.precio || item.imagenPreview); // No mostrar vacíos en preview
+
+        return {
+            // Datos de pasos anteriores (props)
+            nombre: nombreProveedor,
+            ubicacionDetalle: ubicacionDetalle,
+            // Datos de ESTE paso (estado local)
+            descripcion: descripcion,
+          
+            logoPreview: logoPreview,
+            carrusel: carruselPreviews,
+            sitioWeb: sitioWeb,
+            whatsapp: whatsapp,
+            telefono: telefono,
+            email: email,
+            galeriaProductos: galeriaForPreview // <= Pasa la galería formateada para preview
+        };
+    };
+    const previewData = buildPreviewData();
+
+
     return (
         // Usa clase de layout base
         <div className="registro-step-layout">
@@ -281,13 +299,62 @@ const FormularioPersonalizadoTipoB = ({
                         <textarea id="descripcion-b" name="descripcion" value={descripcion} onChange={handleInputChange} rows="4" placeholder="Describe tu negocio, productos destacados..." />
                     </div>
 
-                    {/* Marcas y Servicios (Tags) */}
-                    <div className="form-section">
-                        <label htmlFor="marcasStr-b">Marcas (separadas por coma)</label>
-                        <input id="marcasStr-b" type="text" name="marcasStr" value={marcasStr} onChange={handleInputChange} placeholder="Ej: Marca X, Marca Y" />
-                        <label htmlFor="serviciosStr-b">Servicios extra (separados por coma)</label>
-                        <input id="serviciosStr-b" type="text" name="serviciosStr" value={serviciosStr} onChange={handleInputChange} placeholder="Ej: Envío Rápido, Soporte Técnico" />
+                   {/* --- REEMPLAZADO: Marcas y Extras con Autocomplete --- */}
+                   <div className="form-section">
+                        {/* Marcas con Autocomplete */}
+                        <Autocomplete
+                            multiple // Habilita selección múltiple
+                            id="marcas-tags"
+                            options={marcas} // La lista completa de marcas disponibles (prop)
+                            value={selectedMarcas} // El array de estado con las marcas seleccionadas
+                            onChange={(event, newValue) => {
+                                setSelectedMarcas(newValue); // Actualiza el estado directamente
+                            }}
+                            getOptionLabel={(option) => option} // Muestra el string de la opción
+                            filterSelectedOptions // Oculta opciones ya seleccionadas del dropdown
+                            // renderTags={(value, getTagProps) => // Opcional: personalizar cómo se ven los chips
+                            //     value.map((option, index) => (
+                            //         <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                            //     ))
+                            // }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="outlined" // O el estilo que prefieras (standard, filled)
+                                    label="Marcas que trabajas"
+                                    placeholder="Selecciona o escribe para buscar..."
+                                // Añadir sx prop para estilos si es necesario
+                                // sx={{ /* Tus estilos MUI aquí */ }}
+                                />
+                            )}
+                            // Estilo para el contenedor del Autocomplete si es necesario
+                            sx={{ mb: 2 }} // Ejemplo: Margen inferior
+                        />
+
+                        {/* Extras con Autocomplete */}
+                        <Autocomplete
+                            multiple
+                            id="extras-tags"
+                            options={extras} // La lista completa de extras disponibles (prop)
+                            value={selectedExtras} // El array de estado con los extras seleccionados
+                            onChange={(event, newValue) => {
+                                setSelectedExtras(newValue); // Actualiza el estado directamente
+                            }}
+                            getOptionLabel={(option) => option}
+                            filterSelectedOptions
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="outlined"
+                                    label="Servicios extra y capacidades"
+                                    placeholder="Selecciona o escribe..."
+                                />
+                            )}
+                        // sx={{ /* Estilos adicionales si se necesitan */ }}
+                        />
                     </div>
+                    {/* --- FIN REEMPLAZO --- */}
+
 
                     {/* Contacto */}
                     <div className="form-section">
@@ -356,8 +423,7 @@ const FormularioPersonalizadoTipoB = ({
             {/* Contenedor del Simulador */}
             <div className="simulator-wrapper">
                 <h1>Vista Previa: Card Productos</h1>
-                {/* TODO: Añadir o implementar SimuladorCardProductos */}
-                <p style={{ color: 'lightgray', textAlign: 'center', paddingTop: '20px' }}>(Vista previa no implementada aún)</p>
+                <CardProductosPreview proveedor={previewData} />
             </div>
         </div>
     );

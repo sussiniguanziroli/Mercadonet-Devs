@@ -4,7 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
 
 // Clase base aplicada al div principal del componente React
-.simulator.card-historia-preview { // Añadida especificidad si es necesario
+.simulator.card-historia-preview  { // Añadida especificidad si es necesario
     display: flex;
     flex-direction: row;
     align-items: center; // Centra verticalmente si las alturas difieren

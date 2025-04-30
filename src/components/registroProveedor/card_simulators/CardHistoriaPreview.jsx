@@ -10,7 +10,7 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 
 const CardHistoriaPreview = ({ proveedor }) => {
     const {
-        nombre = '', ubicacionDetalle = '', 
+        nombre = '', ubicacionDetalle = '',
         logoPreview = null, // Puede ser null, blob URL o https URL
         carrusel = [],      // Array de URLs (blob o https)
         descripcion = '', marca = [], extras = [],
@@ -86,7 +86,7 @@ const CardHistoriaPreview = ({ proveedor }) => {
                     <p><IoLocationOutline /> {ubicacionMostrada}</p>
                 </div>
 
-               
+
                 {/* --- Textos (Descripción, Marcas, Extras) --- */}
                 <div className="texts-box">
                     {/* Muestra placeholder si no hay descripción en pasos avanzados, o nada en paso 1 */}
@@ -99,18 +99,18 @@ const CardHistoriaPreview = ({ proveedor }) => {
                     )}
 
                     {Array.isArray(marca) && marca.length > 0 && (
-                       <div className="marcas alineado-auto"><h4>Marcas:</h4> {marca.slice(0, 5).map((m, i) => <p key={i}>{m}</p>)}{marca.length > 5 && <p>...</p>}</div>
+                        <div className="marcas alineado-auto"><h4>Marcas:</h4> {marca.slice(0, 5).map((m, i) => <p key={i}>{m}</p>)}{marca.length > 5 && <p>...</p>}</div>
                     )}
                     {Array.isArray(extras) && extras.length > 0 && (
-                       <div className="extras alineado-auto"><h4>Servicios/Extras:</h4> {extras.slice(0, 4).map((e, i) => ( <p key={i} className="tag-extra">{e}</p> ))}{extras.length > 4 && <p className="tag-extra">...</p>}</div>
+                        <div className="extras alineado-auto"><h4>Servicios/Extras:</h4> {extras.slice(0, 4).map((e, i) => (<p key={i} className="tag-extra">{e}</p>))}{extras.length > 4 && <p className="tag-extra">...</p>}</div>
                     )}
-                     {/* Placeholder si no hay descripción/marcas/extras? Podría añadirse */}
-                     {!descripcion && (!marca || marca.length === 0) && (!extras || extras.length === 0) && (
+                    {/* Placeholder si no hay descripción/marcas/extras? Podría añadirse */}
+                    {!descripcion && (!marca || marca.length === 0) && (!extras || extras.length === 0) && (
                         <p className='placeholder-text'>(Aquí aparecerá tu descripción, marcas y servicios)</p>
-                     )}
+                    )}
                 </div>
 
-                
+
             </div>
         </div>
     );

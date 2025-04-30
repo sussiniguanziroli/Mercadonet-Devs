@@ -6,7 +6,7 @@ import { scrollToTop } from '../../../utils/scrollHelper';
 // --- MODIFICADO: Importa el simulador unificado ---
 import CardHistoriaPreview from '../card_simulators/CardHistoriaPreview';
 // TODO: Importar CardProductosPreview cuando esté unificado
-import CardProductoSimulator from '../card_simulators/CardProductosSimulator'; // Placeholder mientras unificas Productos
+import CardProductosPreview from '../card_simulators/CardProductosPreview';
 
 // --- Componente del Paso: Formulario General ---
 const FormularioGeneral = ({
@@ -280,7 +280,7 @@ const FormularioGeneral = ({
                 <h1>{selectedCard === 'tipoA' ? 'Card Historia' : 'Card Producto'}</h1>
                 {selectedCard === 'tipoA' && <CardHistoriaPreview proveedor={previewData} />}
                 {/* TODO: Reemplazar con CardProductosPreview cuando se unifique */}
-                {selectedCard === 'tipoB' && <CardProductoSimulator data={previewData} />}
+                {selectedCard === 'tipoB' && <CardProductosPreview proveedor={previewData} />}
                 {!selectedCard && <p style={{ color: 'white', textAlign: 'center' }}>Selecciona un tipo de card.</p>}
             </div>
         </div>
