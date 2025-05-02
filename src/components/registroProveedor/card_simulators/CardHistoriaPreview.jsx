@@ -1,9 +1,6 @@
-// src/components/registroProveedor/card_simulators/CardHistoriaPreview.jsx
-// (Versión ajustada con placeholders)
-
 import React from 'react';
-import { IoLocationOutline, IoGlobeOutline } from 'react-icons/io5';
-import { FaArrowLeft, FaArrowRight, FaWhatsapp, FaPhoneAlt, FaEnvelope, FaImage, FaImages } from "react-icons/fa"; // Iconos añadidos
+import { IoLocationOutline } from 'react-icons/io5';
+import { FaArrowLeft, FaArrowRight, FaImage, FaImages } from "react-icons/fa"; // Iconos añadidos
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
@@ -24,7 +21,7 @@ const CardHistoriaPreview = ({ proveedor }) => {
     const tieneLogo = logoPreview && typeof logoPreview === 'string'; // Verifica que sea un string (URL blob o https)
 
     return (
-        <div className="proveedor-item-simulator simulator card-historia-preview">
+        <div className="card-historia-preview">
             {/* --- Carrusel: Muestra preview o placeholder --- */}
             <div className="carousel-box">
                 <CarouselProvider
@@ -93,8 +90,6 @@ const CardHistoriaPreview = ({ proveedor }) => {
                     {descripcion ? (
                         <p className="description">{descripcion}</p>
                     ) : (
-                        // Opcional: Mostrar placeholder solo si estamos en paso 2+ y no hay desc
-                        // (Necesitaría saber el paso actual aquí, es más simple no mostrar nada)
                         null
                     )}
 

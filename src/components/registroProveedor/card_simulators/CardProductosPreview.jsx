@@ -1,8 +1,6 @@
-// src/components/registroProveedor/card_simulators/CardProductosPreview.jsx
-
 import React from 'react';
 import { IoLocationOutline } from 'react-icons/io5';
-import { FaWhatsapp, FaPhoneAlt, FaEnvelope, FaImage, FaImages, FaBoxOpen } from "react-icons/fa";
+import { FaImage, FaImages, FaBoxOpen } from "react-icons/fa";
 import { CarouselProvider, Slider, Slide } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
@@ -25,7 +23,7 @@ const CardProductosPreview = ({ proveedor }) => {
     const tieneGaleria = Array.isArray(galeriaProductos) && galeriaProductos.length > 0;
 
     return (
-        <div className="proveedor-item-desktop simulator card-productos-preview">
+        <div className="card-productos-preview">
 
             {/* Carrusel */}
             <div className="carousel-box">
@@ -90,26 +88,7 @@ const CardProductosPreview = ({ proveedor }) => {
                     )}
                 </div>
 
-                {/* Descripción, marcas y servicios */}
-                <div className="texts-box">
-                    {descripcion && <p className="description">{descripcion}</p>}
-                    {Array.isArray(marcas) && marcas.length > 0 && (
-                        <div className="marcas alineado-auto">
-                            <h4>Marcas:</h4>
-                            {marcas.slice(0, 5).map((m, i) => <p key={i}>{m}</p>)}
-                            {marcas.length > 5 && <p>...</p>}
-                        </div>
-                    )}
-                    {Array.isArray(servicios) && servicios.length > 0 && (
-                        <div className="extras alineado-auto">
-                            <h4>Servicios:</h4>
-                            {servicios.slice(0, 4).map((s, i) => (
-                                <p key={i} className="tag-extra">{s}</p>
-                            ))}
-                            {servicios.length > 4 && <p>...</p>}
-                        </div>
-                    )}
-                </div>
+               
             </div>
         </div>
     );

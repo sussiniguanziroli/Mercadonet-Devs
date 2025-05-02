@@ -103,25 +103,29 @@ const FormularioPersonalizadoTipoA = ({
         }
     };
 
-    const handleFileChange = (e) => {
+    const handleFileChange = (e) => { // Para Logo y Carrusel
         const { name, files } = e.target;
-        if (name === "logo") {
-            const file = files?.[0];
-            // Limpia la preview ANTERIOR si era una URL local (blob)
-            if (logoPreview && logoPreview.startsWith('blob:')) {
-                URL.revokeObjectURL(logoPreview);
-            }
-            setLogoFile(file || null); // Guarda el nuevo File (o null)
-            setLogoPreview(file ? URL.createObjectURL(file) : null); // Crea nueva preview local (o null)
+        const isLogo = name === 'logo';
+        const currentFiles = isLogo ? [files?.[0]].filter(Boolean) : Array.from(files || []);
+        const oldPreviews = isLogo ? [logoPreview].filter(Boolean) : carruselPreviews;
+        const setFiles = isLogo ? setLogoFile : setCarruselFiles;
+        const setPreviews = isLogo ? setLogoPreview : setCarruselPreviews;
 
-        } else if (name === "carrusel") {
-            const fileList = Array.from(files || []);
-            // Limpia previews ANTERIORES si eran locales (blob)
-            carruselPreviews.forEach(url => { if (url && url.startsWith('blob:')) URL.revokeObjectURL(url) });
-            setCarruselFiles(fileList); // Guarda los nuevos Files
-            setCarruselPreviews(fileList.map(file => URL.createObjectURL(file))); // Crea nuevas previews locales
+        // Limpiar previews anteriores
+        oldPreviews.forEach(url => { if (url.startsWith('blob:')) URL.revokeObjectURL(url) });
+
+        // Crear nuevas previews
+        const newPreviews = currentFiles.map(file => URL.createObjectURL(file));
+
+        // Actualizar estado
+        if (isLogo) {
+            setFiles(currentFiles[0] || null);
+            setPreviews(newPreviews[0] || null);
+        } else {
+            setFiles(currentFiles);
+            setPreviews(newPreviews);
         }
-        e.target.value = null; // Permite seleccionar el mismo archivo otra vez
+        e.target.value = null; // Reset input
     };
 
     // --- Submit de este paso ---
@@ -172,30 +176,44 @@ const FormularioPersonalizadoTipoA = ({
                 <form onSubmit={handleSubmit} className="registro-form" noValidate>
                     <h1>Personaliza tu Card Historia</h1>
 
-                    {/* Logo Input */}
-                    <div className="form-section">
-                        <label>Logo</label>
-                        {logoPreview && (<div className='preview-image-container solo'><img src={logoPreview} alt="Vista previa Logo" /></div>)}
-                        <div className="input-logo">
-                            <label htmlFor="logo-upload-a" className="file-input-content">
+                   {/* Logo */}
+                   <div className="form-section">
+                        {/* Asociar label con input usando htmlFor */}
+                        <label htmlFor="logo-upload-b">Logo</label>
+                        {logoPreview && (
+                            <div style={{ marginBottom: '10px', maxWidth: '150px', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '4px', padding: '5px', background: 'rgba(255,255,255,0.05)' }}>
+                                <img src={logoPreview} alt="Vista previa del Logo" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                            </div>
+                        )}
+                        {/* Contenedor que aplica el mixin/estilo base */}
+                        <div className="input-logo"> {/* Clase específica para tamaño si es necesario */}
+                            {/* Label visible que activará el input oculto */}
+                            <label htmlFor="logo-upload-b" className="file-input-content" style={{ cursor: 'pointer' }}>
                                 <FaFileCirclePlus />
                                 <p><strong>{logoFile ? logoFile.name : 'Seleccionar Logo'}</strong></p>
                             </label>
-                            <input id="logo-upload-a" type="file" name="logo" accept="image/*" onChange={handleFileChange} />
+                            {/* Input real (oculto por SCSS base o específico) */}
+                            <input id="logo-upload-b" type="file" name="logo" accept="image/*" onChange={handleFileChange} />
                         </div>
                         {logoFile && <button type='button' onClick={() => handleFileChange({ target: { name: 'logo', files: null } })} className="remove-button-link">Quitar</button>}
                     </div>
 
-                    {/* Carrusel Input */}
+                    {/* Carrusel */}
                     <div className="form-section">
-                        <label>Carrusel Multimedia (Imágenes)</label>
-                        {carruselPreviews.length > 0 && (<div className='preview-image-container multiple'> {carruselPreviews.map((previewUrl, index) => (<img key={index} src={previewUrl} alt={`Vista previa ${index + 1}`} />))} </div>)}
-                        <div className="input-carrusel">
-                            <label htmlFor="carrusel-upload-a" className="file-input-content">
+                        <label htmlFor="carrusel-upload-b">Carrusel Multimedia (Imágenes)</label>
+                        {carruselPreviews.length > 0 && (
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '10px' }}>
+                                {carruselPreviews.map((previewUrl, index) => (
+                                    <img key={index} src={previewUrl} alt={`Vista previa ${index + 1}`} style={{ width: '80px', height: '80px', objectFit: 'cover', border: '1px solid #555', borderRadius: '4px' }} />
+                                ))}
+                            </div>
+                        )}
+                        <div className="input-carrusel"> {/* Clase específica para tamaño si es necesario */}
+                            <label htmlFor="carrusel-upload-b" className="file-input-content" style={{ cursor: 'pointer' }}>
                                 <FaFileCirclePlus />
                                 <p><strong>Agregar imágenes</strong><br />O arrastra y suelta</p>
                             </label>
-                            <input id="carrusel-upload-a" type="file" name="carrusel" accept="image/*" multiple onChange={handleFileChange} />
+                            <input id="carrusel-upload-b" type="file" name="carrusel" accept="image/*" multiple onChange={handleFileChange} />
                         </div>
                         {carruselFiles.length > 0 && <button type='button' onClick={() => handleFileChange({ target: { name: 'carrusel', files: null } })} className="remove-button-link">Quitar {carruselFiles.length} archivo(s)</button>}
                     </div>

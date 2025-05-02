@@ -50,7 +50,7 @@ const FormularioPersonalizadoTipoB = ({
             setTelefono(initialData.telefono || '');
             setEmail(initialData.email || '');
             // Inicializa strings de tags (serán reemplazados)
-            
+
 
             // Inicializar Galería desde initialData si existe y tiene el formato esperado
             if (Array.isArray(initialData.galeria) && initialData.galeria.length > 0) {
@@ -78,7 +78,7 @@ const FormularioPersonalizadoTipoB = ({
         } else {
             // Resetea todo si no hay initialData
             setDescripcion(''); setSitioWeb(''); setWhatsapp(''); setTelefono(''); setEmail('');
-             setLogoFile(null); setLogoPreview(null);
+            setLogoFile(null); setLogoPreview(null);
             setCarruselFiles([]); setCarruselPreviews([]);
             setGaleria(Array(6).fill(null).map(() => ({ ...initialProductState })));
         }
@@ -185,8 +185,8 @@ const FormularioPersonalizadoTipoB = ({
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        
-        
+
+
 
         // 2. Procesar galería: Incluir solo los datos relevantes (File object incluido)
         const galeriaDataToSend = galeria.map(item => ({
@@ -198,7 +198,7 @@ const FormularioPersonalizadoTipoB = ({
         // 3. Recolectar todos los datos locales
         const stepData = {
             descripcion, sitioWeb, whatsapp, telefono, email,
-            
+
             logoFile: logoFile,
             carruselFiles: carruselFiles,
             galeria: galeriaDataToSend, // <= Array procesado con Files
@@ -213,7 +213,7 @@ const FormularioPersonalizadoTipoB = ({
     // --- Construcción de Datos COMBINADOS para el Simulador ---
     const buildPreviewData = () => {
         const ubicacionDetalle = `${ciudad}${ciudad && provincia ? ', ' : ''}${provincia}`;
-        
+
 
         // Prepara la galería para la preview (solo necesita titulo, precio, imagenPreview)
         const galeriaForPreview = galeria.map(item => ({
@@ -228,7 +228,7 @@ const FormularioPersonalizadoTipoB = ({
             ubicacionDetalle: ubicacionDetalle,
             // Datos de ESTE paso (estado local)
             descripcion: descripcion,
-          
+
             logoPreview: logoPreview,
             carrusel: carruselPreviews,
             sitioWeb: sitioWeb,
@@ -299,8 +299,8 @@ const FormularioPersonalizadoTipoB = ({
                         <textarea id="descripcion-b" name="descripcion" value={descripcion} onChange={handleInputChange} rows="4" placeholder="Describe tu negocio, productos destacados..." />
                     </div>
 
-                   {/* --- REEMPLAZADO: Marcas y Extras con Autocomplete --- */}
-                   <div className="form-section">
+                    {/* --- REEMPLAZADO: Marcas y Extras con Autocomplete --- */}
+                    <div className="form-section">
                         {/* Marcas con Autocomplete */}
                         <Autocomplete
                             multiple // Habilita selección múltiple

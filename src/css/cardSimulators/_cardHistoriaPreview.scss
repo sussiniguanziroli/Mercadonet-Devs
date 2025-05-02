@@ -1,0 +1,345 @@
+.card-historia-preview {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: fit-content;
+    max-height: 400px;
+    background-color: rgba(252, 252, 252, 0.747);
+    border-radius: 3px;
+    width: 100%;
+    max-width: 720px;
+    font-size: 1rem;
+    gap: 8px;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15) !important;
+        transform: scale(1.005);
+    }
+
+    .carousel-box {
+        margin: 3px;
+        position: relative;
+        /* Para posicionar los botones y dots */
+        height: 100%;
+        width: 25%;
+        min-width: 320px;
+        max-width: 320px;
+        overflow: hidden;
+
+        &:hover .carousel-button {
+            opacity: 1 !important;
+            /* Hacer visibles los botones */
+            pointer-events: auto !important;
+            /* Permitir interacción */
+        }
+
+        &:hover .carousel-dots {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
+
+        .carousel-frame {
+            border-radius: 10px;
+            background-color: #d6d6d6;
+            padding: 10px;
+        }
+
+        .carousel-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+
+            /* Altura fija para las slides */
+            iframe {
+                width: 100%;
+                height: 100%;
+            }
+
+            .carousel-placeholder {
+                display: flex;
+                flex-direction: column; // Apila ícono y texto
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                width: 100%;
+                color: #adb5bd; // Gris más claro
+                font-size: 0.9rem;
+                background-color: #e9ecef; // Fondo muy claro
+                border-radius: inherit; // Hereda bordes del frame
+                text-align: center;
+                padding: 10px;
+                box-sizing: border-box;
+
+                svg {
+                    // Estilo para el ícono dentro del placeholder
+                    font-size: 2.5rem; // Tamaño del ícono
+                    margin-bottom: 8px; // Espacio debajo del ícono
+                    opacity: 0.7;
+                }
+            }
+
+            .carousel-image {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                /* Asegura que la imagen no se deforme */
+                border-radius: 5px;
+                /* Bordes suaves para imágenes */
+            }
+        }
+
+
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            /* Centra verticalmente */
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Fondo oscuro con transparencia */
+            color: white;
+            border: none;
+            width: 30px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            /* Prevenir interacción mientras están ocultos */
+            transition: opacity 0.3s ease;
+
+            /* Transición suave */
+
+        }
+
+        .back {
+            left: 0;
+        }
+
+        .next {
+            right: 0;
+            /* Botón de "next" a la derecha */
+        }
+
+
+        .carousel-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            /* Fondo más oscuro al hacer hover */
+        }
+
+        .carousel-dots {
+            pointer-events: none;
+            /* Prevenir interacción mientras están ocultos */
+            transition: opacity 0.3s ease;
+            opacity: 0;
+            position: absolute;
+            bottom: 10px;
+            right: 50%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            /* Espaciado entre dots */
+            margin-top: 15px;
+            /* Separación con el slider */
+        }
+
+        .carousel-dots button {
+            width: 6px;
+            height: 6px;
+            background-color: #ccc;
+            /* Color base de los dots */
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .carousel-dots button:hover,
+        .carousel-dots .carousel__dot--selected {
+            background-color: #333;
+            /* Color para el dot activo o hover */
+        }
+
+    }
+
+    .info-box {
+        width: 75%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        height: 100%;
+        align-self: flex-start;
+
+        .titles-box {
+            padding-top: 10px;
+            width: fit-content;
+            display: grid;
+            grid-template-columns: 60px 1fr auto;
+            grid-template-rows: auto auto;
+            grid-template-areas:
+                'logo-small h3 verificado'
+                'logo-small p p';
+            align-items: center;
+            column-gap: 7px;
+            row-gap: 1px;
+
+            .verificado {
+                width: 85px;
+                grid-area: verificado;
+            }
+
+            .small-logo-box {
+                grid-area: logo-small;
+                width: 60px;
+                height: 60px;
+                border-radius: 5px;
+                background-color: #e9ecef;
+
+                .small-logo {
+                    object-fit: contain;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: inherit;
+                }
+
+                .logo-placeholder {
+                    font-size: 0.8rem;
+                    color: #818181; // Gris claro
+                    text-align: center;
+                    font-weight: 500;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;
+                  
+                    svg {
+                      font-size: 1.5rem; // Tamaño ícono logo
+                      margin-bottom: 4px;
+                      opacity: 0.7;
+                    }
+                  }
+            }
+
+            h3 {
+                font-family: 'Montserrat', sans-serif;
+                grid-area: h3;
+                color: $text-gray;
+
+                &:hover {
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
+            }
+
+            p {
+                color: $text-gray;
+                grid-area: p;
+            }
+        }
+
+        .tags-box {
+            margin: 7px 0;
+
+            img {
+                margin: 3px;
+                height: 1.7rem;
+                border-radius: 2px;
+            }
+
+        }
+
+        .texts-box {
+            margin-top: 16px;
+            width: 100%;
+            max-width: 360px;
+            .marcas {
+                color: $text-gray;
+                border: none;
+            }
+
+            .description {
+                color: $text-gray;
+                font-weight: 470;
+                word-wrap: break-word;  // asegura que corte palabras largas
+                    overflow-wrap: break-word;
+                    white-space: normal;
+                p {
+                    width: 100%;
+                    word-wrap: break-word;  // asegura que corte palabras largas
+                    overflow-wrap: break-word;
+                    white-space: normal;    // asegúrate de que no esté en nowrap
+                  }
+            }
+
+            .extras {
+                display: flex;
+                align-items: center;
+                color: $text-gray;
+                border: none;
+
+                .tag-extra {
+                    padding: 5px;
+                    color: $text-gray;
+                    background-color: #f4f4f4;
+                    border-radius: 3px;
+                    font-weight: 500;
+                }
+
+            }
+            .placeholder-text {
+                font-style: italic;
+                font-size: 0.85rem;
+                margin-top: 10px;
+                &.small {
+                    font-size: 0.75rem;
+                    text-align: center;
+                    width: 100%; // Para centrar en buttons-box si está vacío
+                }
+            }
+        }
+    }
+
+    
+    // CLASES DE SERVICIO
+    .alineado-auto {
+        display: flex;
+        column-gap: .3rem;
+        align-self: flex-start;
+        margin-top: .7rem;
+        flex-wrap: wrap;
+    }
+
+    @media (min-width: 1920px) {
+        font-size: 0.9rem; // Reduce el tamaño base para pantallas grandes
+
+        h3 {
+            font-size: 1.1rem; // Ajusta el tamaño del título
+        }
+
+        p {
+            font-size: .95rem; // Ajusta el tamaño del párrafo
+        }
+    }
+
+    @media (max-width: 1600px) {
+        font-size: 0.7rem; // Reduce el tamaño base para pantallas pequeñas
+
+        h3 {
+            font-size: 0.9rem; // Ajusta el tamaño del título
+        }
+
+        p {
+            font-size: 0.75rem; // Ajusta el tamaño del párrafo
+        }
+    }
+}
