@@ -4384,7 +4384,6 @@
   padding: 10px 0;
 }
 
-/* Definición de colores principales */
 .registro-step-layout {
   /* Sin cambios de color aquí */
   display: flex;
@@ -4593,7 +4592,7 @@
 }
 .simulator-wrapper h1 {
   font-size: 1.6rem;
-  color: #F5F5F5;
+  color: #FFFFFF;
   font-family: "Montserrat", sans-serif;
   margin-bottom: 20px;
   text-align: center;
@@ -4612,7 +4611,6 @@
   }
 }
 
-/* Definición de colores principales */
 .registro-step-layout {
   /* Sin cambios de color aquí */
   display: flex;
@@ -4821,7 +4819,7 @@
 }
 .simulator-wrapper h1 {
   font-size: 1.6rem;
-  color: #F5F5F5;
+  color: #FFFFFF;
   font-family: "Montserrat", sans-serif;
   margin-bottom: 20px;
   text-align: center;
@@ -4873,7 +4871,6 @@
   cursor: not-allowed;
 }
 
-/* Definición de colores principales */
 .registro-step-layout {
   /* Sin cambios de color aquí */
   display: flex;
@@ -5082,7 +5079,7 @@
 }
 .simulator-wrapper h1 {
   font-size: 1.6rem;
-  color: #F5F5F5;
+  color: #FFFFFF;
   font-family: "Montserrat", sans-serif;
   margin-bottom: 20px;
   text-align: center;
@@ -5197,7 +5194,6 @@
   font-size: 35px;
 }
 
-/* Definición de colores principales */
 .registro-step-layout {
   /* Sin cambios de color aquí */
   display: flex;
@@ -5406,7 +5402,7 @@
 }
 .simulator-wrapper h1 {
   font-size: 1.6rem;
-  color: #F5F5F5;
+  color: #FFFFFF;
   font-family: "Montserrat", sans-serif;
   margin-bottom: 20px;
   text-align: center;
