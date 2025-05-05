@@ -1,7 +1,16 @@
-// src/components/registroProveedor/steps/FormularioGeneral.jsx
-
 import React, { useState, useEffect } from 'react';
 import { scrollToTop } from '../../../utils/scrollHelper';
+import {
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Chip,
+    OutlinedInput,
+    Box,
+    Autocomplete,
+    TextField
+} from '@mui/material';
 
 // --- MODIFICADO: Importa el simulador unificado ---
 import CardHistoriaPreview from '../card_simulators/CardHistoriaPreview';
@@ -19,14 +28,17 @@ const FormularioGeneral = ({
     selectedCard, // 'tipoA' o 'tipoB'
     ubicaciones = [], // Lista de ubicaciones (con default)
     pproductos = [],   // Lista de tipos de proveedor (con default)
-    servicios = []
+    servicios = [],
+    marcasDisponibles = []
 }) => {
     // --- Estados locales para cada campo del formulario ---
     const [pais, setPais] = useState('Argentina');
     const [tipoRegistro, setTipoRegistro] = useState('');
     const [nombreProveedor, setNombreProveedor] = useState('');
-    const [tipoProveedor, setTipoProveedor] = useState('');
+    const [tipoProveedor, setTipoProveedor] = useState([]);
     const [categoriaPrincipal, setCategoriaPrincipal] = useState('');
+    const [marcasOficiales, setMarcasOficiales] = useState([]);
+    const [marcasError, setMarcasError] = useState('');
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [ciudad, setCiudad] = useState('');
     const [provincia, setProvincia] = useState('');
@@ -37,7 +49,7 @@ const FormularioGeneral = ({
     const [cuit, setCuit] = useState('');
     const [antiguedad, setAntiguedad] = useState('');
     const [facturacion, setFacturacion] = useState('');
-    const [categoryError, setCategoryError] = useState('');
+    const [categoryError, setCategoryError] = useState(false);
 
     // --- Efecto para inicializar desde initialData ---
     useEffect(() => {
@@ -47,7 +59,7 @@ const FormularioGeneral = ({
             // --- MODIFICADO: Inicializa tipoRegistro ---
             setTipoRegistro(initialData.tipoRegistro || '');
             setNombreProveedor(initialData.nombreProveedor || '');
-            setTipoProveedor(initialData.tipoProveedor || '');
+            setTipoProveedor(initialData.tipoProveedor || []);
             setCategoriaPrincipal(initialData.categoriaPrincipal || '');
             setSelectedCategories(initialData.categoriasAdicionales || []);
             setCiudad(initialData.ciudad || '');
@@ -59,6 +71,11 @@ const FormularioGeneral = ({
             setCuit(initialData.cuit || '');
             setAntiguedad(initialData.antiguedad || '');
             setFacturacion(initialData.facturacion || '');
+            if (tipoProveedor.includes('Distribuidores Oficiales')) {
+                setMarcasOficiales(initialData.marcasOficiales || []);
+            } else {
+                setMarcasOficiales([]); // Asegura que esté vacío si no es distribuidor oficial
+            }
         }
     }, [initialData]);
 
@@ -69,13 +86,47 @@ const FormularioGeneral = ({
     const leyendaOtrasCategorias = esProveedorDeServicios ? 'Otros Servicios Ofrecidos (Hasta 5)' : 'Otras categorías (Elige hasta 5)';
 
 
+     // --- [NUEVO] Efecto para limpiar marcas si se deselecciona "Distribuidores Oficiales" ---
+     useEffect(() => {
+        if (!tipoProveedor.includes('Distribuidores Oficiales')) {
+            setMarcasOficiales([]);
+            setMarcasError('');
+        }
+    }, [tipoProveedor]); 
+
     // --- Handlers ---
+
+    const handleMarcasChangeAutocomplete = (event, newValue) => {
+        // newValue ya es el array con las selecciones propuestas
+        if (newValue.length <= 5) {
+            setMarcasOficiales(newValue);
+            setMarcasError(''); // Limpia error si está dentro del límite
+        } else {
+            // Si se excede, no actualizamos el estado y mostramos el error.
+            // El Autocomplete no añadirá visualmente la 6ta opción si no actualizamos el state.
+            setMarcasError("Solo puedes seleccionar hasta 5 marcas.");
+        }
+    };
+
+    const getMarcaOptionDisabled = (option) => {
+        // Deshabilita la opción si ya hay 5 seleccionadas Y esta opción no es una de ellas
+        return marcasOficiales.length >= 5 && !marcasOficiales.includes(option);
+    };
+
+    const handleTipoProveedorChange = (event) => {
+        const {
+            target: { value }
+        } = event;
+        setTipoProveedor(typeof value === 'string' ? value.split(',') : value);
+    };
+
     // NUEVO: Handler para cambio de Tipo de Registro
     const handleTipoRegistroChange = (e) => {
         const newType = e.target.value;
         setTipoRegistro(newType);
-        // Resetea campos dependientes al cambiar el tipo principal
-        setTipoProveedor('');
+        setMarcasOficiales([]);
+        setMarcasError('');
+        setTipoProveedor([]);
         setCategoriaPrincipal('');
         setSelectedCategories([]);
         setCategoryError('');
@@ -109,15 +160,15 @@ const FormularioGeneral = ({
     };
 
 
-    // Submit: Añade tipoRegistro a los datos enviados
+    // Submit
     const handleSubmit = (e) => {
         e.preventDefault();
         const stepData = {
             pais,
-            tipoRegistro, // <= AÑADIDO
+            tipoRegistro, 
             nombreProveedor,
-            // Incluye tipoProveedor solo si es relevante
-            tipoProveedor: tipoRegistro === 'productos' ? tipoProveedor : '',
+            marcasOficiales,
+            tipoProveedor: tipoRegistro === 'productos' ? tipoProveedor : [],
             categoriaPrincipal,
             categoriasAdicionales: selectedCategories,
             ciudad, provincia, nombre, apellido, rol, whatsapp,
@@ -188,14 +239,108 @@ const FormularioGeneral = ({
 
                         {/* --- CONDICIONAL: Mostrar solo si es proveedor de productos --- */}
                         {tipoRegistro === 'productos' && (
-                            <label> Tipo de Proveedor:
-                                <select name="tipoProveedor" value={tipoProveedor} onChange={e => setTipoProveedor(e.target.value)} required={tipoRegistro === 'productos'}>
-                                    <option value="" disabled>Selecciona...</option>
-                                    {(pproductos || []).map((tipo, i) => <option key={i} value={tipo}>{tipo}</option>)}
-                                </select>
-                            </label>
+                            <FormControl fullWidth sx={{ mt: 2 }}>
+                                <InputLabel id="tipo-proveedor-label">Tipo de Proveedor</InputLabel>
+                                <Select
+                                    labelId="tipo-proveedor-label"
+                                    multiple
+                                    value={tipoProveedor}
+                                    onChange={(e) => {
+                                        const {
+                                            target: { value },
+                                        } = e;
+                                        setTipoProveedor(
+                                            typeof value === 'string' ? value.split(',') : value
+                                        );
+                                    }}
+                                    input={<OutlinedInput label="Tipo de Proveedor" />}
+                                    renderValue={(selected) => (
+                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                            {selected.map((value) => (
+                                                <Chip
+                                                    key={value}
+                                                    label={value}
+                                                    onMouseDown={(e) => {
+                                                        // Evita que se dispare el dropdown cuando hacés click en la X
+                                                        e.stopPropagation();
+                                                    }}
+                                                    onDelete={() => {
+                                                        setTipoProveedor((prev) =>
+                                                            prev.filter((item) => item !== value)
+                                                        );
+                                                    }}
+                                                />
+                                            ))}
+                                        </Box>
+                                    )}
+                                >
+                                    {pproductos.map((tipo) => (
+                                        <MenuItem key={tipo} value={tipo}>
+                                            {tipo}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         )}
+
+
+
                     </div>
+
+                    {/* Se muestra si es producto Y si 'Distribuidores Oficiales' está seleccionado */}
+                    {tipoRegistro === 'productos' && tipoProveedor.includes('Distribuidores Oficiales') && (
+                        <div className='form-section'>
+                            <Autocomplete
+                                multiple
+                                id="marcas-distribuidor-autocomplete"
+                                options={marcasDisponibles} // Usa la prop
+                                value={marcasOficiales} // Usa el estado
+                                onChange={handleMarcasChangeAutocomplete} // Usa el handler adaptado
+                                getOptionLabel={(option) => option} // Asume que las marcas son strings
+                                filterSelectedOptions // Oculta opciones ya seleccionadas
+                                getOptionDisabled={getMarcaOptionDisabled} // Deshabilita opciones si se supera el límite
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        variant="outlined"
+                                        label="¿De qué marca(s) eres Distribuidor Oficial? (Hasta 5) *"
+                                        placeholder="Escribe o selecciona marcas..."
+                                        // Aplicamos estilos del ejemplo para mejorar visualización de chips
+                                        sx={{
+                                             '& .MuiInputBase-root': { 
+                                                 flexWrap: 'wrap', 
+                                                 paddingTop: '8px', 
+                                                 paddingBottom: '8px', 
+                                                 paddingRight: '38px', 
+                                             },
+                                             '& .MuiAutocomplete-input': { // Estilo para el input real donde se escribe
+                                                 minWidth: '120px', 
+                                                marginTop: '6px', 
+                                                 flexGrow: 1,
+                                             },
+                                        }}
+                                        error={!!marcasError} // Marca el campo con error si marcasError no está vacío
+                                       // helperText={marcasError} // Muestra el error debajo (opcional, ya lo mostramos aparte)
+                                    />
+                                )}
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Chip
+                                            key={option} // Usa la marca como key si son únicas
+                                            label={option}
+                                            {...getTagProps({ index })}
+                                            sx={{ margin: '2px 4px 2px 0' }} // Ajusta margen de los chips
+                                        />
+                                    ))
+                                }
+                                // Mensaje si no hay opciones (se muestra dentro del desplegable)
+                                noOptionsText="No hay marcas disponibles"
+                            />
+                            {/* Muestra el mensaje de error debajo del Autocomplete */}
+                            {marcasError && <p className="error-message" style={{ color: 'red', fontSize: '0.8em', marginTop: '4px', marginLeft: '14px' }}>{marcasError}</p>}
+                        </div>
+                    )}
+
 
                     {/* --- CONDICIONAL: Categorías / Servicios (Mostrar solo si se eligió tipoRegistro) --- */}
                     {tipoRegistro && (

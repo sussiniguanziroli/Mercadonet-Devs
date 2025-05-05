@@ -216,6 +216,7 @@ const RegistrosProveedorNavigator = () => {
                     ubicaciones={filtrosData.ubicaciones}
                     pproductos={filtrosData.pproductos}
                     selectedCard={formData.tipoCard}
+                    marcasDisponibles={filtrosData.marcas}
                 />;
             case 2: // FormularioPersonalizado (Dispatcher)
                 if (!formData.tipoCard) return <Typography color="error.main">Error: Tipo de card no seleccionado...</Typography>;

@@ -176,8 +176,8 @@ const FormularioPersonalizadoTipoA = ({
                 <form onSubmit={handleSubmit} className="registro-form" noValidate>
                     <h1>Personaliza tu Card Historia</h1>
 
-                   {/* Logo */}
-                   <div className="form-section">
+                    {/* Logo */}
+                    <div className="form-section">
                         {/* Asociar label con input usando htmlFor */}
                         <label htmlFor="logo-upload-b">Logo</label>
                         {logoPreview && (
@@ -224,61 +224,93 @@ const FormularioPersonalizadoTipoA = ({
                         <textarea id="descripcion-a" name="descripcion" value={descripcion} onChange={handleInputChange} rows="5" placeholder="Describe tu empresa, historia, valores..." />
                     </div>
 
-                    {/* --- REEMPLAZADO: Marcas y Extras con Autocomplete --- */}
                     <div className="form-section">
                         {/* Marcas con Autocomplete */}
                         <Autocomplete
-                            multiple // Habilita selección múltiple
-                            id="marcas-tags"
-                            options={marcas} // La lista completa de marcas disponibles (prop)
-                            value={selectedMarcas} // El array de estado con las marcas seleccionadas
-                            onChange={(event, newValue) => {
-                                setSelectedMarcas(newValue); // Actualiza el estado directamente
-                            }}
-                            getOptionLabel={(option) => option} // Muestra el string de la opción
-                            filterSelectedOptions // Oculta opciones ya seleccionadas del dropdown
-                            // renderTags={(value, getTagProps) => // Opcional: personalizar cómo se ven los chips
-                            //     value.map((option, index) => (
-                            //         <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                            //     ))
-                            // }
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    variant="outlined" // O el estilo que prefieras (standard, filled)
-                                    label="Marcas que trabajas"
-                                    placeholder="Selecciona o escribe para buscar..."
-                                // Añadir sx prop para estilos si es necesario
-                                // sx={{ /* Tus estilos MUI aquí */ }}
-                                />
-                            )}
-                            // Estilo para el contenedor del Autocomplete si es necesario
-                            sx={{ mb: 2 }} // Ejemplo: Margen inferior
-                        />
-
-                        {/* Extras con Autocomplete */}
-                        <Autocomplete
                             multiple
-                            id="extras-tags"
-                            options={extras} // La lista completa de extras disponibles (prop)
-                            value={selectedExtras} // El array de estado con los extras seleccionados
-                            onChange={(event, newValue) => {
-                                setSelectedExtras(newValue); // Actualiza el estado directamente
-                            }}
+                            id="marcas-tags"
+                            options={marcas}
+                            value={selectedMarcas}
+                            onChange={(event, newValue) => setSelectedMarcas(newValue)}
                             getOptionLabel={(option) => option}
                             filterSelectedOptions
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
                                     variant="outlined"
-                                    label="Servicios extra y capacidades"
-                                    placeholder="Selecciona o escribe..."
+                                    label="Marcas que trabajás"
+                                    placeholder="Escribí o seleccioná"
+                                    sx={{
+                                        '& .MuiInputBase-root': {
+                                            flexWrap: 'wrap',
+                                            paddingRight: '8px',
+                                        },
+                                        '& .MuiAutocomplete-input': {
+                                            minWidth: '120px', // evita que se achique demasiado
+                                            marginTop: '6px',
+                                            flexGrow: 1,
+                                    
+                                        },
+                                    }}
                                 />
                             )}
-                        // sx={{ /* Estilos adicionales si se necesitan */ }}
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip
+                                        label={option}
+                                        {...getTagProps({ index })}
+                                        sx={{ margin: '2px' }}
+                                    />
+                                ))
+                            }
+                        />
+
+                        {/* Extras con Autocomplete */}
+                        <Autocomplete
+                            multiple
+                            id="extras-tags"
+                            options={extras}
+                            value={selectedExtras}
+                            onChange={(event, newValue) => setSelectedExtras(newValue)}
+                            getOptionLabel={(option) => option}
+                            filterSelectedOptions
+                            renderTags={(value, getTagProps) =>
+                                value.map((option, index) => (
+                                    <Chip
+                                        
+                                        label={option}
+                                        {...getTagProps({ index })}
+                                        onMouseDown={(e) => e.stopPropagation()}
+                                    />
+                                ))
+                            }
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="outlined"
+                                    label="Extras que ofrecés"
+                                    placeholder="Escribí o seleccioná"
+                                />
+                            )}
+                            sx={{
+                                '& .MuiInputBase-root': {
+                                    flexWrap: 'wrap',
+                                    
+                                    alignItems: 'flex-start',
+                                },
+                                '& .MuiChip-root': {
+                                    margin: '4px 4px 0 0',
+                                },
+                                '& .MuiAutocomplete-input': {
+                                    minWidth: '120px', // evita que se achique demasiado
+                                    marginTop: '6px',
+                                    flexGrow: 1,
+                            
+                                },
+                            }}
                         />
                     </div>
-                    {/* --- FIN REEMPLAZO --- */}
+
 
                     {/* Contacto */}
                     <div className="form-section">

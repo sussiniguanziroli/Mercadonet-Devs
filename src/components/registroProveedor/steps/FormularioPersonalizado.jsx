@@ -17,7 +17,6 @@ const FormularioPersonalizado = ({
     // categoriasCompletas, // Ya no se necesita para preview de Historia
     marcas,          // Filtro global
     extras,          // Filtro global
-    servicios        // Filtro global
 }) => {
 
     const commonProps = { // Agrupa props comunes para pasarlas
@@ -27,7 +26,7 @@ const FormularioPersonalizado = ({
     };
 
     const tipoAProps = { ...commonProps, marcas, extras }; // Tipo A necesita marcas y extras
-    const tipoBProps = { ...commonProps, marcas, servicios }; // Tipo B necesita marcas y servicios
+    const tipoBProps = { ...commonProps, marcas, extras }; // Tipo B necesita marcas y servicios
 
     return (
         <div>
