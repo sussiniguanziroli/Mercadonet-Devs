@@ -3,13 +3,14 @@ import { IoLocationOutline } from 'react-icons/io5';
 import { FaImage, FaImages, FaBoxOpen } from "react-icons/fa";
 
 // --- Imports para Carrusel Principal (Superior) ---
-import { CarouselProvider, Slider as PureSlider, Slide as PureSlide } from 'pure-react-carousel';
+import { CarouselProvider, Slider as PureSlider, Slide as PureSlide, ButtonBack, ButtonNext, DotGroup } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
 // --- Imports para Carrusel de Productos (Inferior) ---
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
 
 const CardProductosPreview = ({ proveedor }) => {
     const {
@@ -90,6 +91,13 @@ const CardProductosPreview = ({ proveedor }) => {
                             </PureSlide>
                         )}
                     </PureSlider>
+                    {tieneCarruselPrincipal && carrusel.length > 1 && (
+                        <>
+                            <ButtonBack className="carousel-button back"><FaArrowLeft /></ButtonBack>
+                            <ButtonNext className="carousel-button next"><FaArrowRight /></ButtonNext>
+                            <DotGroup className="carousel-dots" />
+                        </>
+                    )}
                 </CarouselProvider>
             </div>
 
