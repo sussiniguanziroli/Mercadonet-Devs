@@ -2,20 +2,22 @@
 
 import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { FaFileCirclePlus } from 'react-icons/fa6';
+import { FaFileCirclePlus} from 'react-icons/fa6'; 
+import { FaTimes } from 'react-icons/fa';
 import { scrollToTop } from '../../../utils/scrollHelper';
 import CardProductosPreview from '../card_simulators/CardProductosPreview';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
-import { FaTimes } from 'react-icons/fa';
 
 // Componente FileUploader reusable
 const FileUploader = ({ 
   onFilesChange, 
   multiple = true, 
   accept = 'image/*',
-  previews = [],
+  // previews prop no se usa directamente en este FileUploader para mostrarse internamente,
+  // excepto para el caso !multiple, pero el padre maneja las previews principales.
+  previews = [], 
   maxFiles = 1,
   label = 'Arrastra archivos aquí o haz clic'
 }) => {
@@ -37,9 +39,18 @@ const FileUploader = ({
       <div className="file-uploader-content">
         <FaFileCirclePlus size={24} />
         <p>{label}</p>
-        {!multiple && previews.length > 0 && (
-          <div className="single-preview">
-            <img src={previews[0]} alt="Preview" />
+        {/* Previsualización interna para single file upload (ej: logo), si se pasa 'previews' */}
+        {!multiple && previews && previews.length > 0 && (
+          <div className="single-preview"> 
+            {/* Asumimos que el primer preview es el relevante para single upload */}
+            {/* Necesitaría saber el tipo de 'previews[0]' para mostrar img o video */}
+            {typeof previews[0] === 'string' ? ( // Si es una URL (simple caso para logo)
+                <img src={previews[0]} alt="Preview" />
+            ) : previews[0] && previews[0].fileType === 'image' ? (
+                <img src={previews[0].url} alt="Preview" />
+            ) : previews[0] && previews[0].fileType === 'video' ? (
+                <video src={previews[0].url} controls muted style={{maxWidth: '100px', maxHeight: '100px'}} />
+            ) : null}
           </div>
         )}
       </div>
@@ -59,10 +70,9 @@ const FormularioPersonalizadoTipoB = ({
     ciudad = '',
     provincia = '',
     marcas = [],
-    servicios = [],
+    servicios = [], // Esta prop no se usa en el formulario actual, pero la mantengo
     extras = []
 }) => {
-    // --- Estado Local del Formulario ---
     const [descripcion, setDescripcion] = useState('');
     const [sitioWeb, setSitioWeb] = useState('');
     const [whatsapp, setWhatsapp] = useState('');
@@ -72,23 +82,28 @@ const FormularioPersonalizadoTipoB = ({
     const [selectedExtras, setSelectedExtras] = useState([]);
     const [logoFile, setLogoFile] = useState(null);
     const [logoPreview, setLogoPreview] = useState(null);
-    const [carruselFiles, setCarruselFiles] = useState([]);
-    const [carruselPreviews, setCarruselPreviews] = useState([]);
+    
+    // --- ESTADO DEL CARRUSEL MODIFICADO ---
+    const [carruselMediaItems, setCarruselMediaItems] = useState([]);
+    // const [carruselFiles, setCarruselFiles] = useState([]); // REEMPLAZADO
+    // const [carruselPreviews, setCarruselPreviews] = useState([]); // REEMPLAZADO
+    
     const [galeria, setGaleria] = useState(
         Array(6).fill(null).map(() => ({ ...initialProductState }))
     );
 
     useEffect(() => {
         scrollToTop();
-        console.log("[TipoB] useEffect - Recibiendo initialData:", initialData);
         if (initialData) {
             setDescripcion(initialData.descripcion || '');
             setSitioWeb(initialData.sitioWeb || '');
             setWhatsapp(initialData.whatsapp || '');
             setTelefono(initialData.telefono || '');
             setEmail(initialData.email || '');
+            setSelectedMarcas(Array.isArray(initialData.marca) ? initialData.marca : (initialData.marcas || [])); // Compatibilidad
+            setSelectedExtras(Array.isArray(initialData.extras) ? initialData.extras : []);
 
-            // Inicializar Galería desde initialData
+
             if (Array.isArray(initialData.galeria) && initialData.galeria.length > 0) {
                 const initialGaleriaState = Array(6).fill(null).map((_, index) => {
                     const productData = initialData.galeria[index];
@@ -105,32 +120,51 @@ const FormularioPersonalizadoTipoB = ({
             }
 
             setLogoPreview(initialData.logoURL || null);
-            setCarruselPreviews(initialData.carruselURLs || []);
             setLogoFile(null);
-            setCarruselFiles([]);
+
+            // --- INICIALIZACIÓN DEL CARRUSEL MODIFICADA ---
+            const initialMedia = (initialData.carruselURLs || []).map(url => {
+                let fileType = 'image';
+                let mimeType = 'image/jpeg'; 
+                const extension = url.split('.').pop().toLowerCase().split('?')[0];
+                if (['mp4', 'webm', 'ogg', 'mov'].includes(extension)) {
+                    fileType = 'video';
+                    mimeType = `video/${extension === 'mov' ? 'quicktime' : extension}`;
+                } else if (['png', 'gif', 'bmp', 'webp'].includes(extension)) {
+                    mimeType = `image/${extension}`;
+                }
+                return { url, fileType, mimeType, file: null };
+            });
+            setCarruselMediaItems(initialMedia);
+
         } else {
             setDescripcion(''); setSitioWeb(''); setWhatsapp(''); setTelefono(''); setEmail('');
+            setSelectedMarcas([]); setSelectedExtras([]);
             setLogoFile(null); setLogoPreview(null);
-            setCarruselFiles([]); setCarruselPreviews([]);
+            setCarruselMediaItems([]); // Reset del nuevo estado
             setGaleria(Array(6).fill(null).map(() => ({ ...initialProductState })));
         }
     }, [initialData]);
 
-    /// --- Efecto para Limpiar ObjectURLs ---
     useEffect(() => {
         return () => {
-            console.log("[TipoB] Limpiando ObjectURLs locales (si existen y son blob)");
             if (logoPreview && logoPreview.startsWith('blob:')) URL.revokeObjectURL(logoPreview);
-            carruselPreviews.forEach(url => { if (url && url.startsWith('blob:')) URL.revokeObjectURL(url) });
+            
+            // --- LIMPIEZA DE CARRUSEL MODIFICADA ---
+            carruselMediaItems.forEach(item => { 
+                if (item.url && item.url.startsWith('blob:')) {
+                    URL.revokeObjectURL(item.url);
+                }
+            });
+
             galeria.forEach(item => {
                 if (item.imagenPreview && item.imagenPreview.startsWith('blob:')) {
                     URL.revokeObjectURL(item.imagenPreview);
                 }
             });
         };
-    }, [logoPreview, carruselPreviews, galeria]);
+    }, [logoPreview, carruselMediaItems, galeria]); // Dependencia actualizada
 
-    // --- Manejadores de Eventos Locales ---
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         switch (name) {
@@ -151,10 +185,11 @@ const FormularioPersonalizadoTipoB = ({
         );
     };
 
-    const handleGaleriaFileChange = (index, event) => {
-        const file = event.target.files?.[0];
-        event.target.value = null;
-
+    const handleGaleriaFileChange = (index, eventOrFiles) => {
+        // Adaptado para funcionar tanto con evento como con array de files de FileUploader
+        const file = eventOrFiles.target ? eventOrFiles.target.files?.[0] : (Array.isArray(eventOrFiles) ? eventOrFiles[0] : null);
+        if (eventOrFiles.target) eventOrFiles.target.value = null;
+    
         setGaleria(currentGaleria => {
             const oldPreview = currentGaleria[index]?.imagenPreview;
             if (oldPreview && oldPreview.startsWith('blob:')) {
@@ -166,6 +201,7 @@ const FormularioPersonalizadoTipoB = ({
             );
         });
     };
+    
 
     const handleRemoveGaleriaImage = (index) => {
         setGaleria(currentGaleria => {
@@ -179,7 +215,6 @@ const FormularioPersonalizadoTipoB = ({
         });
     };
 
-    // --- Submit ---
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -189,25 +224,35 @@ const FormularioPersonalizadoTipoB = ({
             imagenFile: item.imagenFile
         })).filter(item => item.titulo || item.precio || item.imagenFile);
 
+        // --- DATOS DEL CARRUSEL PARA ENVIAR MODIFICADOS ---
+        const carruselNuevosArchivos = carruselMediaItems
+            .filter(item => item.file instanceof File)
+            .map(item => item.file);
+
+        const carruselUrlsExistentes = carruselMediaItems
+            .filter(item => !item.file && item.url)
+            .map(item => ({ url: item.url, fileType: item.fileType, mimeType: item.mimeType }));
+
         const stepData = {
             descripcion, sitioWeb, whatsapp, telefono, email,
             logoFile: logoFile,
-            carruselFiles: carruselFiles,
+            // carruselFiles: carruselFiles, // REEMPLAZADO
+            carruselNuevosArchivos: carruselNuevosArchivos,
+            carruselUrlsExistentes: carruselUrlsExistentes,
             galeria: galeriaDataToSend,
+            marca: selectedMarcas, // Asegúrate de que el backend espera "marca"
+            extras: selectedExtras,
         };
-
-        console.log("[TipoB] Enviando Datos:", stepData);
         onNext(stepData);
     };
 
-    // --- Construcción de Datos para el Simulador ---
     const buildPreviewData = () => {
         const ubicacionDetalle = `${ciudad}${ciudad && provincia ? ', ' : ''}${provincia}`;
 
         const galeriaForPreview = galeria.map(item => ({
             titulo: item.titulo,
             precio: item.precio,
-            imagenPreview: item.imagenPreview
+            imagenPreview: item.imagenPreview // Galería sigue usando imagenPreview
         })).filter(item => item.titulo || item.precio || item.imagenPreview);
 
         return {
@@ -215,24 +260,29 @@ const FormularioPersonalizadoTipoB = ({
             ubicacionDetalle: ubicacionDetalle,
             descripcion: descripcion,
             logoPreview: logoPreview,
-            carrusel: carruselPreviews,
+            // --- DATOS DEL CARRUSEL PARA SIMULADOR MODIFICADOS ---
+            carrusel: carruselMediaItems.map(item => ({ 
+                url: item.url,
+                fileType: item.fileType,
+                mimeType: item.mimeType
+            })),
             sitioWeb: sitioWeb,
             whatsapp: whatsapp,
             telefono: telefono,
             email: email,
-            galeriaProductos: galeriaForPreview
+            galeriaProductos: galeriaForPreview,
+            marca: selectedMarcas,
+            extras: selectedExtras,
         };
     };
     const previewData = buildPreviewData();
 
     return (
         <div className="registro-step-layout">
-            {/* Contenedor del Formulario */}
             <div className="form-wrapper">
                 <form onSubmit={handleSubmit} className="registro-form" noValidate>
                     <h1>Personaliza tu Card Productos</h1>
 
-                    {/* Logo */}
                     <div className="form-section">
                         <label>Logo</label>
                         {logoPreview && (
@@ -241,7 +291,7 @@ const FormularioPersonalizadoTipoB = ({
                                 <button 
                                     type="button" 
                                     onClick={() => {
-                                        if (logoPreview.startsWith('blob:')) URL.revokeObjectURL(logoPreview);
+                                        if (logoPreview && logoPreview.startsWith('blob:')) URL.revokeObjectURL(logoPreview);
                                         setLogoFile(null);
                                         setLogoPreview(null);
                                     }}
@@ -251,7 +301,6 @@ const FormularioPersonalizadoTipoB = ({
                                 </button>
                             </div>
                         )}
-                        
                         <FileUploader
                             onFilesChange={(files) => {
                                 if (files.length > 0) {
@@ -264,44 +313,34 @@ const FormularioPersonalizadoTipoB = ({
                                 }
                             }}
                             multiple={false}
+                            accept="image/*" // Logo sigue siendo solo imagen
                             label={logoPreview ? "Cambiar logo" : "Arrastra tu logo aquí o haz clic"}
                         />
                     </div>
 
-                    {/* Carrusel */}
+                    {/* --- SECCIÓN CARRUSEL MODIFICADA --- */}
                     <div className="form-section">
-                        <label>Carrusel Multimedia (Imágenes)</label>
-                        {carruselPreviews.length > 0 && (
-                            <div className="carrusel-previews"> {/* Reusa clase de TipoB si existe o define estilos */}
-                                {carruselPreviews.map((previewUrl, index) => (
-                                    <div key={index} className="carrusel-preview-item">
-                                        <img src={previewUrl} alt={`Vista previa ${index + 1}`} />
+                        <label>Carrusel Multimedia (Imágenes y Videos)</label>
+                        {carruselMediaItems.length > 0 && (
+                            <div className="carrusel-previews">
+                                {carruselMediaItems.map((item, index) => (
+                                    <div key={item.url + '-' + index} className="carrusel-preview-item">
+                                        {item.fileType === 'image' ? (
+                                            <img src={item.url} alt={`Contenido del carrusel ${index + 1}`} />
+                                        ) : (
+                                            <video controls muted style={{ width: '100%', display:'block' }}>
+                                                <source src={item.url} type={item.mimeType} />
+                                                Tu navegador no soporta la etiqueta de video.
+                                            </video>
+                                        )}
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                const newPreviews = [...carruselPreviews];
-                                                const newFiles = [...carruselFiles];
-                                                const removedPreviewUrl = newPreviews.splice(index, 1)[0];
-                                                
-                                                
-                                                if (removedPreviewUrl.startsWith('blob:')) {
-                                                    URL.revokeObjectURL(removedPreviewUrl);
-                                                   
-                                                    let blobCountBeforeIndex = 0;
-                                                    for (let i = 0; i < index; i++) {
-                                                        if (carruselPreviews[i].startsWith('blob:')) {
-                                                            blobCountBeforeIndex++;
-                                                        }
-                                                    }
-                                                    
-                                                    if (carruselFiles.length > blobCountBeforeIndex) {
-                                                         newFiles.splice(blobCountBeforeIndex, 1);
-                                                    }
-
+                                                const itemToRemove = carruselMediaItems[index];
+                                                if (itemToRemove.url.startsWith('blob:')) {
+                                                    URL.revokeObjectURL(itemToRemove.url);
                                                 }
-                                                
-                                                setCarruselPreviews(newPreviews);
-                                                setCarruselFiles(newFiles);
+                                                setCarruselMediaItems(prevItems => prevItems.filter((_, i) => i !== index));
                                             }}
                                             className="remove-button"
                                         >
@@ -314,60 +353,42 @@ const FormularioPersonalizadoTipoB = ({
                         <FileUploader
                             onFilesChange={(acceptedFiles) => {
                                 const LIMITE_CARRUSEL = 7;
+                                const archivosActualesCount = carruselMediaItems.length;
 
-                                // Previews actuales que NO son blob (de initialData)
-                                const persistentPreviews = carruselPreviews.filter(url => !url.startsWith('blob:'));
-                                // Files actuales que SÍ son blob (de subidas previas en esta sesión)
-                                const currentUploadedFiles = carruselFiles || [];
-
-                                const totalEspaciosOcupadosPorPersistentesYBlobsActuales = persistentPreviews.length + currentUploadedFiles.length;
-
-                                if (totalEspaciosOcupadosPorPersistentesYBlobsActuales >= LIMITE_CARRUSEL) {
-                                    // Opcional: Aquí podrías disparar una notificación al usuario
-                                    console.warn(`Límite de ${LIMITE_CARRUSEL} imágenes alcanzado. No se pueden agregar más.`);
+                                if (archivosActualesCount >= LIMITE_CARRUSEL) {
+                                    console.warn(`Límite de ${LIMITE_CARRUSEL} ítems alcanzado.`);
                                     return;
                                 }
 
-                                const espaciosDisponiblesParaNuevosArchivos = LIMITE_CARRUSEL - totalEspaciosOcupadosPorPersistentesYBlobsActuales;
-                                
-                                // Tomar solo los archivos que caben
-                                const nuevosArchivosFiltrados = acceptedFiles.slice(0, espaciosDisponiblesParaNuevosArchivos);
+                                const espaciosDisponibles = LIMITE_CARRUSEL - archivosActualesCount;
+                                const archivosAAgregarFiltrados = acceptedFiles.slice(0, espaciosDisponibles);
 
-                                if (nuevosArchivosFiltrados.length === 0 && acceptedFiles.length > 0) {
-                                     console.warn(`Límite de ${LIMITE_CARRUSEL} imágenes alcanzado o no hay espacio para nuevos archivos.`);
-                                     return;
-                                }
-                                
-                                if (acceptedFiles.length > nuevosArchivosFiltrados.length) {
-                                    // Opcional: Notificar al usuario que algunos archivos no se agregaron
-                                    console.warn(`Se intentaron agregar ${acceptedFiles.length} imágenes, pero solo ${nuevosArchivosFiltrados.length} fueron añadidas para no exceder el límite de ${LIMITE_CARRUSEL}.`);
+                                if (acceptedFiles.length > archivosAAgregarFiltrados.length) {
+                                    console.warn(`Solo se agregarán ${archivosAAgregarFiltrados.length} de ${acceptedFiles.length} archivos debido al límite.`);
                                 }
 
-                                if (nuevosArchivosFiltrados.length > 0) {
-                                    // Los Object URLs de blobs anteriores se limpian por el useEffect general
-                                    // cuando 'carruselPreviews' y/o 'carruselFiles' cambian.
-
-                                    const updatedUploadedFiles = [...currentUploadedFiles, ...nuevosArchivosFiltrados];
-                                    
-                                    // Crear ObjectURLs solo para los archivos en updatedUploadedFiles
-                                    const updatedUploadedFilePreviews = updatedUploadedFiles.map(file => URL.createObjectURL(file));
-                                                                              
-                                    setCarruselFiles(updatedUploadedFiles);
-                                    setCarruselPreviews([...persistentPreviews, ...updatedUploadedFilePreviews]);
+                                if (archivosAAgregarFiltrados.length > 0) {
+                                    const nuevosMediaItems = archivosAAgregarFiltrados.map(file => ({
+                                        url: URL.createObjectURL(file),
+                                        fileType: file.type.startsWith('video/') ? 'video' : 'image',
+                                        mimeType: file.type,
+                                        file: file 
+                                    }));
+                                    setCarruselMediaItems(prevItems => [...prevItems, ...nuevosMediaItems]);
                                 }
                             }}
                             multiple={true}
-                            label="Arrastra imágenes aquí o haz clic (máx. 7)" 
+                            accept="image/*,video/mp4,video/webm,video/ogg,video/quicktime"
+                            label={`Arrastra imágenes o videos (máx. 7)`}
                         />
                     </div>
+                    {/* --- FIN SECCIÓN CARRUSEL MODIFICADA --- */}
 
-                    {/* Descripción */}
                     <div className="form-section">
                         <label htmlFor="descripcion-b">Descripción del Proveedor</label>
                         <textarea id="descripcion-b" name="descripcion" value={descripcion} onChange={handleInputChange} rows="4" placeholder="Describe tu negocio, productos destacados..." />
                     </div>
 
-                    {/* Marcas y Extras */}
                     <div className="form-section">
                         <Autocomplete
                             multiple
@@ -384,29 +405,17 @@ const FormularioPersonalizadoTipoB = ({
                                     label="Marcas que trabajás"
                                     placeholder="Escribí o seleccioná"
                                     sx={{
-                                        '& .MuiInputBase-root': {
-                                            flexWrap: 'wrap',
-                                            paddingRight: '8px',
-                                        },
-                                        '& .MuiAutocomplete-input': {
-                                            minWidth: '120px',
-                                            marginTop: '6px',
-                                            flexGrow: 1,
-                                        },
+                                        '& .MuiInputBase-root': { flexWrap: 'wrap', paddingRight: '8px' },
+                                        '& .MuiAutocomplete-input': { minWidth: '120px', marginTop: '6px', flexGrow: 1 },
                                     }}
                                 />
                             )}
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (
-                                    <Chip
-                                        label={option}
-                                        {...getTagProps({ index })}
-                                        sx={{ margin: '2px' }}
-                                    />
+                                    <Chip label={option} {...getTagProps({ index })} sx={{ margin: '2px' }} />
                                 ))
                             }
                         />
-
                         <Autocomplete
                             multiple
                             id="extras-tags"
@@ -417,11 +426,7 @@ const FormularioPersonalizadoTipoB = ({
                             filterSelectedOptions
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (
-                                    <Chip
-                                        label={option}
-                                        {...getTagProps({ index })}
-                                        onMouseDown={(e) => e.stopPropagation()}
-                                    />
+                                    <Chip label={option} {...getTagProps({ index })} onMouseDown={(e) => e.stopPropagation()} sx={{ margin: '4px 4px 0 0' }}/>
                                 ))
                             }
                             renderInput={(params) => (
@@ -433,48 +438,32 @@ const FormularioPersonalizadoTipoB = ({
                                 />
                             )}
                             sx={{
-                                '& .MuiInputBase-root': {
-                                    flexWrap: 'wrap',
-                                    alignItems: 'flex-start',
-                                },
-                                '& .MuiChip-root': {
-                                    margin: '4px 4px 0 0',
-                                },
-                                '& .MuiAutocomplete-input': {
-                                    minWidth: '120px',
-                                    marginTop: '6px',
-                                    flexGrow: 1,
-                                },
+                                '& .MuiInputBase-root': { flexWrap: 'wrap', alignItems: 'flex-start' },
+                                '& .MuiAutocomplete-input': { minWidth: '120px', marginTop: '6px', flexGrow: 1 },
                             }}
                         />
                     </div>
 
-                    {/* Contacto */}
                     <div className="form-section">
                         <h3>Información de Contacto</h3>
                         <label htmlFor="sitioWeb-b"> Sitio Web</label>
                         <input id="sitioWeb-b" type="url" name="sitioWeb" value={sitioWeb} onChange={handleInputChange} placeholder="https://..." />
-
                         <label htmlFor="whatsapp-b"> Whatsapp</label>
                         <input id="whatsapp-b" type="text" name="whatsapp" value={whatsapp} onChange={handleInputChange} placeholder="Whatsapp" />
-
                         <label htmlFor="telefono-b"> Teléfono</label>
                         <input id="telefono-b" type="tel" name="telefono" value={telefono} onChange={handleInputChange} placeholder="Teléfono" />
-
                         <label htmlFor="email-b"> Email</label>
                         <input id="email-b" type="email" name="email" value={email} onChange={handleInputChange} placeholder="Email" />
                     </div>
 
-                    {/* Galería de Productos */}
                     <div className="form-section galeria-productos">
                         <h3>Galería de Productos (Hasta 6)</h3>
                         <div className="galeria-grid">
                             {galeria.map((producto, index) => (
                                 <div key={index} className="producto-card">
                                     <label>Producto {index + 1}</label>
-                                    
                                     {producto.imagenPreview ? (
-                                        <div className="single-preview">
+                                        <div className="single-preview"> {/* Usar clase de TipoB o definirla */}
                                             <img src={producto.imagenPreview} alt={`Preview Producto ${index + 1}`} />
                                             <button
                                                 type="button"
@@ -486,23 +475,22 @@ const FormularioPersonalizadoTipoB = ({
                                         </div>
                                     ) : (
                                         <FileUploader
-                                            onFilesChange={(files) => {
+                                            onFilesChange={(files) => { // Pasar 'files' directamente
                                                 if (files.length > 0) {
-                                                    handleGaleriaFileChange(index, { target: { files } });
+                                                    handleGaleriaFileChange(index, files); // Modificado para pasar files
                                                 }
                                             }}
                                             multiple={false}
-                                            label="Arrastra imagen del producto aquí o haz clic"
+                                            accept="image/*" // Galería sigue siendo solo imagen
+                                            label="Arrastra imagen aquí"
                                         />
                                     )}
-                                    
                                     <input 
                                         type="text" 
                                         value={producto.titulo} 
                                         onChange={(e) => handleGaleriaInputChange(index, 'titulo', e.target.value)} 
                                         placeholder="Título Producto" 
                                     />
-                                    
                                     <input 
                                         type="text" 
                                         value={producto.precio} 
@@ -514,7 +502,6 @@ const FormularioPersonalizadoTipoB = ({
                         </div>
                     </div>
 
-                    {/* Botones */}
                     <div className="botones-navegacion">
                         <button type="button" onClick={onBack}>Atrás</button>
                         <button type="submit">Continuar</button>
@@ -522,7 +509,6 @@ const FormularioPersonalizadoTipoB = ({
                 </form>
             </div>
 
-            {/* Contenedor del Simulador */}
             <div className="simulator-wrapper">
                 <h1>Vista Previa: Card Productos</h1>
                 <CardProductosPreview proveedor={previewData} />

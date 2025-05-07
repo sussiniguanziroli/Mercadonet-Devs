@@ -1,59 +1,78 @@
 import React from 'react';
 import { IoLocationOutline } from 'react-icons/io5';
-import { FaArrowLeft, FaArrowRight, FaImage, FaImages } from "react-icons/fa"; // Iconos añadidos
+import { FaArrowLeft, FaArrowRight, FaImage, FaImages } from "react-icons/fa";
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
-
 
 const CardHistoriaPreview = ({ proveedor }) => {
     const {
         nombre = '', ubicacionDetalle = '',
-        logoPreview = null, // Puede ser null, blob URL o https URL
-        carrusel = [],      // Array de URLs (blob o https)
+        logoPreview = null,
+        carrusel = [], // Ahora es un array de objetos: { url, fileType, mimeType }
         descripcion = '', marca = [], extras = [],
         sitioWeb = '', whatsapp = '', telefono = '', email = ''
     } = proveedor || {};
 
-    const nombreMostrado = nombre.trim() || 'Nombre Empresa'; // Placeholder más corto
+    const nombreMostrado = nombre.trim() || 'Nombre Empresa';
     const ubicacionMostrada = ubicacionDetalle.trim() || 'Ubicación';
-    // El carrusel tiene contenido si es un array con al menos una URL válida
-    const tieneCarrusel = Array.isArray(carrusel) && carrusel.length > 0 && carrusel.some(c => typeof c === 'string');
-    const tieneLogo = logoPreview && typeof logoPreview === 'string'; // Verifica que sea un string (URL blob o https)
+    
+    // Actualizado para el nuevo formato de carrusel
+    const tieneCarrusel = Array.isArray(carrusel) && carrusel.length > 0 && carrusel.some(item => item && typeof item.url === 'string');
+    const tieneLogo = logoPreview && typeof logoPreview === 'string';
 
     return (
         <div className="card-historia-preview">
-            {/* --- Carrusel: Muestra preview o placeholder --- */}
             <div className="carousel-box">
                 <CarouselProvider
                     naturalSlideWidth={100}
-                    naturalSlideHeight={100} // Para hacerlo cuadrado, ajusta si prefieres otro aspect-ratio
-                    totalSlides={tieneCarrusel ? carrusel.length : 1} // Siempre 1 slide mínimo (el placeholder)
+                    naturalSlideHeight={100}
+                    totalSlides={tieneCarrusel ? carrusel.length : 1}
                     className="carousel-frame"
                     infinite={tieneCarrusel && carrusel.length > 1}
                 >
                     <Slider>
                         {tieneCarrusel ? (
-                            carrusel.map((imgSrc, index) => (
-                                <Slide className="carousel-slide" key={index} index={index}>
-                                    <img
-                                        className="carousel-image"
-                                        src={imgSrc} // Asumimos que el padre pasa URLs válidas
-                                        alt={`Multimedia ${index + 1}`}
-                                        onError={(e) => e.target.style.display = 'none'} // Oculta si la URL falla
-                                    />
+                            carrusel.map((item, index) => (
+                                <Slide className="carousel-slide" key={item.url ? item.url + '-' + index : index} index={index}>
+                                    {item.fileType === 'image' ? (
+                                        <img
+                                            className="carousel-image" // Clase genérica para imagen/video
+                                            src={item.url}
+                                            alt={`Multimedia ${index + 1}`}
+                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                        />
+                                    ) : item.fileType === 'video' ? (
+                                        <video
+                                            className="carousel-image" // Clase genérica para imagen/video
+                                            src={item.url}
+                                            controls
+                                            autoPlay
+                                            muted
+                                            loop
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} // objectFit para videos
+                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                        >
+                                            Tu navegador no soporta la etiqueta de video.
+                                            {/* Opcionalmente, puedes usar item.mimeType si lo necesitas para el tag source,
+                                                pero src en video es generalmente suficiente para los tipos comunes. */}
+                                        </video>
+                                    ) : (
+                                        // Fallback por si fileType no es ni image ni video
+                                        <div className="carousel-placeholder-item">
+                                            <span>Formato no soportado</span>
+                                        </div>
+                                    )}
                                 </Slide>
                             ))
                         ) : (
-                            // Placeholder explícito si no hay carrusel
                             <Slide className="carousel-slide" index={0}>
                                 <div className="carousel-placeholder">
-                                    <FaImages /> {/* Icono */}
+                                    <FaImages />
                                     <span>Tu Multimedia</span>
                                 </div>
                             </Slide>
                         )}
                     </Slider>
-                    {/* Botones/Dots solo si hay carrusel real con más de 1 imagen */}
                     {tieneCarrusel && carrusel.length > 1 && (
                         <>
                             <ButtonBack className="carousel-button back"><FaArrowLeft /></ButtonBack>
@@ -64,16 +83,14 @@ const CardHistoriaPreview = ({ proveedor }) => {
                 </CarouselProvider>
             </div>
 
-            {/* --- Info Box --- */}
             <div className="info-box">
                 <div className="titles-box">
-                    {/* --- Logo: Muestra preview o placeholder --- */}
                     <div className="small-logo-box">
                         {tieneLogo ? (
                             <img className="small-logo" src={logoPreview} alt="Logo" />
                         ) : (
                             <div className="logo-placeholder">
-                                <FaImage /> {/* Icono */}
+                                <FaImage />
                                 <span>Logo</span>
                             </div>
                         )}
@@ -83,15 +100,10 @@ const CardHistoriaPreview = ({ proveedor }) => {
                     <p><IoLocationOutline /> {ubicacionMostrada}</p>
                 </div>
 
-
-                {/* --- Textos (Descripción, Marcas, Extras) --- */}
                 <div className="texts-box">
-                    {/* Muestra placeholder si no hay descripción en pasos avanzados, o nada en paso 1 */}
                     {descripcion ? (
                         <p className="description">{descripcion}</p>
-                    ) : (
-                        null
-                    )}
+                    ) : null}
 
                     {Array.isArray(marca) && marca.length > 0 && (
                         <div className="marcas alineado-auto"><h4>Marcas:</h4> {marca.slice(0, 5).map((m, i) => <p key={i}>{m}</p>)}{marca.length > 5 && <p>...</p>}</div>
@@ -99,13 +111,10 @@ const CardHistoriaPreview = ({ proveedor }) => {
                     {Array.isArray(extras) && extras.length > 0 && (
                         <div className="extras alineado-auto"><h4>Servicios/Extras:</h4> {extras.slice(0, 4).map((e, i) => (<p key={i} className="tag-extra">{e}</p>))}{extras.length > 4 && <p className="tag-extra">...</p>}</div>
                     )}
-                    {/* Placeholder si no hay descripción/marcas/extras? Podría añadirse */}
                     {!descripcion && (!marca || marca.length === 0) && (!extras || extras.length === 0) && (
                         <p className='placeholder-text'>(Aquí aparecerá tu descripción, marcas y servicios)</p>
                     )}
                 </div>
-
-
             </div>
         </div>
     );

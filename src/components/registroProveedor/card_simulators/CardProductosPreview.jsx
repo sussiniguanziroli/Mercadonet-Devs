@@ -7,7 +7,7 @@ import { CarouselProvider, Slider as PureSlider, Slide as PureSlide, ButtonBack,
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
 // --- Imports para Carrusel de Productos (Inferior) ---
-import Slider from "react-slick";
+import Slider from "react-slick"; // Renombrado para evitar conflicto con PureSlider si es necesario, aunque aquí se usa directamente.
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
@@ -17,32 +17,32 @@ const CardProductosPreview = ({ proveedor }) => {
         nombre = '',
         ubicacionDetalle = '',
         logoPreview = null,
-        carrusel = [], // Para el carrusel superior (pure-react-carousel)
-        descripcion = '', // No usado en este preview específico, pero podría estar
-        marcas = [],     // No usado en este preview específico, pero podría estar
-        servicios = [],  // No usado en este preview específico, pero podría estar
-        galeriaProductos = [] // Para el carrusel inferior (react-slick)
+        carrusel = [], // AHORA: Array de objetos { url, fileType, mimeType }
+        descripcion = '',
+        marcas = [],
+        servicios = [],
+        galeriaProductos = []
     } = proveedor || {};
 
     const nombreMostrado = nombre.trim() || 'Nombre Empresa';
     const ubicacionMostrada = ubicacionDetalle.trim() || 'Ubicación';
-    const tieneCarruselPrincipal = Array.isArray(carrusel) && carrusel.length > 0 && carrusel.some(c => typeof c === 'string');
+    
+    // --- LÓGICA PARA CARRUSEL PRINCIPAL ACTUALIZADA ---
+    const tieneCarruselPrincipal = Array.isArray(carrusel) && carrusel.length > 0 && carrusel.some(item => item && typeof item.url === 'string');
+    
     const tieneLogo = logoPreview && typeof logoPreview === 'string';
-    // Aseguramos que galeriaProductos sea siempre un array para evitar errores
     const productosValidos = Array.isArray(galeriaProductos) ? galeriaProductos.filter(p => p.titulo || p.precio || p.imagenPreview) : [];
     const tieneGaleria = productosValidos.length > 0;
 
-    // --- Settings para React-Slick (Galería de Productos) ---
-    // Ajustamos slidesToShow para el preview, puedes modificarlo
     const productCarouselSettings = {
         dots: true,
-        infinite: productosValidos.length > 3, // Solo infinito si hay más slides que las visibles
+        infinite: productosValidos.length > 3,
         speed: 500,
-        slidesToShow: 3, // Mostrar 3 en el preview por defecto
+        slidesToShow: 3,
         slidesToScroll: 1,
         responsive: [
              {
-                 breakpoint: 1024, // Ajustar breakpoints si es necesario para el preview
+                 breakpoint: 1024,
                  settings: {
                      slidesToShow: 3,
                      infinite: productosValidos.length > 3,
@@ -60,29 +60,54 @@ const CardProductosPreview = ({ proveedor }) => {
                 settings: {
                     slidesToShow: 1,
                     infinite: productosValidos.length > 1,
-                    dots: false // Ocultar dots en móvil si prefieres
+                    dots: false 
                 },
             },
         ],
     };
 
     return (
-        // Conservamos la clase base
         <div className="card-productos-preview">
 
-            {/* Carrusel Principal (Superior - pure-react-carousel) - Sin cambios */}
+            {/* --- CARRUSEL PRINCIPAL (SUPERIOR - pure-react-carousel) - MODIFICADO --- */}
             <div className="carousel-box">
                 <CarouselProvider
-                    naturalSlideWidth={100} naturalSlideHeight={100} // Ajusta el aspect ratio si es necesario
+                    naturalSlideWidth={100} naturalSlideHeight={100} 
                     totalSlides={tieneCarruselPrincipal ? carrusel.length : 1}
                     className="carousel-frame"
                     infinite={tieneCarruselPrincipal && carrusel.length > 1}
                 >
                     <PureSlider>
                         {tieneCarruselPrincipal ? (
-                            carrusel.map((imgSrc, index) => (
-                                <PureSlide className="carousel-slide" key={index} index={index}>
-                                    <img className="carousel-image" src={imgSrc} alt={`Multimedia ${index + 1}`} onError={(e) => e.target.style.display = 'none'} />
+                            carrusel.map((item, index) => ( // item es ahora { url, fileType, mimeType }
+                                <PureSlide className="carousel-slide" key={item.url ? item.url + '-' + index : index} index={index}>
+                                    {item.fileType === 'image' ? (
+                                        <img 
+                                            className="carousel-image" // Clase unificada para img/video
+                                            src={item.url} 
+                                            alt={`Multimedia ${index + 1}`} 
+                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                        />
+                                    ) : item.fileType === 'video' ? (
+                                        <video 
+                                            className="carousel-image" // Clase unificada para img/video
+                                            src={item.url} 
+                                            controls 
+                                            autoPlay 
+                                            muted 
+                                            loop
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                        >
+                                            
+                                            Tu navegador no soporta la etiqueta de video.
+                                        </video>
+                                    ) : (
+                                        // Fallback si el tipo no es reconocido
+                                        <div className="carousel-placeholder-item" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', backgroundColor: '#eee'}}>
+                                            <span>Formato no soportado</span>
+                                        </div>
+                                    )}
                                 </PureSlide>
                             ))
                         ) : (
@@ -112,50 +137,42 @@ const CardProductosPreview = ({ proveedor }) => {
                         )}
                     </div>
                     <h3>{nombreMostrado}</h3>
-                    {/* Mantenemos el icono verificado si es parte del diseño */}
                     <img className="verificado" src="https://i.ibb.co/MkjBH00V/Verificado-HD-removebg-preview.png" alt="Verificado" />
                     <p><IoLocationOutline /> {ubicacionMostrada}</p>
                 </div>
 
-                {/* --- Galería de Productos con React-Slick --- */}
+                {/* Galería de Productos con React-Slick - Sin cambios en su lógica interna de datos */}
                 <div className="product-gallery-preview-section">
                     <h4>Galería de Productos</h4>
                     {tieneGaleria ? (
-                        // Usamos la clase del componente original ProductsCarousel para los estilos
                         <div className="products-carousel">
                             <Slider {...productCarouselSettings}>
                                 {productosValidos.map((producto, index) => (
-                                    // Usamos la estructura y clases de ProductsCarousel para cada slide
                                     <div key={index} className="product-item">
-                                        <div className="product-image-container"> {/* Contenedor para manejar el aspect ratio o placeholder */}
+                                        <div className="product-image-container">
                                             {producto.imagenPreview ? (
                                                 <img
                                                     src={producto.imagenPreview}
                                                     alt={producto.titulo || `Producto ${index + 1}`}
-                                                    className="product-image" // Clase de ProductsCarousel
-                                                    // Opcional: añadir onError para manejar imágenes rotas en preview
+                                                    className="product-image"
                                                     onError={(e) => {
-                                                        e.target.onerror = null; // prevent infinite loop
-                                                        // Puedes ocultarlo o mostrar un placeholder específico
+                                                        e.target.onerror = null; 
                                                         e.target.style.display = 'none';
-                                                        // O mostrar un placeholder dentro del contenedor
-                                                        const placeholder = e.target.nextElementSibling;
+                                                        const placeholder = e.target.parentElement.querySelector('.product-gallery-img-placeholder-error');
                                                         if (placeholder) placeholder.style.display = 'flex';
                                                     }}
                                                 />
                                             ) : null }
-                                            {/* Placeholder si no hay imagenPreview o si la imagen falla */}
-                                            { (!producto.imagenPreview) && (
-                                                 <div className="product-gallery-img-placeholder" style={{display: 'flex'}}><FaBoxOpen /></div>
+                                            {(!producto.imagenPreview) && (
+                                                <div className="product-gallery-img-placeholder" style={{display: 'flex'}}><FaBoxOpen /></div>
                                             )}
-                                             {/* Placeholder oculto para mostrar en caso de error de imagen */}
-                                              { producto.imagenPreview && (
-                                                 <div className="product-gallery-img-placeholder" style={{display: 'none'}}><FaBoxOpen /><span>Error</span></div>
+                                            {/* Placeholder oculto para mostrar en caso de error de imagen, si la imagen existía */}
+                                            { producto.imagenPreview && (
+                                                <div className="product-gallery-img-placeholder-error" style={{display: 'none'}}><FaBoxOpen /><span>Error</span></div>
                                             )}
-
                                         </div>
-                                        <p className="product-title" title={producto.titulo}>{producto.titulo || 'Título...'}</p> {/* Clase de ProductsCarousel */}
-                                        <p className="product-price">{producto.precio || 'Precio...'}</p>      {/* Clase de ProductsCarousel */}
+                                        <p className="product-title" title={producto.titulo}>{producto.titulo || 'Título...'}</p>
+                                        <p className="product-price">{producto.precio || 'Precio...'}</p>
                                     </div>
                                 ))}
                             </Slider>
@@ -164,8 +181,6 @@ const CardProductosPreview = ({ proveedor }) => {
                         <p className='placeholder-text small'>(Aquí verás tus productos destacados)</p>
                     )}
                 </div>
-
-
             </div>
         </div>
     );
