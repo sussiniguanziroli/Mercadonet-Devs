@@ -310,6 +310,7 @@ $error-color: #dc3545; // Rojo estándar para errores
     legend {
         font-size: 0.8rem;
         font-weight: 500;
+        margin-bottom: 3px;
         color: $text-color-secondary; // Texto secundario oscuro
         font-family: 'Montserrat', sans-serif;
         text-transform: uppercase;

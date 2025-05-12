@@ -1,510 +1,372 @@
-// src/components/registroProveedor/steps/FormularioPersonalizadoTipoB.jsx
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { useDropzone } from 'react-dropzone';
-import { FaFileCirclePlus} from 'react-icons/fa6'; 
+import { FaFileCirclePlus } from 'react-icons/fa6';
 import { FaTimes } from 'react-icons/fa';
 import { scrollToTop } from '../../../utils/scrollHelper';
 import CardProductosPreview from '../card_simulators/CardProductosPreview';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import InputLabel from '@mui/material/InputLabel';
 
-// Componente FileUploader reusable
-const FileUploader = ({ 
-  onFilesChange, 
-  multiple = true, 
-  accept = 'image/*',
-  // previews prop no se usa directamente en este FileUploader para mostrarse internamente,
-  // excepto para el caso !multiple, pero el padre maneja las previews principales.
-  previews = [], 
-  maxFiles = 1,
-  label = 'Arrastra archivos aquí o haz clic'
-}) => {
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        accept,
-        multiple,
-        maxFiles: multiple ? undefined : maxFiles,
-        onDrop: acceptedFiles => {
-          onFilesChange(acceptedFiles);
+const LIMITE_CARRUSEL = 7;
+const LIMITE_GALERIA_PRODUCTOS = 6;
+const PRODUCTOS_OBLIGATORIOS_GALERIA = 3; // Nuevo: Límite para productos obligatorios
+const DESCRIPCION_MAX_LENGTH = 1300;
+
+const parseAcceptString = (acceptString) => {
+    if (typeof acceptString !== 'string') return acceptString;
+    const types = acceptString.split(',');
+    const parsed = {};
+    types.forEach(type => {
+        const trimmedType = type.trim();
+        if (trimmedType) {
+            parsed[trimmedType] = [];
         }
-      });
-
-  return (
-    <div 
-      {...getRootProps()}
-      className={`file-uploader-container ${isDragActive ? 'drag-active' : ''}`}
-    >
-      <input {...getInputProps()} />
-      <div className="file-uploader-content">
-        <FaFileCirclePlus size={24} />
-        <p>{label}</p>
-        {/* Previsualización interna para single file upload (ej: logo), si se pasa 'previews' */}
-        {!multiple && previews && previews.length > 0 && (
-          <div className="single-preview"> 
-            {/* Asumimos que el primer preview es el relevante para single upload */}
-            {/* Necesitaría saber el tipo de 'previews[0]' para mostrar img o video */}
-            {typeof previews[0] === 'string' ? ( // Si es una URL (simple caso para logo)
-                <img src={previews[0]} alt="Preview" />
-            ) : previews[0] && previews[0].fileType === 'image' ? (
-                <img src={previews[0].url} alt="Preview" />
-            ) : previews[0] && previews[0].fileType === 'video' ? (
-                <video src={previews[0].url} controls muted style={{maxWidth: '100px', maxHeight: '100px'}} />
-            ) : null}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+    });
+    return parsed;
 };
 
-// Estado inicial para un producto vacío en la galería
-const initialProductState = { imagenFile: null, imagenPreview: null, titulo: '', precio: '' };
+const FileUploaderRHF = ({
+    field,
+    multiple = true,
+    accept: acceptProp,
+    maxFiles = 1,
+    label = 'Arrastra archivos aquí o haz clic',
+    currentFilesCount = 0,
+    limit = LIMITE_CARRUSEL,
+    isLogo = false,
+    isGaleria = false,
+}) => {
+    const processedAccept = parseAcceptString(acceptProp);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        accept: processedAccept,
+        multiple,
+        maxFiles: isLogo || isGaleria ? maxFiles : undefined,
+        onDrop: acceptedFiles => {
+            if (isLogo || isGaleria) {
+                if (acceptedFiles.length > 0) {
+                    const file = acceptedFiles[0];
+                    if (field.value && typeof field.value.preview === 'string' && field.value.preview.startsWith('blob:') && !field.value.isExisting) {
+                        URL.revokeObjectURL(field.value.preview);
+                    }
+                    const newFileObject = Object.assign(file, { preview: URL.createObjectURL(file) });
+                    field.onChange(newFileObject);
+                }
+            } else {
+                const espaciosDisponibles = limit - currentFilesCount;
+                const archivosAAgregar = acceptedFiles.slice(0, espaciosDisponibles);
+                if (archivosAAgregar.length > 0) {
+                    const nuevosMediaItems = archivosAAgregar.map(file => ({
+                        url: URL.createObjectURL(file),
+                        fileType: file.type.startsWith('video/') ? 'video' : 'image',
+                        mimeType: file.type,
+                        file: file
+                    }));
+                    field.onChange([...(field.value || []), ...nuevosMediaItems]);
+                }
+                if (acceptedFiles.length > archivosAAgregar.length) {
+                    console.warn(`Solo se agregarán ${archivosAAgregar.length} de ${acceptedFiles.length} archivos debido al límite.`);
+                }
+            }
+        }
+    });
+
+    return (
+        <div {...getRootProps()} className={`file-uploader-container ${isDragActive ? 'drag-active' : ''} ${isGaleria ? 'galeria-uploader' : ''}`}>
+            <input {...getInputProps()} />
+            <div className="file-uploader-content">
+                <FaFileCirclePlus size={isGaleria ? 20 : 24} />
+                <p style={isGaleria ? {fontSize: '0.8em'} : {}}>{label}</p>
+            </div>
+        </div>
+    );
+};
 
 const FormularioPersonalizadoTipoB = ({
     initialData,
     onNext,
     onBack,
-    onCancel,
     nombreProveedor = '',
     ciudad = '',
     provincia = '',
-    marcas = [],
-    servicios = [], // Esta prop no se usa en el formulario actual, pero la mantengo
-    extras = []
+    marcas: marcasOpciones = [],
+    extras: extrasOpciones = [],
 }) => {
-    const [descripcion, setDescripcion] = useState('');
-    const [sitioWeb, setSitioWeb] = useState('');
-    const [whatsapp, setWhatsapp] = useState('');
-    const [telefono, setTelefono] = useState('');
-    const [email, setEmail] = useState('');
-    const [selectedMarcas, setSelectedMarcas] = useState([]);
-    const [selectedExtras, setSelectedExtras] = useState([]);
-    const [logoFile, setLogoFile] = useState(null);
-    const [logoPreview, setLogoPreview] = useState(null);
-    
-    // --- ESTADO DEL CARRUSEL MODIFICADO ---
-    const [carruselMediaItems, setCarruselMediaItems] = useState([]);
-    // const [carruselFiles, setCarruselFiles] = useState([]); // REEMPLAZADO
-    // const [carruselPreviews, setCarruselPreviews] = useState([]); // REEMPLAZADO
-    
-    const [galeria, setGaleria] = useState(
-        Array(6).fill(null).map(() => ({ ...initialProductState }))
-    );
 
-    useEffect(() => {
-        scrollToTop();
-        if (initialData) {
-            setDescripcion(initialData.descripcion || '');
-            setSitioWeb(initialData.sitioWeb || '');
-            setWhatsapp(initialData.whatsapp || '');
-            setTelefono(initialData.telefono || '');
-            setEmail(initialData.email || '');
-            setSelectedMarcas(Array.isArray(initialData.marca) ? initialData.marca : (initialData.marcas || [])); // Compatibilidad
-            setSelectedExtras(Array.isArray(initialData.extras) ? initialData.extras : []);
+    const getInitialDefaultValues = useCallback(() => {
+        const initialLogoFile = initialData?.logoURL
+            ? { name: 'logo_existente.png', type: 'image/existing', preview: initialData.logoURL, isExisting: true }
+            : null;
 
-
-            if (Array.isArray(initialData.galeria) && initialData.galeria.length > 0) {
-                const initialGaleriaState = Array(6).fill(null).map((_, index) => {
-                    const productData = initialData.galeria[index];
-                    return productData ? {
-                        imagenFile: null,
-                        imagenPreview: productData.imagenURL || null,
-                        titulo: productData.titulo || '',
-                        precio: productData.precio || '',
-                    } : { ...initialProductState };
-                });
-                setGaleria(initialGaleriaState);
-            } else {
-                setGaleria(Array(6).fill(null).map(() => ({ ...initialProductState })));
+        const initialCarruselItems = (initialData?.carruselURLs || []).map(media => {
+            let fileType = 'image'; let mimeType = 'image/jpeg';
+            const urlString = typeof media.url === 'string' ? media.url : '';
+            const extension = urlString ? urlString.split('.').pop().toLowerCase().split('?')[0] : '';
+            if (media.fileType) {
+                fileType = media.fileType;
+                mimeType = media.mimeType || (fileType === 'video' ? `video/${extension === 'mov' ? 'quicktime' : extension}` : `image/${extension || 'jpeg'}`);
+            } else if (extension) {
+                 if (['mp4', 'webm', 'ogg', 'mov'].includes(extension)) { fileType = 'video'; mimeType = `video/${extension === 'mov' ? 'quicktime' : extension}`; }
+                 else if (['png', 'gif', 'bmp', 'webp', 'jpg', 'jpeg'].includes(extension)) { mimeType = `image/${extension === 'jpg' ? 'jpeg' : extension}`; fileType = 'image'; }
             }
+            return { url: media.url, fileType, mimeType, file: null, isExisting: true };
+        });
 
-            setLogoPreview(initialData.logoURL || null);
-            setLogoFile(null);
+        const initialGaleria = Array(LIMITE_GALERIA_PRODUCTOS).fill(null).map((_, index) => {
+            const productData = initialData?.galeria?.[index];
+            return productData
+                ? { imagenFile: productData.imagenURL ? { name: `prod_${index}_existente.png`, type:'image/existing', preview: productData.imagenURL, isExisting: true } : null,
+                    titulo: productData.titulo || '', precio: productData.precio || '' }
+                : { imagenFile: null, titulo: '', precio: '' };
+        });
 
-            // --- INICIALIZACIÓN DEL CARRUSEL MODIFICADA ---
-            const initialMedia = (initialData.carruselURLs || []).map(url => {
-                let fileType = 'image';
-                let mimeType = 'image/jpeg'; 
-                const extension = url.split('.').pop().toLowerCase().split('?')[0];
-                if (['mp4', 'webm', 'ogg', 'mov'].includes(extension)) {
-                    fileType = 'video';
-                    mimeType = `video/${extension === 'mov' ? 'quicktime' : extension}`;
-                } else if (['png', 'gif', 'bmp', 'webp'].includes(extension)) {
-                    mimeType = `image/${extension}`;
-                }
-                return { url, fileType, mimeType, file: null };
-            });
-            setCarruselMediaItems(initialMedia);
-
-        } else {
-            setDescripcion(''); setSitioWeb(''); setWhatsapp(''); setTelefono(''); setEmail('');
-            setSelectedMarcas([]); setSelectedExtras([]);
-            setLogoFile(null); setLogoPreview(null);
-            setCarruselMediaItems([]); // Reset del nuevo estado
-            setGaleria(Array(6).fill(null).map(() => ({ ...initialProductState })));
-        }
+        return {
+            descripcion: initialData?.descripcion || '',
+            sitioWeb: initialData?.sitioWeb || '',
+            whatsapp: initialData?.whatsapp || '',
+            telefono: initialData?.telefono || '',
+            email: initialData?.email || '',
+            marcasSeleccionadas: Array.isArray(initialData?.marca) ? initialData.marca : (initialData?.marcas || []),
+            extrasSeleccionados: Array.isArray(initialData?.extras) ? initialData.extras : [],
+            logoFile: initialLogoFile,
+            carruselMediaItems: initialCarruselItems,
+            galeria: initialGaleria,
+        };
     }, [initialData]);
 
+    const { control, handleSubmit, watch, setValue, reset, formState: { errors }, register, getValues } = useForm({
+        defaultValues: getInitialDefaultValues(),
+        mode: 'onBlur',
+    });
+
+    const { fields: galeriaFields } = useFieldArray({ control, name: "galeria" });
+    const watchedAllFields = watch();
+
+    useEffect(() => { scrollToTop(); reset(getInitialDefaultValues()); }, [initialData, reset, getInitialDefaultValues]);
+
     useEffect(() => {
+        const currentValues = getValues();
+        const logoPreviewToRevoke = currentValues.logoFile?.preview;
+        const carruselPreviewsToRevoke = (currentValues.carruselMediaItems || []).map(item => item.url);
+        const galeriaPreviewsToRevoke = (currentValues.galeria || []).map(item => item.imagenFile?.preview);
         return () => {
-            if (logoPreview && logoPreview.startsWith('blob:')) URL.revokeObjectURL(logoPreview);
-            
-            // --- LIMPIEZA DE CARRUSEL MODIFICADA ---
-            carruselMediaItems.forEach(item => { 
-                if (item.url && item.url.startsWith('blob:')) {
-                    URL.revokeObjectURL(item.url);
+            if (logoPreviewToRevoke && logoPreviewToRevoke.startsWith('blob:') && !currentValues.logoFile?.isExisting) URL.revokeObjectURL(logoPreviewToRevoke);
+            carruselPreviewsToRevoke.forEach(url => {
+                if (url && url.startsWith('blob:')) {
+                    const item = (currentValues.carruselMediaItems || []).find(i => i.url === url);
+                    if (item && !item.isExisting) URL.revokeObjectURL(url);
                 }
             });
-
-            galeria.forEach(item => {
-                if (item.imagenPreview && item.imagenPreview.startsWith('blob:')) {
-                    URL.revokeObjectURL(item.imagenPreview);
-                }
+            galeriaPreviewsToRevoke.forEach(previewUrl => {
+                if (previewUrl && previewUrl.startsWith('blob:')) URL.revokeObjectURL(previewUrl);
             });
         };
-    }, [logoPreview, carruselMediaItems, galeria]); // Dependencia actualizada
+    }, [getValues]);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        switch (name) {
-            case 'descripcion': setDescripcion(value); break;
-            case 'sitioWeb': setSitioWeb(value); break;
-            case 'whatsapp': setWhatsapp(value); break;
-            case 'telefono': setTelefono(value); break;
-            case 'email': setEmail(value); break;
-            default: break;
-        }
-    };
-
-    const handleGaleriaInputChange = (index, field, value) => {
-        setGaleria(currentGaleria =>
-            currentGaleria.map((item, i) =>
-                i === index ? { ...item, [field]: value } : item
-            )
-        );
-    };
-
-    const handleGaleriaFileChange = (index, eventOrFiles) => {
-        // Adaptado para funcionar tanto con evento como con array de files de FileUploader
-        const file = eventOrFiles.target ? eventOrFiles.target.files?.[0] : (Array.isArray(eventOrFiles) ? eventOrFiles[0] : null);
-        if (eventOrFiles.target) eventOrFiles.target.value = null;
-    
-        setGaleria(currentGaleria => {
-            const oldPreview = currentGaleria[index]?.imagenPreview;
-            if (oldPreview && oldPreview.startsWith('blob:')) {
-                URL.revokeObjectURL(oldPreview);
-            }
-            const newPreview = file ? URL.createObjectURL(file) : null;
-            return currentGaleria.map((item, i) =>
-                i === index ? { ...item, imagenFile: file || null, imagenPreview: newPreview } : item
-            );
-        });
-    };
-    
-
-    const handleRemoveGaleriaImage = (index) => {
-        setGaleria(currentGaleria => {
-            const oldPreview = currentGaleria[index]?.imagenPreview;
-            if (oldPreview && oldPreview.startsWith('blob:')) {
-                URL.revokeObjectURL(oldPreview);
-            }
-            return currentGaleria.map((item, i) =>
-                i === index ? { ...item, imagenFile: null, imagenPreview: null } : item
-            );
-        });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const galeriaDataToSend = galeria.map(item => ({
-            titulo: item.titulo,
-            precio: item.precio,
-            imagenFile: item.imagenFile
-        })).filter(item => item.titulo || item.precio || item.imagenFile);
-
-        // --- DATOS DEL CARRUSEL PARA ENVIAR MODIFICADOS ---
-        const carruselNuevosArchivos = carruselMediaItems
-            .filter(item => item.file instanceof File)
-            .map(item => item.file);
-
-        const carruselUrlsExistentes = carruselMediaItems
-            .filter(item => !item.file && item.url)
-            .map(item => ({ url: item.url, fileType: item.fileType, mimeType: item.mimeType }));
+    const onSubmit = (data) => {
+        const nuevosArchivosCarrusel = (data.carruselMediaItems || []).filter(item => item.file instanceof File && !item.isExisting).map(item => item.file);
+        const urlsCarruselExistentes = (data.carruselMediaItems || []).filter(item => item.isExisting || (!item.file && item.url)).map(item => ({ url: item.url, fileType: item.fileType, mimeType: item.mimeType }));
+        const galeriaDataToSend = (data.galeria || []).map(producto => ({
+            titulo: producto.titulo, 
+            precio: producto.precio, // El $ es solo visual, se guarda el número
+            imagenFile: producto.imagenFile instanceof File && !producto.imagenFile.isExisting ? producto.imagenFile : null,
+            imagenUrlExistente: producto.imagenFile?.isExisting ? producto.imagenFile.preview : null,
+        })).filter(item => item.titulo || item.precio || item.imagenFile || item.imagenUrlExistente);
 
         const stepData = {
-            descripcion, sitioWeb, whatsapp, telefono, email,
-            logoFile: logoFile,
-            // carruselFiles: carruselFiles, // REEMPLAZADO
-            carruselNuevosArchivos: carruselNuevosArchivos,
-            carruselUrlsExistentes: carruselUrlsExistentes,
+            descripcion: data.descripcion, sitioWeb: data.sitioWeb, whatsapp: data.whatsapp, telefono: data.telefono, email: data.email,
+            marca: data.marcasSeleccionadas, extras: data.extrasSeleccionados,
+            logoFile: data.logoFile instanceof File && !data.logoFile.isExisting ? data.logoFile : null,
+            logoUrlExistente: data.logoFile?.isExisting ? data.logoFile.preview : null,
+            carruselNuevosArchivos: nuevosArchivosCarrusel,
+            carruselUrlsExistentes: urlsCarruselExistentes,
             galeria: galeriaDataToSend,
-            marca: selectedMarcas, // Asegúrate de que el backend espera "marca"
-            extras: selectedExtras,
         };
         onNext(stepData);
     };
 
-    const buildPreviewData = () => {
+    const buildPreviewData = (currentFormData) => {
         const ubicacionDetalle = `${ciudad}${ciudad && provincia ? ', ' : ''}${provincia}`;
-
-        const galeriaForPreview = galeria.map(item => ({
-            titulo: item.titulo,
-            precio: item.precio,
-            imagenPreview: item.imagenPreview // Galería sigue usando imagenPreview
+        const logoForPreview = currentFormData.logoFile?.preview || null;
+        const carruselForPreview = (currentFormData.carruselMediaItems || []).map(item => ({ url: item.url || item.preview, fileType: item.fileType, mimeType: item.mimeType }));
+        const descripcionCompleta = currentFormData.descripcion || '';
+        const descripcionParaPreview = descripcionCompleta.length > 540 ? `${descripcionCompleta.substring(0, 540)}...` : descripcionCompleta;
+        const galeriaForPreview = (currentFormData.galeria || []).map(item => ({ 
+            titulo: item.titulo, 
+            precio: item.precio ? `$${item.precio}` : '', // Añadir $ en la preview si hay precio
+            imagenPreview: item.imagenFile?.preview || null 
         })).filter(item => item.titulo || item.precio || item.imagenPreview);
 
         return {
-            nombre: nombreProveedor,
-            ubicacionDetalle: ubicacionDetalle,
-            descripcion: descripcion,
-            logoPreview: logoPreview,
-            // --- DATOS DEL CARRUSEL PARA SIMULADOR MODIFICADOS ---
-            carrusel: carruselMediaItems.map(item => ({ 
-                url: item.url,
-                fileType: item.fileType,
-                mimeType: item.mimeType
-            })),
-            sitioWeb: sitioWeb,
-            whatsapp: whatsapp,
-            telefono: telefono,
-            email: email,
-            galeriaProductos: galeriaForPreview,
-            marca: selectedMarcas,
-            extras: selectedExtras,
+            nombre: nombreProveedor, ubicacionDetalle, descripcion: descripcionParaPreview, marca: currentFormData.marcasSeleccionadas,
+            extras: currentFormData.extrasSeleccionados, logoPreview: logoForPreview, carrusel: carruselForPreview,
+            sitioWeb: currentFormData.sitioWeb, whatsapp: currentFormData.whatsapp, telefono: currentFormData.telefono,
+            email: currentFormData.email, galeriaProductos: galeriaForPreview,
         };
     };
-    const previewData = buildPreviewData();
+    const previewData = buildPreviewData(watchedAllFields);
 
+    const handleRemoveLogo = () => {
+        const currentLogo = getValues("logoFile");
+        if (currentLogo?.preview?.startsWith('blob:') && !currentLogo.isExisting) URL.revokeObjectURL(currentLogo.preview);
+        setValue('logoFile', null, { shouldValidate: true, shouldDirty: true });
+    };
+    const handleRemoveCarruselItem = (indexToRemove) => {
+        const currentItems = getValues("carruselMediaItems") || [];
+        const itemToRemove = currentItems[indexToRemove];
+        if (itemToRemove?.url?.startsWith('blob:') && !itemToRemove.isExisting) URL.revokeObjectURL(itemToRemove.url);
+        const newItems = currentItems.filter((_, i) => i !== indexToRemove);
+        setValue('carruselMediaItems', newItems, { shouldValidate: true, shouldDirty: true });
+    };
+    const handleRemoveGaleriaImage = (index) => {
+        const fieldName = `galeria.${index}.imagenFile`;
+        const currentImageFile = getValues(fieldName);
+        if (currentImageFile?.preview?.startsWith('blob:') && !currentImageFile.isExisting) URL.revokeObjectURL(currentImageFile.preview);
+        setValue(fieldName, null, { shouldValidate: true, shouldDirty: true });
+    };
+    
     return (
         <div className="registro-step-layout">
             <div className="form-wrapper">
-                <form onSubmit={handleSubmit} className="registro-form" noValidate>
+                <form onSubmit={handleSubmit(onSubmit)} className="registro-form" noValidate>
                     <h1>Personaliza tu Card Productos</h1>
 
-                    <div className="form-section">
-                        <label>Logo</label>
-                        {logoPreview && (
+                    <div className="form-section"> {/* LOGO */}
+                        <InputLabel htmlFor="logo-uploader-b" error={!!errors.logoFile}>Logo</InputLabel>
+                        {watch('logoFile')?.preview && (
                             <div className="logo-preview-container">
-                                <img src={logoPreview} alt="Vista previa del Logo" />
-                                <button 
-                                    type="button" 
-                                    onClick={() => {
-                                        if (logoPreview && logoPreview.startsWith('blob:')) URL.revokeObjectURL(logoPreview);
-                                        setLogoFile(null);
-                                        setLogoPreview(null);
-                                    }}
-                                    className="remove-button"
-                                >
-                                    <FaTimes />
-                                </button>
+                                <img src={watch('logoFile').preview} alt="Vista previa del Logo" />
+                                <button type="button" onClick={handleRemoveLogo} className="remove-button"><FaTimes /></button>
                             </div>
                         )}
-                        <FileUploader
-                            onFilesChange={(files) => {
-                                if (files.length > 0) {
-                                    const file = files[0];
-                                    if (logoPreview && logoPreview.startsWith('blob:')) {
-                                        URL.revokeObjectURL(logoPreview);
-                                    }
-                                    setLogoFile(file);
-                                    setLogoPreview(URL.createObjectURL(file));
-                                }
-                            }}
-                            multiple={false}
-                            accept="image/*" // Logo sigue siendo solo imagen
-                            label={logoPreview ? "Cambiar logo" : "Arrastra tu logo aquí o haz clic"}
-                        />
+                        <Controller name="logoFile" control={control} rules={{ validate: { fileType: v => (v && v instanceof File && !v.isExisting) ? v.type.startsWith('image/') || 'Solo imágenes para logo.' : true } }}
+                            render={({ field }) => <FileUploaderRHF field={field} multiple={false} acceptProp="image/*" label={watch('logoFile')?.preview ? "Cambiar logo" : "Arrastra tu logo"} isLogo={true} maxFiles={1} />} />
+                        {errors.logoFile && <FormHelperText error>{errors.logoFile.message}</FormHelperText>}
                     </div>
 
-                    {/* --- SECCIÓN CARRUSEL MODIFICADA --- */}
-                    <div className="form-section">
-                        <label>Carrusel Multimedia (Imágenes y Videos)</label>
-                        {carruselMediaItems.length > 0 && (
+                    <div className="form-section"> {/* CARRUSEL */}
+                        <InputLabel htmlFor="carrusel-uploader-b" error={!!errors.carruselMediaItems}>Carrusel Multimedia (máx. {LIMITE_CARRUSEL})</InputLabel>
+                        {(watch('carruselMediaItems') || []).length > 0 && (
                             <div className="carrusel-previews">
-                                {carruselMediaItems.map((item, index) => (
+                                {(watch('carruselMediaItems')).map((item, index) => (
                                     <div key={item.url + '-' + index} className="carrusel-preview-item">
-                                        {item.fileType === 'image' ? (
-                                            <img src={item.url} alt={`Contenido del carrusel ${index + 1}`} />
-                                        ) : (
-                                            <video controls muted style={{ width: '100%', display:'block' }}>
-                                                <source src={item.url} type={item.mimeType} />
-                                                Tu navegador no soporta la etiqueta de video.
-                                            </video>
-                                        )}
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                const itemToRemove = carruselMediaItems[index];
-                                                if (itemToRemove.url.startsWith('blob:')) {
-                                                    URL.revokeObjectURL(itemToRemove.url);
-                                                }
-                                                setCarruselMediaItems(prevItems => prevItems.filter((_, i) => i !== index));
-                                            }}
-                                            className="remove-button"
-                                        >
-                                            <FaTimes />
-                                        </button>
+                                        {item.fileType === 'image' ? <img src={item.url || item.preview} alt={`Contenido ${index + 1}`} /> : <video controls muted style={{ width: '100%', display: 'block' }}><source src={item.url || item.preview} type={item.mimeType} />Tu navegador no soporta video.</video>}
+                                        <button type="button" onClick={() => handleRemoveCarruselItem(index)} className="remove-button"><FaTimes /></button>
                                     </div>
                                 ))}
                             </div>
                         )}
-                        <FileUploader
-                            onFilesChange={(acceptedFiles) => {
-                                const LIMITE_CARRUSEL = 7;
-                                const archivosActualesCount = carruselMediaItems.length;
-
-                                if (archivosActualesCount >= LIMITE_CARRUSEL) {
-                                    console.warn(`Límite de ${LIMITE_CARRUSEL} ítems alcanzado.`);
-                                    return;
-                                }
-
-                                const espaciosDisponibles = LIMITE_CARRUSEL - archivosActualesCount;
-                                const archivosAAgregarFiltrados = acceptedFiles.slice(0, espaciosDisponibles);
-
-                                if (acceptedFiles.length > archivosAAgregarFiltrados.length) {
-                                    console.warn(`Solo se agregarán ${archivosAAgregarFiltrados.length} de ${acceptedFiles.length} archivos debido al límite.`);
-                                }
-
-                                if (archivosAAgregarFiltrados.length > 0) {
-                                    const nuevosMediaItems = archivosAAgregarFiltrados.map(file => ({
-                                        url: URL.createObjectURL(file),
-                                        fileType: file.type.startsWith('video/') ? 'video' : 'image',
-                                        mimeType: file.type,
-                                        file: file 
-                                    }));
-                                    setCarruselMediaItems(prevItems => [...prevItems, ...nuevosMediaItems]);
-                                }
-                            }}
-                            multiple={true}
-                            accept="image/*,video/mp4,video/webm,video/ogg,video/quicktime"
-                            label={`Arrastra imágenes o videos (máx. 7)`}
-                        />
+                        <Controller name="carruselMediaItems" control={control} rules={{ validate: { maxItems: v => (v && v.length <= LIMITE_CARRUSEL) || `No más de ${LIMITE_CARRUSEL} ítems.` } }}
+                            render={({ field }) => <FileUploaderRHF field={field} multiple={true} acceptProp="image/*,video/mp4,video/webm,video/ogg,video/quicktime" label={`Imágenes/Videos (actuales: ${(field.value || []).length}/${LIMITE_CARRUSEL})`} currentFilesCount={(field.value || []).length} limit={LIMITE_CARRUSEL} />} />
+                        {errors.carruselMediaItems && <FormHelperText error>{errors.carruselMediaItems.message}</FormHelperText>}
                     </div>
-                    {/* --- FIN SECCIÓN CARRUSEL MODIFICADA --- */}
-
-                    <div className="form-section">
-                        <label htmlFor="descripcion-b">Descripción del Proveedor</label>
-                        <textarea id="descripcion-b" name="descripcion" value={descripcion} onChange={handleInputChange} rows="4" placeholder="Describe tu negocio, productos destacados..." />
+                    
+                    <div className="form-section"> {/* DESCRIPCIÓN */}
+                        <Controller name="descripcion" control={control} rules={{ required: 'La descripción es requerida', maxLength: { value: DESCRIPCION_MAX_LENGTH, message: `Máx. ${DESCRIPCION_MAX_LENGTH} caracteres.` } }}
+                            render={({ field, fieldState: { error } }) => {
+                                const len = field.value?.length || 0;
+                                return <TextField {...field} id="descripcion-b" label="Descripción del Negocio/Productos *" multiline rows={4} variant="outlined" fullWidth placeholder="Describe tu negocio..." error={!!error} helperText={error ? error.message : `${len}/${DESCRIPCION_MAX_LENGTH}`} inputProps={{ maxLength: DESCRIPCION_MAX_LENGTH }} InputLabelProps={{ shrink: true }} />;
+                            }} />
+                    </div>
+                    
+                    <div className="form-section"> {/* MARCAS */}
+                        <Controller name="marcasSeleccionadas" control={control}
+                            render={({ field }) => <Autocomplete multiple id="marcas-tags-b" options={marcasOpciones} value={field.value || []} onChange={(e, v) => field.onChange(v)} getOptionLabel={(opt) => typeof opt === 'string' ? opt : ''} isOptionEqualToValue={(opt, val) => opt === val} filterSelectedOptions renderInput={(params) => <TextField {...params} variant="outlined" label="Marcas que trabajás" placeholder="Escribí o seleccioná" error={!!errors.marcasSeleccionadas} helperText={errors.marcasSeleccionadas?.message} InputLabelProps={{ shrink: true }} />} renderTags={(val, getTagProps) => val.map((opt, idx) => <Chip label={opt} {...getTagProps({ idx })} sx={{ margin: '2px' }} />)} />} />
+                    </div>
+                    <div className="form-section"> {/* EXTRAS */}
+                         <Controller name="extrasSeleccionados" control={control}
+                            render={({ field }) => <Autocomplete multiple id="extras-tags-b" options={extrasOpciones} value={field.value || []} onChange={(e, v) => field.onChange(v)} getOptionLabel={(opt) => typeof opt === 'string' ? opt : ''} isOptionEqualToValue={(opt, val) => opt === val} filterSelectedOptions renderInput={(params) => <TextField {...params} variant="outlined" label="Extras que ofrecés" placeholder="Escribí o seleccioná" error={!!errors.extrasSeleccionados} helperText={errors.extrasSeleccionados?.message} InputLabelProps={{ shrink: true }} />} renderTags={(val, getTagProps) => val.map((opt, idx) => <Chip label={opt} {...getTagProps({ idx })} sx={{ margin: '4px 4px 0 0' }} />)} />} />
                     </div>
 
-                    <div className="form-section">
-                        <Autocomplete
-                            multiple
-                            id="marcas-tags"
-                            options={marcas}
-                            value={selectedMarcas}
-                            onChange={(event, newValue) => setSelectedMarcas(newValue)}
-                            getOptionLabel={(option) => option}
-                            filterSelectedOptions
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    variant="outlined"
-                                    label="Marcas que trabajás"
-                                    placeholder="Escribí o seleccioná"
-                                    sx={{
-                                        '& .MuiInputBase-root': { flexWrap: 'wrap', paddingRight: '8px' },
-                                        '& .MuiAutocomplete-input': { minWidth: '120px', marginTop: '6px', flexGrow: 1 },
-                                    }}
-                                />
-                            )}
-                            renderTags={(value, getTagProps) =>
-                                value.map((option, index) => (
-                                    <Chip label={option} {...getTagProps({ index })} sx={{ margin: '2px' }} />
-                                ))
-                            }
-                        />
-                        <Autocomplete
-                            multiple
-                            id="extras-tags"
-                            options={extras}
-                            value={selectedExtras}
-                            onChange={(event, newValue) => setSelectedExtras(newValue)}
-                            getOptionLabel={(option) => option}
-                            filterSelectedOptions
-                            renderTags={(value, getTagProps) =>
-                                value.map((option, index) => (
-                                    <Chip label={option} {...getTagProps({ index })} onMouseDown={(e) => e.stopPropagation()} sx={{ margin: '4px 4px 0 0' }}/>
-                                ))
-                            }
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    variant="outlined"
-                                    label="Extras que ofrecés"
-                                    placeholder="Escribí o seleccioná"
-                                />
-                            )}
-                            sx={{
-                                '& .MuiInputBase-root': { flexWrap: 'wrap', alignItems: 'flex-start' },
-                                '& .MuiAutocomplete-input': { minWidth: '120px', marginTop: '6px', flexGrow: 1 },
-                            }}
-                        />
-                    </div>
-
-                    <div className="form-section">
+                    <div className="form-section"> {/* CONTACTO */}
                         <h3>Información de Contacto</h3>
-                        <label htmlFor="sitioWeb-b"> Sitio Web</label>
-                        <input id="sitioWeb-b" type="url" name="sitioWeb" value={sitioWeb} onChange={handleInputChange} placeholder="https://..." />
-                        <label htmlFor="whatsapp-b"> Whatsapp</label>
-                        <input id="whatsapp-b" type="text" name="whatsapp" value={whatsapp} onChange={handleInputChange} placeholder="Whatsapp" />
-                        <label htmlFor="telefono-b"> Teléfono</label>
-                        <input id="telefono-b" type="tel" name="telefono" value={telefono} onChange={handleInputChange} placeholder="Teléfono" />
-                        <label htmlFor="email-b"> Email</label>
-                        <input id="email-b" type="email" name="email" value={email} onChange={handleInputChange} placeholder="Email" />
+                        <div className="form-field-html-group">
+                            <legend htmlFor="sitioWeb-b">Sitio Web <span style={{ color: 'red' }}>*</span></legend>
+                            <input id="sitioWeb-b" type="url" placeholder="https://..." {...register('sitioWeb', { required: 'El sitio web es requerido', pattern: { value: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i, message: "URL inválida" } })} className={errors.sitioWeb ? 'input-error' : ''} />
+                            {errors.sitioWeb && <span className="error-message">{errors.sitioWeb.message}</span>}
+                        </div>
+                        <div className="form-field-html-group">
+                            <legend htmlFor="whatsapp-b">WhatsApp <span style={{ color: 'red' }}>*</span></legend>
+                            <input id="whatsapp-b" type="text" placeholder="Ej: +54 9 11..." {...register('whatsapp', { required: 'WhatsApp es requerido' })} className={errors.whatsapp ? 'input-error' : ''} />
+                            {errors.whatsapp && <span className="error-message">{errors.whatsapp.message}</span>}
+                        </div>
+                        <div className="form-field-html-group">
+                            <legend htmlFor="telefono-b">Teléfono Fijo (Opcional)</legend>
+                            <input id="telefono-b" type="tel" placeholder="Teléfono" {...register('telefono')} className={errors.telefono ? 'input-error' : ''} />
+                            {errors.telefono && <span className="error-message">{errors.telefono.message}</span>}
+                        </div>
+                        <div className="form-field-html-group">
+                            <legend htmlFor="email-b">Email de Contacto Público <span style={{ color: 'red' }}>*</span></legend>
+                            <input id="email-b" type="email" placeholder="Email" {...register('email', { required: 'El email es requerido', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Email inválido" } })} className={errors.email ? 'input-error' : ''} />
+                            {errors.email && <span className="error-message">{errors.email.message}</span>}
+                        </div>
                     </div>
 
-                    <div className="form-section galeria-productos">
-                        <h3>Galería de Productos (Hasta 6)</h3>
+                    <div className="form-section galeria-productos"> {/* GALERÍA */}
+                        <h3>Galería de Productos (Hasta {LIMITE_GALERIA_PRODUCTOS}, primeros {PRODUCTOS_OBLIGATORIOS_GALERIA} obligatorios)</h3>
                         <div className="galeria-grid">
-                            {galeria.map((producto, index) => (
-                                <div key={index} className="producto-card">
-                                    <label>Producto {index + 1}</label>
-                                    {producto.imagenPreview ? (
-                                        <div className="single-preview"> {/* Usar clase de TipoB o definirla */}
-                                            <img src={producto.imagenPreview} alt={`Preview Producto ${index + 1}`} />
-                                            <button
-                                                type="button"
-                                                onClick={() => handleRemoveGaleriaImage(index)}
-                                                className="remove-button"
-                                            >
-                                                <FaTimes />
-                                            </button>
+                            {galeriaFields.map((item, index) => {
+                                const esObligatorio = index < PRODUCTOS_OBLIGATORIOS_GALERIA;
+                                return (
+                                    <div key={item.id} className="producto-card">
+                                        <InputLabel 
+                                            error={!!errors.galeria?.[index]?.imagenFile} 
+                                            sx={{ mb: 0.5, fontSize: '0.8rem' }}
+                                            htmlFor={`galeria_imagen_${index}`} // Conectar con el uploader si es posible
+                                        >
+                                            <legend>Producto {index + 1} {esObligatorio && <span style={{ color: 'red' }}>*</span>}</legend>
+                                        </InputLabel>
+                                        {watch(`galeria.${index}.imagenFile`)?.preview ? (
+                                            <div className="single-preview">
+                                                <img src={watch(`galeria.${index}.imagenFile`).preview} alt={`Preview ${index + 1}`} />
+                                                <button type="button" onClick={() => handleRemoveGaleriaImage(index)} className="remove-button"><FaTimes /></button>
+                                            </div>
+                                        ) : (
+                                            <Controller 
+                                                name={`galeria.${index}.imagenFile`} 
+                                                control={control}
+                                                rules={esObligatorio ? { required: 'La imagen es requerida' } : {}}
+                                                render={({ field }) => <FileUploaderRHF field={field} multiple={false} acceptProp="image/*" label="Subir imagen" isGaleria={true} maxFiles={1} />} 
+                                            />
+                                        )}
+                                        {errors.galeria?.[index]?.imagenFile && <span className="error-message" style={{fontSize: '0.75rem', marginTop: '3px'}}>{errors.galeria[index].imagenFile.message}</span>}
+                                        
+                                        <div className="form-field-html-group" style={{marginTop: '8px'}}>
+                                            <label htmlFor={`galeria_titulo_${index}`}>Título Producto {esObligatorio}</label>
+                                            <input type="text" id={`galeria_titulo_${index}`} placeholder="Título"
+                                                {...register(`galeria.${index}.titulo`, esObligatorio ? { required: 'Título requerido' } : {} )}
+                                                className={errors.galeria?.[index]?.titulo ? 'input-error' : ''} />
+                                            {errors.galeria?.[index]?.titulo && <span className="error-message">{errors.galeria[index].titulo.message}</span>}
                                         </div>
-                                    ) : (
-                                        <FileUploader
-                                            onFilesChange={(files) => { // Pasar 'files' directamente
-                                                if (files.length > 0) {
-                                                    handleGaleriaFileChange(index, files); // Modificado para pasar files
-                                                }
-                                            }}
-                                            multiple={false}
-                                            accept="image/*" // Galería sigue siendo solo imagen
-                                            label="Arrastra imagen aquí"
-                                        />
-                                    )}
-                                    <input 
-                                        type="text" 
-                                        value={producto.titulo} 
-                                        onChange={(e) => handleGaleriaInputChange(index, 'titulo', e.target.value)} 
-                                        placeholder="Título Producto" 
-                                    />
-                                    <input 
-                                        type="text" 
-                                        value={producto.precio} 
-                                        onChange={(e) => handleGaleriaInputChange(index, 'precio', e.target.value)} 
-                                        placeholder="Precio o Rango" 
-                                    />
-                                </div>
-                            ))}
+
+                                        <div className="form-field-html-group" style={{marginTop: '8px'}}>
+                                            <label htmlFor={`galeria_precio_${index}`}>Precio {esObligatorio}</label>
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <span style={{ marginRight: '4px', fontSize: '1em', color: errors.galeria?.[index]?.precio ? '#d32f2f' : 'inherit' }}>$</span>
+                                                <input type="text" id={`galeria_precio_${index}`} placeholder="100.00"
+                                                    {...register(`galeria.${index}.precio`, {
+                                                        ...(esObligatorio && { required: 'Precio requerido' }),
+                                                        pattern: { value: /^\d*(\.\d{0,2})?$/, message: 'Precio inválido (ej: 100 o 100.99)' }
+                                                    })}
+                                                    className={errors.galeria?.[index]?.precio ? 'input-error' : ''} 
+                                                    style={{ flexGrow: 1 }} // Para que el input ocupe el espacio restante
+                                                />
+                                            </div>
+                                            {errors.galeria?.[index]?.precio && <span className="error-message">{errors.galeria[index].precio.message}</span>}
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
 
                     <div className="botones-navegacion">
-                        <button type="button" onClick={onBack}>Atrás</button>
-                        <button type="submit">Continuar</button>
+                        <button type="button" onClick={onBack} className="secondary-button">Atrás</button>
+                        <button type="submit" className="primary-button">Continuar</button>
                     </div>
                 </form>
             </div>

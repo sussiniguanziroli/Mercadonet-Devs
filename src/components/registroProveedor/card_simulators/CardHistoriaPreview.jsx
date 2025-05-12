@@ -15,7 +15,7 @@ const CardHistoriaPreview = ({ proveedor }) => {
 
     const nombreMostrado = nombre.trim() || 'Nombre Empresa';
     const ubicacionMostrada = ubicacionDetalle.trim() || 'Ubicación';
-    
+
     // Actualizado para el nuevo formato de carrusel
     const tieneCarrusel = Array.isArray(carrusel) && carrusel.length > 0 && carrusel.some(item => item && typeof item.url === 'string');
     const tieneLogo = logoPreview && typeof logoPreview === 'string';
@@ -102,7 +102,13 @@ const CardHistoriaPreview = ({ proveedor }) => {
 
                 <div className="texts-box">
                     {descripcion ? (
-                        <p className="description">{descripcion}</p>
+                        <p className="description">
+                            {/* Comprueba si la longitud es mayor que 540 */}
+                            {descripcion.length > 540
+                                ? `${descripcion.substring(0, 540)}...` // Si es mayor, corta a 540 y añade "..."
+                                : descripcion // Si es menor o igual, muestra la descripción completa
+                            }
+                        </p>
                     ) : null}
 
                     {Array.isArray(marca) && marca.length > 0 && (
