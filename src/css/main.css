@@ -3851,7 +3851,7 @@
 }
 .card-historia-preview .info-box .tags-box img {
   margin: 3px;
-  height: 1.7rem;
+  height: 20px;
   border-radius: 2px;
 }
 .card-historia-preview .info-box .texts-box {
@@ -4091,7 +4091,7 @@
 }
 .card-productos-preview .info-box .tags-box img {
   margin: 3px;
-  height: 1.7rem;
+  height: 18px;
   border-radius: 2px;
 }
 .card-productos-preview .info-box .titles-box {

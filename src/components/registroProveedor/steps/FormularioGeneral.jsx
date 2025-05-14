@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'; // Asegúrate de importar useRef
+import React, { useEffect, useRef, useState } from 'react'; // Asegúrate de importar useRef
 import { useForm, Controller } from 'react-hook-form';
 import {
     FormControl,
@@ -139,9 +139,26 @@ const FormularioGeneral = ({
     const watchedCiudad = watch('ciudad');
     const watchedProvincia = watch('provincia');
 
+    useEffect(() => {
+        // Si es proveedor de servicios, combinar servicio principal y adicionales en un solo array
+        if (esProveedorDeServicios) {
+            const allServices = [
+                watch('categoriaPrincipal'),
+                ...(watch('categoriasAdicionales') || [])
+            ].filter(Boolean); // Eliminar valores vacíos
+            setSelectedServices(allServices);
+        } else {
+            // Limpiar el array si el tipo de registro cambia
+            setSelectedServices([]);
+        }
+    }, [esProveedorDeServicios, watch('categoriaPrincipal'), watch('categoriasAdicionales')]);
+
+    const [selectedServices, setSelectedServices] = useState([]);
+
     const buildPreviewDataForStep1 = () => {
         const ubicacionDetalle = `${watchedCiudad}${watchedCiudad && watchedProvincia ? ', ' : ''}${watchedProvincia}`;
         return {
+            selectedServices: selectedServices || [],
             tipoProveedor: watchedTipoProveedor || [],
             tipoRegistro: watchedTipoRegistro || '',
             nombre: watchedNombreProveedor,
@@ -150,7 +167,7 @@ const FormularioGeneral = ({
     };
     const previewData = buildPreviewDataForStep1();
 
- 
+
 
     const getMarcaOptionDisabled = (option) => {
         const currentMarcas = watch('marcasOficiales', []);
@@ -325,7 +342,9 @@ const FormularioGeneral = ({
                                     {...register("categoriaPrincipal", { required: `Selecciona ${labelCategoriaPrincipal}` })}
                                 >
                                     <option value="">Selecciona...</option>
-                                    {categoriasDisponibles.map((cat, i) => <option key={i} value={cat}>{cat}</option>)}
+                                    {categoriasDisponibles.map((cat, i) => (
+                                        <option key={i} value={cat}>{cat}</option>
+                                    ))}
                                 </select>
                                 {errors.categoriaPrincipal && <p className="error-message">{errors.categoriaPrincipal.message}</p>}
                             </div>
@@ -333,25 +352,28 @@ const FormularioGeneral = ({
                             <fieldset className='form-section'>
                                 <legend>{leyendaOtrasCategorias}</legend>
                                 <div className="cat-label-container">
-                                    {categoriasDisponibles.map((cat, i) => (
-                                        <label className="cat-label" key={i}>
-                                            <input
-                                                type="checkbox"
-                                                value={cat}
-                                                {...register("categoriasAdicionales", {
-                                                    validate: value => !value || value.length <= 5 || "Solo puedes seleccionar hasta 5 opciones."
-                                                })}
-                                                disabled={watch('categoriasAdicionales', []).length >= 5 && !watch('categoriasAdicionales', []).includes(cat)}
-                                            />
-                                            <span>{cat}</span>
-                                        </label>
-                                    ))}
+                                    {categoriasDisponibles
+                                        .filter((cat) => cat !== watch("categoriaPrincipal")) // Filtrar el servicio principal seleccionado
+                                        .map((cat, i) => (
+                                            <label className="cat-label" key={i}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={cat}
+                                                    {...register("categoriasAdicionales", {
+                                                        validate: value => !value || value.length <= 5 || "Solo puedes seleccionar hasta 5 opciones."
+                                                    })}
+                                                    disabled={watch('categoriasAdicionales', []).length >= 5 && !watch('categoriasAdicionales', []).includes(cat)}
+                                                />
+                                                <span>{cat}</span>
+                                            </label>
+                                        ))}
                                     {categoriasDisponibles.length === 0 && <p className='placeholder-text small'>(No hay opciones disponibles)</p>}
                                 </div>
                                 {errors.categoriasAdicionales && <p className="error-message">{errors.categoriasAdicionales.message}</p>}
                             </fieldset>
                         </>
                     )}
+
 
                     <div className="form-section">
                         <legend>Ubicación: <span style={{ color: 'red' }}>*</span></legend>

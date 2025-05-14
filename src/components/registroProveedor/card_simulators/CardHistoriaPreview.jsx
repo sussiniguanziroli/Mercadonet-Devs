@@ -8,6 +8,7 @@ import  RegisterTags from '../assetsRegistro/RegisterTags';
 
 const CardHistoriaPreview = ({ proveedor }) => {
     const {
+        selectedServices = [],
         tipoRegistro = [],
         tipoProveedor = [],
         nombre = '', ubicacionDetalle = '',

@@ -24,17 +24,17 @@ const servicioTags = {
         alt: 'Servicios',
         className: 'tag-distroficial'
     },
-    'Logistica/Transporte': {
+    'Logística/Transporte': {
         src: 'https://i.ibb.co/Ln4BbrK/Logistica-Transporte.png',
         alt: 'Servicio Logistica',
         className: 'tag-distroficial'
     },
-    'Importacion': {
+    'Importación': {
         src: 'https://i.ibb.co/0jGtnnQ/Importacion.png',
         alt: 'Servicio Importacion',
         className: 'tag-distroficial'
     },
-    'Exportacion': {
+    'Exportación': {
         src: 'https://i.ibb.co/x31CDjS/Exportaci-n.png',
         alt: 'Servicio Exportacion',
         className: 'tag-distroficial'
@@ -45,7 +45,7 @@ const servicioTags = {
         className: 'tag-distroficial'
     },
     'Almacenamiento': {
-        src: 'https://i.ibb.co/x8cFyrC/Dropshipping.png', // mismo que Dropshipping
+        src: 'https://i.ibb.co/HqtcGPt/Almacenamiento.png', // mismo que Dropshipping
         alt: 'Servicio Almacenamiento',
         className: 'tag-distroficial'
     }
@@ -55,8 +55,8 @@ const RegisterTags = ({ proveedor }) => {
     if (!proveedor?.tipoRegistro) return null;
 
 
-    console.log(proveedor)
-    const { tipoRegistro, tipoProveedor, servicios } = proveedor;
+    
+    const { tipoRegistro, tipoProveedor, selectedServices } = proveedor;
 
     // Si es "Productos", mapeamos tipoProveedor
     if (tipoRegistro === 'productos') {
@@ -90,7 +90,7 @@ const RegisterTags = ({ proveedor }) => {
                     />
                 )}
 
-                {servicios?.map((servicio) => (
+                {selectedServices?.map((servicio) => (
                     servicioTags[servicio] && (
                         <img
                             key={servicio}
