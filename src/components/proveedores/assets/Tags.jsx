@@ -7,17 +7,17 @@ const tipoTags = {
     className: 'tag-distroficial'
   },
   'Distribuidor Oficial': {
-    src: 'https://i.imgur.com/RIN3TB0.png',
+    src: 'https://i.ibb.co/XrbvST97/Etiqueta-DISTRIBUIDOR.png',
     alt: 'Distribuidor Oficial',
     className: 'tag-distroficial'
   },
   'Mayorista': {
-    src: 'https://i.imgur.com/DiAnzfH.png',
+    src: 'https://i.ibb.co/gqV60ZQ/Etiqueta-MAYORISTA.png',
     alt: 'Mayorista',
     className: 'tag-mayorista'
   },
   'Fabricante': {
-    src: 'https://i.imgur.com/nscxZFG.png',
+    src: 'https://i.ibb.co/84z5tTts/Etiqueta-FABRICANTE.png',
     alt: 'Fabricante',
     className: 'tag-fabricante'
   }
@@ -25,27 +25,27 @@ const tipoTags = {
 
 const servicioTags = {
   'Logistica/Transporte': {
-    src: 'https://i.ibb.co/Ln4BbrK/Logistica-Transporte.png',
+    src: 'https://i.ibb.co/DHYhgTdM/Logistica-Transporte.png',
     alt: 'Servicio Logistica',
     className: 'tag-distroficial'
   },
   'Importacion': {
-    src: 'https://i.ibb.co/0jGtnnQ/Importacion.png',
+    src: 'https://i.ibb.co/1YNxxXFT/Importacion.png',
     alt: 'Servicio Importacion',
     className: 'tag-distroficial'
   },
   'Exportacion': {
-    src: 'https://i.ibb.co/x31CDjS/Exportaci-n.png',
+    src: 'https://i.ibb.co/gLLkMP63/Exportaci-n.png',
     alt: 'Servicio Exportacion',
     className: 'tag-distroficial'
   },
   'Dropshipping': {
-    src: 'https://i.ibb.co/x8cFyrC/Dropshipping.png',
+    src: 'https://i.ibb.co/Cp7LPYLM/Dropshipping.png',
     alt: 'Servicio Dropshipping',
     className: 'tag-distroficial'
   },
   'Almacenamiento': {
-    src: 'https://i.ibb.co/x8cFyrC/Dropshipping.png', // mismo que Dropshipping
+    src: 'https://i.ibb.co/DHLrYzcC/Almacenamiento.png', // mismo que Dropshipping
     alt: 'Servicio Almacenamiento',
     className: 'tag-distroficial'
   }
