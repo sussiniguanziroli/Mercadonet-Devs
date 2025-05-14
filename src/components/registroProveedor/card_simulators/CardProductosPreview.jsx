@@ -11,9 +11,12 @@ import Slider from "react-slick"; // Renombrado para evitar conflicto con PureSl
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
+import RegisterTags from '../assetsRegistro/RegisterTags';
 
 const CardProductosPreview = ({ proveedor }) => {
     const {
+        tipoProveedor = [],
+        tipoRegistro = '',
         nombre = '',
         ubicacionDetalle = '',
         logoPreview = null,
@@ -139,6 +142,10 @@ const CardProductosPreview = ({ proveedor }) => {
                     <h3>{nombreMostrado}</h3>
                     <img className="verificado" src="https://i.ibb.co/MkjBH00V/Verificado-HD-removebg-preview.png" alt="Verificado" />
                     <p><IoLocationOutline /> {ubicacionMostrada}</p>
+                </div>
+
+                <div className='tags-box'>
+                    <RegisterTags proveedor={proveedor} />
                 </div>
 
                 {/* Galería de Productos con React-Slick - Sin cambios en su lógica interna de datos */}

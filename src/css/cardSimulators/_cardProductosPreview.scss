@@ -183,6 +183,16 @@
         align-self: flex-start;
         gap: 12px;
 
+        .tags-box {
+
+            img {
+                margin: 3px;
+                height: 1.7rem;
+                border-radius: 2px;
+            }
+
+        }
+
         .titles-box {
             padding-top: 10px;
             width: fit-content;
@@ -196,17 +206,7 @@
             column-gap: 7px;
             row-gap: 1px;
 
-            .tags-box {
-                grid-area: tags;
-                margin: 4px 0;
-
-                img {
-                    margin: .5px;
-                    height: 1.6rem;
-                    border-radius: 2px;
-                }
-
-            }
+            
 
             .verificado {
                 width: 85px;

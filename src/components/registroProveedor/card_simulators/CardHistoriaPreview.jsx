@@ -3,9 +3,13 @@ import { IoLocationOutline } from 'react-icons/io5';
 import { FaArrowLeft, FaArrowRight, FaImage, FaImages } from "react-icons/fa";
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
+import  RegisterTags from '../assetsRegistro/RegisterTags';
+
 
 const CardHistoriaPreview = ({ proveedor }) => {
     const {
+        tipoRegistro = [],
+        tipoProveedor = [],
         nombre = '', ubicacionDetalle = '',
         logoPreview = null,
         carrusel = [], // Ahora es un array de objetos: { url, fileType, mimeType }
@@ -99,6 +103,11 @@ const CardHistoriaPreview = ({ proveedor }) => {
                     <img className="verificado" src="https://i.ibb.co/MkjBH00V/Verificado-HD-removebg-preview.png" alt="Verificado" />
                     <p><IoLocationOutline /> {ubicacionMostrada}</p>
                 </div>
+
+                <div className='tags-box'>
+                    <RegisterTags proveedor={proveedor} />
+                </div>
+                
 
                 <div className="texts-box">
                     {descripcion ? (

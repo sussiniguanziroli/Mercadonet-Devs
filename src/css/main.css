@@ -4089,6 +4089,11 @@
   align-self: flex-start;
   gap: 12px;
 }
+.card-productos-preview .info-box .tags-box img {
+  margin: 3px;
+  height: 1.7rem;
+  border-radius: 2px;
+}
 .card-productos-preview .info-box .titles-box {
   padding-top: 10px;
   width: fit-content;
@@ -4099,15 +4104,6 @@
   align-items: center;
   column-gap: 7px;
   row-gap: 1px;
-}
-.card-productos-preview .info-box .titles-box .tags-box {
-  grid-area: tags;
-  margin: 4px 0;
-}
-.card-productos-preview .info-box .titles-box .tags-box img {
-  margin: 0.5px;
-  height: 1.6rem;
-  border-radius: 2px;
 }
 .card-productos-preview .info-box .titles-box .verificado {
   width: 85px;

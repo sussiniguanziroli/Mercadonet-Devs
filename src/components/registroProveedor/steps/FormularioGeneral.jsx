@@ -142,11 +142,15 @@ const FormularioGeneral = ({
     const buildPreviewDataForStep1 = () => {
         const ubicacionDetalle = `${watchedCiudad}${watchedCiudad && watchedProvincia ? ', ' : ''}${watchedProvincia}`;
         return {
+            tipoProveedor: watchedTipoProveedor || [],
+            tipoRegistro: watchedTipoRegistro || '',
             nombre: watchedNombreProveedor,
             ubicacionDetalle: ubicacionDetalle,
         };
     };
     const previewData = buildPreviewDataForStep1();
+
+ 
 
     const getMarcaOptionDisabled = (option) => {
         const currentMarcas = watch('marcasOficiales', []);

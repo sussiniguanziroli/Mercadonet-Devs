@@ -10,6 +10,8 @@ const FormularioPersonalizado = ({
     onBack,
     onCancel,
     selectedCard,
+    tipoProveedor,
+    tipoRegistro,
     // --- NUEVAS PROPS A RECIBIR Y PASAR ---
     nombreProveedor, // Del paso 1
     ciudad,          // Del paso 1
@@ -22,6 +24,7 @@ const FormularioPersonalizado = ({
     const commonProps = { // Agrupa props comunes para pasarlas
         initialData, onNext, onBack, onCancel,
         nombreProveedor, ciudad, provincia,
+        tipoProveedor, tipoRegistro
         // categoriasCompletas, // No necesario por ahora
     };
 

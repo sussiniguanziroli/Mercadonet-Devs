@@ -223,6 +223,8 @@ const RegistrosProveedorNavigator = () => {
 
                 // Prepara datos del paso anterior para la preview del paso 2
                 const datosPasoAnterior = {
+                    tipoProveedor: formData.datosGenerales.tipoProveedor,
+                    tipoRegistro: formData.datosGenerales.tipoRegistro,
                     nombreProveedor: formData.datosGenerales.nombreProveedor,
                     ciudad: formData.datosGenerales.ciudad,
                     provincia: formData.datosGenerales.provincia,
