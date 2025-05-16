@@ -270,7 +270,7 @@ const RegistrosProveedorNavigator = () => {
             {/* Stepper Fijo Arriba */}
             <Box sx={{
                 position: 'sticky', top: 0, zIndex: 1100,
-                backgroundColor: 'rgba(0, 5, 16, 0.85)',
+                backgroundColor: 'rgba(0, 5, 16, 0.9)',
                 backdropFilter: 'blur(4px)',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
             }}>
