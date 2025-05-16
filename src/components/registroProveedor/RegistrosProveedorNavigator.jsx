@@ -267,34 +267,38 @@ const RegistrosProveedorNavigator = () => {
     // --- Renderizado del Navegador (JSX Principal - Completo) ---
     return (
         <Box sx={{ width: '100%', minHeight: '100vh', position: 'relative', display: 'flex', flexDirection: 'column' }}>
-            {/* Stepper Fijo Arriba */}
-            <Box sx={{
-                position: 'sticky', top: 0, zIndex: 1100,
-                backgroundColor: 'rgba(0, 5, 16, 0.9)',
-                backdropFilter: 'blur(4px)',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
-            }}>
-                <Box sx={{ width: { xs: '95%', md: '85%', lg: '75%' }, margin: 'auto', py: 1.5 }}>
-                    <CustomStepper
-                        activeStep={currentStep}
-                        steps={STEPS}
-                        sx={{ /* ... estilos del stepper ... */ }}
-                    />
-                </Box>
-            </Box>
+
 
             {/* Área Principal con Fondo */}
             <Box sx={{
                 flexGrow: 1, width: '100%',
-                pt: { xs: 4, md: 6 }, pb: { xs: 4, md: 6 }, px: { xs: 2, md: 3 },
+                pb: { xs: 4, md: 6 }, px: { xs: 2, md: 3 },
                 backgroundImage: `url(${backgroundImageURL})`,
                 backgroundSize: 'cover', backgroundPosition: 'center center',
                 backgroundRepeat: 'no-repeat', backgroundAttachment: 'fixed',
                 display: 'flex', flexDirection: 'column',
                 alignItems: 'center', justifyContent: 'flex-start',
             }}>
+                {/* Stepper Fijo Arriba */}
+                <Box sx={{
+                    height: '120px',
+                    width: '100%',
+                    position: 'sticky', top: 0, zIndex: 1100,
+                    backgroundColor: 'transparent',
+                    backdropFilter: 'blur(6px)',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                }}>
+                    <Box sx={{ width: { xs: '95%', md: '85%', lg: '75%' }, margin: 'auto', py: 1.5 }}>
+                        <CustomStepper
+                            activeStep={currentStep}
+                            steps={STEPS}
+                            sx={{ /* ... estilos del stepper ... */ }}
+                        />
+                    </Box>
+                </Box>
                 {/* Contenedor para limitar ancho del contenido */}
                 <Box sx={{
+                    pt: {xs: 4, md: 6},
                     width: '100%', maxWidth: '1500px',
                     position: 'relative',
                     display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -306,7 +310,7 @@ const RegistrosProveedorNavigator = () => {
                             variant="outlined"
                             size="small"
                             sx={{
-                                position: 'absolute', top: { xs: -25, md: -35 }, right: 0, zIndex: 1,
+                                position: 'absolute', top: { xs: 0, md: 0 }, right: 0, zIndex: 1,
                                 color: 'common.white', borderColor: 'rgba(255, 255, 255, 0.5)',
                                 '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)', borderColor: 'common.white', }
                             }}
