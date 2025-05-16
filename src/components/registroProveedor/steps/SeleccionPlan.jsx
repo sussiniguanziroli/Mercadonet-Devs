@@ -1,4 +1,6 @@
-import React from "react";
+// src/components/registroProveedor/steps/SeleccionPlan.jsx
+
+import React, { useState, useEffect } from "react";
 import { Container, Typography, Grid, Card, CardContent, Button, Chip, Box } from '@mui/material';
 import { FaCheckCircle } from "react-icons/fa";
 
@@ -19,11 +21,8 @@ const plansData = [
             'Categoría, Tipo de Proveedor, Marcas y Ubicación',
             'Nombre e Historia de tu empresa',
         ],
-        buttonText: 'Empezar',
-        muiButtonVariant: 'contained',
+        buttonText: 'Seleccionar Plan Base',
         isPopular: false,
-        cardClassName: 'plan-card plan-card--base',
-        buttonClassName: 'plan-button plan-button--base'
     },
     {
         id: 'Pro',
@@ -43,116 +42,141 @@ const plansData = [
             'Categoría, Tipo de Proveedor, Marcas y Ubicación',
             'Nombre e Historia de tu empresa',
         ],
-        buttonText: 'Empezar',
-        muiButtonVariant: 'contained',
+        buttonText: 'Seleccionar Plan Pro',
         isPopular: true,
-        cardClassName: 'plan-card plan-card--popular',
-        buttonClassName: 'plan-button plan-button--popular'
     },
 ];
 
-const SeleccionPlan = ({ nextStep, prevStep, updateFormData }) => {
-    const handlePlanSelection = (planId) => {
-        const selectedPlanData = plansData.find(p => p.id === planId);
-        if (selectedPlanData) {
-            updateFormData({ plan: selectedPlanData });
+const SeleccionPlan = ({ initialData, onNext, onBack }) => {
+    const [selectedPlanId, setSelectedPlanId] = useState(null);
+
+    useEffect(() => {
+        if (initialData && initialData.id) {
+            setSelectedPlanId(initialData.id);
         }
-        nextStep();
+    }, [initialData]);
+
+    const handlePlanCardSelection = (planId) => {
+        setSelectedPlanId(planId);
+    };
+
+    const handleContinueToSummary = () => {
+        if (!selectedPlanId) {
+            alert("Por favor, selecciona un plan para continuar.");
+            return;
+        }
+        const currentSelectedPlanObject = plansData.find(p => p.id === selectedPlanId);
+        if (currentSelectedPlanObject) {
+            onNext(currentSelectedPlanObject);
+        } else {
+            alert("Error al encontrar los detalles del plan seleccionado.");
+            console.error("Error: No se encontró el objeto del plan para el ID:", selectedPlanId);
+        }
     };
 
     return (
         <Container maxWidth="lg" sx={{ py: { xs: 3, md: 5 } }}>
-            <Typography
-                variant="subtitle2" // Podría ser 'overline' o 'caption' también para un texto pequeño y estilizado
-                align="center"
-                gutterBottom
-                className="section-plans-title" // Clase Sass para el color blanco y otros estilos
-            >
+            <Typography variant="subtitle2" align="center" gutterBottom className="section-plans-title">
                 PLANES
             </Typography>
-            <Typography
-                variant="h3"
-                component="h1"
-                align="center"
-                gutterBottom
-                className="section-main-title" // Clase Sass para el color blanco
-                sx={{ fontWeight: 'bold', mb: 1 }}
-            >
+            <Typography variant="h3" component="h1" align="center" gutterBottom className="section-main-title" sx={{ fontWeight: 'bold', mb: 1 }}>
                 Comienza hoy y dale visibilidad a tu empresa en el mercado Mayorista
             </Typography>
-            <Typography
-                variant="h6"
-                align="center"
-                paragraph // paragraph añade un margin-bottom
-                className="section-subtitle" // Clase Sass para el color blanco
-                sx={{ mb: { xs: 3, md: 5 } }}
-            >
+            <Typography variant="h6" align="center" paragraph className="section-subtitle" sx={{ mb: { xs: 3, md: 5 } }}>
                 Conecta, destaca y crece con el plan que potencie tu empresa
             </Typography>
 
             <Grid container spacing={4} justifyContent="center" alignItems="stretch">
-                {plansData.map((plan) => (
-                    <Grid item key={plan.id} xs={12} sm={7} md={plan.isPopular ? 4.5 : 3.5}>
-                        <Card
-                            className={plan.cardClassName}
-                            sx={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}
-                        >
-                            {plan.isPopular && plan.tag && (
-                                <Chip
-                                    label={plan.tag}
-                                    className="plan-tag" // Estilizado en Sass
-                                    size="small"
-                                    sx={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', zIndex: 1 }}
-                                />
-                            )}
-                            <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', p: { xs: 2, md: 3 } }}>
-                                <Box sx={{ mb: 2 }}>
-                                    <Typography variant="h4" component="h2" className="plan-name" gutterBottom>
-                                        {plan.name}
-                                        {plan.logoText && <span className="plan-logo-text">{plan.logoText}</span>}
+                {plansData.map((plan) => {
+                    const isSelected = selectedPlanId === plan.id;
+                    const cardClasses = `plan-card ${plan.isPopular ? 'plan-card--popular' : 'plan-card--base'} ${isSelected ? 'plan-card--selected' : ''}`;
+
+                    return (
+                        <Grid item key={plan.id} xs={12} sm={7} md={plan.isPopular ? 4.5 : 3.5}>
+                            <Card
+                                className={cardClasses}
+                                onClick={() => handlePlanCardSelection(plan.id)}
+                                sx={{ // Mantener solo SX que no colisionen con SASS o sean para layout básico
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    position: 'relative', // Necesario para el Chip absoluto
+                                    // cursor: 'pointer', // Ya definido en SASS .plan-card
+                                    // transiciones, borders, shadows, transform manejados por SASS
+                                }}
+                            >
+                                {plan.isPopular && plan.tag && (
+                                    <Chip
+                                        label={plan.tag}
+                                        className="plan-tag" // SASS controlará esto
+                                    />
+                                )}
+                                <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', p: { xs: 2, md: 3 } }}>
+                                    <Box sx={{ mb: 2 }}>
+                                        <Typography variant="h4" component="h2" className="plan-name" gutterBottom>
+                                            {plan.name}
+                                            {plan.logoText && <span className="plan-logo-text">{plan.logoText}</span>}
+                                        </Typography>
+                                        <Typography variant="body2" className="plan-description">
+                                            {plan.description}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ mb: 3, display: 'flex', alignItems: 'baseline' }}>
+                                        <Typography variant="h3" component="p" className="plan-price">
+                                            {plan.price}
+                                        </Typography>
+                                        <Typography variant="subtitle1" className="plan-frequency">
+                                            {plan.frequency}
+                                        </Typography>
+                                    </Box>
+                                    <Typography variant="subtitle1" gutterBottom className="plan-features-title">
+                                        ¿Qué está incluido?
                                     </Typography>
-                                    <Typography variant="body2" className="plan-description">
-                                        {plan.description}
-                                    </Typography>
+                                    <Box component="ul" className="plan-feature-list" sx={{ listStyle: 'none', p: 0, mb: 'auto' /*o mb:3 si prefieres*/ }}>
+                                        {plan.features.map((feature, index) => (
+                                            <Box component="li" key={index} className="plan-feature-item" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                                <FaCheckCircle fontSize="small" className="plan-feature-icon" /> {/* Color manejado por SASS */}
+                                                <Typography variant="body2" sx={{ ml: 1 }}>{feature}</Typography>
+                                            </Box>
+                                        ))}
+                                    </Box>
+                                </CardContent>
+                                <Box sx={{ p: { xs: 2, md: 3 }, pt: 0, mt: 'auto' }}>
+                                    <Button
+                                        fullWidth
+                                        className="plan-button" // SASS controlará variant, color, fontWeight
+                                    >
+                                        {isSelected ? 'Plan Seleccionado' : plan.buttonText}
+                                    </Button>
                                 </Box>
-                                <Box sx={{ mb: 3, display: 'flex', alignItems: 'baseline' }}>
-                                    <Typography variant="h3" component="p" className="plan-price">
-                                        {plan.price}
-                                    </Typography>
-                                    <Typography variant="subtitle1" className="plan-frequency">
-                                        {plan.frequency}
-                                    </Typography>
-                                </Box>
-                                <Typography variant="subtitle1" gutterBottom className="plan-features-title">
-                                    ¿Qué está incluido?
-                                </Typography>
-                                <Box component="ul" className="plan-feature-list" sx={{ listStyle: 'none', p: 0, mb: 'auto' }}>
-                                    {plan.features.map((feature, index) => (
-                                        <Box component="li" key={index} className="plan-feature-item" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                            <FaCheckCircle fontSize="small" className="plan-feature-icon" />
-                                            <Typography variant="body2" sx={{ ml: 1 }}>{feature}</Typography>
-                                        </Box>
-                                    ))}
-                                </Box>
-                            </CardContent>
-                            <Box sx={{ p: { xs: 2, md: 3 }, pt: 0 }}>
-                                <Button
-                                    fullWidth
-                                    variant={plan.muiButtonVariant}
-                                    className={plan.buttonClassName}
-                                    onClick={() => handlePlanSelection(plan.id)}
-                                >
-                                    {plan.buttonText}
-                                </Button>
-                            </Box>
-                        </Card>
-                    </Grid>
-                ))}
+                            </Card>
+                        </Grid>
+                    );
+                })}
             </Grid>
 
-            <Box textAlign="center" sx={{ mt: 4 }}>
-                <Button variant="outlined" onClick={prevStep} className="multistep-button-prev">
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 5, pt: 2, borderTop: '1px solid rgba(255,255,255,0.2)' }}>
+                <Button variant="outlined" onClick={onBack} className="multistep-button-prev">
+                    {/* sx para color y borde del botón "Volver" se pueden mantener o mover a SASS si ya está definido en .multistep-button-prev */}
                     Volver
+                </Button>
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleContinueToSummary}
+                    disabled={!selectedPlanId}
+                    className="multistep-button-next" // Puedes añadir estilos SASS para esta clase si MUI no es suficiente
+                    sx={{
+                        color: 'common.white',
+                        '&.Mui-disabled': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                            color: 'rgba(255, 255, 255, 0.3)',
+                            borderColor: 'rgba(255, 255, 255, 0.12)',
+                        }
+                    }}
+                >
+                    Continuar al Resumen
                 </Button>
             </Box>
         </Container>

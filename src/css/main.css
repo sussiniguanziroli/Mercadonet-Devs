@@ -6078,15 +6078,17 @@
 
 .plan-card {
   border-radius: 16px !important;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out, border-color 0.25s ease-in-out;
   display: flex;
   flex-direction: column;
   height: 100%;
+  border: 2px solid transparent;
+  cursor: pointer;
 }
-.plan-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+.plan-card:hover:not(.plan-card--selected) {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 .plan-card .plan-name {
   font-weight: bold;
@@ -6137,8 +6139,9 @@
   margin-bottom: 0.5rem;
 }
 .plan-card .plan-feature-list .plan-feature-item .plan-feature-icon {
-  font-size: 1.3rem;
-  margin-right: 0.5rem;
+  font-size: 1.2rem;
+  margin-right: 0.6rem;
+  transition: color 0.25s ease;
 }
 .plan-card .plan-button {
   padding: 0.8rem 1.5rem !important;
@@ -6146,17 +6149,18 @@
   border-radius: 8px !important;
   text-transform: none !important;
   width: 100%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+  margin-top: auto;
 }
 .plan-card .plan-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 .plan-card--base {
   background-color: #FFFFFF;
   color: #212529;
-  border: 1px solid #E0E0E0;
+  border: 2px solid #E0E0E0;
 }
 .plan-card--base .plan-description,
 .plan-card--base .plan-frequency {
@@ -6165,12 +6169,13 @@
 .plan-card--base .plan-feature-list .plan-feature-icon {
   color: #28a745;
 }
-.plan-card--base .plan-button--base {
-  background-color: #333333 !important;
-  color: #FFFFFF !important;
+.plan-card--base .plan-button {
+  background-color: transparent !important;
+  color: #333333 !important;
+  border: 1px solid #333333 !important;
 }
-.plan-card--base .plan-button--base:hover {
-  background-color: #1f1f1f !important;
+.plan-card--base .plan-button:hover {
+  background-color: rgba(51, 51, 51, 0.1) !important;
 }
 .plan-card--popular {
   background-color: #2D2D2D;
@@ -6178,40 +6183,88 @@
 }
 .plan-card--popular .plan-tag {
   background-color: #FFA500 !important;
-  color: black !important;
+  color: #212529 !important;
   font-weight: bold !important;
   border-radius: 12px !important;
-  line-height: 1.5 !important;
-  padding: 2px 10px !important;
+  line-height: normal !important;
+  padding: 4px 12px !important;
+  font-size: 0.75rem;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
 }
 .plan-card--popular .plan-description,
 .plan-card--popular .plan-frequency {
   color: rgba(255, 255, 255, 0.85);
 }
 .plan-card--popular .plan-feature-list .plan-feature-icon {
-  color: #5dd879;
+  color: #71dd8a;
 }
-.plan-card--popular .plan-button--popular {
-  background-color: #8A2BE2 !important;
+.plan-card--popular .plan-button {
+  background-color: transparent !important;
+  color: #8A2BE2 !important;
+  border: 1px solid #8A2BE2 !important;
+}
+.plan-card--popular .plan-button:hover {
+  background-color: rgba(138, 43, 226, 0.15) !important;
+}
+.plan-card--selected {
+  border: 2px solid #8A2BE2;
+  box-shadow: 0px 6px 20px rgba(138, 43, 226, 0.3);
+  transform: scale(1.02);
+}
+.plan-card--selected .plan-feature-list .plan-feature-icon {
+  color: #8A2BE2;
+}
+.plan-card--selected .plan-button {
+  background-color: #000000 !important;
   color: #FFFFFF !important;
+  border-color: #000000 !important;
+  font-weight: bold !important;
 }
-.plan-card--popular .plan-button--popular:hover {
-  background-color: #751bc9 !important;
+.plan-card--selected .plan-button:hover {
+  background-color: black !important;
+  border-color: black !important;
 }
 
 .multistep-button-prev {
   border-color: rgba(255, 255, 255, 0.5) !important;
   color: #FFFFFF !important;
   font-weight: bold !important;
-  padding: 0.6rem 1.5rem !important;
+  padding: 0.7rem 1.5rem !important;
   text-transform: none !important;
   border-radius: 8px !important;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 .multistep-button-prev:hover {
   background-color: rgba(255, 255, 255, 0.1) !important;
-  border-color: rgba(255, 255, 255, 0.8) !important;
+  border-color: #FFFFFF !important;
 }
 
+/*
+.multistep-button-next {
+    background-color: $color-primary-selected-accent !important; // O tu color primario del tema
+    color: $color-text-light !important;
+    font-weight: bold !important;
+    padding: 0.7rem 1.5rem !important;
+    text-transform: none !important;
+    border-radius: $border-radius-button !important;
+    transition: background-color $transition-duration ease, transform $transition-duration ease;
+
+    &:hover {
+        background-color: darken($color-primary-selected-accent, 8%) !important;
+        transform: translateY(-1px);
+    }
+
+    &:disabled {
+        background-color: rgba($color-text-light, 0.12) !important;
+        color: rgba($color-text-light, 0.3) !important;
+        border-color: rgba($color-text-light, 0.12) !important; // Si tuviera borde
+        cursor: not-allowed;
+    }
+}
+*/
 .unset {
   all: unset;
 }

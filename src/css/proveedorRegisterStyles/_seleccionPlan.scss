@@ -2,30 +2,39 @@
 
 $color-text-light: #FFFFFF;
 $color-text-dark: #212529;
-$color-text-muted-light: rgba(255, 255, 255, 0.85); // Un poco más opaco para mejor lectura
+$color-text-muted-light: rgba(255, 255, 255, 0.85);
 $color-text-muted-dark: #555555;
 
-$color-brand-orange: #FFA500; // Naranja para el tag "Más vendido" y logo "Mercadonet+"
-$color-plan-pro-accent: #8A2BE2; // Morado para Pro
+$color-brand-orange: #FFA500;
+$color-plan-pro-accent: #8A2BE2; // Usado como color de acento para "popular" y "seleccionado"
+$color-primary-selected-accent: $color-plan-pro-accent; // Específico para el estado seleccionado (puedes cambiarlo por ej. un azul)
+$color-primary-selected-shadow: rgba(138, 43, 226, 0.3); // Sombra para el seleccionado, basado en $color-plan-pro-accent
+
 $color-success: #28a745;
 
 $bg-card-base: #FFFFFF;
-$bg-card-popular: #2D2D2D;
+$bg-card-popular: #2D2D2D; // Fondo oscuro para la tarjeta popular
+$color-button-bg-selected: #000000;
 
-$button-bg-base: #333333;
-$button-text-base: $color-text-light;
-$button-bg-popular: $color-plan-pro-accent;
-$button-text-popular: $color-text-light;
+$button-bg-base-default: #333333; // Botón en tarjeta base (no seleccionada)
+$button-text-base-default: $color-text-light;
+$button-bg-popular-default: $color-plan-pro-accent; // Botón en tarjeta popular (no seleccionada)
+$button-text-popular-default: $color-text-light;
+
+$button-bg-selected: $color-primary-selected-accent; // Botón cuando la tarjeta está seleccionada
+$button-text-selected: $color-text-light;
 
 $border-radius-card: 16px;
 $border-radius-button: 8px;
+$transition-duration: 0.25s;
 
+// --- ESTILOS DE SECCIÓN ---
 .section-plans-title {
-    color: $color-text-light !important; // Cambiado a blanco
+    color: $color-text-light !important;
     font-weight: bold !important;
     text-transform: uppercase !important;
     margin-bottom: 0.5rem !important;
-    font-size: 0.9rem !important; // Ajustar tamaño si es necesario
+    font-size: 0.9rem !important;
 }
 
 .section-main-title {
@@ -37,24 +46,28 @@ $border-radius-button: 8px;
 }
 
 .section-subtitle {
-    color: $color-text-muted-light !important; // Un blanco ligeramente menos intenso
+    color: $color-text-muted-light !important;
     font-size: 1.1rem !important;
     margin-bottom: 2.5rem !important;
 }
 
+// --- ESTILOS DE TARJETAS DE PLANES ---
 .plan-card {
     border-radius: $border-radius-card !important;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); // Sombra más sutil por defecto
+    transition: transform $transition-duration ease-in-out, box-shadow $transition-duration ease-in-out, border-color $transition-duration ease-in-out;
     display: flex;
     flex-direction: column;
     height: 100%;
+    border: 2px solid transparent; // Borde base para la transición
+    cursor: pointer;
 
-    &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    &:hover:not(.plan-card--selected) { // Hover solo si no está seleccionada
+        transform: translateY(-5px) scale(1.01);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
 
+    // --- Contenido Interno de la Tarjeta ---
     .plan-name {
         font-weight: bold;
         font-size: 2rem;
@@ -62,7 +75,7 @@ $border-radius-button: 8px;
         line-height: 1.1;
 
         .plan-logo-text {
-            color: $color-brand-orange; // Usando la variable naranja
+            color: $color-brand-orange;
             font-weight: bold;
             font-size: 1em;
             margin-left: 0.4em;
@@ -71,7 +84,7 @@ $border-radius-button: 8px;
 
     .plan-description {
         font-size: 0.9rem;
-        min-height: 60px;
+        min-height: 60px; // Asegura altura mínima
         margin-bottom: 1.25rem;
         line-height: 1.5;
     }
@@ -101,7 +114,7 @@ $border-radius-button: 8px;
         padding-left: 0;
         list-style: none;
         margin-bottom: 1.5rem;
-        flex-grow: 1;
+        flex-grow: 1; // Para empujar el botón hacia abajo
 
         .plan-feature-item {
             font-size: 0.9rem;
@@ -110,31 +123,35 @@ $border-radius-button: 8px;
             margin-bottom: 0.5rem;
 
             .plan-feature-icon {
-                font-size: 1.3rem;
-                margin-right: 0.5rem;
+                font-size: 1.2rem; // Ligeramente más pequeño
+                margin-right: 0.6rem;
+                transition: color $transition-duration ease;
             }
         }
     }
 
+    // --- Estilo del Botón Interno (común) ---
     .plan-button {
         padding: 0.8rem 1.5rem !important;
         font-weight: bold !important;
         border-radius: $border-radius-button !important;
         text-transform: none !important;
         width: 100%;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-        transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); // Sombra sutil para el botón
+        transition: background-color $transition-duration ease, transform $transition-duration ease, box-shadow $transition-duration ease, color $transition-duration ease;
+        margin-top: auto; // Asegura que el botón esté al final si CardContent no usa flex-grow en plan-feature-list
 
         &:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
     }
 
+    // --- Estilos Específicos para Tarjeta Base (NO seleccionada) ---
     &--base {
         background-color: $bg-card-base;
         color: $color-text-dark;
-        border: 1px solid #E0E0E0;
+        border: 2px solid #E0E0E0; // Borde más visible para base
 
         .plan-description,
         .plan-frequency {
@@ -145,28 +162,35 @@ $border-radius-button: 8px;
             color: $color-success;
         }
 
-        .plan-button--base {
-            background-color: $button-bg-base !important;
-            color: $button-text-base !important;
+        .plan-button { // Estilo para el botón en tarjeta base (Outlined por defecto)
+            background-color: transparent !important;
+            color: $button-bg-base-default !important; // Texto del color del bg original
+            border: 1px solid $button-bg-base-default !important;
 
             &:hover {
-                background-color: darken($button-bg-base, 8%) !important;
+                background-color: rgba($button-bg-base-default, 0.1) !important;
             }
         }
     }
 
+    // --- Estilos Específicos para Tarjeta Popular (NO seleccionada) ---
     &--popular {
         background-color: $bg-card-popular;
         color: $color-text-light;
-        // border: 2px solid $color-plan-pro-accent; // Borde opcional para Pro
+        // border: 2px solid $color-plan-pro-accent; // Opcional si quieres un borde siempre para Pro
 
-        .plan-tag {
+        .plan-tag { // Estilo del Chip/Tag
             background-color: $color-brand-orange !important;
-            color: darken($color-brand-orange, 55%) !important; // Texto más oscuro para el tag
+            color: $color-text-dark !important; // Texto oscuro para buen contraste en naranja
             font-weight: bold !important;
-            border-radius: 12px !important;
-            line-height: 1.5 !important;
-            padding: 2px 10px !important;
+            border-radius: 12px !important; // Más redondeado
+            line-height: normal !important; // Ajustar si es necesario
+            padding: 4px 12px !important; // Más padding
+            font-size: 0.75rem;
+            position: absolute;
+            top: 12px; // Ajustar posición
+            right: 12px;
+            z-index: 1;
         }
 
         .plan-description,
@@ -175,30 +199,90 @@ $border-radius-button: 8px;
         }
 
         .plan-feature-list .plan-feature-icon {
-            color: lighten($color-success, 20%);
+            color: lighten($color-success, 25%); // Icono más claro sobre fondo oscuro
         }
 
-        .plan-button--popular {
-            background-color: $button-bg-popular !important;
-            color: $button-text-popular !important;
+        .plan-button { // Estilo para el botón en tarjeta popular (Outlined por defecto)
+            background-color: transparent !important;
+            color: $button-bg-popular-default !important; // Texto del color del acento
+            border: 1px solid $button-bg-popular-default !important;
 
             &:hover {
-                background-color: darken($button-bg-popular, 8%) !important;
+                background-color: rgba($button-bg-popular-default, 0.15) !important; // Más notorio el hover
+            }
+        }
+    }
+
+    // --- Estilos para Tarjeta SELECCIONADA (aplica a base o popular cuando está seleccionada) ---
+    &--selected {
+        border: 2px solid $color-primary-selected-accent;
+        box-shadow: 0px 6px 20px $color-primary-selected-shadow; // Sombra de acento
+        transform: scale(1.02); // Un ligero aumento de tamaño
+
+        // Si es popular y seleccionada, el tag se mantiene
+        &.plan-card--popular .plan-tag {
+             // Los estilos del tag ya están definidos en .plan-card--popular .plan-tag
+        }
+
+        .plan-feature-list .plan-feature-icon {
+            color: $color-primary-selected-accent; // Iconos con color de acento
+        }
+
+        .plan-button { // Estilo "Contained" para el botón de la tarjeta seleccionada
+            background-color: $color-button-bg-selected !important;
+            color: $button-text-selected !important;
+            border-color: $color-button-bg-selected !important; // Asegurar que el borde coincida
+            font-weight: bold !important;
+
+            &:hover {
+                background-color: darken($color-button-bg-selected, 8%) !important;
+                border-color: darken($color-button-bg-selected, 8%) !important;
             }
         }
     }
 }
 
+// --- ESTILOS BOTONES DE NAVEGACIÓN (Volver, Continuar) ---
 .multistep-button-prev {
     border-color: rgba($color-text-light, 0.5) !important;
     color: $color-text-light !important;
     font-weight: bold !important;
-    padding: 0.6rem 1.5rem !important;
+    padding: 0.7rem 1.5rem !important; // Ajuste ligero de padding
     text-transform: none !important;
     border-radius: $border-radius-button !important;
+    transition: background-color $transition-duration ease, border-color $transition-duration ease;
+
 
     &:hover {
         background-color: rgba($color-text-light, 0.1) !important;
-        border-color: rgba($color-text-light, 0.8) !important;
+        border-color: $color-text-light !important; // Borde más sólido al hacer hover
     }
 }
+
+// Ya tienes un botón "Continuar al Resumen" en el JSX,
+// sus estilos se pueden manejar con props de MUI (variant="contained", color="primary")
+// o añadir una clase específica si necesitas más personalización que MUI no cubra.
+// Ejemplo si usaras una clase ".multistep-button-next" para el botón de continuar:
+/*
+.multistep-button-next {
+    background-color: $color-primary-selected-accent !important; // O tu color primario del tema
+    color: $color-text-light !important;
+    font-weight: bold !important;
+    padding: 0.7rem 1.5rem !important;
+    text-transform: none !important;
+    border-radius: $border-radius-button !important;
+    transition: background-color $transition-duration ease, transform $transition-duration ease;
+
+    &:hover {
+        background-color: darken($color-primary-selected-accent, 8%) !important;
+        transform: translateY(-1px);
+    }
+
+    &:disabled {
+        background-color: rgba($color-text-light, 0.12) !important;
+        color: rgba($color-text-light, 0.3) !important;
+        border-color: rgba($color-text-light, 0.12) !important; // Si tuviera borde
+        cursor: not-allowed;
+    }
+}
+*/
