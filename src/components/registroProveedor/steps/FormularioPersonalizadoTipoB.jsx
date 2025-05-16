@@ -87,6 +87,7 @@ const FileUploaderRHF = ({
 };
 
 const FormularioPersonalizadoTipoB = ({
+    selectedServices = [],
     tipoProveedor = [],
     tipoRegistro = '',
     initialData,
@@ -204,6 +205,7 @@ const FormularioPersonalizadoTipoB = ({
         })).filter(item => item.titulo || item.precio || item.imagenPreview);
 
         return {
+            selectedServices: selectedServices,
             tipoProveedor: tipoProveedor, tipoRegistro: tipoRegistro,
             nombre: nombreProveedor, ubicacionDetalle, descripcion: descripcionParaPreview, marca: currentFormData.marcasSeleccionadas,
             extras: currentFormData.extrasSeleccionados, logoPreview: logoForPreview, carrusel: carruselForPreview,

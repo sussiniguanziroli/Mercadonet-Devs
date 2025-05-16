@@ -93,6 +93,7 @@ const FileUploaderRHF = ({
 
 
 const FormularioPersonalizadoTipoA = ({
+    selectedServices = [],
     tipoProveedor = [],
     tipoRegistro = '',
     initialData,
@@ -216,6 +217,7 @@ const FormularioPersonalizadoTipoA = ({
         }));
 
         return {
+            selectedServices: selectedServices,
             tipoProveedor: tipoProveedor,
             tipoRegistro, tipoRegistro,
             nombre: nombreProveedor,

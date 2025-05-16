@@ -17,6 +17,8 @@ import CardHistoriaPreview from '../card_simulators/CardHistoriaPreview';
 import CardProductosPreview from '../card_simulators/CardProductosPreview';
 
 const FormularioGeneral = ({
+    selectedServices,
+    setSelectedServices,
     initialData,
     onNext,
     onBack,
@@ -153,7 +155,7 @@ const FormularioGeneral = ({
         }
     }, [esProveedorDeServicios, watch('categoriaPrincipal'), watch('categoriasAdicionales')]);
 
-    const [selectedServices, setSelectedServices] = useState([]);
+    
 
     const buildPreviewDataForStep1 = () => {
         const ubicacionDetalle = `${watchedCiudad}${watchedCiudad && watchedProvincia ? ', ' : ''}${watchedProvincia}`;

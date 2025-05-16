@@ -45,8 +45,10 @@ const initialFormData = {
 };
 
 
+
 // --- Componente Principal del Navegador ---
 const RegistrosProveedorNavigator = () => {
+    const [selectedServices, setSelectedServices] = useState([]);
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(0);
     const [formData, setFormData] = useState(initialFormData);
@@ -217,12 +219,15 @@ const RegistrosProveedorNavigator = () => {
                     pproductos={filtrosData.pproductos}
                     selectedCard={formData.tipoCard}
                     marcasDisponibles={filtrosData.marcas}
+                    selectedServices={selectedServices}
+                    setSelectedServices={setSelectedServices}
                 />;
             case 2: // FormularioPersonalizado (Dispatcher)
                 if (!formData.tipoCard) return <Typography color="error.main">Error: Tipo de card no seleccionado...</Typography>;
-
+                
                 // Prepara datos del paso anterior para la preview del paso 2
                 const datosPasoAnterior = {
+                    selectedServices: selectedServices,
                     tipoProveedor: formData.datosGenerales.tipoProveedor,
                     tipoRegistro: formData.datosGenerales.tipoRegistro,
                     nombreProveedor: formData.datosGenerales.nombreProveedor,

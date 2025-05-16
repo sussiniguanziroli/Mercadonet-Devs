@@ -5,6 +5,7 @@ import FormularioPersonalizadoTipoA from './FormularioPersonalizadoTipoA';
 import FormularioPersonalizadoTipoB from './FormularioPersonalizadoTipoB';
 
 const FormularioPersonalizado = ({
+    selectedServices,
     initialData,
     onNext,
     onBack,
@@ -24,7 +25,7 @@ const FormularioPersonalizado = ({
     const commonProps = { // Agrupa props comunes para pasarlas
         initialData, onNext, onBack, onCancel,
         nombreProveedor, ciudad, provincia,
-        tipoProveedor, tipoRegistro
+        tipoProveedor, tipoRegistro, selectedServices
         // categoriasCompletas, // No necesario por ahora
     };
 
