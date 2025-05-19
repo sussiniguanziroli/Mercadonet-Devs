@@ -6265,6 +6265,95 @@
     }
 }
 */
+.MuiContainer-root > .MuiTypography-h4 {
+  color: #FFFFFF !important;
+  margin-bottom: 2rem !important;
+}
+
+.MuiPaper-elevation3 {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.MuiPaper-elevation3 .MuiTabs-root .MuiTabs-indicator {
+  background-color: #FFA500;
+  height: 3px;
+}
+.MuiPaper-elevation3 .MuiTabs-root .MuiTab-root {
+  text-transform: none;
+  font-weight: 500;
+  color: #5f6368;
+  opacity: 0.85;
+}
+.MuiPaper-elevation3 .MuiTabs-root .MuiTab-root.Mui-selected {
+  color: #0D47A1;
+  font-weight: 600;
+  opacity: 1;
+}
+.MuiPaper-elevation3 .MuiTabs-root .MuiTab-root .MuiTab-iconWrapper {
+  margin-right: 8px;
+}
+.MuiPaper-elevation3 .MuiBox-root[role=tabpanel] .MuiTypography-h6 {
+  color: #0D47A1;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.MuiPaper-elevation3 .MuiBox-root[role=tabpanel] .MuiPaper-outlined {
+  border-color: rgba(0, 0, 0, 0.12);
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: white;
+}
+.MuiPaper-elevation3 .MuiBox-root[role=tabpanel] .MuiList-root .MuiListItem-root {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.MuiPaper-elevation3 .MuiBox-root[role=tabpanel] .MuiList-root .MuiListItemIcon-root {
+  color: #0D47A1;
+}
+.MuiPaper-elevation3 .MuiBox-root[role=tabpanel] .MuiList-root .MuiListItemText-primary {
+  font-weight: 500;
+  color: #212529;
+}
+.MuiPaper-elevation3 .MuiBox-root[role=tabpanel] .MuiList-root .MuiListItemText-secondary {
+  color: #5f6368;
+}
+.MuiPaper-elevation3 .MuiBox-root[role=tabpanel] .MuiDivider-root {
+  border-color: rgba(0, 0, 0, 0.12);
+}
+.MuiPaper-elevation3 .MuiBox-root[role=tabpanel] .checkout-card-preview-container {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  padding: 4px;
+}
+.MuiPaper-elevation3 .MuiBox-root > .MuiButton-outlined {
+  border-color: #5f6368;
+  color: #5f6368;
+  font-weight: 500;
+}
+.MuiPaper-elevation3 .MuiBox-root > .MuiButton-outlined:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  border-color: #2e3033;
+}
+.MuiPaper-elevation3 .MuiBox-root > .MuiButton-textError {
+  font-weight: 500;
+}
+.MuiPaper-elevation3 .MuiBox-root > .MuiButton-containedPrimary {
+  background-color: #0D47A1;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+.MuiPaper-elevation3 .MuiBox-root > .MuiButton-containedPrimary:hover {
+  background-color: #093272;
+}
+.MuiPaper-elevation3 .MuiBox-root > .MuiButton-containedPrimary.Mui-disabled {
+  background-color: rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.26);
+}
+.MuiPaper-elevation3 .MuiBox-root > .MuiButton-containedPrimary .MuiCircularProgress-root {
+  color: #FFFFFF;
+}
+
 .unset {
   all: unset;
 }

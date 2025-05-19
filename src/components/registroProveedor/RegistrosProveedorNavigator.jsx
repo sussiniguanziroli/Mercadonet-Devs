@@ -22,6 +22,45 @@ import { STEPS, backgroundImageURL } from "../registroProveedor/assetsRegistro/C
 // --- MODIFICADO: Importa la función del servicio que trae TODO ---
 import { fetchFiltrosGlobales } from '../../services/firestoreService'; // <-- ¡VERIFICA ESTA RUTA!
 
+// Funciones de sessionStorage
+const saveToSessionStorage = (key, value) => {
+    try {
+        sessionStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+        console.error("Error al guardar en sessionStorage", error);
+    }
+};
+
+const loadFromSessionStorage = (key) => {
+    try {
+        const data = sessionStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    } catch (error) {
+        console.error("Error al cargar desde sessionStorage", error);
+        return null;
+    }
+};
+
+const saveImageToSession = (key, file) => {
+    try {
+        const url = URL.createObjectURL(file);
+        sessionStorage.setItem(key, url);
+        return url;
+    } catch (error) {
+        console.error("Error al guardar imagen", error);
+        return null;
+    }
+};
+
+const loadImageFromSession = (key) => {
+    try {
+        return sessionStorage.getItem(key);
+    } catch (error) {
+        console.error("Error al cargar imagen", error);
+        return null;
+    }
+};
+
 // Estructura inicial detallada para el estado del formulario (copiada de tu original)
 const initialFormData = {
     tipoCard: null,
@@ -51,7 +90,7 @@ const RegistrosProveedorNavigator = () => {
     const [selectedServices, setSelectedServices] = useState([]);
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(0);
-    const [formData, setFormData] = useState(initialFormData);
+    const [formData, setFormData] = useState(() => loadFromSessionStorage("formData") || initialFormData);
 
     // --- MODIFICADO: Estado para TODOS los filtros globales ---
     const [filtrosData, setFiltrosData] = useState({
@@ -118,48 +157,7 @@ const RegistrosProveedorNavigator = () => {
         // El scroll ahora se maneja en el useEffect [currentStep]
         setCurrentStep(prev => Math.max(prev - 1, 0));
     }
-    const cancelRegistration = () => {
-        setFormData(initialFormData); // Resetea el formulario
-        navigate("/registrar-mi-empresa"); // Navega fuera
-    };
 
-    // --- Manejo de Datos (Completo y CON LOGS DETALLADOS) ---
-    const updateStepData = (stepKey, newData) => {
-        setFormData(prev => {
-            // --- LOGS PARA DEPURACIÓN ---
-            console.log(`%c[Navigator] updateStepData para stepKey: ${stepKey}`, 'color: blue; font-weight: bold;', {
-                'Estado PREVIO (prev)': { ...prev }, // Loguea una copia para evitar problemas de referencia
-                'Nuevos Datos (newData)': newData,
-            });
-            // --- FIN LOGS ---
-
-            // Si la clave es simple (tipoCard, planSeleccionado)
-            if (stepKey === 'tipoCard' || stepKey === 'planSeleccionado') {
-                const newState = { ...prev, [stepKey]: newData };
-                console.log(`%c[Navigator] updateStepData - Nuevo Estado (simple):`, 'color: green;', newState);
-                return newState;
-            }
-            // Si la clave es un objeto anidado (datosGenerales, datosPersonalizados)
-            const newState = {
-                ...prev, // 1. Copia todo el estado anterior
-                [stepKey]: { // 2. Sobrescribe la clave específica (ej: 'datosGenerales') con un NUEVO objeto
-                    // 3. Copia el contenido *anterior* de esa clave anidada (si existía y era objeto)
-                    ...(typeof prev[stepKey] === 'object' && prev[stepKey] !== null ? prev[stepKey] : {}),
-                    // 4. Fusiona (y sobrescribe si hay colisión) con los nuevos datos recibidos
-                    ...newData
-                }
-            };
-            console.log(`%c[Navigator] updateStepData - Nuevo Estado (anidado):`, 'color: green;', newState);
-            return newState; // Devuelve el nuevo estado completo
-        });
-    };
-
-    // Función llamada por los componentes de paso al completarse
-    const handleStepCompletion = (stepKey, stepLocalData) => {
-        console.log(`[Navigator] handleStepCompletion - Recibiendo datos para ${stepKey}:`, stepLocalData);
-        updateStepData(stepKey, stepLocalData); // Actualiza el estado central
-        nextStep(); // Avanza al siguiente paso
-    };
 
     // Función específica para el primer paso (SeleccionTipoCard)
     const handleTipoCardSelection = (tipo) => {
@@ -177,6 +175,62 @@ const RegistrosProveedorNavigator = () => {
         console.log('[Navigator] handleTipoCardSelection - Llamando a nextStep. Tipo seleccionado:', tipo);
         nextStep(); // Avanza al siguiente paso
     };
+
+    const updateStepData = (stepKey, newData) => {
+        setFormData((prev) => {
+            const updatedData = { ...prev, [stepKey]: { ...prev[stepKey], ...newData } };
+
+            if (newData.logoFile instanceof File) {
+                const logoUrl = saveImageToSession("logoFile", newData.logoFile);
+                updatedData[stepKey].logoUrl = logoUrl;
+            }
+
+            if (Array.isArray(newData.carruselMediaItems)) {
+                updatedData[stepKey].carruselMediaItems = newData.carruselMediaItems.map((item, index) => {
+                    if (item.file instanceof File) {
+                        const url = saveImageToSession(`carrusel-${index}`, item.file);
+                        return { ...item, url };
+                    }
+                    return item;
+                });
+            }
+
+            saveToSessionStorage("formData", updatedData);
+            return updatedData;
+        });
+    };
+
+    const handleStepCompletion = (stepKey, stepLocalData) => {
+        updateStepData(stepKey, stepLocalData);
+        nextStep();
+    };
+
+    const cancelRegistration = () => {
+        setFormData(initialFormData);
+        sessionStorage.clear();
+        navigate("/registrar-mi-empresa");
+    };
+
+    useEffect(() => {
+        const savedData = loadFromSessionStorage("formData");
+        if (savedData) {
+            const logoUrl = loadImageFromSession("logoFile");
+            if (logoUrl) {
+                savedData.datosPersonalizados.tipoA.logoFile = { url: logoUrl };
+            }
+
+            if (Array.isArray(savedData.datosPersonalizados.tipoA.carruselMediaItems)) {
+                savedData.datosPersonalizados.tipoA.carruselMediaItems = savedData.datosPersonalizados.tipoA.carruselMediaItems.map((item, index) => {
+                    const url = loadImageFromSession(`carrusel-${index}`);
+                    return url ? { ...item, url } : item;
+                });
+            }
+
+            setFormData(savedData);
+        }
+    }, []);
+
+
 
     // --- Renderizado del Paso Actual (Pasando las props necesarias) ---
     const renderCurrentStep = () => {
@@ -224,7 +278,7 @@ const RegistrosProveedorNavigator = () => {
                 />;
             case 2: // FormularioPersonalizado (Dispatcher)
                 if (!formData.tipoCard) return <Typography color="error.main">Error: Tipo de card no seleccionado...</Typography>;
-                
+
                 // Prepara datos del paso anterior para la preview del paso 2
                 const datosPasoAnterior = {
                     selectedServices: selectedServices,
@@ -303,7 +357,7 @@ const RegistrosProveedorNavigator = () => {
                 </Box>
                 {/* Contenedor para limitar ancho del contenido */}
                 <Box sx={{
-                    pt: {xs: 4, md: 6},
+                    pt: { xs: 4, md: 6 },
                     width: '100%', maxWidth: '1500px',
                     position: 'relative',
                     display: 'flex', flexDirection: 'column', alignItems: 'center',

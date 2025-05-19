@@ -219,10 +219,6 @@ $transition-duration: 0.25s;
         box-shadow: 0px 6px 20px $color-primary-selected-shadow; // Sombra de acento
         transform: scale(1.02); // Un ligero aumento de tamaño
 
-        // Si es popular y seleccionada, el tag se mantiene
-        &.plan-card--popular .plan-tag {
-             // Los estilos del tag ya están definidos en .plan-card--popular .plan-tag
-        }
 
         .plan-feature-list .plan-feature-icon {
             color: $color-primary-selected-accent; // Iconos con color de acento

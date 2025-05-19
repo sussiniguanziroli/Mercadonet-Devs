@@ -236,22 +236,20 @@ const FormularioPersonalizadoTipoA = ({
     const previewData = buildPreviewData(watchedAllFields);
 
     const handleRemoveLogo = () => {
-        const currentLogo = getValues("logoFile");
-        if (currentLogo && typeof currentLogo.preview === 'string' && currentLogo.preview.startsWith('blob:') && !currentLogo.isExisting) {
-            URL.revokeObjectURL(currentLogo.preview);
-        }
-        setValue('logoFile', null, { shouldValidate: true, shouldDirty: true });
+        setValue('logoFile', null);
     };
 
     const handleRemoveCarruselItem = (indexToRemove) => {
-        const currentItems = watchedCarruselMediaItems || []; // Usar el valor observado para la UI
-        const itemToRemove = currentItems[indexToRemove];
-
-        if (itemToRemove && itemToRemove.url && itemToRemove.url.startsWith('blob:') && !itemToRemove.isExisting) {
-            URL.revokeObjectURL(itemToRemove.url);
-        }
+        const currentItems = watchedCarruselMediaItems || [];
         const newItems = currentItems.filter((_, i) => i !== indexToRemove);
-        setValue('carruselMediaItems', newItems, { shouldValidate: true, shouldDirty: true });
+        setValue('carruselMediaItems', newItems);
+    };
+
+    
+
+    const handleBack = () => {
+        const currentData = getValues();
+        onBack(currentData);
     };
 
     // Estilo para los mensajes de error de los inputs HTML
@@ -308,7 +306,7 @@ const FormularioPersonalizadoTipoA = ({
 
                     {/* SECCIÓN CARRUSEL (Sin cambios respecto a tu última versión buena) */}
                     <div className="form-section">
-                        <InputLabel htmlFor="carrusel-uploader" error={!!errors.carruselMediaItems}>
+                        <InputLabel  htmlFor="carrusel-uploader" error={!!errors.carruselMediaItems}>
                             Carrusel Multimedia (Imágenes y Videos, máx. {LIMITE_CARRUSEL})
                         </InputLabel>
                         {(watchedCarruselMediaItems || []).length > 0 && (
@@ -340,6 +338,7 @@ const FormularioPersonalizadoTipoA = ({
                             }}
                             render={({ field }) => (
                                 <FileUploaderRHF
+                                
                                     field={field}
                                     multiple={true}
                                     acceptProp="image/*,video/mp4,video/webm,video/ogg,video/quicktime" // Usar acceptProp

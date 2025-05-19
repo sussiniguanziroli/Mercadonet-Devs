@@ -65,6 +65,40 @@ const FormularioGeneral = ({
         }
     });
 
+    const onSubmit = async (data) => {
+        let logoUrl = null;
+
+        // Verificar si el logo está en el formulario
+        if (data.logoFile instanceof File) {
+            logoUrl = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(data.logoFile);
+            });
+        }
+
+        const carruselUrls = await Promise.all(
+            (data.carruselMediaItems || []).map(async (item) => {
+                if (item.file instanceof File) {
+                    return await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.readAsDataURL(item.file);
+                    });
+                }
+                return item.url;
+            })
+        );
+
+        const stepData = {
+            ...data,
+            logoUrl,
+            carruselUrls,
+            tipoProveedor: data.tipoRegistro === 'productos' ? data.tipoProveedor : [],
+        };
+        onNext(stepData);
+    };
+
     const watchedTipoRegistro = watch('tipoRegistro');
     const watchedTipoProveedor = watch('tipoProveedor', []);
 
@@ -129,13 +163,7 @@ const FormularioGeneral = ({
     const labelCategoriaPrincipal = esProveedorDeServicios ? 'Tipo de Servicio Principal' : 'Categoría Principal';
     const leyendaOtrasCategorias = esProveedorDeServicios ? 'Otros Servicios Ofrecidos (Hasta 5)' : 'Otras categorías (Elige hasta 5)';
 
-    const onSubmit = (data) => {
-        const stepData = {
-            ...data,
-            tipoProveedor: data.tipoRegistro === 'productos' ? data.tipoProveedor : [],
-        };
-        onNext(stepData);
-    };
+    
 
     const watchedNombreProveedor = watch('nombreProveedor');
     const watchedCiudad = watch('ciudad');

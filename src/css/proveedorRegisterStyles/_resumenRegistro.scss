@@ -1,0 +1,154 @@
+// src/styles/_checkoutResumen.scss
+
+// --- Variables de Color Específicas para el Checkout ---
+$checkout-text-light: #FFFFFF; // Para el título principal y elementos sobre fondos oscuros
+$checkout-text-dark: #212529;  // Texto principal dentro de la Paper clara
+$checkout-text-muted: #5f6368; // Texto secundario o menos importante dentro de la Paper
+$checkout-accent-orange: #FFA500; // Naranja vibrante para acentos
+$checkout-accent-blue-dark: #0D47A1; // Azul oscuro y fuerte para acentos primarios
+$checkout-primary-mui-blue: #1976D2; // Azul estándar de MUI para consistencia si es necesario
+
+$checkout-bg-paper: #FFFFFF; // Fondo de la Paper principal (claro)
+$checkout-divider-color: rgba(0, 0, 0, 0.12); // Divisores sobre fondo claro
+$checkout-tab-indicator: $checkout-accent-orange;
+$checkout-tab-text-active: $checkout-accent-blue-dark;
+$checkout-tab-text-inactive: $checkout-text-muted;
+
+$checkout-button-confirm-bg: $checkout-accent-blue-dark;
+$checkout-button-confirm-text: $checkout-text-light;
+$checkout-button-confirm-hover-bg: darken($checkout-accent-blue-dark, 10%);
+
+$checkout-button-back-border: $checkout-text-muted;
+$checkout-button-back-text: $checkout-text-muted;
+$checkout-button-back-hover-bg: rgba(0, 0, 0, 0.04);
+
+// --- Estilos Generales del Contenedor del Checkout ---
+// Si tienes un contenedor global para esta página, puedes añadir estilos aquí.
+// Por ejemplo:
+// .checkout-page-wrapper {
+//   background-color: #121212; // Si el fondo general de la página es oscuro
+// }
+
+// Título Principal de la Página de Checkout
+.MuiContainer-root > .MuiTypography-h4 { // Apuntando al Typography h4 directo dentro del Container
+    color: $checkout-text-light !important; // Título "Finalizar Registro y Suscripción" en blanco
+    margin-bottom: 2rem !important; // Más espacio debajo del título
+}
+
+// Paper Principal que contiene Tabs y Contenido
+.MuiPaper-elevation3 { // O una clase más específica si es necesario
+    background-color: $checkout-bg-paper;
+    border-radius: 12px; // Bordes ligeramente redondeados para la Paper principal
+    overflow: hidden; // Para que las Tabs no se salgan del borde redondeado
+
+    // Pestañas (Tabs y Tab)
+    .MuiTabs-root {
+        .MuiTabs-indicator {
+            background-color: $checkout-tab-indicator;
+            height: 3px;
+        }
+
+        .MuiTab-root {
+            text-transform: none; // Capitalización normal para las pestañas
+            font-weight: 500;
+            color: $checkout-tab-text-inactive;
+            opacity: 0.85;
+
+            &.Mui-selected {
+                color: $checkout-tab-text-active;
+                font-weight: 600;
+                opacity: 1;
+            }
+
+            .MuiTab-iconWrapper { // Estilo para los iconos dentro de las pestañas
+                margin-right: 8px; // Espacio entre icono y texto
+                // El color del icono generalmente hereda el color del texto del Tab
+            }
+        }
+    }
+
+    // Paneles de Contenido de las Pestañas
+    .MuiBox-root[role="tabpanel"] { // El Box dentro de TabPanel
+        .MuiTypography-h6 { // Títulos de sección dentro de cada pestaña
+            color: $checkout-accent-blue-dark;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        // Estilos para la Paper interna (resumen plan, datos contacto, pago)
+        .MuiPaper-outlined {
+            border-color: $checkout-divider-color;
+            padding: 1.5rem; // Un poco más de padding interno
+            border-radius: 8px;
+            background-color: lighten($checkout-bg-paper, 2%); // Un blanco apenas diferente o el mismo
+        }
+
+        // Listas y sus elementos
+        .MuiList-root {
+            .MuiListItem-root {
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+            .MuiListItemIcon-root {
+                color: $checkout-accent-blue-dark; // Color para iconos en listas
+            }
+            .MuiListItemText-primary {
+                font-weight: 500;
+                color: $checkout-text-dark;
+            }
+            .MuiListItemText-secondary {
+                color: $checkout-text-muted;
+            }
+        }
+
+        // Divisores
+        .MuiDivider-root {
+            border-color: $checkout-divider-color;
+        }
+
+        
+
+        // Contenedor de la Vista Previa de la Card
+        // El Box que tiene border, borderRadius, p:0.5, etc.
+        // Puedes añadir una clase específica a este Box en el JSX si necesitas más control
+        // Ejemplo: <Box className="checkout-card-preview-container" sx={{...}}>
+        .checkout-card-preview-container { // Asegúrate de añadir esta clase al Box en el JSX
+            border: 1px solid $checkout-divider-color;
+            border-radius: 8px;
+            padding: 4px; // Un pequeño padding si es necesario
+            // Los estilos de minHeight, display flex, etc., ya están en el sx
+        }
+    }
+
+    // Barra de Botones de Acción Inferior
+    .MuiBox-root { // El Box que contiene los botones Volver, Cancelar, Pagar
+        & > .MuiButton-outlined { // Botón Volver
+            border-color: $checkout-button-back-border;
+            color: $checkout-button-back-text;
+            font-weight: 500;
+            &:hover {
+                background-color: $checkout-button-back-hover-bg;
+                border-color: darken($checkout-button-back-border, 20%);
+            }
+        }
+        & > .MuiButton-textError { // Botón Cancelar
+            font-weight: 500;
+        }
+
+        & > .MuiButton-containedPrimary { // Botón Confirmar y Pagar
+            background-color: $checkout-button-confirm-bg;
+            color: $checkout-button-confirm-text;
+            font-weight: 500;
+            &:hover {
+                background-color: $checkout-button-confirm-hover-bg;
+            }
+            &.Mui-disabled { // Estilos para el botón de pago deshabilitado
+                background-color: rgba(0, 0, 0, 0.12); // Un gris estándar para deshabilitado
+                color: rgba(0, 0, 0, 0.26);
+            }
+            .MuiCircularProgress-root { // Icono de carga en el botón
+                color: $checkout-button-confirm-text;
+            }
+        }
+    }
+}
