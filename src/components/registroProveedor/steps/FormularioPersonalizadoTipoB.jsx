@@ -8,13 +8,12 @@ import CardProductosPreview from '../card_simulators/CardProductosPreview';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
-import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import InputLabel from '@mui/material/InputLabel';
 
 const LIMITE_CARRUSEL = 7;
 const LIMITE_GALERIA_PRODUCTOS = 6;
-const PRODUCTOS_OBLIGATORIOS_GALERIA = 3; // Nuevo: Límite para productos obligatorios
+const PRODUCTOS_OBLIGATORIOS_GALERIA = 3;
 const DESCRIPCION_MAX_LENGTH = 1300;
 
 const parseAcceptString = (acceptString) => {
@@ -30,6 +29,7 @@ const parseAcceptString = (acceptString) => {
     return parsed;
 };
 
+// Definición de FileUploaderRHF (similar a TipoA, podría ser un componente compartido)
 const FileUploaderRHF = ({
     field,
     multiple = true,
@@ -39,40 +39,52 @@ const FileUploaderRHF = ({
     currentFilesCount = 0,
     limit = LIMITE_CARRUSEL,
     isLogo = false,
-    isGaleria = false,
+    isGaleria = false, // Prop específica para la galería
 }) => {
     const processedAccept = parseAcceptString(acceptProp);
+
+    const onDrop = useCallback(acceptedFiles => {
+        if (isLogo || isGaleria) { // Para logo o imagen de galería (un solo archivo)
+            if (acceptedFiles.length > 0) {
+                const file = acceptedFiles[0];
+                if (field.value && typeof field.value.preview === 'string' && field.value.preview.startsWith('blob:') && !field.value.isExisting) {
+                    URL.revokeObjectURL(field.value.preview);
+                }
+                field.onChange({
+                    file: file,
+                    preview: URL.createObjectURL(file),
+                    name: file.name,
+                    type: file.type,
+                    isExisting: false
+                });
+            }
+        } else { // Para carrusel (múltiples archivos)
+            const espaciosDisponibles = limit - currentFilesCount;
+            const archivosAAgregar = acceptedFiles.slice(0, espaciosDisponibles);
+
+            if (archivosAAgregar.length > 0) {
+                const nuevosMediaItems = archivosAAgregar.map(file => ({
+                    file: file,
+                    url: URL.createObjectURL(file),
+                    fileType: file.type.startsWith('video/') ? 'video' : 'image',
+                    mimeType: file.type,
+                    name: file.name,
+                    isExisting: false
+                }));
+                const currentItems = field.value || [];
+                field.onChange([...currentItems, ...nuevosMediaItems]);
+            }
+            if (acceptedFiles.length > archivosAAgregar.length) {
+                 alert(`Solo se agregarán ${archivosAAgregar.length} de ${acceptedFiles.length} archivos debido al límite de ${limit}.`);
+            }
+        }
+    }, [field, isLogo, isGaleria, multiple, limit, currentFilesCount, processedAccept]);
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         accept: processedAccept,
         multiple,
-        maxFiles: isLogo || isGaleria ? maxFiles : undefined,
-        onDrop: acceptedFiles => {
-            if (isLogo || isGaleria) {
-                if (acceptedFiles.length > 0) {
-                    const file = acceptedFiles[0];
-                    if (field.value && typeof field.value.preview === 'string' && field.value.preview.startsWith('blob:') && !field.value.isExisting) {
-                        URL.revokeObjectURL(field.value.preview);
-                    }
-                    const newFileObject = Object.assign(file, { preview: URL.createObjectURL(file) });
-                    field.onChange(newFileObject);
-                }
-            } else {
-                const espaciosDisponibles = limit - currentFilesCount;
-                const archivosAAgregar = acceptedFiles.slice(0, espaciosDisponibles);
-                if (archivosAAgregar.length > 0) {
-                    const nuevosMediaItems = archivosAAgregar.map(file => ({
-                        url: URL.createObjectURL(file),
-                        fileType: file.type.startsWith('video/') ? 'video' : 'image',
-                        mimeType: file.type,
-                        file: file
-                    }));
-                    field.onChange([...(field.value || []), ...nuevosMediaItems]);
-                }
-                if (acceptedFiles.length > archivosAAgregar.length) {
-                    console.warn(`Solo se agregarán ${archivosAAgregar.length} de ${acceptedFiles.length} archivos debido al límite.`);
-                }
-            }
-        }
+        maxFiles: (isLogo || isGaleria) ? maxFiles : undefined,
+        onDrop
     });
 
     return (
@@ -86,13 +98,15 @@ const FileUploaderRHF = ({
     );
 };
 
+
 const FormularioPersonalizadoTipoB = ({
-    selectedServices = [],
+    selectedServices = [], // Aunque no se use directamente, se pasa para la preview si es necesario
     tipoProveedor = [],
     tipoRegistro = '',
-    initialData,
+    initialData, // Viene de RegistrosProveedorNavigator.formData.datosPersonalizados.tipoB
     onNext,
     onBack,
+    onCancel,
     nombreProveedor = '',
     ciudad = '',
     provincia = '',
@@ -101,31 +115,37 @@ const FormularioPersonalizadoTipoB = ({
 }) => {
 
     const getInitialDefaultValues = useCallback(() => {
-        const initialLogoFile = initialData?.logoURL
-            ? { name: 'logo_existente.png', type: 'image/existing', preview: initialData.logoURL, isExisting: true }
+        const initialLogo = initialData?.logoURL
+            ? { file: null, preview: initialData.logoURL, isExisting: true, name: 'logo_cargado', type: 'image/existing' }
             : null;
 
-        const initialCarruselItems = (initialData?.carruselURLs || []).map(media => {
-            let fileType = 'image'; let mimeType = 'image/jpeg';
-            const urlString = typeof media.url === 'string' ? media.url : '';
-            const extension = urlString ? urlString.split('.').pop().toLowerCase().split('?')[0] : '';
-            if (media.fileType) {
-                fileType = media.fileType;
-                mimeType = media.mimeType || (fileType === 'video' ? `video/${extension === 'mov' ? 'quicktime' : extension}` : `image/${extension || 'jpeg'}`);
-            } else if (extension) {
-                 if (['mp4', 'webm', 'ogg', 'mov'].includes(extension)) { fileType = 'video'; mimeType = `video/${extension === 'mov' ? 'quicktime' : extension}`; }
-                 else if (['png', 'gif', 'bmp', 'webp', 'jpg', 'jpeg'].includes(extension)) { mimeType = `image/${extension === 'jpg' ? 'jpeg' : extension}`; fileType = 'image'; }
-            }
-            return { url: media.url, fileType, mimeType, file: null, isExisting: true };
-        });
+        const initialCarruselItems = (initialData?.carruselURLs || []).map(media => ({
+            file: null,
+            url: media.url,
+            fileType: media.fileType || (media.url.includes('.mp4') || media.url.includes('.mov') ? 'video' : 'image'),
+            mimeType: media.mimeType || '',
+            isExisting: true,
+            name: 'media_cargado'
+        }));
 
+        // Inicializar galería, asegurando que haya LIMITE_GALERIA_PRODUCTOS items
         const initialGaleria = Array(LIMITE_GALERIA_PRODUCTOS).fill(null).map((_, index) => {
             const productData = initialData?.galeria?.[index];
-            return productData
-                ? { imagenFile: productData.imagenURL ? { name: `prod_${index}_existente.png`, type:'image/existing', preview: productData.imagenURL, isExisting: true } : null,
-                    titulo: productData.titulo || '', precio: productData.precio || '' }
-                : { imagenFile: null, titulo: '', precio: '' };
+            if (productData) {
+                return {
+                    titulo: productData.titulo || '',
+                    precio: productData.precio || '',
+                    imagenFile: productData.imagenURL // El campo en initialData es imagenURL
+                        ? { file: null, preview: productData.imagenURL, isExisting: true, name: `prod_${index}_cargado`, type: productData.mimeType || 'image/existing' }
+                        : null,
+                    // Preservar fileType y mimeType si vienen en productData (desde el navigator)
+                    fileType: productData.fileType || (productData.imagenURL ? 'image' : ''),
+                    mimeType: productData.mimeType || (productData.imagenURL ? 'image/existing' : ''),
+                };
+            }
+            return { imagenFile: null, titulo: '', precio: '', fileType: '', mimeType: '' };
         });
+
 
         return {
             descripcion: initialData?.descripcion || '',
@@ -133,9 +153,9 @@ const FormularioPersonalizadoTipoB = ({
             whatsapp: initialData?.whatsapp || '',
             telefono: initialData?.telefono || '',
             email: initialData?.email || '',
-            marcasSeleccionadas: Array.isArray(initialData?.marca) ? initialData.marca : (initialData?.marcas || []),
+            marcasSeleccionadas: Array.isArray(initialData?.marca) ? initialData.marca : (Array.isArray(initialData?.marcas) ? initialData.marcas : []),
             extrasSeleccionados: Array.isArray(initialData?.extras) ? initialData.extras : [],
-            logoFile: initialLogoFile,
+            logoFile: initialLogo,
             carruselMediaItems: initialCarruselItems,
             galeria: initialGaleria,
         };
@@ -147,70 +167,109 @@ const FormularioPersonalizadoTipoB = ({
     });
 
     const { fields: galeriaFields } = useFieldArray({ control, name: "galeria" });
-    const watchedAllFields = watch();
+    const watchedAllFields = watch(); // Para la preview
 
     useEffect(() => { scrollToTop(); reset(getInitialDefaultValues()); }, [initialData, reset, getInitialDefaultValues]);
 
+    // Limpieza de Blob URLs
     useEffect(() => {
         const currentValues = getValues();
-        const logoPreviewToRevoke = currentValues.logoFile?.preview;
-        const carruselPreviewsToRevoke = (currentValues.carruselMediaItems || []).map(item => item.url);
-        const galeriaPreviewsToRevoke = (currentValues.galeria || []).map(item => item.imagenFile?.preview);
         return () => {
-            if (logoPreviewToRevoke && logoPreviewToRevoke.startsWith('blob:') && !currentValues.logoFile?.isExisting) URL.revokeObjectURL(logoPreviewToRevoke);
-            carruselPreviewsToRevoke.forEach(url => {
-                if (url && url.startsWith('blob:')) {
-                    const item = (currentValues.carruselMediaItems || []).find(i => i.url === url);
-                    if (item && !item.isExisting) URL.revokeObjectURL(url);
+            // Logo
+            if (currentValues.logoFile?.preview?.startsWith('blob:') && !currentValues.logoFile.isExisting) {
+                URL.revokeObjectURL(currentValues.logoFile.preview);
+            }
+            // Carrusel
+            (currentValues.carruselMediaItems || []).forEach(item => {
+                if (item.url?.startsWith('blob:') && !item.isExisting) {
+                    URL.revokeObjectURL(item.url);
                 }
             });
-            galeriaPreviewsToRevoke.forEach(previewUrl => {
-                if (previewUrl && previewUrl.startsWith('blob:')) URL.revokeObjectURL(previewUrl);
+            // Galería
+            (currentValues.galeria || []).forEach(item => {
+                if (item.imagenFile?.preview?.startsWith('blob:') && !item.imagenFile.isExisting) {
+                    URL.revokeObjectURL(item.imagenFile.preview);
+                }
             });
         };
     }, [getValues]);
 
-    const onSubmit = (data) => {
-        const nuevosArchivosCarrusel = (data.carruselMediaItems || []).filter(item => item.file instanceof File && !item.isExisting).map(item => item.file);
-        const urlsCarruselExistentes = (data.carruselMediaItems || []).filter(item => item.isExisting || (!item.file && item.url)).map(item => ({ url: item.url, fileType: item.fileType, mimeType: item.mimeType }));
-        const galeriaDataToSend = (data.galeria || []).map(producto => ({
-            titulo: producto.titulo, 
-            precio: producto.precio, // El $ es solo visual, se guarda el número
-            imagenFile: producto.imagenFile instanceof File && !producto.imagenFile.isExisting ? producto.imagenFile : null,
-            imagenUrlExistente: producto.imagenFile?.isExisting ? producto.imagenFile.preview : null,
-        })).filter(item => item.titulo || item.precio || item.imagenFile || item.imagenUrlExistente);
+    const prepareSubmitData = (dataFromForm) => {
+        const logoEsNuevo = dataFromForm.logoFile?.file instanceof File && !dataFromForm.logoFile.isExisting;
+        const logoAEnviar = logoEsNuevo ? dataFromForm.logoFile.file : null;
+        const logoUrlExistenteAEnviar = dataFromForm.logoFile?.isExisting ? dataFromForm.logoFile.preview : null;
 
-        const stepData = {
-            descripcion: data.descripcion, sitioWeb: data.sitioWeb, whatsapp: data.whatsapp, telefono: data.telefono, email: data.email,
-            marca: data.marcasSeleccionadas, extras: data.extrasSeleccionados,
-            logoFile: data.logoFile instanceof File && !data.logoFile.isExisting ? data.logoFile : null,
-            logoUrlExistente: data.logoFile?.isExisting ? data.logoFile.preview : null,
-            carruselNuevosArchivos: nuevosArchivosCarrusel,
-            carruselUrlsExistentes: urlsCarruselExistentes,
-            galeria: galeriaDataToSend,
+        const carruselNuevosArchivos = (dataFromForm.carruselMediaItems || [])
+            .filter(item => item.file instanceof File && !item.isExisting)
+            .map(item => item.file);
+        const carruselUrlsExistentes = (dataFromForm.carruselMediaItems || [])
+            .filter(item => item.isExisting && item.url)
+            .map(item => ({ url: item.url, fileType: item.fileType, mimeType: item.mimeType }));
+
+        const galeriaProcesada = (dataFromForm.galeria || []).map(producto => {
+            const imagenEsNueva = producto.imagenFile?.file instanceof File && !producto.imagenFile.isExisting;
+            return {
+                titulo: producto.titulo,
+                precio: producto.precio,
+                imagenFile: imagenEsNueva ? producto.imagenFile.file : null,
+                imagenUrlExistente: producto.imagenFile?.isExisting ? producto.imagenFile.preview : null,
+                // El navigator se encargará de fileType y mimeType para los nuevos archivos.
+                // Para los existentes, ya deberían estar en la URL del navigator, pero no se reenvían desde aquí.
+            };
+        }).filter(p => p.titulo || p.precio || p.imagenFile || p.imagenUrlExistente); // Enviar solo productos con datos
+
+        return {
+            descripcion: dataFromForm.descripcion,
+            sitioWeb: dataFromForm.sitioWeb,
+            whatsapp: dataFromForm.whatsapp,
+            telefono: dataFromForm.telefono,
+            email: dataFromForm.email,
+            marca: dataFromForm.marcasSeleccionadas || [], // Asegurar que sea array (o 'marcas')
+            extras: dataFromForm.extrasSeleccionados || [],
+            logoFile: logoAEnviar,
+            logoUrlExistente: logoUrlExistenteAEnviar,
+            carruselNuevosArchivos: carruselNuevosArchivos,
+            carruselUrlsExistentes: carruselUrlsExistentes,
+            galeria: galeriaProcesada,
         };
+    };
+
+    const onSubmit = (dataFromForm) => {
+        const stepData = prepareSubmitData(dataFromForm);
         onNext(stepData);
+    };
+    const handleBack = () => {
+        const dataFromForm = getValues();
+        const stepData = prepareSubmitData(dataFromForm);
+        onBack(stepData);
     };
 
     const buildPreviewData = (currentFormData) => {
         const ubicacionDetalle = `${ciudad}${ciudad && provincia ? ', ' : ''}${provincia}`;
         const logoForPreview = currentFormData.logoFile?.preview || null;
-        const carruselForPreview = (currentFormData.carruselMediaItems || []).map(item => ({ url: item.url || item.preview, fileType: item.fileType, mimeType: item.mimeType }));
-        const descripcionCompleta = currentFormData.descripcion || '';
-        const descripcionParaPreview = descripcionCompleta.length > 540 ? `${descripcionCompleta.substring(0, 540)}...` : descripcionCompleta;
-        const galeriaForPreview = (currentFormData.galeria || []).map(item => ({ 
-            titulo: item.titulo, 
-            precio: item.precio ? `$${item.precio}` : '', // Añadir $ en la preview si hay precio
-            imagenPreview: item.imagenFile?.preview || null 
-        })).filter(item => item.titulo || item.precio || item.imagenPreview);
+        const carruselForPreview = (currentFormData.carruselMediaItems || []).map(item => ({
+            url: item.url || item.preview, fileType: item.fileType, mimeType: item.mimeType
+        }));
+        const galeriaForPreview = (currentFormData.galeria || []).map(item => ({
+            titulo: item.titulo,
+            precio: item.precio ? `$${item.precio}` : '', // Añadir $ para preview
+            imagenPreview: item.imagenFile?.preview || null
+        })).filter(p => p.titulo || p.precio || p.imagenPreview);
+
 
         return {
-            selectedServices: selectedServices,
-            tipoProveedor: tipoProveedor, tipoRegistro: tipoRegistro,
-            nombre: nombreProveedor, ubicacionDetalle, descripcion: descripcionParaPreview, marca: currentFormData.marcasSeleccionadas,
-            extras: currentFormData.extrasSeleccionados, logoPreview: logoForPreview, carrusel: carruselForPreview,
-            sitioWeb: currentFormData.sitioWeb, whatsapp: currentFormData.whatsapp, telefono: currentFormData.telefono,
-            email: currentFormData.email, galeriaProductos: galeriaForPreview,
+            selectedServices, tipoProveedor, tipoRegistro,
+            nombre: nombreProveedor, ubicacionDetalle,
+            descripcion: currentFormData.descripcion,
+            marca: currentFormData.marcasSeleccionadas, // o 'marcas' si es el nombre correcto
+            extras: currentFormData.extrasSeleccionados,
+            logoPreview: logoForPreview,
+            carrusel: carruselForPreview,
+            sitioWeb: currentFormData.sitioWeb,
+            whatsapp: currentFormData.whatsapp,
+            telefono: currentFormData.telefono,
+            email: currentFormData.email,
+            galeriaProductos: galeriaForPreview,
         };
     };
     const previewData = buildPreviewData(watchedAllFields);
@@ -234,134 +293,142 @@ const FormularioPersonalizadoTipoB = ({
         setValue(fieldName, null, { shouldValidate: true, shouldDirty: true });
     };
     
+    const errorSpanStyle = { color: '#d32f2f', fontSize: '0.75rem', marginTop: '3px', display: 'block' };
+
     return (
         <div className="registro-step-layout">
             <div className="form-wrapper">
                 <form onSubmit={handleSubmit(onSubmit)} className="registro-form" noValidate>
                     <h1>Personaliza tu Card Productos</h1>
 
-                    <div className="form-section"> {/* LOGO */}
+                    {/* LOGO */}
+                    <div className="form-section">
                         <InputLabel htmlFor="logo-uploader-b" error={!!errors.logoFile}>Logo</InputLabel>
                         {watch('logoFile')?.preview && (
                             <div className="logo-preview-container">
-                                <img src={watch('logoFile').preview} alt="Vista previa del Logo" />
+                                <img src={watch('logoFile').preview} alt={watch('logoFile').name || "Vista previa del Logo"} />
                                 <button type="button" onClick={handleRemoveLogo} className="remove-button"><FaTimes /></button>
                             </div>
                         )}
-                        <Controller name="logoFile" control={control} rules={{ validate: { fileType: v => (v && v instanceof File && !v.isExisting) ? v.type.startsWith('image/') || 'Solo imágenes para logo.' : true } }}
-                            render={({ field }) => <FileUploaderRHF field={field} multiple={false} acceptProp="image/*" label={watch('logoFile')?.preview ? "Cambiar logo" : "Arrastra tu logo"} isLogo={true} maxFiles={1} />} />
-                        {errors.logoFile && <FormHelperText error>{errors.logoFile.message}</FormHelperText>}
+                        <Controller name="logoFile" control={control}
+                            rules={{ validate: { fileType: v => (v && v.file instanceof File && !v.isExisting) ? v.file.type.startsWith('image/') || 'Solo imágenes.' : true }}}
+                            render={({ field }) => <FileUploaderRHF field={field} multiple={false} acceptProp="image/*" label={field.value?.preview ? "Cambiar logo" : "Arrastra tu logo"} isLogo={true} maxFiles={1} />} />
+                        {errors.logoFile && <FormHelperText error>{errors.logoFile.message || errors.logoFile.type}</FormHelperText>}
                     </div>
 
-                    <div className="form-section"> {/* CARRUSEL */}
+                    {/* CARRUSEL */}
+                    <div className="form-section">
                         <InputLabel htmlFor="carrusel-uploader-b" error={!!errors.carruselMediaItems}>Carrusel Multimedia (máx. {LIMITE_CARRUSEL})</InputLabel>
                         {(watch('carruselMediaItems') || []).length > 0 && (
                             <div className="carrusel-previews">
-                                {(watch('carruselMediaItems')).map((item, index) => (
-                                    <div key={item.url + '-' + index} className="carrusel-preview-item">
-                                        {item.fileType === 'image' ? <img src={item.url || item.preview} alt={`Contenido ${index + 1}`} /> : <video controls muted style={{ width: '100%', display: 'block' }}><source src={item.url || item.preview} type={item.mimeType} />Tu navegador no soporta video.</video>}
+                                {watch('carruselMediaItems').map((item, index) => (
+                                    <div key={item.url || item.name || index} className="carrusel-preview-item">
+                                        {item.fileType === 'image' ? <img src={item.url} alt={item.name || `Contenido ${index + 1}`} /> : <video controls muted style={{ width: '100%', display: 'block' }} src={item.url} type={item.mimeType}>Tu navegador no soporta video.</video>}
                                         <button type="button" onClick={() => handleRemoveCarruselItem(index)} className="remove-button"><FaTimes /></button>
                                     </div>
                                 ))}
                             </div>
                         )}
-                        <Controller name="carruselMediaItems" control={control} rules={{ validate: { maxItems: v => (v && v.length <= LIMITE_CARRUSEL) || `No más de ${LIMITE_CARRUSEL} ítems.` } }}
-                            render={({ field }) => <FileUploaderRHF field={field} multiple={true} acceptProp="image/*,video/mp4,video/webm,video/ogg,video/quicktime" label={`Imágenes/Videos (actuales: ${(field.value || []).length}/${LIMITE_CARRUSEL})`} currentFilesCount={(field.value || []).length} limit={LIMITE_CARRUSEL} />} />
-                        {errors.carruselMediaItems && <FormHelperText error>{errors.carruselMediaItems.message}</FormHelperText>}
+                        <Controller name="carruselMediaItems" control={control} rules={{ validate: { maxItems: v => (v || []).length <= LIMITE_CARRUSEL || `No más de ${LIMITE_CARRUSEL} ítems.` } }}
+                            render={({ field }) => <FileUploaderRHF field={field} multiple={true} acceptProp="image/*,video/mp4,video/webm,video/ogg,video/quicktime" label={`Imágenes/Videos (${(field.value || []).length}/${LIMITE_CARRUSEL})`} currentFilesCount={(field.value || []).length} limit={LIMITE_CARRUSEL} />} />
+                        {errors.carruselMediaItems && <FormHelperText error>{errors.carruselMediaItems.message || errors.carruselMediaItems.type}</FormHelperText>}
                     </div>
                     
-                    <div className="form-section"> {/* DESCRIPCIÓN */}
+                    {/* DESCRIPCIÓN */}
+                    <div className="form-section">
                         <Controller name="descripcion" control={control} rules={{ required: 'La descripción es requerida', maxLength: { value: DESCRIPCION_MAX_LENGTH, message: `Máx. ${DESCRIPCION_MAX_LENGTH} caracteres.` } }}
-                            render={({ field, fieldState: { error } }) => {
-                                const len = field.value?.length || 0;
-                                return <TextField {...field} id="descripcion-b" label="Descripción del Negocio/Productos *" multiline rows={4} variant="outlined" fullWidth placeholder="Describe tu negocio..." error={!!error} helperText={error ? error.message : `${len}/${DESCRIPCION_MAX_LENGTH}`} inputProps={{ maxLength: DESCRIPCION_MAX_LENGTH }} InputLabelProps={{ shrink: true }} />;
-                            }} />
+                            render={({ field, fieldState: { error } }) => (
+                                <TextField {...field} id="descripcion-b" label="Descripción del Negocio/Productos *" multiline rows={4} variant="outlined" fullWidth placeholder="Describe tu negocio..." error={!!error} helperText={error ? error.message : `${(field.value || '').length}/${DESCRIPCION_MAX_LENGTH}`} inputProps={{ maxLength: DESCRIPCION_MAX_LENGTH }} InputLabelProps={{ shrink: true }} />
+                            )} />
                     </div>
                     
-                    <div className="form-section"> {/* MARCAS */}
+                    {/* MARCAS y EXTRAS (igual que TipoA) */}
+                    <div className="form-section">
                         <Controller name="marcasSeleccionadas" control={control}
-                            render={({ field }) => <Autocomplete multiple id="marcas-tags-b" options={marcasOpciones} value={field.value || []} onChange={(e, v) => field.onChange(v)} getOptionLabel={(opt) => typeof opt === 'string' ? opt : ''} isOptionEqualToValue={(opt, val) => opt === val} filterSelectedOptions renderInput={(params) => <TextField {...params} variant="outlined" label="Marcas que trabajás" placeholder="Escribí o seleccioná" error={!!errors.marcasSeleccionadas} helperText={errors.marcasSeleccionadas?.message} InputLabelProps={{ shrink: true }} />} renderTags={(val, getTagProps) => val.map((opt, idx) => <Chip label={opt} {...getTagProps({ idx })} sx={{ margin: '2px' }} />)} />} />
+                            render={({ field }) => <Autocomplete multiple id="marcas-tags-b" options={marcasOpciones} value={field.value || []} onChange={(e, v) => field.onChange(v)} getOptionLabel={(opt) => typeof opt === 'string' ? opt : ''} isOptionEqualToValue={(opt, val) => opt === val} filterSelectedOptions renderInput={(params) => <TextField {...params} variant="outlined" label="Marcas que trabajás" placeholder="Escribí o seleccioná" error={!!errors.marcasSeleccionadas} helperText={errors.marcasSeleccionadas?.message} InputLabelProps={{ shrink: true }} />} renderTags={(val, getTagProps) => val.map((opt, idx) => <Chip key={opt+idx} label={opt} {...getTagProps({ idx })} sx={{ margin: '2px' }} />)} />} />
                     </div>
-                    <div className="form-section"> {/* EXTRAS */}
+                    <div className="form-section">
                          <Controller name="extrasSeleccionados" control={control}
-                            render={({ field }) => <Autocomplete multiple id="extras-tags-b" options={extrasOpciones} value={field.value || []} onChange={(e, v) => field.onChange(v)} getOptionLabel={(opt) => typeof opt === 'string' ? opt : ''} isOptionEqualToValue={(opt, val) => opt === val} filterSelectedOptions renderInput={(params) => <TextField {...params} variant="outlined" label="Extras que ofrecés" placeholder="Escribí o seleccioná" error={!!errors.extrasSeleccionados} helperText={errors.extrasSeleccionados?.message} InputLabelProps={{ shrink: true }} />} renderTags={(val, getTagProps) => val.map((opt, idx) => <Chip label={opt} {...getTagProps({ idx })} sx={{ margin: '4px 4px 0 0' }} />)} />} />
+                            render={({ field }) => <Autocomplete multiple id="extras-tags-b" options={extrasOpciones} value={field.value || []} onChange={(e, v) => field.onChange(v)} getOptionLabel={(opt) => typeof opt === 'string' ? opt : ''} isOptionEqualToValue={(opt, val) => opt === val} filterSelectedOptions renderInput={(params) => <TextField {...params} variant="outlined" label="Extras que ofrecés" placeholder="Escribí o seleccioná" error={!!errors.extrasSeleccionados} helperText={errors.extrasSeleccionados?.message} InputLabelProps={{ shrink: true }} />} renderTags={(val, getTagProps) => val.map((opt, idx) => <Chip key={opt+idx} label={opt} {...getTagProps({ idx })} sx={{ margin: '4px 4px 0 0' }} />)} />} />
                     </div>
 
-                    <div className="form-section"> {/* CONTACTO */}
+                    {/* CONTACTO (igual que TipoA, pero con validaciones de requerido para algunos campos) */}
+                    <div className="form-section">
                         <h3>Información de Contacto</h3>
                         <div className="form-field-html-group">
-                            <legend htmlFor="sitioWeb-b">Sitio Web <span style={{ color: 'red' }}>*</span></legend>
+                            <label htmlFor="sitioWeb-b">Sitio Web <span style={{ color: 'red' }}>*</span></label>
                             <input id="sitioWeb-b" type="url" placeholder="https://..." {...register('sitioWeb', { required: 'El sitio web es requerido', pattern: { value: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i, message: "URL inválida" } })} className={errors.sitioWeb ? 'input-error' : ''} />
-                            {errors.sitioWeb && <span className="error-message">{errors.sitioWeb.message}</span>}
+                            {errors.sitioWeb && <span style={errorSpanStyle}>{errors.sitioWeb.message}</span>}
                         </div>
                         <div className="form-field-html-group">
-                            <legend htmlFor="whatsapp-b">WhatsApp <span style={{ color: 'red' }}>*</span></legend>
+                            <label htmlFor="whatsapp-b">WhatsApp <span style={{ color: 'red' }}>*</span></label>
                             <input id="whatsapp-b" type="text" placeholder="Ej: +54 9 11..." {...register('whatsapp', { required: 'WhatsApp es requerido' })} className={errors.whatsapp ? 'input-error' : ''} />
-                            {errors.whatsapp && <span className="error-message">{errors.whatsapp.message}</span>}
+                            {errors.whatsapp && <span style={errorSpanStyle}>{errors.whatsapp.message}</span>}
                         </div>
                         <div className="form-field-html-group">
-                            <legend htmlFor="telefono-b">Teléfono Fijo (Opcional)</legend>
+                            <label htmlFor="telefono-b">Teléfono Fijo (Opcional)</label>
                             <input id="telefono-b" type="tel" placeholder="Teléfono" {...register('telefono')} className={errors.telefono ? 'input-error' : ''} />
-                            {errors.telefono && <span className="error-message">{errors.telefono.message}</span>}
+                            {errors.telefono && <span style={errorSpanStyle}>{errors.telefono.message}</span>}
                         </div>
                         <div className="form-field-html-group">
-                            <legend htmlFor="email-b">Email de Contacto Público <span style={{ color: 'red' }}>*</span></legend>
+                            <label htmlFor="email-b">Email de Contacto Público <span style={{ color: 'red' }}>*</span></label>
                             <input id="email-b" type="email" placeholder="Email" {...register('email', { required: 'El email es requerido', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Email inválido" } })} className={errors.email ? 'input-error' : ''} />
-                            {errors.email && <span className="error-message">{errors.email.message}</span>}
+                            {errors.email && <span style={errorSpanStyle}>{errors.email.message}</span>}
                         </div>
                     </div>
 
-                    <div className="form-section galeria-productos"> {/* GALERÍA */}
-                        <h3>Galería de Productos (Hasta {LIMITE_GALERIA_PRODUCTOS}, primeros {PRODUCTOS_OBLIGATORIOS_GALERIA} obligatorios)</h3>
+                    {/* GALERÍA DE PRODUCTOS */}
+                    <div className="form-section galeria-productos">
+                        <h3>Galería de Productos (Hasta {LIMITE_GALERIA_PRODUCTOS}, primeros {PRODUCTOS_OBLIGATORIOS_GALERIA} obligatorios con imagen, título y precio)</h3>
                         <div className="galeria-grid">
                             {galeriaFields.map((item, index) => {
                                 const esObligatorio = index < PRODUCTOS_OBLIGATORIOS_GALERIA;
                                 return (
                                     <div key={item.id} className="producto-card">
-                                        <InputLabel 
-                                            error={!!errors.galeria?.[index]?.imagenFile} 
-                                            sx={{ mb: 0.5, fontSize: '0.8rem' }}
-                                            htmlFor={`galeria_imagen_${index}`} // Conectar con el uploader si es posible
-                                        >
-                                            <legend>Producto {index + 1} {esObligatorio && <span style={{ color: 'red' }}>*</span>}</legend>
+                                        <InputLabel error={!!errors.galeria?.[index]?.imagenFile} sx={{ mb: 0.5, fontSize: '0.8rem' }}>
+                                            Producto {index + 1} {esObligatorio && <span style={{ color: 'red' }}>*</span>}
                                         </InputLabel>
                                         {watch(`galeria.${index}.imagenFile`)?.preview ? (
                                             <div className="single-preview">
-                                                <img src={watch(`galeria.${index}.imagenFile`).preview} alt={`Preview ${index + 1}`} />
+                                                <img src={watch(`galeria.${index}.imagenFile`).preview} alt={watch(`galeria.${index}.imagenFile`).name || `Preview ${index + 1}`} />
                                                 <button type="button" onClick={() => handleRemoveGaleriaImage(index)} className="remove-button"><FaTimes /></button>
                                             </div>
-                                        ) : (
-                                            <Controller 
-                                                name={`galeria.${index}.imagenFile`} 
-                                                control={control}
-                                                rules={esObligatorio ? { required: 'La imagen es requerida' } : {}}
-                                                render={({ field }) => <FileUploaderRHF field={field} multiple={false} acceptProp="image/*" label="Subir imagen" isGaleria={true} maxFiles={1} />} 
-                                            />
-                                        )}
-                                        {errors.galeria?.[index]?.imagenFile && <span className="error-message" style={{fontSize: '0.75rem', marginTop: '3px'}}>{errors.galeria[index].imagenFile.message}</span>}
+                                        ) : null}
+                                        <Controller 
+                                            name={`galeria.${index}.imagenFile`} 
+                                            control={control}
+                                            rules={esObligatorio ? { 
+                                                required: 'La imagen es requerida',
+                                                validate: { fileType: v => (v && v.file instanceof File && !v.isExisting) ? v.file.type.startsWith('image/') || 'Solo imágenes.' : true }
+                                            } : {
+                                                validate: { fileType: v => (v && v.file instanceof File && !v.isExisting) ? v.file.type.startsWith('image/') || 'Solo imágenes.' : true }
+                                            }}
+                                            render={({ field }) => <FileUploaderRHF field={field} multiple={false} acceptProp="image/*" label={field.value?.preview ? "Cambiar" : "Subir imagen"} isGaleria={true} maxFiles={1} />} 
+                                        />
+                                        {errors.galeria?.[index]?.imagenFile && <FormHelperText error sx={{fontSize: '0.75rem', marginTop: '3px'}}>{errors.galeria[index].imagenFile.message || errors.galeria[index].imagenFile.type}</FormHelperText>}
                                         
                                         <div className="form-field-html-group" style={{marginTop: '8px'}}>
-                                            <label htmlFor={`galeria_titulo_${index}`}>Título Producto {esObligatorio}</label>
-                                            <input type="text" id={`galeria_titulo_${index}`} placeholder="Título"
+                                            <label htmlFor={`galeria_titulo_${index}`}>Título {esObligatorio && <span style={{ color: 'red' }}>*</span>}</label>
+                                            <input type="text" id={`galeria_titulo_${index}`} placeholder="Título producto"
                                                 {...register(`galeria.${index}.titulo`, esObligatorio ? { required: 'Título requerido' } : {} )}
                                                 className={errors.galeria?.[index]?.titulo ? 'input-error' : ''} />
-                                            {errors.galeria?.[index]?.titulo && <span className="error-message">{errors.galeria[index].titulo.message}</span>}
+                                            {errors.galeria?.[index]?.titulo && <span style={errorSpanStyle}>{errors.galeria[index].titulo.message}</span>}
                                         </div>
 
                                         <div className="form-field-html-group" style={{marginTop: '8px'}}>
-                                            <label htmlFor={`galeria_precio_${index}`}>Precio {esObligatorio}</label>
+                                            <label htmlFor={`galeria_precio_${index}`}>Precio {esObligatorio && <span style={{ color: 'red' }}>*</span>}</label>
                                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                                 <span style={{ marginRight: '4px', fontSize: '1em', color: errors.galeria?.[index]?.precio ? '#d32f2f' : 'inherit' }}>$</span>
                                                 <input type="text" id={`galeria_precio_${index}`} placeholder="100.00"
                                                     {...register(`galeria.${index}.precio`, {
                                                         ...(esObligatorio && { required: 'Precio requerido' }),
-                                                        pattern: { value: /^\d*(\.\d{0,2})?$/, message: 'Precio inválido (ej: 100 o 100.99)' }
+                                                        pattern: { value: /^\d*([.,]\d{0,2})?$/, message: 'Precio inválido (ej: 100 o 100.99)' }
                                                     })}
                                                     className={errors.galeria?.[index]?.precio ? 'input-error' : ''} 
-                                                    style={{ flexGrow: 1 }} // Para que el input ocupe el espacio restante
+                                                    style={{ flexGrow: 1 }}
                                                 />
                                             </div>
-                                            {errors.galeria?.[index]?.precio && <span className="error-message">{errors.galeria[index].precio.message}</span>}
+                                            {errors.galeria?.[index]?.precio && <span style={errorSpanStyle}>{errors.galeria[index].precio.message}</span>}
                                         </div>
                                     </div>
                                 );
@@ -370,7 +437,7 @@ const FormularioPersonalizadoTipoB = ({
                     </div>
 
                     <div className="botones-navegacion">
-                        <button type="button" onClick={onBack} className="secondary-button">Atrás</button>
+                        <button type="button" onClick={handleBack} className="secondary-button">Atrás</button>
                         <button type="submit" className="primary-button">Continuar</button>
                     </div>
                 </form>

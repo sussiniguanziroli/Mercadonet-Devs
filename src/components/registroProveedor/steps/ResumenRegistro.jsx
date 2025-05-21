@@ -1,5 +1,5 @@
 // src/components/registroProveedor/steps/ResumenRegistro.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react'; // useEffect no se usa directamente aquí
 import {
     Box,
     Container,
@@ -18,22 +18,19 @@ import {
     CircularProgress
 } from '@mui/material';
 
-// Importaciones de React Icons (Font Awesome)
 import {
     FaShoppingCart,
     FaUserCircle,
     FaCreditCard,
     FaFileAlt,
     FaBuilding,
-    FaWhatsapp, // Para el WhatsApp de contacto
-    FaCheckCircle // Para características del plan y otros checks
+    FaWhatsapp,
+    FaCheckCircle
 } from 'react-icons/fa';
 
-// ASUMO QUE ESTOS COMPONENTES ESTÁN DISPONIBLES Y FUNCIONAN CON LAS PROPS ADECUADAS
 import CardHistoriaPreview from '../card_simulators/CardHistoriaPreview';
 import CardProductosPreview from '../card_simulators/CardProductosPreview';
 
-// Panel para el contenido de cada Tab
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -70,8 +67,8 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
 
     const handleFinalConfirm = async () => {
         setIsProcessing(true);
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        onConfirm();
+        // Simulación de procesamiento, onConfirm se encarga de la lógica real.
+        await onConfirm(); // Llamamos a la prop onConfirm del Navigator
         setIsProcessing(false);
     };
 
@@ -82,37 +79,47 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
         planSeleccionado = {}
     } = formData || {};
 
+    // datosPersonalizados[tipoCard] ya contiene las URLs finales de Firebase
     const personalDataForSelectedType = datosPersonalizados?.[tipoCard] || {};
 
+    // --- AJUSTES EN proveedorPreviewProps ---
     const proveedorPreviewProps = {
+        // Datos generales para ambas cards
         nombre: datosGenerales.nombreProveedor || 'Nombre de Empresa Ejemplo',
         tipoRegistro: datosGenerales.tipoRegistro || '',
         tipoProveedor: datosGenerales.tipoProveedor || [],
         ubicacionDetalle: `${datosGenerales.ciudad || ''}${datosGenerales.ciudad && datosGenerales.provincia ? ', ' : ''}${datosGenerales.provincia || ''}` || 'Ubicación Ejemplo',
         selectedServices: [datosGenerales.categoriaPrincipal, ...(datosGenerales.categoriasAdicionales || [])].filter(Boolean),
+        
+        // Datos específicos de personalDataForSelectedType
         descripcion: personalDataForSelectedType.descripcion || '',
-        logoPreview: personalDataForSelectedType.logoUrlExistente || personalDataForSelectedType.logoFile?.preview || null,
-        carrusel: (personalDataForSelectedType.carruselUrlsExistentes || []).concat(
-            (personalDataForSelectedType.carruselNuevosArchivos || []).map(file => ({
-                url: file instanceof File ? URL.createObjectURL(file) : file.url, // Manejar tanto File como objetos con url
-                fileType: file.type?.startsWith('video/') ? 'video' : 'image',
-                mimeType: file.type
-            }))
-        ),
-        marca: personalDataForSelectedType.marca || personalDataForSelectedType.marcasSeleccionadas || [],
-        extras: personalDataForSelectedType.extras || personalDataForSelectedType.extrasSeleccionados || [],
+        logoPreview: personalDataForSelectedType.logoURL || null, // Directamente de logoURL
+        carrusel: personalDataForSelectedType.carruselURLs || [], // Directamente de carruselURLs
+                                                                 // (ya es un array de {url, fileType, mimeType})
+        marca: personalDataForSelectedType.marca || [], // 'marca' es el campo en tipoA
+        extras: personalDataForSelectedType.extras || [],
         sitioWeb: personalDataForSelectedType.sitioWeb || '',
-        whatsapp: personalDataForSelectedType.whatsapp || '',
+        whatsapp: personalDataForSelectedType.whatsapp || '', // WhatsApp de la empresa (card)
         telefono: personalDataForSelectedType.telefono || '',
-        email: personalDataForSelectedType.email || '',
+        email: personalDataForSelectedType.email || '', // Email público de la empresa (card)
+
+        // Específico para tipoB (Productos)
         ...(tipoCard === 'tipoB' && {
+            // 'marcas' es el campo en tipoB (diferente de 'marca' en tipoA)
+            // Si la estructura es la misma para marcas en tipoA y tipoB, usa un solo nombre de campo.
+            // Aquí asumimos que 'marcas' existe en personalDataForSelectedType para tipoB
+            marca: personalDataForSelectedType.marcas || personalDataForSelectedType.marca || [], 
             galeriaProductos: (personalDataForSelectedType.galeria || []).map(prod => ({
                 titulo: prod.titulo,
                 precio: prod.precio,
-                imagenPreview: prod.imagenUrlExistente || prod.imagenFile?.preview || null,
+                imagenPreview: prod.imagenURL || null, // Directamente de imagenURL
+                // fileType y mimeType no son usados por CardProductosPreview para la galería,
+                // pero si lo fueran, se podrían pasar desde prod.fileType y prod.mimeType
             })).filter(p => p.titulo || p.precio || p.imagenPreview)
         }),
     };
+    // --- FIN DE AJUSTES EN proveedorPreviewProps ---
+
 
     if (!formData) {
         return (
@@ -146,15 +153,15 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
                             </Typography>
                             <Paper variant="outlined" sx={{ p: 2 }}>
                                 <Typography variant="h5" component="div" color="primary.main">
-                                    {planSeleccionado.name || 'Nombre del Plan no disponible'}
+                                    {planSeleccionado?.name || 'Nombre del Plan no disponible'}
                                 </Typography>
                                 <Typography variant="h6" color="text.secondary" gutterBottom>
-                                    {planSeleccionado.price || '$0 USD'} {planSeleccionado.frequency || '/mes'}
+                                    {planSeleccionado?.price || '$0 USD'} {planSeleccionado?.frequency || '/mes'}
                                 </Typography>
                                 <Divider sx={{ my: 1.5 }} />
                                 <Typography variant="subtitle1" gutterBottom>Características principales:</Typography>
                                 <List dense>
-                                    {(planSeleccionado.features || ['Característica 1', 'Característica 2', 'Característica 3']).slice(0, 3).map((feature, idx) => (
+                                    {(planSeleccionado?.features || ['Característica 1', 'Característica 2', 'Característica 3']).slice(0, 3).map((feature, idx) => (
                                         <ListItem key={idx} disablePadding>
                                             <ListItemIcon sx={{ minWidth: '30px' }}><FaCheckCircle color="green" /></ListItemIcon>
                                             <ListItemText primary={feature} />
@@ -197,11 +204,11 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
                             <Divider component="li" />
                             <ListItem>
                                 <ListItemIcon><FaWhatsapp /></ListItemIcon>
-                                <ListItemText primary="WhatsApp de Contacto" secondary={datosGenerales.whatsapp || 'No provisto'} />
+                                <ListItemText primary="WhatsApp de Contacto (Formulario General)" secondary={datosGenerales.whatsapp || 'No provisto'} />
                             </ListItem>
                             <Divider component="li" />
                             <ListItem>
-                                <ListItemIcon><FaBuilding /></ListItemIcon> {/* Icono de empresa para el rol */}
+                                <ListItemIcon><FaBuilding /></ListItemIcon>
                                 <ListItemText primary="Rol en la Empresa" secondary={datosGenerales.rol || 'No provisto'} />
                             </ListItem>
                             {datosGenerales.cuit && (
@@ -215,8 +222,9 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
                             )}
                              <Divider component="li" />
                             <ListItem>
-                                <ListItemIcon><FaCreditCard /></ListItemIcon> {/* Reutilizando para 'facturación' */}
-                                <ListItemText primary="Email para Facturación/Notificaciones" secondary={datosGenerales.emailComprador || personalDataForSelectedType.email || 'Email no provisto'} />
+                                <ListItemIcon><FaCreditCard /></ListItemIcon>
+                                {/* Asumiendo que el email para facturación podría ser el email del contacto principal general o el email de la card */}
+                                <ListItemText primary="Email para Facturación/Notificaciones" secondary={datosGenerales.email /* Asumiendo que hay un datosGenerales.email para esto */ || personalDataForSelectedType.email || 'Email no provisto'} />
                             </ListItem>
                         </List>
                     </Paper>
@@ -243,7 +251,7 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
                             </Grid>
                             <Grid item xs={12} sm={4}>
                                  <Typography variant="subtitle1" align="right" sx={{fontWeight:'bold', mt:2}}>
-                                    Total: {planSeleccionado.price || '$0 USD'}
+                                    Total: {planSeleccionado?.price || '$0 USD'}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -257,7 +265,7 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
                     <Button variant="outlined" onClick={onBack} disabled={isProcessing}>
                         Volver
                     </Button>
-                    {onCancel && (
+                    {onCancel && ( // El botón Cancelar ya llama a la prop onCancel, que está conectada a la función del Navigator
                          <Button variant="text" color="error" onClick={onCancel} disabled={isProcessing}>
                             Cancelar Registro
                         </Button>
@@ -265,11 +273,11 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={handleFinalConfirm}
-                        disabled={isProcessing || activeTab !== 2}
+                        onClick={handleFinalConfirm} // Llama a onConfirm (prop) que ya maneja la lógica en el Navigator
+                        disabled={isProcessing || activeTab !== 2} // Solo se puede confirmar desde la pestaña de pago
                         startIcon={isProcessing ? <CircularProgress size={20} color="inherit" /> : <FaCreditCard />}
                     >
-                        {isProcessing ? 'Procesando...' : `Confirmar y Pagar ${planSeleccionado.price || ''}`}
+                        {isProcessing ? 'Procesando...' : `Confirmar y Pagar ${planSeleccionado?.price || ''}`}
                     </Button>
                 </Box>
             </Paper>

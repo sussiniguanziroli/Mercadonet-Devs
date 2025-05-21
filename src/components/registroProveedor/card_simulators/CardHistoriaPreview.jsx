@@ -8,20 +8,23 @@ import  RegisterTags from '../assetsRegistro/RegisterTags';
 
 const CardHistoriaPreview = ({ proveedor }) => {
     const {
-        selectedServices = [],
-        tipoRegistro = [],
-        tipoProveedor = [],
-        nombre = '', ubicacionDetalle = '',
-        logoPreview = null,
-        carrusel = [], // Ahora es un array de objetos: { url, fileType, mimeType }
-        descripcion = '', marca = [], extras = [],
-        sitioWeb = '', whatsapp = '', telefono = '', email = ''
+        selectedServices = [], // Usado por RegisterTags
+        tipoRegistro = '',     // Usado por RegisterTags
+        tipoProveedor = [],    // Usado por RegisterTags
+        nombre = '',
+        ubicacionDetalle = '',
+        logoPreview = null,    // URL para el logo (puede ser blob: o https:)
+        carrusel = [],         // Array de objetos: { url, fileType, mimeType }
+        descripcion = '',
+        marca = [],
+        extras = [],
+        // Campos de contacto, si se necesitaran en la preview
+        // sitioWeb = '', whatsapp = '', telefono = '', email = ''
     } = proveedor || {};
 
     const nombreMostrado = nombre.trim() || 'Nombre Empresa';
     const ubicacionMostrada = ubicacionDetalle.trim() || 'Ubicación';
 
-    // Actualizado para el nuevo formato de carrusel
     const tieneCarrusel = Array.isArray(carrusel) && carrusel.length > 0 && carrusel.some(item => item && typeof item.url === 'string');
     const tieneLogo = logoPreview && typeof logoPreview === 'string';
 
@@ -38,31 +41,28 @@ const CardHistoriaPreview = ({ proveedor }) => {
                     <Slider>
                         {tieneCarrusel ? (
                             carrusel.map((item, index) => (
-                                <Slide className="carousel-slide" key={item.url ? item.url + '-' + index : index} index={index}>
+                                <Slide className="carousel-slide" key={item.url ? `${item.url}-${index}` : index} index={index}>
                                     {item.fileType === 'image' ? (
                                         <img
-                                            className="carousel-image" // Clase genérica para imagen/video
+                                            className="carousel-image"
                                             src={item.url}
                                             alt={`Multimedia ${index + 1}`}
-                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                            onError={(e) => { e.target.style.display = 'none'; /* Podría mostrar un placeholder aquí */ }}
                                         />
                                     ) : item.fileType === 'video' ? (
                                         <video
-                                            className="carousel-image" // Clase genérica para imagen/video
+                                            className="carousel-image"
                                             src={item.url}
                                             controls
                                             autoPlay
                                             muted
                                             loop
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} // objectFit para videos
-                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            onError={(e) => { e.target.style.display = 'none'; /* Podría mostrar un placeholder aquí */ }}
                                         >
                                             Tu navegador no soporta la etiqueta de video.
-                                            {/* Opcionalmente, puedes usar item.mimeType si lo necesitas para el tag source,
-                                                pero src en video es generalmente suficiente para los tipos comunes. */}
                                         </video>
                                     ) : (
-                                        // Fallback por si fileType no es ni image ni video
                                         <div className="carousel-placeholder-item">
                                             <span>Formato no soportado</span>
                                         </div>
@@ -106,26 +106,25 @@ const CardHistoriaPreview = ({ proveedor }) => {
                 </div>
 
                 <div className='tags-box'>
+                    {/* RegisterTags consume varias props de proveedor */}
                     <RegisterTags proveedor={proveedor} />
                 </div>
                 
-
                 <div className="texts-box">
                     {descripcion ? (
                         <p className="description">
-                            {/* Comprueba si la longitud es mayor que 540 */}
                             {descripcion.length > 540
-                                ? `${descripcion.substring(0, 540)}...` // Si es mayor, corta a 540 y añade "..."
-                                : descripcion // Si es menor o igual, muestra la descripción completa
+                                ? `${descripcion.substring(0, 540)}...`
+                                : descripcion
                             }
                         </p>
                     ) : null}
 
                     {Array.isArray(marca) && marca.length > 0 && (
-                        <div className="marcas alineado-auto"><h4>Marcas:</h4> {marca.slice(0, 5).map((m, i) => <p key={i}>{m}</p>)}{marca.length > 5 && <p>...</p>}</div>
+                        <div className="marcas alineado-auto"><h4>Marcas:</h4> {marca.slice(0, 5).map((m, i) => <p key={`${m}-${i}`}>{m}</p>)}{marca.length > 5 && <p>...</p>}</div>
                     )}
                     {Array.isArray(extras) && extras.length > 0 && (
-                        <div className="extras alineado-auto"><h4>Servicios/Extras:</h4> {extras.slice(0, 4).map((e, i) => (<p key={i} className="tag-extra">{e}</p>))}{extras.length > 4 && <p className="tag-extra">...</p>}</div>
+                        <div className="extras alineado-auto"><h4>Servicios/Extras:</h4> {extras.slice(0, 4).map((e, i) => (<p key={`${e}-${i}`} className="tag-extra">{e}</p>))}{extras.length > 4 && <p className="tag-extra">...</p>}</div>
                     )}
                     {!descripcion && (!marca || marca.length === 0) && (!extras || extras.length === 0) && (
                         <p className='placeholder-text'>(Aquí aparecerá tu descripción, marcas y servicios)</p>

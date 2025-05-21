@@ -7,7 +7,7 @@ import { CarouselProvider, Slider as PureSlider, Slide as PureSlide, ButtonBack,
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
 // --- Imports para Carrusel de Productos (Inferior) ---
-import Slider from "react-slick"; // Renombrado para evitar conflicto con PureSlider si es necesario, aunque aquí se usa directamente.
+import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
@@ -15,22 +15,23 @@ import RegisterTags from '../assetsRegistro/RegisterTags';
 
 const CardProductosPreview = ({ proveedor }) => {
     const {
+        // tipoProveedor y tipoRegistro son usados por RegisterTags
         tipoProveedor = [],
         tipoRegistro = '',
         nombre = '',
         ubicacionDetalle = '',
-        logoPreview = null,
-        carrusel = [], // AHORA: Array de objetos { url, fileType, mimeType }
-        descripcion = '',
-        marcas = [],
-        servicios = [],
-        galeriaProductos = []
+        logoPreview = null,    // URL para el logo (puede ser blob: o https:)
+        carrusel = [],         // Array de objetos { url, fileType, mimeType }
+        // descripcion no se usa directamente en esta preview, pero puede ser parte del objeto proveedor
+        // marcas y servicios son usados por RegisterTags
+        // marcas = [], // Ya incluido en proveedor para RegisterTags
+        // servicios = [], // Ya incluido en proveedor para RegisterTags
+        galeriaProductos = []  // Array de objetos { titulo, precio, imagenPreview (URL) }
     } = proveedor || {};
 
     const nombreMostrado = nombre.trim() || 'Nombre Empresa';
     const ubicacionMostrada = ubicacionDetalle.trim() || 'Ubicación';
     
-    // --- LÓGICA PARA CARRUSEL PRINCIPAL ACTUALIZADA ---
     const tieneCarruselPrincipal = Array.isArray(carrusel) && carrusel.length > 0 && carrusel.some(item => item && typeof item.url === 'string');
     
     const tieneLogo = logoPreview && typeof logoPreview === 'string';
@@ -47,14 +48,14 @@ const CardProductosPreview = ({ proveedor }) => {
              {
                  breakpoint: 1024,
                  settings: {
-                     slidesToShow: 3,
+                     slidesToShow: productosValidos.length < 3 ? productosValidos.length : 3,
                      infinite: productosValidos.length > 3,
                  },
              },
             {
                 breakpoint: 768,
                 settings: {
-                    slidesToShow: 2,
+                    slidesToShow: productosValidos.length < 2 ? productosValidos.length : 2,
                     infinite: productosValidos.length > 2,
                 },
             },
@@ -72,7 +73,6 @@ const CardProductosPreview = ({ proveedor }) => {
     return (
         <div className="card-productos-preview">
 
-            {/* --- CARRUSEL PRINCIPAL (SUPERIOR - pure-react-carousel) - MODIFICADO --- */}
             <div className="carousel-box">
                 <CarouselProvider
                     naturalSlideWidth={100} naturalSlideHeight={100} 
@@ -82,31 +82,29 @@ const CardProductosPreview = ({ proveedor }) => {
                 >
                     <PureSlider>
                         {tieneCarruselPrincipal ? (
-                            carrusel.map((item, index) => ( // item es ahora { url, fileType, mimeType }
-                                <PureSlide className="carousel-slide" key={item.url ? item.url + '-' + index : index} index={index}>
+                            carrusel.map((item, index) => (
+                                <PureSlide className="carousel-slide" key={item.url ? `${item.url}-${index}` : index} index={index}>
                                     {item.fileType === 'image' ? (
                                         <img 
-                                            className="carousel-image" // Clase unificada para img/video
+                                            className="carousel-image"
                                             src={item.url} 
                                             alt={`Multimedia ${index + 1}`} 
-                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                            onError={(e) => { e.target.style.display = 'none'; /* Podría mostrar un placeholder */ }}
                                         />
                                     ) : item.fileType === 'video' ? (
                                         <video 
-                                            className="carousel-image" // Clase unificada para img/video
+                                            className="carousel-image"
                                             src={item.url} 
                                             controls 
                                             autoPlay 
                                             muted 
                                             loop
                                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                            onError={(e) => { e.target.style.display = 'none'; }}
+                                            onError={(e) => { e.target.style.display = 'none'; /* Podría mostrar un placeholder */ }}
                                         >
-                                            
                                             Tu navegador no soporta la etiqueta de video.
                                         </video>
                                     ) : (
-                                        // Fallback si el tipo no es reconocido
                                         <div className="carousel-placeholder-item" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', backgroundColor: '#eee'}}>
                                             <span>Formato no soportado</span>
                                         </div>
@@ -129,7 +127,6 @@ const CardProductosPreview = ({ proveedor }) => {
                 </CarouselProvider>
             </div>
 
-            {/* Info principal - Sin cambios */}
             <div className="info-box">
                 <div className="titles-box">
                     <div className="small-logo-box">
@@ -145,10 +142,10 @@ const CardProductosPreview = ({ proveedor }) => {
                 </div>
 
                 <div className='tags-box'>
+                    {/* RegisterTags consume varias props de proveedor */}
                     <RegisterTags proveedor={proveedor} />
                 </div>
 
-                {/* Galería de Productos con React-Slick - Sin cambios en su lógica interna de datos */}
                 <div className="product-gallery-preview-section">
                     <h4>Galería de Productos</h4>
                     {tieneGaleria ? (
@@ -173,7 +170,6 @@ const CardProductosPreview = ({ proveedor }) => {
                                             {(!producto.imagenPreview) && (
                                                 <div className="product-gallery-img-placeholder" style={{display: 'flex'}}><FaBoxOpen /></div>
                                             )}
-                                            {/* Placeholder oculto para mostrar en caso de error de imagen, si la imagen existía */}
                                             { producto.imagenPreview && (
                                                 <div className="product-gallery-img-placeholder-error" style={{display: 'none'}}><FaBoxOpen /><span>Error</span></div>
                                             )}

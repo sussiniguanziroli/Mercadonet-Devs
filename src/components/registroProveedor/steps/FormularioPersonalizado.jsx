@@ -5,37 +5,45 @@ import FormularioPersonalizadoTipoA from './FormularioPersonalizadoTipoA';
 import FormularioPersonalizadoTipoB from './FormularioPersonalizadoTipoB';
 
 const FormularioPersonalizado = ({
-    selectedServices,
-    initialData,
+    selectedServices, // Prop para TipoA y TipoB (si es necesario para la lógica interna o preview)
+    initialData,    // Recibe formData.datosPersonalizados[selectedCard] del Navigator
     onNext,
     onBack,
     onCancel,
     selectedCard,
-    tipoProveedor,
-    tipoRegistro,
-    // --- NUEVAS PROPS A RECIBIR Y PASAR ---
-    nombreProveedor, // Del paso 1
-    ciudad,          // Del paso 1
-    provincia,       // Del paso 1
-    // categoriasCompletas, // Ya no se necesita para preview de Historia
-    marcas,          // Filtro global
-    extras,          // Filtro global
+    tipoProveedor,    // Prop para preview en TipoA y TipoB
+    tipoRegistro,     // Prop para preview en TipoA y TipoB
+    nombreProveedor,  // Prop para preview en TipoA y TipoB
+    ciudad,           // Prop para preview en TipoA y TipoB
+    provincia,        // Prop para preview en TipoA y TipoB
+    marcas,           // Prop para opciones de Autocomplete en TipoA y TipoB
+    extras,           // Prop para opciones de Autocomplete en TipoA y TipoB
+    // servicios ya no se pasa aquí, ya que FormularioGeneral lo usa y selectedServices se pasa a TipoA/B
 }) => {
 
-    const commonProps = { // Agrupa props comunes para pasarlas
-        initialData, onNext, onBack, onCancel,
-        nombreProveedor, ciudad, provincia,
-        tipoProveedor, tipoRegistro, selectedServices
-        // categoriasCompletas, // No necesario por ahora
+    const commonProps = {
+        initialData, // Se pasa directamente initialData, ya que está en el formato esperado
+        onNext,
+        onBack,
+        onCancel,
+        nombreProveedor,
+        ciudad,
+        provincia,
+        tipoProveedor,
+        tipoRegistro,
+        selectedServices, // Asegúrate de que esta prop se esté pasando si es necesaria para CardHistoriaPreview o CardProductosPreview
+        marcas,          // Opciones para el Autocomplete de marcas
+        extras           // Opciones para el Autocomplete de extras
     };
 
-    const tipoAProps = { ...commonProps, marcas, extras }; // Tipo A necesita marcas y extras
-    const tipoBProps = { ...commonProps, marcas, extras }; // Tipo B necesita marcas y servicios
+    // Ya no se necesita una transformación específica para tipoAProps si initialData
+    // (proveniente de formData.datosPersonalizados.tipoA del Navigator)
+    // ya tiene la estructura correcta (ej: logoURL, carruselURLs).
 
     return (
         <div>
-            {selectedCard === 'tipoA' && <FormularioPersonalizadoTipoA {...tipoAProps} />}
-            {selectedCard === 'tipoB' && <FormularioPersonalizadoTipoB {...tipoBProps} />}
+            {selectedCard === 'tipoA' && <FormularioPersonalizadoTipoA {...commonProps} />}
+            {selectedCard === 'tipoB' && <FormularioPersonalizadoTipoB {...commonProps} />}
             {!selectedCard && <p>Error: Tipo de card no determinado.</p>}
         </div>
     );
