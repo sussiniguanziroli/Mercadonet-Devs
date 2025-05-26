@@ -30,8 +30,11 @@
 .header.scrolled .search-box {
   display: none;
 }
-.header img {
-  width: 9%;
+.header .logo-container {
+  width: 30%;
+}
+.header .logo-container img {
+  width: 30%;
   height: auto;
 }
 .header .search-box {
