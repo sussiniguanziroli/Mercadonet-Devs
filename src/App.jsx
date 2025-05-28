@@ -13,6 +13,7 @@ import "slick-carousel/slick/slick-theme.css";
 import RegisterNavigator from './components/registros/RegisterNavigator';
 import RegistrosProveedorNavigator from './components/registroProveedor/RegistrosProveedorNavigator';
 import LandingRegistroProveedor from './components/registroProveedor/LandingRegistroProveedor';
+import ProtectedRoute from './components/common/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -30,8 +31,24 @@ function App() {
                                 <Route path="/" element={<Landing />} />
                                 <Route path="/proveedores" element={<Proveedores />} />
                                 <Route path="/registrarme" element={<RegisterNavigator />} />
-                                <Route path='/registrar-mi-empresa/flujo' element={<RegistrosProveedorNavigator />} />
                                 <Route path="/registrar-mi-empresa" element={<LandingRegistroProveedor />} />
+
+                                <Route 
+                                    path='/registrar-mi-empresa/flujo' 
+                                    element={
+                                        <ProtectedRoute>
+                                            <RegistrosProveedorNavigator />
+                                        </ProtectedRoute>
+                                    } 
+                                />
+
+                                {/* Add a placeholder route for /perfil if you haven't already */}
+                                {/* <Route path="/perfil" element={
+                                    <ProtectedRoute>
+                                        <div>Página de Perfil del Usuario (Próximamente)</div>
+                                    </ProtectedRoute>
+                                } /> */}
+
                             </Routes>
                         </div>
                     </BrowserRouter>

@@ -7,7 +7,7 @@ import { db } from '../firebase/config';
 const FILTROS_COLLECTION_NAME = "filtros";
 
 // 1. Categorías (Mapa)
-const CATEGORIAS_DOC_ID = "aksjeiX4pQZXtU1OKgyI";
+const CATEGORIAS_DOC_ID = "VZThZs2CU982Okg62ehm";
 const CATEGORIAS_FIELD_NAME = "categorias"; // Campo es un Mapa/Objeto
 
 // 2. PProductos (Array)

@@ -1,3 +1,4 @@
+// src/components/proveedores/FiltrosComponent.jsx
 import React, { useEffect, useRef, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useFiltersContext } from '../../context/FiltersContext';
@@ -5,58 +6,84 @@ import { VscDebugRestart } from 'react-icons/vsc';
 import { FaFilter, FaStar } from 'react-icons/fa';
 import { MdFilterAltOff } from "react-icons/md";
 
-
 const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
     const {
-        filtrosOpciones,
+        filtrosOpciones, // This will have: { ubicaciones, categorias, marcas, servicios, extras, pproductos }
         selectedCategoria,
         selectedUbicacion,
+        selectedMarca,
         updateFilters,
         selectedExtras,
         checkedServices,
+        isLoading, 
+        selectedPProductos 
     } = useFiltersContext();
 
-    const [showMore, setShowMore] = useState(false);
-    const [inputValue, setInputValue] = useState("");
-    const [filteredOptions, setFilteredOptions] = useState(filtrosOpciones.marca || []);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
+    const [showMoreCategorias, setShowMoreCategorias] = useState(false);
+    const [inputMarcaValue, setInputMarcaValue] = useState(selectedMarca || "");
+    const [filteredMarcaOptions, setFilteredMarcaOptions] = useState([]);
+    const [isMarcaDropdownOpen, setIsMarcaDropdownOpen] = useState(false);
+    const marcaDropdownRef = useRef(null);
 
-    const visibleCount = 6;
+    const visibleCountCategorias = 6;
+
+    useEffect(() => {
+        setInputMarcaValue(selectedMarca || "");
+    }, [selectedMarca]);
+
+    useEffect(() => {
+        const marcasOpt = Array.isArray(filtrosOpciones.marcas) ? filtrosOpciones.marcas : [];
+        if (inputMarcaValue) {
+            setFilteredMarcaOptions(
+                marcasOpt.filter((marca) =>
+                    typeof marca === 'string' && marca.toLowerCase().includes(inputMarcaValue.toLowerCase())
+                )
+            );
+        } else {
+            setFilteredMarcaOptions(marcasOpt);
+        }
+    }, [inputMarcaValue, filtrosOpciones.marcas]);
 
     const handleCategoriaChange = (categoria) => {
-        const newCategorias = selectedCategoria.includes(categoria)
+        const newCategorias = Array.isArray(selectedCategoria) && selectedCategoria.includes(categoria)
             ? selectedCategoria.filter((item) => item !== categoria)
-            : [...selectedCategoria, categoria];
-
+            : [...(Array.isArray(selectedCategoria) ? selectedCategoria : []), categoria];
         updateFilters("categoria", newCategorias);
     };
 
     const handleMarcaInputChange = (e) => {
         const value = e.target.value;
-        setInputValue(value);
-
-        const filtered = filtrosOpciones.marca.filter((marca) =>
-            marca.toLowerCase().includes(value.toLowerCase())
-        );
-        setFilteredOptions(filtered);
-        setDropdownOpen(true);
+        setInputMarcaValue(value);
+        setIsMarcaDropdownOpen(true);
     };
 
     const handleMarcaSelect = (marca) => {
-        setInputValue(marca);
+        setInputMarcaValue(marca);
         updateFilters("marca", marca);
-        setDropdownOpen(false);
+        setIsMarcaDropdownOpen(false);
     };
-
+    
     const handleMarcaInputFocus = () => {
-        setDropdownOpen(true);
+        const marcasOpt = Array.isArray(filtrosOpciones.marcas) ? filtrosOpciones.marcas : [];
+         setFilteredMarcaOptions(
+            marcasOpt.filter((m) =>
+                typeof m === 'string' && m.toLowerCase().includes(inputMarcaValue.toLowerCase())
+            )
+        );
+        setIsMarcaDropdownOpen(true);
+    };
+    
+    const handleMarcaReset = () => {
+        setInputMarcaValue("");
+        updateFilters("marca", "");
+        setFilteredMarcaOptions(Array.isArray(filtrosOpciones.marcas) ? filtrosOpciones.marcas : []);
+        setIsMarcaDropdownOpen(false);
     };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setDropdownOpen(false);
+            if (marcaDropdownRef.current && !marcaDropdownRef.current.contains(event.target)) {
+                setIsMarcaDropdownOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -64,13 +91,6 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-
-    const handleReset = () => {
-        setInputValue("");
-        setFilteredOptions(filtrosOpciones.marca);
-        setDropdownOpen(true);
-        updateFilters("marca", "");
-    };
 
     const handleExtrasChange = (e) => {
         updateFilters("extras", e.target.value);
@@ -86,9 +106,17 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
 
     const handleServicesChange = (servicio) => {
         updateFilters("servicio", (prevState) =>
-            prevState.includes(servicio)
+            Array.isArray(prevState) && prevState.includes(servicio)
                 ? prevState.filter((item) => item !== servicio)
-                : [...prevState, servicio]
+                : [...(Array.isArray(prevState) ? prevState : []), servicio]
+        );
+    };
+    
+    const handlePProductosChange = (tipoProveedor) => {
+        updateFilters("pproductos", (prev) =>
+            Array.isArray(prev) && prev.includes(tipoProveedor)
+                ? prev.filter((item) => item !== tipoProveedor)
+                : [...(Array.isArray(prev) ? prev : []), tipoProveedor]
         );
     };
 
@@ -97,18 +125,38 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
         updateFilters("servicio", []);
         updateFilters("extras", '');
         updateFilters("ubicacion", "");
-        updateFilters("marca", "");
+        handleMarcaReset(); 
         updateFilters("categoria", []);
     };
 
     const isFulfillmentActive =
+        Array.isArray(checkedServices) &&
         checkedServices.includes("Logística/Transporte") &&
         checkedServices.includes("Almacenamiento");
+
+    if (isLoading) {
+        return (
+            <main className={`main-filters-component ${isMenuHidden ? 'hidden' : 'visible'}`}>
+                <div className='closebtn-div'>
+                    <button onClick={() => setIsMenuHidden(true)} aria-label="Cerrar filtros"><IoClose /></button>
+                </div>
+                <p style={{padding: '20px', textAlign: 'center'}}>Cargando filtros...</p>
+            </main>
+        );
+    }
+
+    const anyFilterOptionsAvailable = 
+        filtrosOpciones.servicios?.length > 0 || 
+        filtrosOpciones.categorias?.length > 0 || 
+        filtrosOpciones.ubicaciones?.length > 0 || 
+        filtrosOpciones.marcas?.length > 0 || 
+        filtrosOpciones.extras?.length > 0 ||
+        filtrosOpciones.pproductos?.length > 0;
 
     return (
         <main className={`main-filters-component ${isMenuHidden ? 'hidden' : 'visible'}`}>
             <div className='closebtn-div'>
-                <button onClick={() => setIsMenuHidden(true)}>
+                <button onClick={() => setIsMenuHidden(true)} aria-label="Cerrar filtros">
                     <IoClose />
                 </button>
             </div>
@@ -117,154 +165,136 @@ const FiltrosComponent = ({ isMenuHidden, setIsMenuHidden }) => {
                 <button onClick={handleResetFilters}><MdFilterAltOff /> Restablecer</button>
             </div>
             <section className='actual-filters-mobile'>
-                <div className="filtro-servicios">
-                    {/* Proveedores de SERVICIOS */}
-                    <h3>Proveedores de Servicios</h3>
-                    <ul className="filtro-tipos-checkboxes">
-                        {filtrosOpciones.servicios.map((servicio) => (
-                            <li key={servicio}>
-                                <label className="switch-label">
-                                    <input
-                                        type="checkbox"
-                                        className="hidden-checkbox"
-                                        value={servicio}
-                                        checked={checkedServices.includes(servicio)}
-                                        onChange={() => handleServicesChange(servicio)}
-                                    />
-                                    <span className="custom-switch"></span>
-                                    {servicio}
-                                    {isFulfillmentActive && servicio === "Logística/Transporte" && (
-                                        <span className="fulfillment-badge">
-                                            <FaStar /> Fulfillment
-                                        </span>
-                                    )}
-                                </label>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                
+
+                {/* Proveedores de SERVICIOS */}
+                {Array.isArray(filtrosOpciones.servicios) && filtrosOpciones.servicios.length > 0 ? (
+                    <div className="filtro-servicios">
+                        <h3>Proveedores de Servicios</h3>
+                        <ul className="filtro-tipos-checkboxes">
+                            {filtrosOpciones.servicios.map((servicio) => (
+                                <li key={servicio}>
+                                    <label className="switch-label">
+                                        <input
+                                            type="checkbox"
+                                            className="hidden-checkbox"
+                                            value={servicio}
+                                            checked={Array.isArray(checkedServices) && checkedServices.includes(servicio)}
+                                            onChange={() => handleServicesChange(servicio)}
+                                        />
+                                        <span className="custom-switch"></span>
+                                        {servicio}
+                                        {isFulfillmentActive && servicio === "Logística/Transporte" && (
+                                            <span className="fulfillment-badge">
+                                                <FaStar /> Fulfillment
+                                            </span>
+                                        )}
+                                    </label>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ) : !isLoading && <p className='filter-placeholder'>Opciones de servicios no disponibles.</p>}
+                
                 {/* Filtro de Categoría */}
-                <div className="filtro-tipos">
-                    <div className="tipo-boton">
-                        <h3>Categoría del Proveedor</h3>
-                        <button onClick={clearCategorias}>Limpiar</button>
-                    </div>
-                    <ul className={`filtro-tipos-checkboxes ${showMore ? 'expanded' : ''}`}>
-                        {filtrosOpciones.categoria.slice(0, visibleCount).map((categoria) => (
-                            <li key={categoria}>
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        value={categoria}
-                                        checked={selectedCategoria.includes(categoria)}
-                                        onChange={() => handleCategoriaChange(categoria)}
-                                        className="hidden-checkbox"
-                                    />
-                                    <span className="custom-checkbox"></span>
-                                    {categoria}
-                                </label>
-                            </li>
-                        ))}
-                        {filtrosOpciones.categoria.slice(visibleCount).map((categoria) => (
-                            <li key={categoria} className="extra-category">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        value={categoria}
-                                        checked={selectedCategoria.includes(categoria)}
-                                        onChange={() => handleCategoriaChange(categoria)}
-                                        className="hidden-checkbox"
-                                    />
-                                    <span className="custom-checkbox"></span>
-                                    {categoria}
-                                </label>
-                            </li>
-                        ))}
-                    </ul>
-                    <button
-                        className="toggle-more-btn"
-                        onClick={() => setShowMore((prev) => !prev)}
-                    >
-                        {showMore ? '-' : '+'}
-                    </button>
-                </div>
-
-                {/* Filtro de Ubicación */}
-                <div className="filtro-ubicacion">
-                    <h3>Ubicación</h3>
-                    <select
-                        value={selectedUbicacion}
-                        onChange={handleUbicacionChange}
-                    >
-                        <option value="">Todo</option>
-                        {filtrosOpciones.ubicacion.map((ubicacion) => (
-                            <option key={ubicacion} value={ubicacion}>
-                                {ubicacion}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                {/* Filtro de Marca */}
-                <div className="filtro-marca">
-                    <h3>Marca</h3>
-                    <div className="combobox" ref={dropdownRef}>
-                        <input
-                            type="text"
-                            value={inputValue}
-                            onChange={handleMarcaInputChange}
-                            placeholder="Buscar Ej: Adidas"
-                            className="combobox-input"
-                            onFocus={handleMarcaInputFocus}
-                        />
-                        {dropdownOpen && (
-                            <ul className="combobox-dropdown">
-                                <button
-                                    className="combobox-option"
-                                    onClick={handleReset}
-                                >
-                                    Todos
-                                </button>
-                                {filteredOptions.length > 0 ? (
-                                    filteredOptions.map((marca) => (
-                                        <li
-                                            key={marca}
-                                            onClick={() => handleMarcaSelect(marca)}
-                                            className="combobox-option"
-                                        >
-                                            {marca}
-                                        </li>
-                                    ))
-                                ) : (
-                                    <li className="combobox-option">Sin coincidencias</li>
-                                )}
-                            </ul>
-                        )}
-                        <button onClick={handleReset}>
-                            <VscDebugRestart size={18} />
-                        </button>
-                    </div>
-                </div>
-
-                {/* Filtro de Servicios y Capacidades */}
-                <div className="filtro-ubicacion">
-                    <h3>Servicios y Capacidades</h3>
-                    <select
-                        value={selectedExtras}
-                        onChange={handleExtrasChange}
-                    >
-                        <option value="">Todo</option>
-                        {filtrosOpciones.extras.map((extra) => (
-                            <option
-                                className="ubicacion-option"
-                                key={extra}
-                                value={extra}
+                {Array.isArray(filtrosOpciones.categorias) && filtrosOpciones.categorias.length > 0 ? (
+                    <div className="filtro-tipos">
+                        <div className="tipo-boton">
+                            <h3>Categoría del Proveedor</h3>
+                            <button onClick={clearCategorias}>Limpiar</button>
+                        </div>
+                        <ul className={`filtro-tipos-checkboxes ${showMoreCategorias ? 'expanded' : ''}`}>
+                            {filtrosOpciones.categorias.slice(0, showMoreCategorias ? filtrosOpciones.categorias.length : visibleCountCategorias).map((categoria) => (
+                                <li key={categoria}>
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            value={categoria}
+                                            checked={Array.isArray(selectedCategoria) && selectedCategoria.includes(categoria)}
+                                            onChange={() => handleCategoriaChange(categoria)}
+                                            className="hidden-checkbox"
+                                        />
+                                        <span className="custom-checkbox"></span>
+                                        {categoria}
+                                    </label>
+                                </li>
+                            ))}
+                        </ul>
+                        {filtrosOpciones.categorias.length > visibleCountCategorias && (
+                            <button
+                                className="toggle-more-btn"
+                                onClick={() => setShowMoreCategorias((prev) => !prev)}
                             >
-                                {extra}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                                {showMoreCategorias ? 'Mostrar menos -' : `Mostrar más (${filtrosOpciones.categorias.length - visibleCountCategorias}) +`}
+                            </button>
+                        )}
+                    </div>
+                ) : !isLoading && <p className='filter-placeholder'>Opciones de categoría no disponibles.</p>}
+
+                 {Array.isArray(filtrosOpciones.ubicaciones) && filtrosOpciones.ubicaciones.length > 0 ? (
+                    <div className="filtro-ubicacion">
+                        <h3>Ubicación (Provincia)</h3>
+                        <select value={selectedUbicacion} onChange={handleUbicacionChange}>
+                            <option value="">Todas</option>
+                            {filtrosOpciones.ubicaciones.map((ubicacion) => (
+                                <option key={ubicacion} value={ubicacion}>{ubicacion}</option>
+                            ))}
+                        </select>
+                    </div>
+                ) : !isLoading && <p className='filter-placeholder'>Opciones de ubicación no disponibles.</p>}
+
+                {Array.isArray(filtrosOpciones.marcas) && filtrosOpciones.marcas.length > 0 ? (
+                    <div className="filtro-marca">
+                        <h3>Marca</h3>
+                        <div className="combobox" ref={marcaDropdownRef}>
+                            <input
+                                type="text"
+                                value={inputMarcaValue}
+                                onChange={handleMarcaInputChange}
+                                placeholder="Buscar Ej: Adidas"
+                                className="combobox-input"
+                                onFocus={handleMarcaInputFocus}
+                            />
+                            {isMarcaDropdownOpen && (
+                                <ul className="combobox-dropdown">
+                                    <button className="combobox-option combobox-option-reset" onClick={handleMarcaReset}>
+                                        Todas las marcas
+                                    </button>
+                                    {filteredMarcaOptions.length > 0 ? (
+                                        filteredMarcaOptions.map((marca) => (
+                                            <li key={marca} onClick={() => handleMarcaSelect(marca)} className="combobox-option">
+                                                {marca}
+                                            </li>
+                                        ))
+                                    ) : (
+                                        inputMarcaValue && <li className="combobox-option no-match">Sin coincidencias</li>
+                                    )}
+                                </ul>
+                            )}
+                            <button onClick={handleMarcaReset} className="reset-marca-btn" title="Limpiar filtro de marca">
+                                <VscDebugRestart size={18} />
+                            </button>
+                        </div>
+                    </div>
+                ) : !isLoading && <p className='filter-placeholder'>Opciones de marca no disponibles.</p>}
+
+                {Array.isArray(filtrosOpciones.extras) && filtrosOpciones.extras.length > 0 ? (
+                    <div className="filtro-ubicacion"> 
+                        <h3>Servicios y Capacidades</h3>
+                        <select value={selectedExtras} onChange={handleExtrasChange}>
+                            <option value="">Todo</option>
+                            {filtrosOpciones.extras.map((extra) => (
+                                <option className="ubicacion-option" key={extra} value={extra}>
+                                    {extra}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                ) : !isLoading && <p className='filter-placeholder'>Opciones de servicios/capacidades no disponibles.</p>}
+                
+                {!anyFilterOptionsAvailable && !isLoading && (
+                    <p style={{padding: '20px', textAlign: 'center'}}>No hay filtros disponibles en este momento.</p>
+                )}
 
                 <button className='readyBtn' onClick={() => setIsMenuHidden(true)}>
                     <p>Hecho</p>

@@ -13,11 +13,16 @@ import FormularioPersonalizado from './steps/FormularioPersonalizado';
 import SeleccionPlan from './steps/SeleccionPlan';
 import ResumenRegistro from './steps/ResumenRegistro';
 
-import { STEPS, backgroundImageURL } from "../registroProveedor/assetsRegistro/Constants.js";
-import { fetchFiltrosGlobales } from '../../services/firestoreService';
+import { STEPS, backgroundImageURL } from "./assetsRegistro/Constants.js";
+import { fetchFiltrosGlobales } from '../../services/firestoreService'; 
+// Import from providerService.js
+import { prepareProviderDataForFirestore, saveProviderProfileToFirestore } from '../../services/providerService'; // Adjust path if your service file is elsewhere
 
 import { storage } from '../../firebase/config.js';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
+import { useAuth } from '../../context/AuthContext.jsx';
+
+const TEMPORARY_UPLOAD_BASE_PATH = 'temp_registrations';
 
 const saveToSessionStorage = (key, value) => {
     try {
@@ -40,9 +45,10 @@ const loadFromSessionStorage = (key) => {
 const initialFormData = {
     tipoCard: null,
     datosGenerales: {
-        pais: 'Argentina', tipoRegistro: '', nombreProveedor: '', tipoProveedor: '', categoriaPrincipal: '',
+        pais: 'Argentina', tipoRegistro: '', nombreProveedor: '', tipoProveedor: [], categoriaPrincipal: '',
         categoriasAdicionales: [], ciudad: '', provincia: '', nombre: '', apellido: '',
-        rol: '', whatsapp: '', cuit: '', antiguedad: '', facturacion: '',
+        rol: '', whatsapp: '', cuit: '', antiguedad: '', facturacion: '', marcasOficiales: [],
+        serviciosClaveParaTags: [] // Ensure this is part of initial data
     },
     datosPersonalizados: {
         tipoA: {
@@ -64,8 +70,28 @@ const initialFormData = {
 
 const RegistrosProveedorNavigator = () => {
     const navigate = useNavigate();
+    const { currentUser, loadingAuth } = useAuth();
     const [currentStep, setCurrentStep] = useState(0);
-    const [formData, setFormData] = useState(() => loadFromSessionStorage("formData") || initialFormData);
+    const [formData, setFormData] = useState(() => {
+        const loadedData = loadFromSessionStorage("formData");
+        if (loadedData) {
+            const mergedData = { ...initialFormData, ...loadedData };
+            mergedData.datosGenerales = { ...initialFormData.datosGenerales, ...(loadedData.datosGenerales || {}) };
+            mergedData.datosPersonalizados = { 
+                tipoA: { ...initialFormData.datosPersonalizados.tipoA, ...(loadedData.datosPersonalizados?.tipoA || {}) },
+                tipoB: { ...initialFormData.datosPersonalizados.tipoB, ...(loadedData.datosPersonalizados?.tipoB || {}) }
+            };
+            // Ensure nested objects within datosPersonalizados are also merged if they exist in loadedData
+            if (loadedData.datosPersonalizados?.tipoA) {
+                mergedData.datosPersonalizados.tipoA = { ...initialFormData.datosPersonalizados.tipoA, ...loadedData.datosPersonalizados.tipoA };
+            }
+            if (loadedData.datosPersonalizados?.tipoB) {
+                 mergedData.datosPersonalizados.tipoB = { ...initialFormData.datosPersonalizados.tipoB, ...loadedData.datosPersonalizados.tipoB };
+            }
+            return mergedData;
+        }
+        return initialFormData;
+    });
 
     const [filtrosData, setFiltrosData] = useState({
         categorias: [], pproductos: [], ubicaciones: [], extras: [], servicios: [], marcas: []
@@ -117,30 +143,25 @@ const RegistrosProveedorNavigator = () => {
         }
     }, [removeDeArchivosTemporales]);
 
-
     const handleFileUploaded = useCallback((tempFileId, { downloadURL, storagePath, fileTypeOriginal, mimeTypeOriginal, error, fieldType, itemIndex = null, arrayName = null }) => {
         setFormData(prevFormData => {
-            const newFormData = { ...prevFormData };
+            const newFormData = JSON.parse(JSON.stringify(prevFormData)); 
             const tipo = newFormData.tipoCard;
 
             if (!tipo || !newFormData.datosPersonalizados[tipo]) {
                 console.warn("handleFileUploaded: tipoCard no definido en formData, no se puede actualizar.");
                 return prevFormData;
             }
-
-            const personalizados = JSON.parse(JSON.stringify(newFormData.datosPersonalizados[tipo])); // Deep copy
+            
+            const personalizados = newFormData.datosPersonalizados[tipo];
 
             if (error) {
                 console.error(`Error final para ${tempFileId} (reportado por uploadFileImmediately):`, error);
-                // Si hay un error, se podría limpiar la URL en el formData si corresponde
-                // Por ejemplo, si se estaba reemplazando un logo y falla, restaurar el logoURL anterior o dejarlo vacío.
-                // Esta parte requiere una lógica cuidadosa para no perder datos válidos.
             } else if (downloadURL && storagePath) {
                 updateArchivosTemporales(storagePath);
-
                 switch (fieldType) {
                     case 'logoFile':
-                        if (personalizados.logoURL) { // Si había un logoURL previo
+                        if (personalizados.logoURL && personalizados.logoURL !== downloadURL) {
                             const oldStoragePath = archivosSubidosTemporalmente.find(p => 
                                 personalizados.logoURL.includes(encodeURIComponent(p.split('/').pop())) && p !== storagePath
                             );
@@ -151,13 +172,13 @@ const RegistrosProveedorNavigator = () => {
                         personalizados.logoURL = downloadURL;
                         break;
                     case 'carruselMediaItems':
-                        const newItemCarrusel = { url: downloadURL, fileType: fileTypeOriginal, mimeType: mimeTypeOriginal, tempId: tempFileId };
+                        const newItemCarrusel = { url: downloadURL, fileType: fileTypeOriginal, mimeType: mimeTypeOriginal, tempId: tempFileId, status: 'loaded' };
                         let updatedCarrusel = Array.isArray(personalizados.carruselURLs) ? [...personalizados.carruselURLs] : [];
                         const existingCarruselIndex = updatedCarrusel.findIndex(item => item.tempId === tempFileId);
                         
                         if (existingCarruselIndex > -1) {
                             const oldItemCarrusel = updatedCarrusel[existingCarruselIndex];
-                            if(oldItemCarrusel.url && oldItemCarrusel.tempId){ 
+                            if(oldItemCarrusel.url && oldItemCarrusel.url !== downloadURL && !oldItemCarrusel.url.startsWith('blob:')){ 
                                 const oldStoragePath = archivosSubidosTemporalmente.find(p => oldItemCarrusel.url.includes(encodeURIComponent(p.split('/').pop())) && p !== storagePath);
                                 if (oldStoragePath) {
                                      deleteFileFromStorage(oldStoragePath);
@@ -170,14 +191,13 @@ const RegistrosProveedorNavigator = () => {
                         personalizados.carruselURLs = updatedCarrusel;
                         break;
                     case 'galeria':
-                        if (arrayName === 'galeria' && itemIndex !== null && Array.isArray(personalizados.galeria)) {
-                            let updatedGaleria = [...personalizados.galeria];
-                            // Asegurar que el array y el item existan
+                        if (arrayName === 'galeria' && itemIndex !== null) {
+                            let updatedGaleria = Array.isArray(personalizados.galeria) ? [...personalizados.galeria] : [];
                             while(updatedGaleria.length <= itemIndex) {
-                                updatedGaleria.push({ titulo: '', precio: '', imagenURL: '', fileType: '', mimeType: '', tempId: null });
+                                updatedGaleria.push({ titulo: '', precio: '', imagenURL: '', fileType: '', mimeType: '', tempId: null, status: 'empty' });
                             }
                             const oldItemGaleria = updatedGaleria[itemIndex];
-                            if(oldItemGaleria && oldItemGaleria.imagenURL && oldItemGaleria.tempId) { 
+                            if(oldItemGaleria && oldItemGaleria.imagenURL && oldItemGaleria.imagenURL !== downloadURL && !oldItemGaleria.imagenURL.startsWith('blob:')) { 
                                 const oldStoragePath = archivosSubidosTemporalmente.find(p => oldItemGaleria.imagenURL.includes(encodeURIComponent(p.split('/').pop())) && p !== storagePath);
                                 if(oldStoragePath){
                                     deleteFileFromStorage(oldStoragePath);
@@ -188,21 +208,10 @@ const RegistrosProveedorNavigator = () => {
                                 imagenURL: downloadURL,
                                 fileType: fileTypeOriginal,
                                 mimeType: mimeTypeOriginal,
-                                tempId: tempFileId
+                                tempId: tempFileId,
+                                status: 'loaded'
                             };
                             personalizados.galeria = updatedGaleria;
-                        } else if (arrayName === 'galeria' && itemIndex !== null && !Array.isArray(personalizados.galeria)) {
-                            // Si personalizados.galeria no es un array pero debería serlo
-                            personalizados.galeria = [];
-                            while(personalizados.galeria.length <= itemIndex) {
-                                personalizados.galeria.push({ titulo: '', precio: '', imagenURL: '', fileType: '', mimeType: '', tempId: null });
-                            }
-                            personalizados.galeria[itemIndex] = {
-                                imagenURL: downloadURL,
-                                fileType: fileTypeOriginal,
-                                mimeType: mimeTypeOriginal,
-                                tempId: tempFileId
-                            };
                         }
                         break;
                     default:
@@ -214,19 +223,26 @@ const RegistrosProveedorNavigator = () => {
             saveToSessionStorage("formData", newFormData);
             return newFormData;
         });
-    }, [updateArchivosTemporales, deleteFileFromStorage, archivosSubidosTemporalmente, fileUploadProgress]);
+    }, [updateArchivosTemporales, deleteFileFromStorage, archivosSubidosTemporalmente]);
 
-
-    const uploadFileImmediately = useCallback(async (file, tempFileId, pathPrefix = 'uploads', fileMetadata = {}) => {
+    const uploadFileImmediately = useCallback(async (file, tempFileId, pathSuffixFromForm = 'general_uploads', fileMetadata = {}) => {
+        if (!currentUser || !currentUser.uid) {
+            console.error("uploadFileImmediately: Usuario no autenticado. No se puede subir el archivo.");
+            handleFileUploadProgress(tempFileId, { progress: 0, status: 'error', errorMsg: 'Usuario no autenticado.' });
+            setOperationError("Debes iniciar sesión para subir archivos. Por favor, recarga la página e inicia sesión.");
+            return;
+        }
         if (!file || !tempFileId) {
             console.error("uploadFileImmediately: Falta archivo o tempFileId");
             handleFileUploadProgress(tempFileId, { progress: 0, status: 'error', errorMsg: 'Faltan datos para subir.' });
             return; 
         }
-
+        setOperationError(null);
         handleFileUploadProgress(tempFileId, { progress: 0, status: 'uploading', errorMsg: null, storagePath: null, finalUrl: null });
         
-        const RUTA_STORAGE = `${pathPrefix}/${Date.now()}-${file.name}`;
+        const userId = currentUser.uid;
+        const RUTA_STORAGE = `${TEMPORARY_UPLOAD_BASE_PATH}/${userId}/${pathSuffixFromForm}/${Date.now()}-${file.name}`;
+        
         const storageRef = ref(storage, RUTA_STORAGE);
         const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -259,7 +275,7 @@ const RegistrosProveedorNavigator = () => {
                 }
             }
         );
-    }, [handleFileUploadProgress, handleFileUploaded]);
+    }, [currentUser, handleFileUploadProgress, handleFileUploaded]);
 
     useEffect(() => {
         const scrollTimeoutId = setTimeout(() => { scrollToTop(); }, 20);
@@ -276,7 +292,6 @@ const RegistrosProveedorNavigator = () => {
             } catch (err) {
                 console.error("[Navigator] Error CRÍTICO al llamar fetchFiltrosGlobales:", err);
                 setErrorFiltros("Error al cargar datos esenciales. Intenta recargar.");
-                setFiltrosData({ categorias: [], pproductos: [], ubicaciones: [], extras: [], servicios: [], marcas: [] });
             } finally {
                 setLoadingFiltros(false);
             }
@@ -289,64 +304,47 @@ const RegistrosProveedorNavigator = () => {
 
     const handleTipoCardSelection = (tipo) => {
         setFormData(prev => {
-            const previousCardType = prev.tipoCard;
-            const previousCardData = previousCardType ? { ...prev.datosPersonalizados[previousCardType] } : {};
-
             const newState = {
                 ...prev,
                 tipoCard: tipo,
-                datosPersonalizados: { 
-                    tipoA: initialFormData.datosPersonalizados.tipoA,
-                    tipoB: initialFormData.datosPersonalizados.tipoB,
+                datosPersonalizados: {
+                    tipoA: { ...initialFormData.datosPersonalizados.tipoA },
+                    tipoB: { ...initialFormData.datosPersonalizados.tipoB },
                 }
             };
-             newState.datosPersonalizados[tipo] = (tipo === previousCardType && Object.keys(previousCardData).length > 0) 
-                ? previousCardData 
-                : ( initialFormData.datosPersonalizados[tipo]);
-            
-            setFileUploadProgress({}); 
+            if (prev.tipoCard === tipo && prev.datosPersonalizados && prev.datosPersonalizados[tipo]) {
+                 newState.datosPersonalizados[tipo] = { ...prev.datosPersonalizados[tipo] };
+            } else {
+                 newState.datosPersonalizados[tipo] = { ...initialFormData.datosPersonalizados[tipo] };
+            }
+            setFileUploadProgress({});
             saveToSessionStorage("formData", newState);
             return newState;
         });
         nextStep();
     };
     
-    const updateFormDataAndSession = (newFormData) => { 
-        setFormData(newFormData);
-        saveToSessionStorage("formData", newFormData);
-    };
-
     const updateStepData = async (stepKey, newDataFromStep) => {
         setOperationError(null);
-        
         setFormData(prevFormData => {
-            let newFormData = { ...prevFormData };
+            let newFormData = JSON.parse(JSON.stringify(prevFormData));
             if (stepKey === 'datosPersonalizados' && newFormData.tipoCard) {
                 const tipo = newFormData.tipoCard;
-                const currentPersonalizados = newFormData.datosPersonalizados[tipo] || {};
+                if (!newFormData.datosPersonalizados[tipo]) {
+                    newFormData.datosPersonalizados[tipo] = { ...initialFormData.datosPersonalizados[tipo] };
+                }
+                const currentPersonalizados = newFormData.datosPersonalizados[tipo];
                 let updatedPersonalizados = { ...currentPersonalizados };
-
                 for (const key in newDataFromStep) {
-                    if (!['logoFile', 'logoTempId', 'logoUrlExistente', 
-                          'carruselNuevosArchivos', 'carruselUrlsExistentes', 'carruselURLs',
-                          'galeria' 
-                         ].includes(key)) {
+                    if (key === 'logoURL' || key === 'carruselURLs' || key === 'galeria') {
+                        if (newDataFromStep[key] !== undefined) {
+                           updatedPersonalizados[key] = newDataFromStep[key];
+                        }
+                    } else if (!['logoFile', 'carruselMediaItems'].includes(key)) { 
                         updatedPersonalizados[key] = newDataFromStep[key];
                     }
                 }
-                
-                if (newDataFromStep.hasOwnProperty('logoURL')) {
-                    updatedPersonalizados.logoURL = newDataFromStep.logoURL;
-                }
-                if (newDataFromStep.hasOwnProperty('carruselURLs')) {
-                    updatedPersonalizados.carruselURLs = newDataFromStep.carruselURLs || [];
-                }
-                if (tipo === 'tipoB' && newDataFromStep.hasOwnProperty('galeria')) {
-                    updatedPersonalizados.galeria = newDataFromStep.galeria || [];
-                }
-
                 newFormData.datosPersonalizados[tipo] = updatedPersonalizados;
-
             } else if (stepKey === 'datosGenerales') {
                 newFormData.datosGenerales = { ...newFormData.datosGenerales, ...newDataFromStep };
             } else {
@@ -359,15 +357,18 @@ const RegistrosProveedorNavigator = () => {
 
     const handleStepBack = (stepKey, stepLocalDataFromChild) => {
         setFormData(prev => {
-            let newFormData = { ...prev };
-            if (stepKey === 'datosPersonalizados' && formData.tipoCard) {
-                const tipo = formData.tipoCard;
+            let newFormData = JSON.parse(JSON.stringify(prev));
+            if (stepKey === 'datosPersonalizados' && newFormData.tipoCard) {
+                const tipo = newFormData.tipoCard;
+                if (!newFormData.datosPersonalizados[tipo]) {
+                     newFormData.datosPersonalizados[tipo] = { ...initialFormData.datosPersonalizados[tipo] };
+                }
                 newFormData.datosPersonalizados[tipo] = { 
-                    ...(prev.datosPersonalizados[tipo] || {}), 
+                    ...newFormData.datosPersonalizados[tipo], 
                     ...stepLocalDataFromChild 
                 };
             } else if (stepKey === 'datosGenerales') {
-                newFormData.datosGenerales = { ...prev.datosGenerales, ...stepLocalDataFromChild };
+                newFormData.datosGenerales = { ...newFormData.datosGenerales, ...stepLocalDataFromChild };
             } else {
                 newFormData[stepKey] = stepLocalDataFromChild;
             }
@@ -379,13 +380,13 @@ const RegistrosProveedorNavigator = () => {
 
     const handleStepCompletion = async (stepKey, stepLocalData) => {
         setIsProcessingGlobal(true);
+        setOperationError(null);
         try {
             await updateStepData(stepKey, stepLocalData);
             const uploadsStillActive = Object.values(fileUploadProgress).some(f => f.status === 'uploading');
             
             if (uploadsStillActive) {
                 setOperationError("Algunos archivos aún se están subiendo. Por favor, espera...");
-                console.log("Esperando subidas activas antes de avanzar...");
             } else if (!operationError) {
                  nextStep();
             }
@@ -401,10 +402,18 @@ const RegistrosProveedorNavigator = () => {
         setIsProcessingGlobal(true);
         setOperationError(null);
         try {
-            const deletePromises = archivosSubidosTemporalmente.map(path => deleteFileFromStorage(path));
-            await Promise.all(deletePromises);
+            const userId = currentUser?.uid;
+            if (userId) {
+                const userSpecificTempFiles = archivosSubidosTemporalmente.filter(path => 
+                    path.startsWith(`${TEMPORARY_UPLOAD_BASE_PATH}/${userId}/`)
+                );
+                const deletePromises = userSpecificTempFiles.map(path => deleteFileFromStorage(path));
+                await Promise.all(deletePromises);
+                setArchivosSubidosTemporalmente(prev => prev.filter(p => !userSpecificTempFiles.includes(p)));
+            } else {
+                 console.warn("Cancelación sin UID de usuario, no se borraron archivos específicos del usuario.");
+            }
             
-            setArchivosSubidosTemporalmente([]);
             sessionStorage.removeItem("archivosSubidosTemporalmente");
             setFormData(initialFormData);
             sessionStorage.removeItem("formData");
@@ -423,9 +432,19 @@ const RegistrosProveedorNavigator = () => {
         if (!loadingFiltros) {
             const savedData = loadFromSessionStorage("formData");
             if (savedData) {
-                setFormData(savedData);
-                // Reiniciar el progreso de subida al cargar desde session storage,
-                // ya que las tareas de subida no persisten entre sesiones de página.
+                 const mergedData = { ...initialFormData, ...savedData };
+                 mergedData.datosGenerales = { ...initialFormData.datosGenerales, ...(savedData.datosGenerales || {}) };
+                 mergedData.datosPersonalizados = { 
+                    tipoA: { ...initialFormData.datosPersonalizados.tipoA, ...(savedData.datosPersonalizados?.tipoA || {}) },
+                    tipoB: { ...initialFormData.datosPersonalizados.tipoB, ...(savedData.datosPersonalizados?.tipoB || {}) }
+                 };
+                 if (savedData.datosPersonalizados?.tipoA) {
+                    mergedData.datosPersonalizados.tipoA = { ...initialFormData.datosPersonalizados.tipoA, ...savedData.datosPersonalizados.tipoA };
+                 }
+                 if (savedData.datosPersonalizados?.tipoB) {
+                    mergedData.datosPersonalizados.tipoB = { ...initialFormData.datosPersonalizados.tipoB, ...savedData.datosPersonalizados.tipoB };
+                 }
+                setFormData(mergedData);
                 setFileUploadProgress({}); 
             }
             const savedTemporalFiles = loadFromSessionStorage("archivosSubidosTemporalmente");
@@ -435,16 +454,28 @@ const RegistrosProveedorNavigator = () => {
         }
     }, [loadingFiltros]);
 
-    const [selectedServices, setSelectedServices] = useState([]); 
+    useEffect(() => {
+        if (!loadingAuth && !currentUser) {
+            setOperationError("Sesión no válida. Debes iniciar sesión para continuar.");
+        } else if (currentUser && operationError === "Sesión no válida. Debes iniciar sesión para continuar.") {
+            setOperationError(null);
+        }
+    }, [currentUser, loadingAuth, operationError]);
+
 
     const renderCurrentStep = () => {
-        if (loadingFiltros) {
+        if (loadingAuth || loadingFiltros) {
             return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5 }}><CircularProgress sx={{ color: 'common.white' }} /><Typography sx={{ ml: 2, color: 'common.white' }}>Cargando configuración...</Typography></Box>);
+        }
+        if (!currentUser && !loadingAuth) {
+             return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}><Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>Debes iniciar sesión para registrar tu empresa.</Typography><Button onClick={() => navigate('/registrarme')} variant="outlined" color="warning">Iniciar Sesión / Registrarse</Button></Box>);
         }
         if (errorFiltros) {
             return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}><Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>{errorFiltros}</Typography><Button onClick={() => window.location.reload()} variant="outlined" color="warning">Recargar</Button></Box>);
         }
-        if (operationError && !Object.values(fileUploadProgress).some(f => f.status === 'uploading')) {
+        
+        const uploadsStillActive = Object.values(fileUploadProgress).some(f => f.status === 'uploading');
+        if (operationError && !uploadsStillActive) {
             return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}><Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>{operationError}</Typography><Button onClick={() => setOperationError(null)} variant="outlined" color="info">Entendido</Button></Box>);
         }
 
@@ -456,8 +487,6 @@ const RegistrosProveedorNavigator = () => {
                        />;
             case 1:
                 return <FormularioGeneral
-                    selectedServices={selectedServices} 
-                    setSelectedServices={setSelectedServices} 
                     onBack={() => handleStepBack('datosGenerales', formData.datosGenerales)}
                     onCancel={cancelRegistration}
                     initialData={formData.datosGenerales}
@@ -465,33 +494,32 @@ const RegistrosProveedorNavigator = () => {
                     categorias={filtrosData.categorias}
                     ubicaciones={filtrosData.ubicaciones}
                     pproductos={filtrosData.pproductos}
-                    servicios={filtrosData.servicios}
+                    servicios={filtrosData.servicios} // These are options for "Tipo de Servicio Principal"
                     selectedCard={formData.tipoCard}
                     marcasDisponibles={filtrosData.marcas}
                 />;
             case 2:
                 if (!formData.tipoCard) return <Typography color="error.main">Error: Tipo de card no seleccionado...</Typography>;
-                const datosPasoAnterior = {
-                    tipoProveedor: formData.datosGenerales.tipoProveedor,
-                    tipoRegistro: formData.datosGenerales.tipoRegistro,
+                const commonPersonalizadoProps = {
+                    fileUploadProgress,
+                    uploadFileImmediately,
+                    onBack: (localData) => handleStepBack('datosPersonalizados', localData),
+                    onCancel: cancelRegistration,
+                    initialData: formData.datosPersonalizados[formData.tipoCard] || initialFormData.datosPersonalizados[formData.tipoCard],
+                    onNext: (localData) => handleStepCompletion('datosPersonalizados', localData),
+                    selectedCard: formData.tipoCard,
                     nombreProveedor: formData.datosGenerales.nombreProveedor,
                     ciudad: formData.datosGenerales.ciudad,
                     provincia: formData.datosGenerales.provincia,
-                    selectedServices: selectedServices,
+                    tipoRegistro: formData.datosGenerales.tipoRegistro,
+                    tipoProveedor: formData.datosGenerales.tipoProveedor,
+                    selectedServices: formData.datosGenerales.serviciosClaveParaTags, // This is for Tags.jsx in preview
+                    marcas: filtrosData.marcas,     // Options for Autocomplete
+                    extras: filtrosData.extras,     // Options for Autocomplete (TipoA)
+                    servicios: filtrosData.servicios // Options for Autocomplete (TipoB)
                 };
-                return <FormularioPersonalizado
-                    fileUploadProgress={fileUploadProgress}
-                    uploadFileImmediately={uploadFileImmediately}
-                    onBack={(localData) => handleStepBack('datosPersonalizados', localData)}
-                    onCancel={cancelRegistration}
-                    initialData={formData.datosPersonalizados[formData.tipoCard] || initialFormData.datosPersonalizados[formData.tipoCard]}
-                    onNext={(localData) => handleStepCompletion('datosPersonalizados', localData)}
-                    selectedCard={formData.tipoCard}
-                    {...datosPasoAnterior}
-                    marcas={filtrosData.marcas}
-                    extras={filtrosData.extras}
-                    servicios={filtrosData.servicios}
-                />;
+                return <FormularioPersonalizado {...commonPersonalizadoProps} />;
+
             case 3:
                 return <SeleccionPlan
                     onBack={prevStep}
@@ -508,24 +536,49 @@ const RegistrosProveedorNavigator = () => {
                     onConfirm={async () => {
                         setIsProcessingGlobal(true);
                         setOperationError(null);
-                        const uploadsStillActive = Object.values(fileUploadProgress).some(f => f.status === 'uploading');
-                        if (uploadsStillActive) {
+                        const uploadsStillActiveConfirm = Object.values(fileUploadProgress).some(f => f.status === 'uploading');
+                        if (uploadsStillActiveConfirm) {
                             setOperationError("Algunos archivos aún se están subiendo. Por favor, espera a que terminen antes de confirmar.");
                             setIsProcessingGlobal(false);
                             return;
                         }
-                        console.log("[Navigator] Iniciando Confirmación de Registro:", JSON.stringify(formData, null, 2));
+                        if (!currentUser || !currentUser.uid) {
+                             setOperationError("Error de autenticación. No se puede confirmar el registro.");
+                             setIsProcessingGlobal(false);
+                             return;
+                        }
+                        
+                        const userId = currentUser.uid;
+                        console.log("[Navigator] Iniciando Confirmación de Registro para UID:", userId);
+
                         try {
-                            alert("Registro Finalizado (Simulación). Datos listos para Firestore.");
+                            // 1. Prepare data for Firestore using the service function
+                            const providerDataToSave = prepareProviderDataForFirestore(formData, userId);
+                            
+                            console.log("Datos transformados para Firestore:", JSON.stringify(providerDataToSave, null, 2));
+                            console.log("Archivos temporales rastreados (con URLs temporales):", archivosSubidosTemporalmente);
+
+                            // 2. Save the prepared data to Firestore using the service function
+                            await saveProviderProfileToFirestore(userId, providerDataToSave);
+                            
+                            alert("¡Perfil de Proveedor guardado en Firestore (con URLs temporales)!");
+                            
+                            // The next major step will be to implement file moving from temporary to permanent storage 
+                            // and then update these URLs in the Firestore document.
+                            // For now, this save operation stores the temporary URLs.
+                            
+                            // 3. Clear local/session state after successful initial save
                             setArchivosSubidosTemporalmente([]); 
                             sessionStorage.removeItem("archivosSubidosTemporalmente");
                             setFormData(initialFormData); 
                             sessionStorage.removeItem("formData");
                             setFileUploadProgress({}); 
                             setCurrentStep(0);
+                            navigate('/perfil'); // Or a provider dashboard / success page
+
                         } catch (error) {
-                            console.error("Error al confirmar el registro en Firestore:", error);
-                            setOperationError("Error al guardar el registro. Intenta de nuevo.");
+                            console.error("Error al confirmar y guardar el registro del proveedor:", error);
+                            setOperationError("Error al guardar el registro. Intenta de nuevo. Detalles: " + error.message);
                         } finally {
                             setIsProcessingGlobal(false);
                         }
@@ -540,7 +593,7 @@ const RegistrosProveedorNavigator = () => {
         <Box sx={{ width: '100%', minHeight: '100vh', position: 'relative', display: 'flex', flexDirection: 'column' }}>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, display: 'flex', flexDirection: 'column' }}
-                open={(isProcessingGlobal || Object.values(fileUploadProgress).some(f => f.status === 'uploading')) && !operationError && !loadingFiltros}
+                open={(isProcessingGlobal || Object.values(fileUploadProgress).some(f => f.status === 'uploading')) && !operationError && !loadingFiltros && !loadingAuth}
             >
                 <CircularProgress color="inherit" />
                 <Typography sx={{ mt: 2 }}>

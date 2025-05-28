@@ -1,155 +1,193 @@
-import React, { createContext, useState, useEffect, useContext, useMemo } from "react";
-import { db } from "../firebase/config";
-import { collection, query, getDocs } from "firebase/firestore";
+// src/context/FiltersContext.jsx
+import React, { createContext, useState, useEffect, useContext, useMemo, useCallback } from "react";
+import { db } from "../firebase/config"; // Adjust path if needed
+import { collection, onSnapshot } from "firebase/firestore"; // onSnapshot for real-time providers
+import { fetchFiltrosGlobales } from "../services/firestoreService"; // Import your service
 
 const FiltersContext = createContext();
 
+// This function transforms a single provider document from Firestore 
+// to the structure expected by your card components.
+const transformProviderDataForDisplay = (firestoreDocWithId) => {
+    if (!firestoreDocWithId || !firestoreDocWithId.id) return null;
+
+    const id = firestoreDocWithId.id;
+    // Assuming firestoreDocWithId contains the spread data already
+    const data = firestoreDocWithId; 
+
+    const ubicacionDetalle = `${data.ciudad || ''}${data.ciudad && data.provincia ? ', ' : ''}${data.provincia || ''}`.trim() || 'Ubicación no especificada';
+
+    let displayCardType = data.cardType; 
+    if (data.cardType === 'tipoB') {
+        displayCardType = 'cardProductos';
+    } else if (data.cardType === 'tipoA') {
+        displayCardType = 'cardHistoria';
+    }
+
+    return {
+        id: id,
+        nombre: data.nombreProveedor || 'Nombre no disponible',
+        logo: data.logoUrl || '',
+        descripcion: data.descripcionGeneral || '', // Mapped from descripcionGeneral
+        ubicacionDetalle: ubicacionDetalle,
+        ciudad: data.ciudad || '', 
+        provincia: data.provincia || '', 
+        contacto: data.contacto || {},
+        carrusel: data.carruselUrls || [], // Unified carousel data
+        
+        // For Tags.jsx and specific filters
+        tipo: data.tipoProveedor || [], 
+        servicios: data.serviciosClaveParaTags || [], 
+        
+        // For textual display in cards & marca filter
+        marca: data.marcasConfiguradas || [], 
+        
+        // For textual display & extras filter
+        extras: data.extrasConfigurados || [], 
+        
+        // For ProductsCarousel
+        productos: data.galeriaProductos || [],
+        
+        tipoRegistro: data.tipoRegistro,
+        cardType: displayCardType,
+        categoriaPrincipal: data.categoriaPrincipal || '',
+        categoriasAdicionales: data.categoriasAdicionales || [],
+    };
+};
+
 export const FiltersProvider = ({ children }) => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [proveedores, setProveedores] = useState([]);
+    const [allProveedores, setAllProveedores] = useState([]); // Stores transformed providers
     const [selectedCategoria, setSelectedCategoria] = useState([]);
     const [selectedMarca, setSelectedMarca] = useState("");
     const [selectedUbicacion, setSelectedUbicacion] = useState("");
     const [checkedServices, setCheckedServices] = useState([]);
     const [selectedExtras, setSelectedExtras] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingProviders, setIsLoadingProviders] = useState(true);
+    const [isLoadingFilterOptions, setIsLoadingFilterOptions] = useState(true); // Separate loading for options
     const [selectedPProductos, setSelectedPProductos] = useState([]);
 
     const [filtrosOpciones, setFiltrosOpciones] = useState({
-        ubicacion: [],
-        categoria: [],
-        marca: [],
-        servicios: [],
-        extras: [],
-        pproductos: [],
+        ubicaciones: [], // From fetchFiltrosGlobales
+        categorias: [],  // From fetchFiltrosGlobales
+        marcas: [],      // From fetchFiltrosGlobales (note: plural 'marcas' vs 'marca' for selected)
+        servicios: [],   // From fetchFiltrosGlobales
+        extras: [],      // From fetchFiltrosGlobales
+        pproductos: [],  // From fetchFiltrosGlobales
     });
 
-    // **Obtener proveedores desde Firebase**
+    // Fetch All Static Filter Options using your firestoreService
     useEffect(() => {
-        const obtenerProveedores = async () => {
+        const loadFilterOptions = async () => {
+            setIsLoadingFilterOptions(true);
             try {
-                const q = query(collection(db, "proveedores"));
-                const snapshot = await getDocs(q);
-                const proveedoresFirebase = snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
-                setProveedores(proveedoresFirebase);
-            } catch (error) {
-                console.error("Error obteniendo los proveedores: ", error);
-            } finally {
-                setIsLoading(false); // Ocultar loader una vez finalizado
-            }
-        };
-
-        obtenerProveedores();
-    }, []);
-
-    // **Obtener opciones de filtros desde Firebase**
-    useEffect(() => {
-        const fetchFiltros = async () => {
-            try {
-                const q = query(collection(db, "filtros"));
-                const snapshot = await getDocs(q);
-
-                let ubicacion = [];
-                let categoria = [];
-                let marca = [];
-                let servicios = [];
-                let extras = [];
-                let pproductos = [];
-
-                snapshot.docs.forEach((doc) => {
-                    const data = doc.data();
-                    if (data.ubicacion) ubicacion = data.ubicacion;
-                    if (data.categoria) categoria = data.categoria;
-                    if (data.marca) marca = data.marca;
-                    if (data.servicios) servicios = data.servicios;
-                    if (data.extras) extras = data.extras;
-                    if (data.pproductos) pproductos = data.pproductos;
-                });
-
+                const options = await fetchFiltrosGlobales();
                 setFiltrosOpciones({
-                    ubicacion,
-                    categoria,
-                    marca,
-                    servicios,
-                    extras,
-                    pproductos,
+                    ubicaciones: options.ubicaciones || [],
+                    categorias: options.categorias || [],
+                    marcas: options.marcas || [],
+                    servicios: options.servicios || [],
+                    extras: options.extras || [],
+                    pproductos: options.pproductos || [],
                 });
             } catch (error) {
-                console.error("Error obteniendo los filtros: ", error);
+                console.error("Error fetching global filter options:", error);
+                // Set empty arrays on error to prevent crashes in filter components
+                setFiltrosOpciones({ ubicaciones: [], categorias: [], marcas: [], servicios: [], extras: [], pproductos: [] });
             }
+            setIsLoadingFilterOptions(false);
         };
-
-        fetchFiltros();
+        loadFilterOptions();
     }, []);
 
+    // Fetch Providers and transform them
+    useEffect(() => {
+        setIsLoadingProviders(true);
+        const proveedoresColRef = collection(db, "proveedores");
+        const unsubscribeProveedores = onSnapshot(proveedoresColRef, (querySnapshot) => {
+            const fetchedProveedoresRaw = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            const transformedData = fetchedProveedoresRaw.map(transformProviderDataForDisplay).filter(p => p !== null);
+            setAllProveedores(transformedData);
+            setIsLoadingProviders(false);
+        }, (error) => {
+            console.error("Error obteniendo los proveedores: ", error);
+            setIsLoadingProviders(false);
+        });
+        return () => unsubscribeProveedores();
+    }, []);
     
-
-    // **Filtrar proveedores**
     const proveedoresFiltrados = useMemo(() => {
-        return proveedores.filter((proveedor) => {
+        return allProveedores.filter((proveedor) => {
+            if (!proveedor) return false;
+
+            const cumpleSearchTerm =
+                !searchTerm || (proveedor.nombre && proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase()));
+
+            const proveedorCategoriasDirectas = [proveedor.categoriaPrincipal, ...(proveedor.categoriasAdicionales || [])].filter(Boolean);
             const cumpleCategorias =
                 !selectedCategoria.length ||
-                selectedCategoria.some((categoria) => proveedor.categoria?.includes(categoria));
+                selectedCategoria.some(catFiltro => proveedorCategoriasDirectas.includes(catFiltro));
+            
+            const cumpleMarca = !selectedMarca || (proveedor.marca && proveedor.marca.includes(selectedMarca));
+            
+            const cumpleUbicacion = !selectedUbicacion || proveedor.provincia === selectedUbicacion;
 
-            const cumpleMarca = !selectedMarca || proveedor.marca?.includes(selectedMarca);
-            const cumpleUbicacion = !selectedUbicacion || proveedor.ubicacion === selectedUbicacion;
-            const cumpleSearchTerm =
-                !searchTerm || proveedor.nombre?.toLowerCase().includes(searchTerm.toLowerCase());
+            const cumplePProductos =
+                !selectedPProductos.length ||
+                selectedPProductos.every(pproductoFiltro => proveedor.tipo?.includes(pproductoFiltro));
 
-            return cumpleCategorias && cumpleMarca && cumpleUbicacion && cumpleSearchTerm;
+            const cumpleServicios = 
+                !checkedServices.length ||
+                checkedServices.every(servicioFiltro => proveedor.servicios?.includes(servicioFiltro));
+
+            const cumpleExtras = 
+                !selectedExtras || 
+                (proveedor.extras && proveedor.extras.includes(selectedExtras));
+
+            return cumpleCategorias && cumpleMarca && cumpleUbicacion && cumpleSearchTerm && cumplePProductos && cumpleServicios && cumpleExtras;
         });
-    }, [proveedores, searchTerm, selectedMarca, selectedCategoria, selectedUbicacion]);
+    }, [allProveedores, searchTerm, selectedCategoria, selectedMarca, selectedUbicacion, selectedPProductos, checkedServices, selectedExtras]);
 
-
-    // **Centralizar actualizaciones de filtros**
-    const updateFilters = (key, value) => {
+    const updateFilters = useCallback((key, value) => {
         switch (key) {
-            case "categoria":
-                setSelectedCategoria(value);
-                break;
-            case "marca":
-                setSelectedMarca(value);
-                break;
-            case "ubicacion":
-                setSelectedUbicacion(value);
-                break;
-            case "search":
-                setSearchTerm(value);
-                break;
-            case "extras":
-                setSelectedExtras(value);
-                break
-            case "servicio": 
-                setCheckedServices(value);
-                break
-            case "pproductos":
-                setSelectedPProductos(value);
-                break
-            default:
-                console.warn("Filtro desconocido:", key);
+            case "categoria": setSelectedCategoria(value); break;
+            case "marca": setSelectedMarca(value); break;
+            case "ubicacion": setSelectedUbicacion(value); break;
+            case "search": setSearchTerm(value); break;
+            case "extras": setSelectedExtras(value); break;
+            case "servicio": setCheckedServices(value); break;
+            case "pproductos": setSelectedPProductos(value); break;
+            default: console.warn("Filtro desconocido:", key);
         }
-    };
+    }, []); 
+
+    // Combined loading state for the context consumer
+    const isLoading = isLoadingProviders || isLoadingFilterOptions;
+
+    const contextValue = useMemo(() => ({
+        searchTerm,
+        proveedoresFiltrados,
+        filtrosOpciones, // This now comes entirely from fetchFiltrosGlobales
+        updateFilters,
+        selectedCategoria,
+        selectedUbicacion,
+        selectedMarca,
+        checkedServices,
+        selectedExtras,
+        isLoading,
+        allProveedores, // Pass all (transformed) providers
+        selectedPProductos
+    }), [
+        searchTerm, proveedoresFiltrados, filtrosOpciones, updateFilters,
+        selectedCategoria, selectedUbicacion, selectedMarca, checkedServices,
+        selectedExtras, isLoading, allProveedores, selectedPProductos
+    ]);
 
     return (
-        <FiltersContext.Provider
-            value={{
-                searchTerm,
-                proveedoresFiltrados,
-                filtrosOpciones,
-                updateFilters,
-                selectedCategoria,
-                selectedUbicacion,
-                selectedMarca,
-                checkedServices,
-                selectedExtras,
-                isLoading,
-                proveedores,
-                selectedPProductos
-            }}
-        >
+        <FiltersContext.Provider value={contextValue}>
             {children}
         </FiltersContext.Provider>
     );

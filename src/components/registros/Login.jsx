@@ -1,9 +1,10 @@
 // src/components/registros/Login.jsx
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { FaGoogle } from "react-icons/fa";
-import { auth } from '../../firebase/config'; // Adjust path if needed
+import { auth, db } from '../../firebase/config'; // Import db
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore"; // Firestore imports
 
 const Login = ({ toggleForm }) => {
   const [email, setEmail] = useState('');
@@ -12,6 +13,9 @@ const Login = ({ toggleForm }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Get location object
+
+  const from = location.state?.from?.pathname || "/"; // Path to redirect to after login
 
   const handleEmailSubmit = (e) => {
     e.preventDefault();
@@ -39,9 +43,12 @@ const Login = ({ toggleForm }) => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log('Usuario inició sesión con éxito:', user.uid);
+      // Firestore profile check/creation is usually done at registration or first Google sign-in.
+      // If you want to ensure profile exists on every email login, you can add a getDoc check here too.
+      // For now, assuming profile is created at registration.
       setLoading(false);
       if (navigate) {
-        navigate('/'); // Redirect to landing page
+        navigate(from, { replace: true }); // Navigate to 'from' or default to "/"
       }
     } catch (err) {
       setLoading(false);
@@ -64,9 +71,31 @@ const Login = ({ toggleForm }) => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       console.log('Usuario inició sesión con Google:', user.uid);
+
+      // Check if user profile already exists in Firestore, create if not
+      const userDocRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(userDocRef);
+
+      if (!docSnap.exists()) {
+        console.log('Creando nuevo perfil de usuario en Firestore para usuario de Google.');
+        await setDoc(userDocRef, {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName || user.email.split('@')[0], // Use part of email if displayName is null
+          photoURL: user.photoURL || '', // Google provides this
+          createdAt: serverTimestamp(),
+          isProveedor: false,             // Default value
+          authProvider: "google"
+        });
+        console.log('Perfil de usuario de Google creado en Firestore');
+      } else {
+        console.log('Perfil de usuario de Google ya existe en Firestore.');
+        // Optionally update lastLogin or other fields if needed
+      }
+
       setLoading(false);
       if (navigate) {
-        navigate('/'); // Redirect to landing page
+        navigate(from, { replace: true }); // Navigate to 'from' or default to "/"
       }
     } catch (err) {
       setLoading(false);
@@ -81,7 +110,6 @@ const Login = ({ toggleForm }) => {
       }
     }
   };
-
 
   const handleBack = () => {
     setStep(1);
@@ -152,9 +180,6 @@ const Login = ({ toggleForm }) => {
           <button className="google" onClick={handleGoogleSignIn} disabled={loading} style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px'}}>
             <FaGoogle /> {loading ? 'Conectando...' : 'Continuar con Google'}
           </button>
-          {/* Facebook and Apple buttons can be implemented similarly later */}
-          {/* <button className="facebook" disabled={loading}>Continuar con Facebook</button> */}
-          {/* <button className="apple" disabled={loading}>Continuar con Apple</button> */}
         </div>
       )}
 

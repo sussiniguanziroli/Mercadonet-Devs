@@ -1,8 +1,9 @@
 // src/components/registros/Register.jsx
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom'; // useNavigate for redirection
-import { auth } from '../../firebase/config'; // Adjust path if needed
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { auth, db } from '../../firebase/config'; // Import db
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore"; // Firestore imports
 
 const Register = ({ toggleForm }) => {
   const [email, setEmail] = useState('');
@@ -10,7 +11,10 @@ const Register = ({ toggleForm }) => {
   const [step, setStep] = useState(1);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
 
   const handleEmailSubmit = (e) => {
     e.preventDefault();
@@ -41,11 +45,25 @@ const Register = ({ toggleForm }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      console.log('Usuario registrado con éxito:', user);
-      console.log('UID del usuario:', user.uid);
-      setLoading(false);
-      navigate('/'); // Redirect to landing page
+      console.log('Usuario registrado con éxito en Auth:', user.uid);
 
+      // Create user profile in Firestore
+      const userDocRef = doc(db, "users", user.uid);
+      await setDoc(userDocRef, {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || '', // Initially empty for email/password
+        photoURL: user.photoURL || '',     // Initially empty
+        createdAt: serverTimestamp(),
+        isProveedor: false,             // Default value
+        authProvider: "email"
+      });
+      console.log('Perfil de usuario creado en Firestore');
+
+      setLoading(false);
+      if (navigate) {
+        navigate(from, { replace: true });
+      }
     } catch (err) {
       setLoading(false);
       console.error("Error en el registro:", err.code, err.message);
@@ -64,7 +82,7 @@ const Register = ({ toggleForm }) => {
   const handleBack = () => {
     setStep(1);
     setError('');
-    setPassword(''); // Clear password when going back to email step
+    setPassword('');
   };
 
   return (

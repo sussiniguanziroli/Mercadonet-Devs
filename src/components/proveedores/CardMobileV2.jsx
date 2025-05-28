@@ -1,30 +1,45 @@
+// src/components/proveedores/CardMobileV2.jsx
 import React from 'react';
 import Slider from 'react-slick';
 import { IoLocationOutline } from 'react-icons/io5';
-import Tags from './assets/Tags';
+import Tags from './assets/Tags'; // Assuming Tags.jsx is in ./assets/
+import { FaImage } from "react-icons/fa";
 
 const CardMobileV2 = ({ proveedor }) => {
-    const maxLength = 75;
-    const truncatedDescription = proveedor.descripcion.length > maxLength
-        ? proveedor.descripcion.slice(0, maxLength) + "...[ver más]"
-        : proveedor.descripcion;
+    if (!proveedor) {
+        return null;
+    }
 
-    const productos = [
-        { titulo: "Conjunto Sommier", precio: "$80.000 - $160.000", imagen: "https://dcdn.mitiendanube.com/stores/001/365/853/products/pagina-web1-76c2d6c8884195030f16783915187385-1024-1024.jpg" },
-        { titulo: "Samsung A15-A30", precio: "$100.000 c/u", imagen: "https://peruimporta.com/wp-content/uploads/2024/06/samsung-a15-5G-65x65-1.jpg" },
-        { titulo: "Smart TV BGH", precio: "$120mil - $250mil", imagen: "https://arbghprod.vtexassets.com/arquivos/ids/163265/BGH-Android-TV_43.jpg?v=638445734763300000" },
-        { titulo: "Mountain Bike", precio: "$70.000 x10u", imagen: "https://http2.mlstatic.com/D_NQ_NP_682156-MLU77775260580_072024-O.webp" },
-        { titulo: "Notebook EXO", precio: "$120.000", imagen: "https://www.oscarbarbieri.com/pub/media/catalog/product/cache/7baadf0dec41407c7702efdbff940ecb/e/x/exo_t56.jpg" },
-    ];
+    const {
+        nombre = 'Nombre no disponible',
+        logo = '',
+        ubicacionDetalle = 'Ubicación no especificada',
+        productos = [], // Expects array from proveedor.galeriaProductos
+        // tipo, servicios, tipoRegistro are used by Tags component via the proveedor prop
+    } = proveedor;
 
-    // Configuración de react-slick para mobile
+    // Settings for react-slick product carousel
     const settings = {
         dots: true,
-        infinite: false,
+        infinite: productos.length > 2, // Only infinite if enough items
         speed: 500,
-        slidesToShow: 3,
+        slidesToShow: Math.min(3, productos.length || 1), // Show 3, or less if fewer products
         slidesToScroll: 1,
         arrows: false,
+         responsive: [
+            {
+                breakpoint: 480, // Small mobile
+                settings: {
+                    slidesToShow: Math.min(2, productos.length || 1),
+                }
+            },
+             {
+                breakpoint: 380, // Even smaller mobile
+                settings: {
+                    slidesToShow: 1,
+                }
+            }
+        ]
     };
 
     return (
@@ -32,12 +47,17 @@ const CardMobileV2 = ({ proveedor }) => {
             <div className='top-container'>
                 <div className='titles-container'>
                     <div className='small-logo-box'>
-                        <img className='small-logo' src={proveedor.logo} alt={proveedor.nombre} />
+                         {logo ? (
+                            <img className='small-logo' src={logo} alt={nombre} />
+                        ) : (
+                            <div className="logo-placeholder" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50px', height: '50px', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
+                                <FaImage size={24} color="#ccc" />
+                            </div>
+                        )}
                     </div>
-                    <h2>{proveedor.nombre}</h2>
-                    <img className="verificado" src='https://i.ibb.co/BsSRKwy/Verificado-HD.jpg' />
-                    <p><IoLocationOutline />{proveedor.ubicacionDetalle}</p>
-
+                    <h2>{nombre}</h2>
+                    <img className="verificado" src='https://i.ibb.co/BsSRKwy/Verificado-HD.jpg' alt="Verificado" />
+                    <p><IoLocationOutline />{ubicacionDetalle}</p>
                     <div className='tags-box alineado-auto'>
                         <Tags proveedor={proveedor} />
                     </div>
@@ -45,20 +65,30 @@ const CardMobileV2 = ({ proveedor }) => {
                 <button>Ver Detalles</button>
             </div>
 
-            {/* Carrusel de productos */}
-            <div className='carousel-box'>
-                <Slider {...settings}>
-                    {productos.map((producto, index) => (
-                        <div key={index} className="product-card">
-                            <img src={producto.imagen} alt={producto.titulo} className="product-image" />
-                            <div className="product-details">
-                                <h4>{producto.titulo}</h4>
-                                <p>{producto.precio}</p>
+            {Array.isArray(productos) && productos.length > 0 ? (
+                <div className='carousel-box products-carousel-mobile-v2'> {/* Added class for specific styling */}
+                    <Slider {...settings}>
+                        {productos.map((producto, index) => (
+                            <div key={producto.imagenURL || index} className="product-card-mobile"> {/* Use imagenURL as key if available */}
+                                <img 
+                                    src={producto.imagenURL || 'default-product-image.png'} // Use imagenURL
+                                    alt={producto.titulo} 
+                                    className="product-image" 
+                                    onError={(e) => { e.target.src = 'https://placehold.co/100x100/eee/ccc?text=Img'; }} // Fallback
+                                />
+                                <div className="product-details-mobile">
+                                    <h4>{producto.titulo || "Producto"}</h4>
+                                    <p>{producto.precio || "Consultar"}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </Slider>
-            </div>
+                        ))}
+                    </Slider>
+                </div>
+            ) : (
+                <div style={{textAlign: 'center', padding: '20px', color: '#777'}}>
+                    <p>(No hay productos destacados para mostrar)</p>
+                </div>
+            )}
         </div>
     );
 };
