@@ -2,7 +2,7 @@
 import React from 'react';
 import Slider from 'react-slick';
 import { IoLocationOutline } from 'react-icons/io5';
-import Tags from './assets/Tags'; // Assuming Tags.jsx is in ./assets/
+import Tags from './assets/Tags';
 import { FaImage } from "react-icons/fa";
 
 const CardMobileV2 = ({ proveedor }) => {
@@ -12,29 +12,34 @@ const CardMobileV2 = ({ proveedor }) => {
 
     const {
         nombre = 'Nombre no disponible',
-        logo = '',
+        logo, // Is an object: { url: "...", ... } or null
         ubicacionDetalle = 'Ubicación no especificada',
-        productos = [], // Expects array from proveedor.galeriaProductos
-        // tipo, servicios, tipoRegistro are used by Tags component via the proveedor prop
+        galeria = [], // This is `proveedor.galeria` from context/Firestore
+                      // Each item is an object: { url: "...", imagenURL: "...", titulo: "...", precio: "..." }
     } = proveedor;
 
-    // Settings for react-slick product carousel
+    const logoUrl = logo?.url; // Access .url property
+    const tieneLogo = !!logoUrl;
+
+    // Filter for valid products to display in the carousel
+    const validProductos = Array.isArray(galeria) ? galeria.filter(p => p && (p.url || p.imagenURL)) : [];
+
     const settings = {
         dots: true,
-        infinite: productos.length > 2, // Only infinite if enough items
+        infinite: validProductos.length > 2,
         speed: 500,
-        slidesToShow: Math.min(3, productos.length || 1), // Show 3, or less if fewer products
+        slidesToShow: Math.min(3, validProductos.length || 1),
         slidesToScroll: 1,
         arrows: false,
         responsive: [
             {
-                breakpoint: 480, // Small mobile
+                breakpoint: 480,
                 settings: {
-                    slidesToShow: Math.min(2, productos.length || 1),
+                    slidesToShow: Math.min(2, validProductos.length || 1),
                 }
             },
             {
-                breakpoint: 380, // Even smaller mobile
+                breakpoint: 380,
                 settings: {
                     slidesToShow: 1,
                 }
@@ -47,8 +52,8 @@ const CardMobileV2 = ({ proveedor }) => {
             <div className='top-container'>
                 <div className='titles-container'>
                     <div className='small-logo-box'>
-                        {logo ? (
-                            <img className='small-logo' src={logo} alt={nombre} />
+                        {tieneLogo ? (
+                            <img className='small-logo' src={logoUrl} alt={nombre} />
                         ) : (
                             <div className="logo-placeholder" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50px', height: '50px', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
                                 <FaImage size={24} color="#ccc" />
@@ -65,21 +70,23 @@ const CardMobileV2 = ({ proveedor }) => {
                 <button>Ver Detalles</button>
             </div>
 
-            {Array.isArray(productos) && productos.length > 0 ? (
-                <div className='carousel-box '> {/* Added class for specific styling */}
+            {validProductos.length > 0 ? (
+                <div className='carousel-box '>
                     <Slider {...settings}>
-                        {productos.map((producto, index) => (
-                            <div className="product-card">
-                                <div className="image-wrapper"> {/* Nuevo contenedor */}
+                        {validProductos.map((producto, index) => (
+                            // Use a unique key, e.g., from producto.url or index if nothing else is available
+                            <div className="product-card" key={producto.url || producto.imagenURL || index}>
+                                <div className="image-wrapper">
                                     <img
-                                        src={producto.imagenURL}
+                                        src={producto.url || producto.imagenURL} // Use .url or fallback to .imagenURL
+                                        alt={producto.titulo || `Producto ${index + 1}`}
                                         className="product-image"
                                         onError={(e) => e.target.src = 'https://placehold.co/100x100/eee/ccc?text=Img'}
                                     />
                                 </div>
                                 <div className="product-details">
-                                    <h4>{producto.titulo}</h4>
-                                    <p>{producto.precio}</p>
+                                    <h4>{producto.titulo || 'Producto'}</h4>
+                                    <p>{producto.precio || ''}</p>
                                 </div>
                             </div>
                         ))}

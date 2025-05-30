@@ -6,82 +6,91 @@ import { fetchFiltrosGlobales } from "../services/firestoreService"; // Import y
 
 const FiltersContext = createContext();
 
-// This function transforms a single provider document from Firestore 
-// to the structure expected by your card components.
 const transformProviderDataForDisplay = (firestoreDocWithId) => {
     if (!firestoreDocWithId || !firestoreDocWithId.id) return null;
 
     const id = firestoreDocWithId.id;
-    // Assuming firestoreDocWithId contains the spread data already
     const data = firestoreDocWithId; 
 
     const ubicacionDetalle = `${data.ciudad || ''}${data.ciudad && data.provincia ? ', ' : ''}${data.provincia || ''}`.trim() || 'Ubicación no especificada';
 
-    let displayCardType = data.cardType; 
+    let displayCardType = data.cardType; // Original type from Firestore: 'tipoA' or 'tipoB'
     if (data.cardType === 'tipoB') {
-        displayCardType = 'cardProductos';
+        displayCardType = 'cardProductos'; // For frontend logic in Proveedor.jsx
     } else if (data.cardType === 'tipoA') {
-        displayCardType = 'cardHistoria';
+        displayCardType = 'cardHistoria'; // For frontend logic
     }
 
     return {
         id: id,
         nombre: data.nombreProveedor || 'Nombre no disponible',
-        logo: data.logoUrl || '',
-        descripcion: data.descripcionGeneral || '', // Mapped from descripcionGeneral
+        
+        // --- CORRECTED FILE OBJECT MAPPINGS ---
+        logo: data.logo || null, // Pass the entire logo object from Firestore
+                                 // It now contains { url: "permanent_https_url", isPermanent: true, ... }
+        
+        carrusel: data.carrusel || [], // Pass the entire carrusel array of objects from Firestore
+                                       // Each item contains { url: "permanent_https_url", ... }
+
+        // For CardTypeB (V2 cards), they will use 'galeria' for their products carousel
+        // The 'productos' alias was from an older structure. We'll use 'galeria' directly.
+        galeria: data.galeria || [],   // Pass the entire galeria array of objects from Firestore
+                                       // Each item contains { url: "permanent_https_url", imagenURL: "permanent_https_url", ... }
+        // --- END OF CORRECTED MAPPINGS ---
+        
+        descripcionGeneral: data.descripcionGeneral || '', // Use the field name from Firestore
         ubicacionDetalle: ubicacionDetalle,
         ciudad: data.ciudad || '', 
         provincia: data.provincia || '', 
         contacto: data.contacto || {},
-        carrusel: data.carruselUrls || [], // Unified carousel data
         
-        // For Tags.jsx and specific filters
-        tipo: data.tipoProveedor || [], 
-        servicios: data.serviciosClaveParaTags || [], 
+        // Fields for Tags.jsx and specific filters
+        // Ensure these field names match what's in your Firestore 'proveedor' documents
+        tipoProveedor: data.tipoProveedor || [], 
+        serviciosClaveParaTags: data.serviciosClaveParaTags || [], 
         
-        // For textual display in cards & marca filter
-        marca: data.marcasConfiguradas || [], 
-        
-        // For textual display & extras filter
-        extras: data.extrasConfigurados || [], 
-        
-        // For ProductsCarousel
-        productos: data.galeriaProductos || [],
+        marcasConfiguradas: data.marcasConfiguradas || [], 
+        extrasConfigurados: data.extrasConfigurados || [], 
         
         tipoRegistro: data.tipoRegistro,
-        cardType: displayCardType,
+        cardType: displayCardType, // For Proveedor.jsx to choose card component
+        originalCardType: data.cardType, // Keep original 'tipoA'/'tipoB' if needed
         categoriaPrincipal: data.categoriaPrincipal || '',
         categoriasAdicionales: data.categoriasAdicionales || [],
+
+        // Pass other relevant fields directly
+        planSeleccionado: data.planSeleccionado,
+        estadoCuenta: data.estadoCuenta,
+        // Ensure all fields needed by Tags or other parts of the card are included
     };
 };
 
 export const FiltersProvider = ({ children }) => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [allProveedores, setAllProveedores] = useState([]); // Stores transformed providers
+    const [allProveedores, setAllProveedores] = useState([]);
     const [selectedCategoria, setSelectedCategoria] = useState([]);
     const [selectedMarca, setSelectedMarca] = useState("");
     const [selectedUbicacion, setSelectedUbicacion] = useState("");
     const [checkedServices, setCheckedServices] = useState([]);
     const [selectedExtras, setSelectedExtras] = useState("");
     const [isLoadingProviders, setIsLoadingProviders] = useState(true);
-    const [isLoadingFilterOptions, setIsLoadingFilterOptions] = useState(true); // Separate loading for options
+    const [isLoadingFilterOptions, setIsLoadingFilterOptions] = useState(true);
     const [selectedPProductos, setSelectedPProductos] = useState([]);
 
     const [filtrosOpciones, setFiltrosOpciones] = useState({
-        ubicaciones: [], // From fetchFiltrosGlobales
-        categorias: [],  // From fetchFiltrosGlobales
-        marcas: [],      // From fetchFiltrosGlobales (note: plural 'marcas' vs 'marca' for selected)
-        servicios: [],   // From fetchFiltrosGlobales
-        extras: [],      // From fetchFiltrosGlobales
-        pproductos: [],  // From fetchFiltrosGlobales
+        ubicaciones: [], 
+        categorias: [],  
+        marcas: [],      
+        servicios: [],   
+        extras: [],      
+        pproductos: [],  
     });
 
-    // Fetch All Static Filter Options using your firestoreService
     useEffect(() => {
         const loadFilterOptions = async () => {
             setIsLoadingFilterOptions(true);
             try {
-                const options = await fetchFiltrosGlobales();
+                const options = await fetchFiltrosGlobales(); //
                 setFiltrosOpciones({
                     ubicaciones: options.ubicaciones || [],
                     categorias: options.categorias || [],
@@ -92,7 +101,6 @@ export const FiltersProvider = ({ children }) => {
                 });
             } catch (error) {
                 console.error("Error fetching global filter options:", error);
-                // Set empty arrays on error to prevent crashes in filter components
                 setFiltrosOpciones({ ubicaciones: [], categorias: [], marcas: [], servicios: [], extras: [], pproductos: [] });
             }
             setIsLoadingFilterOptions(false);
@@ -100,7 +108,6 @@ export const FiltersProvider = ({ children }) => {
         loadFilterOptions();
     }, []);
 
-    // Fetch Providers and transform them
     useEffect(() => {
         setIsLoadingProviders(true);
         const proveedoresColRef = collection(db, "proveedores");
@@ -131,21 +138,25 @@ export const FiltersProvider = ({ children }) => {
                 !selectedCategoria.length ||
                 selectedCategoria.some(catFiltro => proveedorCategoriasDirectas.includes(catFiltro));
             
-            const cumpleMarca = !selectedMarca || (proveedor.marca && proveedor.marca.includes(selectedMarca));
+            // proveedor.marcasConfiguradas should be used here as per transformProviderDataForDisplay
+            const cumpleMarca = !selectedMarca || (proveedor.marcasConfiguradas && proveedor.marcasConfiguradas.includes(selectedMarca));
             
             const cumpleUbicacion = !selectedUbicacion || proveedor.provincia === selectedUbicacion;
 
+            // proveedor.tipoProveedor should be used here
             const cumplePProductos =
                 !selectedPProductos.length ||
-                selectedPProductos.every(pproductoFiltro => proveedor.tipo?.includes(pproductoFiltro));
+                selectedPProductos.every(pproductoFiltro => proveedor.tipoProveedor?.includes(pproductoFiltro));
 
+            // proveedor.serviciosClaveParaTags should be used here
             const cumpleServicios = 
                 !checkedServices.length ||
-                checkedServices.every(servicioFiltro => proveedor.servicios?.includes(servicioFiltro));
+                checkedServices.every(servicioFiltro => proveedor.serviciosClaveParaTags?.includes(servicioFiltro));
 
+            // proveedor.extrasConfigurados should be used here
             const cumpleExtras = 
                 !selectedExtras || 
-                (proveedor.extras && proveedor.extras.includes(selectedExtras));
+                (proveedor.extrasConfigurados && proveedor.extrasConfigurados.includes(selectedExtras));
 
             return cumpleCategorias && cumpleMarca && cumpleUbicacion && cumpleSearchTerm && cumplePProductos && cumpleServicios && cumpleExtras;
         });
@@ -164,13 +175,12 @@ export const FiltersProvider = ({ children }) => {
         }
     }, []); 
 
-    // Combined loading state for the context consumer
     const isLoading = isLoadingProviders || isLoadingFilterOptions;
 
     const contextValue = useMemo(() => ({
         searchTerm,
         proveedoresFiltrados,
-        filtrosOpciones, // This now comes entirely from fetchFiltrosGlobales
+        filtrosOpciones, 
         updateFilters,
         selectedCategoria,
         selectedUbicacion,
@@ -178,7 +188,7 @@ export const FiltersProvider = ({ children }) => {
         checkedServices,
         selectedExtras,
         isLoading,
-        allProveedores, // Pass all (transformed) providers
+        allProveedores, 
         selectedPProductos
     }), [
         searchTerm, proveedoresFiltrados, filtrosOpciones, updateFilters,

@@ -15,8 +15,7 @@ import ResumenRegistro from './steps/ResumenRegistro';
 
 import { STEPS, backgroundImageURL } from "./assetsRegistro/Constants.js";
 import { fetchFiltrosGlobales } from '../../services/firestoreService'; 
-// Import from providerService.js
-import { prepareProviderDataForFirestore, saveProviderProfileToFirestore } from '../../services/providerService'; // Adjust path if your service file is elsewhere
+import { prepareProviderDataForFirestore, saveProviderProfileToFirestore } from '../../services/providerService';
 
 import { storage } from '../../firebase/config.js';
 import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
@@ -48,21 +47,21 @@ const initialFormData = {
         pais: 'Argentina', tipoRegistro: '', nombreProveedor: '', tipoProveedor: [], categoriaPrincipal: '',
         categoriasAdicionales: [], ciudad: '', provincia: '', nombre: '', apellido: '',
         rol: '', whatsapp: '', cuit: '', antiguedad: '', facturacion: '', marcasOficiales: [],
-        serviciosClaveParaTags: [] // Ensure this is part of initial data
+        serviciosClaveParaTags: [] 
     },
     datosPersonalizados: {
         tipoA: {
             descripcion: '', sitioWeb: '', whatsapp: '', telefono: '', email: '',
             marca: [], extras: [],
-            logoURL: '',
-            carruselURLs: [],
+            logo: null, 
+            carruselURLs: [], 
         },
         tipoB: {
             descripcion: '', sitioWeb: '', whatsapp: '', telefono: '', email: '',
             marcas: [], servicios: [],
-            logoURL: '',
-            carruselURLs: [],
-            galeria: [],
+            logo: null, 
+            carruselURLs: [], 
+            galeria: [], 
         },
     },
     planSeleccionado: null,
@@ -77,17 +76,32 @@ const RegistrosProveedorNavigator = () => {
         if (loadedData) {
             const mergedData = { ...initialFormData, ...loadedData };
             mergedData.datosGenerales = { ...initialFormData.datosGenerales, ...(loadedData.datosGenerales || {}) };
-            mergedData.datosPersonalizados = { 
-                tipoA: { ...initialFormData.datosPersonalizados.tipoA, ...(loadedData.datosPersonalizados?.tipoA || {}) },
-                tipoB: { ...initialFormData.datosPersonalizados.tipoB, ...(loadedData.datosPersonalizados?.tipoB || {}) }
+            
+            const deepMergePersonalizados = (initial, loaded) => {
+                const result = { ...initial };
+                if (loaded) {
+                    for (const key in initial) {
+                        if (loaded[key] !== undefined) {
+                            if (typeof initial[key] === 'object' && initial[key] !== null && !Array.isArray(initial[key])) {
+                                result[key] = { ...initial[key], ...loaded[key] };
+                            } else {
+                                result[key] = loaded[key];
+                            }
+                        }
+                    }
+                     for (const key in loaded) { // Add keys present in loaded but not in initial
+                        if (result[key] === undefined) {
+                            result[key] = loaded[key];
+                        }
+                    }
+                }
+                return result;
             };
-            // Ensure nested objects within datosPersonalizados are also merged if they exist in loadedData
-            if (loadedData.datosPersonalizados?.tipoA) {
-                mergedData.datosPersonalizados.tipoA = { ...initialFormData.datosPersonalizados.tipoA, ...loadedData.datosPersonalizados.tipoA };
-            }
-            if (loadedData.datosPersonalizados?.tipoB) {
-                 mergedData.datosPersonalizados.tipoB = { ...initialFormData.datosPersonalizados.tipoB, ...loadedData.datosPersonalizados.tipoB };
-            }
+
+            mergedData.datosPersonalizados = { 
+                tipoA: deepMergePersonalizados(initialFormData.datosPersonalizados.tipoA, loadedData.datosPersonalizados?.tipoA),
+                tipoB: deepMergePersonalizados(initialFormData.datosPersonalizados.tipoB, loadedData.datosPersonalizados?.tipoB)
+            };
             return mergedData;
         }
         return initialFormData;
@@ -159,34 +173,34 @@ const RegistrosProveedorNavigator = () => {
                 console.error(`Error final para ${tempFileId} (reportado por uploadFileImmediately):`, error);
             } else if (downloadURL && storagePath) {
                 updateArchivosTemporales(storagePath);
+                const fileData = {
+                    url: downloadURL,
+                    tempPath: storagePath,
+                    fileType: fileTypeOriginal,
+                    mimeType: mimeTypeOriginal,
+                    tempId: tempFileId, 
+                    status: 'loaded'
+                };
+
                 switch (fieldType) {
                     case 'logoFile':
-                        if (personalizados.logoURL && personalizados.logoURL !== downloadURL) {
-                            const oldStoragePath = archivosSubidosTemporalmente.find(p => 
-                                personalizados.logoURL.includes(encodeURIComponent(p.split('/').pop())) && p !== storagePath
-                            );
-                            if (oldStoragePath) {
-                                deleteFileFromStorage(oldStoragePath);
-                            }
+                        if (personalizados.logo && personalizados.logo.tempPath && personalizados.logo.tempPath !== storagePath) {
+                            deleteFileFromStorage(personalizados.logo.tempPath);
                         }
-                        personalizados.logoURL = downloadURL;
+                        personalizados.logo = fileData;
                         break;
                     case 'carruselMediaItems':
-                        const newItemCarrusel = { url: downloadURL, fileType: fileTypeOriginal, mimeType: mimeTypeOriginal, tempId: tempFileId, status: 'loaded' };
                         let updatedCarrusel = Array.isArray(personalizados.carruselURLs) ? [...personalizados.carruselURLs] : [];
                         const existingCarruselIndex = updatedCarrusel.findIndex(item => item.tempId === tempFileId);
                         
                         if (existingCarruselIndex > -1) {
                             const oldItemCarrusel = updatedCarrusel[existingCarruselIndex];
-                            if(oldItemCarrusel.url && oldItemCarrusel.url !== downloadURL && !oldItemCarrusel.url.startsWith('blob:')){ 
-                                const oldStoragePath = archivosSubidosTemporalmente.find(p => oldItemCarrusel.url.includes(encodeURIComponent(p.split('/').pop())) && p !== storagePath);
-                                if (oldStoragePath) {
-                                     deleteFileFromStorage(oldStoragePath);
-                                }
+                            if(oldItemCarrusel.tempPath && oldItemCarrusel.tempPath !== storagePath){ 
+                                deleteFileFromStorage(oldItemCarrusel.tempPath);
                             }
-                            updatedCarrusel[existingCarruselIndex] = newItemCarrusel;
+                            updatedCarrusel[existingCarruselIndex] = fileData;
                         } else {
-                            updatedCarrusel.push(newItemCarrusel);
+                            updatedCarrusel.push(fileData);
                         }
                         personalizados.carruselURLs = updatedCarrusel;
                         break;
@@ -194,18 +208,17 @@ const RegistrosProveedorNavigator = () => {
                         if (arrayName === 'galeria' && itemIndex !== null) {
                             let updatedGaleria = Array.isArray(personalizados.galeria) ? [...personalizados.galeria] : [];
                             while(updatedGaleria.length <= itemIndex) {
-                                updatedGaleria.push({ titulo: '', precio: '', imagenURL: '', fileType: '', mimeType: '', tempId: null, status: 'empty' });
+                                updatedGaleria.push({ titulo: '', precio: '', url: '', tempPath: '', fileType: '', mimeType: '', tempId: null, status: 'empty' });
                             }
                             const oldItemGaleria = updatedGaleria[itemIndex];
-                            if(oldItemGaleria && oldItemGaleria.imagenURL && oldItemGaleria.imagenURL !== downloadURL && !oldItemGaleria.imagenURL.startsWith('blob:')) { 
-                                const oldStoragePath = archivosSubidosTemporalmente.find(p => oldItemGaleria.imagenURL.includes(encodeURIComponent(p.split('/').pop())) && p !== storagePath);
-                                if(oldStoragePath){
-                                    deleteFileFromStorage(oldStoragePath);
-                                }
+                            if(oldItemGaleria && oldItemGaleria.tempPath && oldItemGaleria.tempPath !== storagePath) { 
+                                deleteFileFromStorage(oldItemGaleria.tempPath);
                             }
                             updatedGaleria[itemIndex] = {
                                 ...(updatedGaleria[itemIndex] || {}), 
-                                imagenURL: downloadURL,
+                                imagenURL: downloadURL, // Keep for compatibility if FormularioPersonalizadoTipoB expects imagenURL in RHF
+                                url: downloadURL,
+                                tempPath: storagePath,
                                 fileType: fileTypeOriginal,
                                 mimeType: mimeTypeOriginal,
                                 tempId: tempFileId,
@@ -223,7 +236,7 @@ const RegistrosProveedorNavigator = () => {
             saveToSessionStorage("formData", newFormData);
             return newFormData;
         });
-    }, [updateArchivosTemporales, deleteFileFromStorage, archivosSubidosTemporalmente]);
+    }, [updateArchivosTemporales, deleteFileFromStorage]);
 
     const uploadFileImmediately = useCallback(async (file, tempFileId, pathSuffixFromForm = 'general_uploads', fileMetadata = {}) => {
         if (!currentUser || !currentUser.uid) {
@@ -243,8 +256,8 @@ const RegistrosProveedorNavigator = () => {
         const userId = currentUser.uid;
         const RUTA_STORAGE = `${TEMPORARY_UPLOAD_BASE_PATH}/${userId}/${pathSuffixFromForm}/${Date.now()}-${file.name}`;
         
-        const storageRef = ref(storage, RUTA_STORAGE);
-        const uploadTask = uploadBytesResumable(storageRef, file);
+        const storageRefInstance = ref(storage, RUTA_STORAGE);
+        const uploadTask = uploadBytesResumable(storageRefInstance, file);
 
         uploadTask.on('state_changed',
             (snapshot) => {
@@ -307,16 +320,21 @@ const RegistrosProveedorNavigator = () => {
             const newState = {
                 ...prev,
                 tipoCard: tipo,
-                datosPersonalizados: {
-                    tipoA: { ...initialFormData.datosPersonalizados.tipoA },
-                    tipoB: { ...initialFormData.datosPersonalizados.tipoB },
+                datosPersonalizados: { // Reset other type, preserve current type if re-selected
+                    tipoA: tipo === 'tipoA' && prev.tipoCard === 'tipoA' ? { ...prev.datosPersonalizados.tipoA } : { ...initialFormData.datosPersonalizados.tipoA },
+                    tipoB: tipo === 'tipoB' && prev.tipoCard === 'tipoB' ? { ...prev.datosPersonalizados.tipoB } : { ...initialFormData.datosPersonalizados.tipoB },
                 }
             };
-            if (prev.tipoCard === tipo && prev.datosPersonalizados && prev.datosPersonalizados[tipo]) {
-                 newState.datosPersonalizados[tipo] = { ...prev.datosPersonalizados[tipo] };
+            if (prev.tipoCard !== tipo && prev.datosPersonalizados && prev.datosPersonalizados[tipo]) {
+                 newState.datosPersonalizados[tipo] = { ...initialFormData.datosPersonalizados[tipo] }; // Fully reset if switching to a different type
+            } else if (prev.tipoCard === tipo && prev.datosPersonalizados && prev.datosPersonalizados[tipo]) {
+                // If re-selecting the same type, keep existing data
+                newState.datosPersonalizados[tipo] = { ...prev.datosPersonalizados[tipo] };
             } else {
-                 newState.datosPersonalizados[tipo] = { ...initialFormData.datosPersonalizados[tipo] };
+                // Default reset for the selected type if no prior data or different type
+                newState.datosPersonalizados[tipo] = { ...initialFormData.datosPersonalizados[tipo] };
             }
+
             setFileUploadProgress({});
             saveToSessionStorage("formData", newState);
             return newState;
@@ -335,16 +353,19 @@ const RegistrosProveedorNavigator = () => {
                 }
                 const currentPersonalizados = newFormData.datosPersonalizados[tipo];
                 let updatedPersonalizados = { ...currentPersonalizados };
+
                 for (const key in newDataFromStep) {
-                    if (key === 'logoURL' || key === 'carruselURLs' || key === 'galeria') {
-                        if (newDataFromStep[key] !== undefined) {
+                     // Check if the key corresponds to a file field (logo, carruselURLs, galeria)
+                    if (key === 'logo' || key === 'carruselURLs' || key === 'galeria') {
+                         if (newDataFromStep[key] !== undefined) { // Ensure direct assignment for file objects/arrays
                            updatedPersonalizados[key] = newDataFromStep[key];
                         }
-                    } else if (!['logoFile', 'carruselMediaItems'].includes(key)) { 
+                    } else if (!['logoFile', 'carruselMediaItems'].includes(key)) { // Exclude RHF temporary field names
                         updatedPersonalizados[key] = newDataFromStep[key];
                     }
                 }
                 newFormData.datosPersonalizados[tipo] = updatedPersonalizados;
+
             } else if (stepKey === 'datosGenerales') {
                 newFormData.datosGenerales = { ...newFormData.datosGenerales, ...newDataFromStep };
             } else {
@@ -409,11 +430,11 @@ const RegistrosProveedorNavigator = () => {
                 );
                 const deletePromises = userSpecificTempFiles.map(path => deleteFileFromStorage(path));
                 await Promise.all(deletePromises);
-                setArchivosSubidosTemporalmente(prev => prev.filter(p => !userSpecificTempFiles.includes(p)));
             } else {
                  console.warn("Cancelación sin UID de usuario, no se borraron archivos específicos del usuario.");
             }
             
+            setArchivosSubidosTemporalmente([]);
             sessionStorage.removeItem("archivosSubidosTemporalmente");
             setFormData(initialFormData);
             sessionStorage.removeItem("formData");
@@ -434,16 +455,31 @@ const RegistrosProveedorNavigator = () => {
             if (savedData) {
                  const mergedData = { ...initialFormData, ...savedData };
                  mergedData.datosGenerales = { ...initialFormData.datosGenerales, ...(savedData.datosGenerales || {}) };
-                 mergedData.datosPersonalizados = { 
-                    tipoA: { ...initialFormData.datosPersonalizados.tipoA, ...(savedData.datosPersonalizados?.tipoA || {}) },
-                    tipoB: { ...initialFormData.datosPersonalizados.tipoB, ...(savedData.datosPersonalizados?.tipoB || {}) }
+                
+                 const deepMergePersonalizados = (initial, loaded) => {
+                    const result = { ...initial };
+                    if (loaded) {
+                        for (const key in initial) {
+                            if (loaded[key] !== undefined) {
+                                if (typeof initial[key] === 'object' && initial[key] !== null && !Array.isArray(initial[key])) {
+                                    result[key] = { ...initial[key], ...loaded[key] };
+                                } else {
+                                    result[key] = loaded[key];
+                                }
+                            }
+                        }
+                        for (const key in loaded) { 
+                            if (result[key] === undefined) {
+                                result[key] = loaded[key];
+                            }
+                        }
+                    }
+                    return result;
+                };
+                mergedData.datosPersonalizados = { 
+                    tipoA: deepMergePersonalizados(initialFormData.datosPersonalizados.tipoA, savedData.datosPersonalizados?.tipoA),
+                    tipoB: deepMergePersonalizados(initialFormData.datosPersonalizados.tipoB, savedData.datosPersonalizados?.tipoB)
                  };
-                 if (savedData.datosPersonalizados?.tipoA) {
-                    mergedData.datosPersonalizados.tipoA = { ...initialFormData.datosPersonalizados.tipoA, ...savedData.datosPersonalizados.tipoA };
-                 }
-                 if (savedData.datosPersonalizados?.tipoB) {
-                    mergedData.datosPersonalizados.tipoB = { ...initialFormData.datosPersonalizados.tipoB, ...savedData.datosPersonalizados.tipoB };
-                 }
                 setFormData(mergedData);
                 setFileUploadProgress({}); 
             }
@@ -494,7 +530,7 @@ const RegistrosProveedorNavigator = () => {
                     categorias={filtrosData.categorias}
                     ubicaciones={filtrosData.ubicaciones}
                     pproductos={filtrosData.pproductos}
-                    servicios={filtrosData.servicios} // These are options for "Tipo de Servicio Principal"
+                    servicios={filtrosData.servicios} 
                     selectedCard={formData.tipoCard}
                     marcasDisponibles={filtrosData.marcas}
                 />;
@@ -513,10 +549,10 @@ const RegistrosProveedorNavigator = () => {
                     provincia: formData.datosGenerales.provincia,
                     tipoRegistro: formData.datosGenerales.tipoRegistro,
                     tipoProveedor: formData.datosGenerales.tipoProveedor,
-                    selectedServices: formData.datosGenerales.serviciosClaveParaTags, // This is for Tags.jsx in preview
-                    marcas: filtrosData.marcas,     // Options for Autocomplete
-                    extras: filtrosData.extras,     // Options for Autocomplete (TipoA)
-                    servicios: filtrosData.servicios // Options for Autocomplete (TipoB)
+                    selectedServices: formData.datosGenerales.serviciosClaveParaTags, 
+                    marcas: filtrosData.marcas,     
+                    extras: filtrosData.extras,     
+                    servicios: filtrosData.servicios 
                 };
                 return <FormularioPersonalizado {...commonPersonalizadoProps} />;
 
@@ -552,29 +588,21 @@ const RegistrosProveedorNavigator = () => {
                         console.log("[Navigator] Iniciando Confirmación de Registro para UID:", userId);
 
                         try {
-                            // 1. Prepare data for Firestore using the service function
                             const providerDataToSave = prepareProviderDataForFirestore(formData, userId);
                             
-                            console.log("Datos transformados para Firestore:", JSON.stringify(providerDataToSave, null, 2));
-                            console.log("Archivos temporales rastreados (con URLs temporales):", archivosSubidosTemporalmente);
-
-                            // 2. Save the prepared data to Firestore using the service function
+                            console.log("Datos preparados para Firestore (con temp paths):", JSON.stringify(providerDataToSave, null, 2));
+                            
                             await saveProviderProfileToFirestore(userId, providerDataToSave);
                             
-                            alert("¡Perfil de Proveedor guardado en Firestore (con URLs temporales)!");
-                            
-                            // The next major step will be to implement file moving from temporary to permanent storage 
-                            // and then update these URLs in the Firestore document.
-                            // For now, this save operation stores the temporary URLs.
-                            
-                            // 3. Clear local/session state after successful initial save
+                            alert("¡Perfil de Proveedor guardado! La finalización de archivos se procesará en segundo plano.");
+                                                        
                             setArchivosSubidosTemporalmente([]); 
                             sessionStorage.removeItem("archivosSubidosTemporalmente");
                             setFormData(initialFormData); 
                             sessionStorage.removeItem("formData");
                             setFileUploadProgress({}); 
                             setCurrentStep(0);
-                            navigate('/perfil'); // Or a provider dashboard / success page
+                            navigate('/perfil'); 
 
                         } catch (error) {
                             console.error("Error al confirmar y guardar el registro del proveedor:", error);

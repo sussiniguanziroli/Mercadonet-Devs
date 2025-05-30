@@ -1,23 +1,24 @@
 // src/services/providerService.js
-import { db } from '../firebase/config'; // Adjust path to your Firebase config
+import { db } from '../firebase/config';
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export const prepareProviderDataForFirestore = (formData, userId) => {
   const {
     datosGenerales,
-    tipoCard, // This will be 'tipoA' or 'tipoB'
+    tipoCard,
     datosPersonalizados,
     planSeleccionado
   } = formData;
 
   const cardSpecificData = datosPersonalizados[tipoCard] || {};
   
-  const cleanTempIdFromFileObjects = (fileArray) => 
-    (fileArray || []).map(item => {
-      if (typeof item !== 'object' || item === null) return item; // Handle cases where item might not be an object
-      const { tempId, ...restOfItem } = item;
+  const cleanTempIdFromFileObjects = (fileArray) => {
+    return (fileArray || []).map(item => {
+      if (typeof item !== 'object' || item === null) return item;
+      const { tempId, status, ...restOfItem } = item; // also removing status if it's client-side only
       return restOfItem;
     });
+  }
 
   let serviciosParaTagsData = [];
   if (datosGenerales.tipoRegistro === 'servicios') {
@@ -49,8 +50,24 @@ export const prepareProviderDataForFirestore = (formData, userId) => {
 
     cardType: tipoCard,
 
-    logoUrl: cardSpecificData.logoURL || '', 
-    carruselUrls: cleanTempIdFromFileObjects(cardSpecificData.carruselURLs),
+    logo: cardSpecificData.logo 
+      ? { 
+          url: cardSpecificData.logo.url || '', 
+          tempStoragePath: cardSpecificData.logo.tempPath || '',
+          permanentStoragePath: '',
+          isPermanent: false
+        } 
+      : null,
+    
+    carrusel: cleanTempIdFromFileObjects(cardSpecificData.carruselURLs).map(item => ({
+        url: item.url || '',
+        tempStoragePath: item.tempPath || '',
+        fileType: item.fileType || '',
+        mimeType: item.mimeType || '',
+        permanentStoragePath: '',
+        isPermanent: false
+    })),
+
     descripcionGeneral: cardSpecificData.descripcion || '',
     contacto: {
       email: cardSpecificData.email || '',
@@ -64,25 +81,31 @@ export const prepareProviderDataForFirestore = (formData, userId) => {
 
     planSeleccionado: planSeleccionado || null,
 
+    fileProcessingStatus: 'pending',
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
     estadoCuenta: "pendienteRevision"
   };
 
-  if (tipoCard === 'tipoB' && cardSpecificData.galeria) {
-    providerData.galeriaProductos = cleanTempIdFromFileObjects(cardSpecificData.galeria);
-  } else if (tipoCard === 'tipoB') {
-    providerData.galeriaProductos = [];
+  if (tipoCard === 'tipoB') {
+    providerData.galeria = cleanTempIdFromFileObjects(cardSpecificData.galeria).map(item => ({
+        titulo: item.titulo || '',
+        precio: item.precio || '',
+        imagenURL: item.imagenURL || item.url || '', // Use imagenURL or url
+        url: item.url || item.imagenURL || '', // Ensure consistency
+        tempStoragePath: item.tempPath || '',
+        fileType: item.fileType || '',
+        mimeType: item.mimeType || '',
+        permanentStoragePath: '',
+        isPermanent: false
+    }));
+  } else {
+    delete providerData.galeria;
   }
   
-  if (providerData.cardType !== 'tipoB') {
-    delete providerData.galeriaProductos;
-  }
-
   return providerData;
 };
 
-// ADD THIS FUNCTION:
 export const saveProviderProfileToFirestore = async (userId, providerData) => {
   if (!userId) {
     console.error("User ID es requerido para guardar el perfil del proveedor.");
@@ -95,16 +118,11 @@ export const saveProviderProfileToFirestore = async (userId, providerData) => {
 
   try {
     const providerDocRef = doc(db, "proveedores", userId);
-    // Using setDoc with { merge: true } will create the document if it doesn't exist,
-    // or update it if it does. This is useful if a user might partially complete
-    // and then come back to update/complete their provider profile.
-    // If you want to strictly create only, you can remove { merge: true }
-    // but then you might need to handle cases where the doc already exists differently.
     await setDoc(providerDocRef, providerData, { merge: true }); 
     console.log("Perfil de proveedor guardado/actualizado en Firestore con ID: ", userId);
     return { success: true, id: userId };
   } catch (error) {
     console.error("Error guardando perfil de proveedor en Firestore: ", error);
-    throw error; // Re-throw error to be caught by the calling function in the component
+    throw error; 
   }
 };

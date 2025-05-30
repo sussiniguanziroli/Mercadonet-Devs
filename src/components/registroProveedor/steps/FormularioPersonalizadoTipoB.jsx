@@ -24,39 +24,46 @@ const FormularioPersonalizadoTipoB = ({
     ciudad = '',
     provincia = '',
     marcas: marcasOpciones = [],
-    extras: extrasOpciones = [],
+    extras: extrasOpciones = [], // Assuming 'extras' are 'servicios' for TipoB
     fileUploadProgress = {},
     uploadFileImmediately,
-    // Props from FormularioGeneral needed for RegisterTags in preview
     tipoRegistro,
     tipoProveedor,
     selectedServices
 }) => {
 
     const getInitialDefaultValues = useCallback(() => {
-        const initialLogo = initialData?.logoURL
-            ? { file: null, preview: initialData.logoURL, isExisting: true, name: 'logo_cargado', type: 'image/existing', tempId: initialData.logoTempId || null, status: 'loaded' }
+        const initialLogoRHF = initialData?.logo
+            ? { 
+                file: null, preview: initialData.logo.url, isExisting: true, 
+                name: 'logo_cargado', type: initialData.logo.mimeType || 'image/existing', 
+                tempId: initialData.logo.tempId || null, status: initialData.logo.status || 'loaded'
+              }
             : null;
 
-        const initialCarruselItems = (initialData?.carruselURLs || []).map(media => ({
-            file: null, url: media.url, fileType: media.fileType || (media.url?.includes('.mp4') || media.url?.includes('.mov') ? 'video' : 'image'),
-            mimeType: media.mimeType || '', isExisting: true, name: 'media_cargado', tempId: media.tempId || null, status: 'loaded'
+        const initialCarruselItemsRHF = (initialData?.carruselURLs || []).map(media => ({
+            file: null, url: media.url, fileType: media.fileType,
+            mimeType: media.mimeType, isExisting: true, name: 'media_cargado', 
+            tempId: media.tempId || null, status: media.status || 'loaded'
         }));
         
-        const initialGaleria = Array(LIMITE_GALERIA_PRODUCTOS_B).fill(null).map((_, index) => {
-            const productData = initialData?.galeria?.[index];
-            if (productData && (productData.titulo || productData.precio || productData.imagenURL)) {
+        const initialGaleriaRHF = Array(LIMITE_GALERIA_PRODUCTOS_B).fill(null).map((_, index) => {
+            const productData = initialData?.galeria?.[index]; // galeria from Navigator's formData
+            if (productData && (productData.titulo || productData.precio || productData.url || productData.imagenURL)) {
                 return {
                     titulo: productData.titulo || '',
                     precio: productData.precio || '',
-                    imagenFile: productData.imagenURL
-                        ? { file: null, preview: productData.imagenURL, isExisting: true, name: `prod_${index}_cargado`, type: productData.mimeType || 'image/existing', tempId: productData.tempId || null, status: 'loaded' }
+                    imagenFile: (productData.url || productData.imagenURL) // Check if productData.url exists
+                        ? { 
+                            file: null, preview: productData.url || productData.imagenURL, isExisting: true, 
+                            name: `prod_${index}_cargado`, type: productData.mimeType || 'image/existing', 
+                            tempId: productData.tempId || null, status: productData.status || 'loaded'
+                          }
                         : null,
-                    fileType: productData.fileType || (productData.imagenURL ? 'image' : ''),
-                    mimeType: productData.mimeType || (productData.imagenURL ? 'image/existing' : ''),
+                    // fileType and mimeType are part of the file object now
                 };
             }
-            return { imagenFile: null, titulo: '', precio: '', fileType: '', mimeType: '' };
+            return { imagenFile: null, titulo: '', precio: '' };
         });
 
         return {
@@ -65,11 +72,11 @@ const FormularioPersonalizadoTipoB = ({
             whatsapp: initialData?.whatsapp || '',
             telefono: initialData?.telefono || '',
             email: initialData?.email || '',
-            marcasSeleccionadas: Array.isArray(initialData?.marcas) ? initialData.marcas : [],
-            serviciosSeleccionados: Array.isArray(initialData?.servicios) ? initialData.servicios : [],
-            logoFile: initialLogo,
-            carruselMediaItems: initialCarruselItems,
-            galeria: initialGaleria,
+            marcasSeleccionadas: Array.isArray(initialData?.marcas) ? initialData.marcas : [], // 'marcas' for TipoB
+            serviciosSeleccionados: Array.isArray(initialData?.servicios) ? initialData.servicios : [], // 'servicios' for TipoB
+            logoFile: initialLogoRHF,
+            carruselMediaItems: initialCarruselItemsRHF,
+            galeria: initialGaleriaRHF,
         };
     }, [initialData]);
 
@@ -89,12 +96,8 @@ const FormularioPersonalizadoTipoB = ({
     }, [initialData, reset, getInitialDefaultValues]);
 
     const initiateFileUpload = useCallback(({ file, tempId, type, itemIndex }) => {
-        if (!file || !tempId) {
-            return;
-        }
-        if (uploadQueueRef.current.has(tempId)) {
-            return;
-        }
+        if (!file || !tempId) return;
+        if (uploadQueueRef.current.has(tempId)) return;
         uploadQueueRef.current.add(tempId);
 
         let pathPrefix = '';
@@ -115,9 +118,9 @@ const FormularioPersonalizadoTipoB = ({
             }
         } else if (type === 'galeria') {
             pathPrefix = 'proveedores/tipoB/galeria';
-            metadata.fieldType = 'galeria';
-            metadata.arrayName = 'galeria';
-            metadata.itemIndex = itemIndex;
+            metadata.fieldType = 'galeria'; // Used by Navigator's handleFileUploaded
+            metadata.arrayName = 'galeria'; // Used by Navigator's handleFileUploaded
+            metadata.itemIndex = itemIndex; // Used by Navigator's handleFileUploaded
             rhfPathForStatusUpdate = `galeria.${itemIndex}.imagenFile.status`;
         }
         
@@ -129,11 +132,15 @@ const FormularioPersonalizadoTipoB = ({
     }, [uploadFileImmediately, setValue, getValues]);
     
     useEffect(() => {
-        const watchedLogoFileValue = getValues('logoFile'); // Use getValues for latest
+        const watchedLogoFileValue = getValues('logoFile');
         if (watchedLogoFileValue?.tempId && fileUploadProgress[watchedLogoFileValue.tempId]) {
             const progress = fileUploadProgress[watchedLogoFileValue.tempId];
             if (progress.status === 'success' && watchedLogoFileValue.status !== 'loaded') {
-                setValue('logoFile', { ...watchedLogoFileValue, preview: progress.finalUrl, file: null, isExisting: true, status: 'loaded' }, { shouldValidate: true, shouldDirty: true });
+                setValue('logoFile', { 
+                    ...watchedLogoFileValue, preview: progress.finalUrl, 
+                    file: null, isExisting: true, status: 'loaded',
+                    type: progress.mimeTypeOriginal || watchedLogoFileValue.type
+                }, { shouldValidate: true, shouldDirty: true });
                 uploadQueueRef.current.delete(watchedLogoFileValue.tempId);
             } else if (progress.status === 'error' && watchedLogoFileValue.status !== 'error_upload') {
                 setValue('logoFile.status', 'error_upload', { shouldValidate: true, shouldDirty: true });
@@ -149,7 +156,12 @@ const FormularioPersonalizadoTipoB = ({
                 if (progress.status === 'success' && item.status !== 'loaded') {
                     uploadQueueRef.current.delete(item.tempId);
                     carruselItemsChanged = true;
-                    return { ...item, url: progress.finalUrl, file: null, isExisting: true, status: 'loaded' };
+                    return { 
+                        ...item, url: progress.finalUrl, 
+                        fileType: progress.fileTypeOriginal || item.fileType,
+                        mimeType: progress.mimeTypeOriginal || item.mimeType,
+                        file: null, isExisting: true, status: 'loaded' 
+                    };
                 } else if (progress.status === 'error' && item.status !== 'error_upload') {
                     uploadQueueRef.current.delete(item.tempId);
                     carruselItemsChanged = true;
@@ -164,13 +176,20 @@ const FormularioPersonalizadoTipoB = ({
 
         const currentGaleriaValues = getValues('galeria') || [];
         let galeriaItemsChanged = false;
-        const newGaleriaItems = currentGaleriaValues.map(item => {
+        const newGaleriaItems = currentGaleriaValues.map((item, index) => {
             if (item.imagenFile?.tempId && fileUploadProgress[item.imagenFile.tempId]) {
                 const progress = fileUploadProgress[item.imagenFile.tempId];
                 if (progress.status === 'success' && item.imagenFile.status !== 'loaded') {
                     uploadQueueRef.current.delete(item.imagenFile.tempId);
                     galeriaItemsChanged = true;
-                    return { ...item, imagenFile: { ...item.imagenFile, preview: progress.finalUrl, file: null, isExisting: true, status: 'loaded' } };
+                    return { 
+                        ...item, 
+                        imagenFile: { 
+                            ...item.imagenFile, preview: progress.finalUrl, 
+                            file: null, isExisting: true, status: 'loaded',
+                            type: progress.mimeTypeOriginal || item.imagenFile.type // Store mimeType for RHF
+                        } 
+                    };
                 } else if (progress.status === 'error' && item.imagenFile.status !== 'error_upload') {
                     uploadQueueRef.current.delete(item.imagenFile.tempId);
                     galeriaItemsChanged = true;
@@ -212,34 +231,101 @@ const FormularioPersonalizadoTipoB = ({
     }, [getValues]);
 
     const prepareSubmitData = () => {
-        const currentValues = getValues();
+        const currentRHFValues = getValues();
+        
+        let submittedLogoData = null;
+        const rhfLogo = currentRHFValues.logoFile;
+        if (rhfLogo?.status === 'loaded' && rhfLogo.preview) {
+            const logoProgress = fileUploadProgress[rhfLogo.tempId];
+            submittedLogoData = {
+                url: rhfLogo.preview,
+                tempPath: logoProgress?.storagePath || initialData?.logo?.tempPath || '',
+                fileType: rhfLogo.type?.startsWith('video/') ? 'video' : 'image',
+                mimeType: rhfLogo.type,
+                tempId: rhfLogo.tempId,
+                status: 'loaded'
+            };
+        } else if (initialData?.logo && rhfLogo?.status !== 'removed' && rhfLogo?.isExisting) {
+            submittedLogoData = initialData.logo;
+        }
+
+        const submittedCarruselData = (currentRHFValues.carruselMediaItems || [])
+            .map(item => {
+                if (item.status === 'loaded' && item.url) {
+                    const itemProgress = fileUploadProgress[item.tempId];
+                    return {
+                        url: item.url,
+                        tempPath: itemProgress?.storagePath || initialData?.carruselURLs?.find(i => i.tempId === item.tempId)?.tempPath || '',
+                        fileType: item.fileType,
+                        mimeType: item.mimeType,
+                        tempId: item.tempId,
+                        status: 'loaded'
+                    };
+                } else if (item.isExisting && item.status !== 'removed' && item.url) {
+                     const existingInitialItem = initialData?.carruselURLs?.find(i => i.tempId === item.tempId || i.url === item.url);
+                    if(existingInitialItem) return existingInitialItem;
+                }
+                return null;
+            })
+            .filter(Boolean);
+
+        const submittedGaleriaData = (currentRHFValues.galeria || [])
+            .map(producto => {
+                const rhfImagenFile = producto.imagenFile;
+                if (rhfImagenFile?.status === 'loaded' && rhfImagenFile.preview) {
+                    const itemProgress = fileUploadProgress[rhfImagenFile.tempId];
+                    return {
+                        titulo: producto.titulo,
+                        precio: producto.precio,
+                        url: rhfImagenFile.preview, // This is the temp download URL
+                        imagenURL: rhfImagenFile.preview, // For consistency if ResumenRegistro uses imagenURL
+                        tempPath: itemProgress?.storagePath || initialData?.galeria?.find(p => p.tempId === rhfImagenFile.tempId)?.tempPath || '',
+                        fileType: rhfImagenFile.type?.startsWith('video/') ? 'video' : 'image',
+                        mimeType: rhfImagenFile.type,
+                        tempId: rhfImagenFile.tempId,
+                        status: 'loaded'
+                    };
+                } else if (rhfImagenFile?.isExisting && rhfImagenFile?.status !== 'removed' && rhfImagenFile?.preview) {
+                    // If it was existing, not removed, and still has a URL, find it in initialData
+                    const existingInitialItem = initialData?.galeria?.find(p => p.tempId === rhfImagenFile.tempId || p.url === rhfImagenFile.preview || p.imagenURL === rhfImagenFile.preview);
+                    if (existingInitialItem) {
+                         // Ensure the returned object has all necessary fields for Navigator
+                        return {
+                            titulo: producto.titulo || existingInitialItem.titulo,
+                            precio: producto.precio || existingInitialItem.precio,
+                            url: existingInitialItem.url || existingInitialItem.imagenURL,
+                            imagenURL: existingInitialItem.imagenURL || existingInitialItem.url,
+                            tempPath: existingInitialItem.tempPath,
+                            fileType: existingInitialItem.fileType,
+                            mimeType: existingInitialItem.mimeType,
+                            tempId: existingInitialItem.tempId,
+                            status: existingInitialItem.status || 'loaded'
+                        };
+                    }
+                }
+                // If only titulo/precio are filled, but no image, still include it if it's not an empty slot
+                if (producto.titulo || producto.precio) {
+                    return {
+                        titulo: producto.titulo,
+                        precio: producto.precio,
+                        url: null, imagenURL: null, tempPath: null, fileType: null, mimeType: null, tempId: null, status: 'no_image'
+                    };
+                }
+                return null;
+            })
+            .filter(Boolean);
+
         return {
-            descripcion: currentValues.descripcion,
-            sitioWeb: currentValues.sitioWeb,
-            whatsapp: currentValues.whatsapp,
-            telefono: currentValues.telefono,
-            email: currentValues.email,
-            marcas: currentValues.marcasSeleccionadas || [],
-            servicios: currentValues.serviciosSeleccionados || [],
-            logoURL: currentValues.logoFile?.status === 'loaded' ? currentValues.logoFile.preview : (initialData?.logoURL || ''),
-            carruselURLs: (currentValues.carruselMediaItems || [])
-                .filter(item => item.status === 'loaded' && item.url)
-                .map(item => ({
-                    url: item.url,
-                    fileType: item.fileType,
-                    mimeType: item.mimeType,
-                    tempId: item.tempId
-                })),
-            galeria: (currentValues.galeria || [])
-                .filter(p => (p.titulo || p.precio || (p.imagenFile?.status === 'loaded' && p.imagenFile?.preview)) && p.imagenFile?.status !== 'error_upload' && p.imagenFile?.status !== 'removed')
-                .map(producto => ({
-                    titulo: producto.titulo,
-                    precio: producto.precio,
-                    imagenURL: producto.imagenFile?.status === 'loaded' ? producto.imagenFile.preview : '',
-                    fileType: producto.fileType || (producto.imagenFile?.status === 'loaded' ? (producto.imagenFile.type?.startsWith('video/') ? 'video' : 'image') : ''),
-                    mimeType: producto.mimeType || (producto.imagenFile?.status === 'loaded' ? producto.imagenFile.type : ''),
-                    tempId: producto.imagenFile?.tempId
-                })),
+            descripcion: currentRHFValues.descripcion,
+            sitioWeb: currentRHFValues.sitioWeb,
+            whatsapp: currentRHFValues.whatsapp,
+            telefono: currentRHFValues.telefono,
+            email: currentRHFValues.email,
+            marcas: currentRHFValues.marcasSeleccionadas || [],
+            servicios: currentRHFValues.serviciosSeleccionados || [],
+            logo: submittedLogoData,
+            carruselURLs: submittedCarruselData,
+            galeria: submittedGaleriaData,
         };
     };
 
@@ -252,53 +338,40 @@ const FormularioPersonalizadoTipoB = ({
         onBack(stepData);
     };
 
-    const buildPreviewData = (currentFormData) => {
+    const buildPreviewData = (currentRHFData) => {
         const ubicacionDetalle = `${ciudad}${ciudad && provincia ? ', ' : ''}${provincia}`;
         
-        let logoForPreview = currentFormData.logoFile?.preview || null;
-        if (currentFormData.logoFile?.status === 'loaded') {
-            logoForPreview = currentFormData.logoFile.preview;
-        } else if (currentFormData.logoFile?.tempId && fileUploadProgress[currentFormData.logoFile.tempId]?.status === 'success') {
-            logoForPreview = fileUploadProgress[currentFormData.logoFile.tempId].finalUrl;
-        }
+        const logoForPreview = currentRHFData.logoFile?.preview || initialData?.logo?.url || null;
 
-        const carruselForPreview = (currentFormData.carruselMediaItems || [])
-            .map(item => {
-                let urlForPreview = item.url;
-                if (item.status === 'loaded') {
-                    urlForPreview = item.url;
-                } else if (item.tempId && fileUploadProgress[item.tempId]?.status === 'success') {
-                    urlForPreview = fileUploadProgress[item.tempId].finalUrl;
-                }
-                return { url: urlForPreview, fileType: item.fileType, mimeType: item.mimeType, status: item.status };
-            })
-            .filter(item => item.url && item.status !== 'error_upload' && item.status !== 'removed');
+        const carruselForPreview = (currentRHFData.carruselMediaItems || []).map(item => ({
+            url: item.url || item.preview,
+            fileType: item.fileType,
+            mimeType: item.mimeType,
+            status: item.status
+        })).filter(item => item.url && item.status !== 'error_upload' && item.status !== 'removed');
         
-        const galeriaForPreview = (currentFormData.galeria || []).map(item => {
-            let imgPreview = item.imagenFile?.preview || null;
-            if (item.imagenFile?.status === 'loaded') {
-                imgPreview = item.imagenFile.preview;
-            } else if (item.imagenFile?.tempId && fileUploadProgress[item.imagenFile.tempId]?.status === 'success') {
-                imgPreview = fileUploadProgress[item.imagenFile.tempId].finalUrl;
-            }
-            return { titulo: item.titulo, precio: item.precio ? `$${item.precio}` : '', imagenPreview: imgPreview, status: item.imagenFile?.status };
-        }).filter(p => (p.titulo || p.precio || p.imagenPreview) && p.status !== 'error_upload' && p.status !== 'removed');
+        const galeriaForPreview = (currentRHFData.galeria || []).map(item => ({
+            titulo: item.titulo, 
+            precio: item.precio ? `$${item.precio}` : '', 
+            imagenPreview: item.imagenFile?.preview || null, 
+            status: item.imagenFile?.status 
+        })).filter(p => (p.titulo || p.precio || p.imagenPreview) && p.status !== 'error_upload' && p.status !== 'removed');
 
         return {
-            tipoRegistro,     // Added for RegisterTags
-            tipoProveedor,    // Added for RegisterTags
-            selectedServices, // Added for RegisterTags
+            tipoRegistro,
+            tipoProveedor,
+            selectedServices,
             nombre: nombreProveedor, 
             ubicacionDetalle,
-            descripcion: currentFormData.descripcion,
-            marcas: currentFormData.marcasSeleccionadas,
-            servicios: currentFormData.serviciosSeleccionados, 
+            descripcion: currentRHFData.descripcion,
+            marcas: currentRHFData.marcasSeleccionadas, 
+            servicios: currentRHFData.serviciosSeleccionados, 
             logoPreview: logoForPreview,
             carrusel: carruselForPreview,
-            sitioWeb: currentFormData.sitioWeb,
-            whatsapp: currentFormData.whatsapp,
-            telefono: currentFormData.telefono,
-            email: currentFormData.email,
+            sitioWeb: currentRHFData.sitioWeb,
+            whatsapp: currentRHFData.whatsapp,
+            telefono: currentRHFData.telefono,
+            email: currentRHFData.email,
             galeriaProductos: galeriaForPreview,
         };
     };
@@ -312,7 +385,6 @@ const FormularioPersonalizadoTipoB = ({
             }
             if (currentLogo.tempId) {
                 uploadQueueRef.current.delete(currentLogo.tempId);
-                setValue('logoFile.status', 'removed', { shouldDirty: true });
             }
         }
         setValue('logoFile', null, { shouldValidate: true, shouldDirty: true });
@@ -342,10 +414,12 @@ const FormularioPersonalizadoTipoB = ({
             }
             if (currentImageFile.tempId) {
                 uploadQueueRef.current.delete(currentImageFile.tempId);
-                setValue(`${rhfPath}.status`, 'removed', { shouldDirty: true });
             }
         }
         setValue(rhfPath, null, { shouldValidate: true, shouldDirty: true });
+        // Also clear titulo and precio if image is removed? Optional.
+        // setValue(`galeria.${index}.titulo`, '', { shouldDirty: true });
+        // setValue(`galeria.${index}.precio`, '', { shouldDirty: true });
     };
 
     return (
@@ -398,20 +472,14 @@ const FormularioPersonalizadoTipoB = ({
                         errors={errors}
                         options={marcasOpciones}
                         label="Marcas que trabajás"
-                        // Pass optionLabelKey and optionIdKey if marcasOpciones are objects
-                        // optionLabelKey="nombre" 
-                        // optionIdKey="id" 
                     />
 
                     <AutocompleteSection
                         rhfName="serviciosSeleccionados" 
                         control={control}
                         errors={errors}
-                        options={extrasOpciones} 
+                        options={extrasOpciones} // Assuming 'extrasOpciones' are 'servicios' for TipoB
                         label="Servicios Adicionales"
-                        // Pass optionLabelKey and optionIdKey if extrasOpciones are objects
-                        // optionLabelKey="nombre"
-                        // optionIdKey="id"
                     />
                     
                     <ContactoFieldsSection

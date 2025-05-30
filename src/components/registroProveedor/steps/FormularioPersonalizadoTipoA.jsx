@@ -14,7 +14,7 @@ const LIMITE_CARRUSEL_A = 7;
 const DESCRIPCION_MAX_LENGTH_A = 1600;
 
 const FormularioPersonalizadoTipoA = ({
-    initialData,
+    initialData, // This is formData.datosPersonalizados.tipoA from Navigator
     onNext,
     onBack,
     nombreProveedor = '',
@@ -24,20 +24,35 @@ const FormularioPersonalizadoTipoA = ({
     extras: extrasOpciones = [],
     fileUploadProgress = {},
     uploadFileImmediately,
-    // Props from FormularioGeneral needed for RegisterTags in preview
     tipoRegistro,
     tipoProveedor,
     selectedServices 
 }) => {
 
     const getInitialDefaultValues = useCallback(() => {
-        const initialLogo = initialData?.logoURL
-            ? { file: null, preview: initialData.logoURL, isExisting: true, name: 'logo_cargado', type: 'image/existing', tempId: initialData.logoTempId || null, status: 'loaded' }
+        // initialData.logo is now an object { url, tempPath, fileType, mimeType, tempId, status } or null
+        const initialLogoRHF = initialData?.logo 
+            ? { 
+                file: null, 
+                preview: initialData.logo.url, 
+                isExisting: true, 
+                name: 'logo_cargado', 
+                type: initialData.logo.mimeType || 'image/existing',
+                tempId: initialData.logo.tempId || null, 
+                status: initialData.logo.status || 'loaded',
+              }
             : null;
 
-        const initialCarruselItems = (initialData?.carruselURLs || []).map(media => ({
-            file: null, url: media.url, fileType: media.fileType || (media.url?.includes('.mp4') || media.url?.includes('.mov') ? 'video' : 'image'),
-            mimeType: media.mimeType || '', isExisting: true, name: 'media_cargado', tempId: media.tempId || null, status: 'loaded'
+        // initialData.carruselURLs is an array of objects { url, tempPath, fileType, mimeType, tempId, status }
+        const initialCarruselItemsRHF = (initialData?.carruselURLs || []).map(media => ({
+            file: null, 
+            url: media.url, 
+            fileType: media.fileType,
+            mimeType: media.mimeType, 
+            isExisting: true, 
+            name: 'media_cargado', 
+            tempId: media.tempId || null, 
+            status: media.status || 'loaded',
         }));
 
         return {
@@ -46,10 +61,10 @@ const FormularioPersonalizadoTipoA = ({
             whatsapp: initialData?.whatsapp || '',
             telefono: initialData?.telefono || '',
             email: initialData?.email || '',
-            marcasSeleccionadas: Array.isArray(initialData?.marca) ? initialData.marca : [],
-            extrasSeleccionados: Array.isArray(initialData?.extras) ? initialData.extras : [],
-            logoFile: initialLogo,
-            carruselMediaItems: initialCarruselItems,
+            marcasSeleccionadas: Array.isArray(initialData?.marca) ? initialData.marca : (Array.isArray(initialData?.marcasConfiguradas) ? initialData.marcasConfiguradas : []),
+            extrasSeleccionados: Array.isArray(initialData?.extras) ? initialData.extras : (Array.isArray(initialData?.extrasConfigurados) ? initialData.extrasConfigurados : []),
+            logoFile: initialLogoRHF,
+            carruselMediaItems: initialCarruselItemsRHF,
         };
     }, [initialData]);
 
@@ -68,12 +83,8 @@ const FormularioPersonalizadoTipoA = ({
     }, [initialData, reset, getInitialDefaultValues]);
 
     const initiateFileUpload = useCallback(({ file, tempId, type, itemIndex }) => {
-        if (!file || !tempId) {
-            return;
-        }
-        if (uploadQueueRef.current.has(tempId)) {
-            return;
-        }
+        if (!file || !tempId) return;
+        if (uploadQueueRef.current.has(tempId)) return;
         uploadQueueRef.current.add(tempId);
 
         let pathPrefix = '';
@@ -102,11 +113,19 @@ const FormularioPersonalizadoTipoA = ({
     }, [uploadFileImmediately, setValue, getValues]);
     
     useEffect(() => {
-        const watchedLogoFileValue = getValues('logoFile'); // Use getValues for latest
+        const watchedLogoFileValue = getValues('logoFile'); 
         if (watchedLogoFileValue?.tempId && fileUploadProgress[watchedLogoFileValue.tempId]) {
             const progress = fileUploadProgress[watchedLogoFileValue.tempId];
             if (progress.status === 'success' && watchedLogoFileValue.status !== 'loaded') {
-                setValue('logoFile', { ...watchedLogoFileValue, preview: progress.finalUrl, file: null, isExisting: true, status: 'loaded' }, { shouldValidate: true, shouldDirty: true });
+                setValue('logoFile', { 
+                    ...watchedLogoFileValue, 
+                    preview: progress.finalUrl, 
+                    // tempPath: progress.storagePath, // Navigator handles this via handleFileUploaded
+                    file: null, 
+                    isExisting: true, 
+                    status: 'loaded',
+                    type: progress.mimeTypeOriginal || watchedLogoFileValue.type // Store mimeType
+                }, { shouldValidate: true, shouldDirty: true });
                 uploadQueueRef.current.delete(watchedLogoFileValue.tempId);
             } else if (progress.status === 'error' && watchedLogoFileValue.status !== 'error_upload') {
                 setValue('logoFile.status', 'error_upload', { shouldValidate: true, shouldDirty: true });
@@ -122,7 +141,16 @@ const FormularioPersonalizadoTipoA = ({
                 if (progress.status === 'success' && item.status !== 'loaded') {
                     uploadQueueRef.current.delete(item.tempId);
                     carruselItemsChanged = true;
-                    return { ...item, url: progress.finalUrl, file: null, isExisting: true, status: 'loaded' };
+                    return { 
+                        ...item, 
+                        url: progress.finalUrl, 
+                        // tempPath: progress.storagePath, // Navigator handles this
+                        fileType: progress.fileTypeOriginal || item.fileType,
+                        mimeType: progress.mimeTypeOriginal || item.mimeType,
+                        file: null, 
+                        isExisting: true, 
+                        status: 'loaded' 
+                    };
                 } else if (progress.status === 'error' && item.status !== 'error_upload') {
                     uploadQueueRef.current.delete(item.tempId);
                     carruselItemsChanged = true;
@@ -157,24 +185,59 @@ const FormularioPersonalizadoTipoA = ({
     }, [getValues]);
 
     const prepareSubmitData = () => {
-        const currentValues = getValues();
+        const currentRHFValues = getValues();
+        
+        let submittedLogoData = null;
+        const rhfLogo = currentRHFValues.logoFile;
+        if (rhfLogo?.status === 'loaded' && rhfLogo.preview) {
+            // If loaded, it means Navigator already has the full object from handleFileUploaded
+            // We need to find that object in fileUploadProgress or initialData to get tempPath
+            const logoProgress = fileUploadProgress[rhfLogo.tempId];
+            submittedLogoData = {
+                url: rhfLogo.preview, // This is the temp download URL
+                tempPath: logoProgress?.storagePath || initialData?.logo?.tempPath || '',
+                fileType: rhfLogo.type?.startsWith('video/') ? 'video' : 'image',
+                mimeType: rhfLogo.type,
+                tempId: rhfLogo.tempId,
+                status: 'loaded'
+            };
+        } else if (initialData?.logo && rhfLogo?.status !== 'removed' && rhfLogo?.isExisting) {
+             // If it was existing and not removed or failed, keep initialData.logo
+            submittedLogoData = initialData.logo;
+        }
+
+
+        const submittedCarruselData = (currentRHFValues.carruselMediaItems || [])
+            .map(item => {
+                if (item.status === 'loaded' && item.url) {
+                    const itemProgress = fileUploadProgress[item.tempId];
+                    return {
+                        url: item.url,
+                        tempPath: itemProgress?.storagePath || initialData?.carruselURLs?.find(i => i.tempId === item.tempId)?.tempPath || '',
+                        fileType: item.fileType,
+                        mimeType: item.mimeType,
+                        tempId: item.tempId,
+                        status: 'loaded'
+                    };
+                } else if (item.isExisting && item.status !== 'removed' && item.url) {
+                    // If it was existing, not removed, and still has a URL, find it in initialData
+                    const existingInitialItem = initialData?.carruselURLs?.find(i => i.tempId === item.tempId || i.url === item.url);
+                    if(existingInitialItem) return existingInitialItem;
+                }
+                return null;
+            })
+            .filter(Boolean);
+
         return {
-            descripcion: currentValues.descripcion,
-            sitioWeb: currentValues.sitioWeb,
-            whatsapp: currentValues.whatsapp,
-            telefono: currentValues.telefono,
-            email: currentValues.email,
-            marca: currentValues.marcasSeleccionadas || [],
-            extras: currentValues.extrasSeleccionados || [],
-            logoURL: currentValues.logoFile?.status === 'loaded' ? currentValues.logoFile.preview : (initialData?.logoURL || ''),
-            carruselURLs: (currentValues.carruselMediaItems || [])
-                .filter(item => item.status === 'loaded' && item.url)
-                .map(item => ({
-                    url: item.url,
-                    fileType: item.fileType,
-                    mimeType: item.mimeType,
-                    tempId: item.tempId
-                })),
+            descripcion: currentRHFValues.descripcion,
+            sitioWeb: currentRHFValues.sitioWeb,
+            whatsapp: currentRHFValues.whatsapp,
+            telefono: currentRHFValues.telefono,
+            email: currentRHFValues.email,
+            marca: currentRHFValues.marcasSeleccionadas || [],
+            extras: currentRHFValues.extrasSeleccionados || [],
+            logo: submittedLogoData, 
+            carruselURLs: submittedCarruselData,
         };
     };
 
@@ -187,43 +250,33 @@ const FormularioPersonalizadoTipoA = ({
         onBack(stepData);
     };
 
-    const buildPreviewData = (currentFormData) => {
+    const buildPreviewData = (currentRHFData) => {
         const ubicacionDetalle = `${ciudad}${ciudad && provincia ? ', ' : ''}${provincia}`;
         
-        let logoForPreview = currentFormData.logoFile?.preview || null;
-        if (currentFormData.logoFile?.status === 'loaded') {
-            logoForPreview = currentFormData.logoFile.preview;
-        } else if (currentFormData.logoFile?.tempId && fileUploadProgress[currentFormData.logoFile.tempId]?.status === 'success') {
-            logoForPreview = fileUploadProgress[currentFormData.logoFile.tempId].finalUrl;
-        }
+        const logoForPreview = currentRHFData.logoFile?.preview || initialData?.logo?.url || null;
 
-        const carruselForPreview = (currentFormData.carruselMediaItems || [])
-            .map(item => {
-                let urlForPreview = item.url;
-                if (item.status === 'loaded') {
-                    urlForPreview = item.url;
-                } else if (item.tempId && fileUploadProgress[item.tempId]?.status === 'success') {
-                    urlForPreview = fileUploadProgress[item.tempId].finalUrl;
-                }
-                return { url: urlForPreview, fileType: item.fileType, mimeType: item.mimeType, status: item.status };
-            })
-            .filter(item => item.url && item.status !== 'error_upload' && item.status !== 'removed');
+        const carruselForPreview = (currentRHFData.carruselMediaItems || []).map(item => ({
+            url: item.url || item.preview, 
+            fileType: item.fileType,
+            mimeType: item.mimeType,
+            status: item.status
+        })).filter(item => item.url && item.status !== 'error_upload' && item.status !== 'removed');
 
         return {
-            tipoRegistro,     // Added for RegisterTags
-            tipoProveedor,    // Added for RegisterTags
-            selectedServices, // Added for RegisterTags
+            tipoRegistro,
+            tipoProveedor,
+            selectedServices,
             nombre: nombreProveedor, 
             ubicacionDetalle,
-            descripcion: currentFormData.descripcion,
-            marca: currentFormData.marcasSeleccionadas,
-            extras: currentFormData.extrasSeleccionados,
+            descripcion: currentRHFData.descripcion,
+            marca: currentRHFData.marcasSeleccionadas || [], 
+            extras: currentRHFData.extrasSeleccionados || [],
             logoPreview: logoForPreview,
             carrusel: carruselForPreview,
-            sitioWeb: currentFormData.sitioWeb,
-            whatsapp: currentFormData.whatsapp,
-            telefono: currentFormData.telefono,
-            email: currentFormData.email,
+            sitioWeb: currentRHFData.sitioWeb,
+            whatsapp: currentRHFData.whatsapp,
+            telefono: currentRHFData.telefono,
+            email: currentRHFData.email,
         };
     };
     const previewData = buildPreviewData(watchedAllFields);
@@ -236,7 +289,8 @@ const FormularioPersonalizadoTipoA = ({
             }
             if (currentLogo.tempId) {
                 uploadQueueRef.current.delete(currentLogo.tempId);
-                setValue('logoFile.status', 'removed', { shouldDirty: true });
+                // No need to call deleteFileFromStorage here, Navigator handles it based on its state.
+                // This component just updates its RHF state.
             }
         }
         setValue('logoFile', null, { shouldValidate: true, shouldDirty: true });
@@ -308,9 +362,6 @@ const FormularioPersonalizadoTipoA = ({
                         errors={errors}
                         options={marcasOpciones}
                         label="Marcas que trabajás"
-                        // Pass optionLabelKey and optionIdKey if marcasOpciones are objects
-                        // optionLabelKey="nombre" 
-                        // optionIdKey="id" 
                     />
 
                     <AutocompleteSection
@@ -319,9 +370,6 @@ const FormularioPersonalizadoTipoA = ({
                         errors={errors}
                         options={extrasOpciones}
                         label="Extras que ofrecés"
-                        // Pass optionLabelKey and optionIdKey if extrasOpciones are objects
-                        // optionLabelKey="nombre"
-                        // optionIdKey="id"
                     />
                     
                     <ContactoFieldsSection
@@ -349,3 +397,4 @@ const FormularioPersonalizadoTipoA = ({
 };
 
 export default FormularioPersonalizadoTipoA;
+

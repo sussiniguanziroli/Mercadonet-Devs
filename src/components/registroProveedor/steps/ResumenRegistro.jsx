@@ -1,5 +1,5 @@
 // src/components/registroProveedor/steps/ResumenRegistro.jsx
-import React, { useState } from 'react'; // useEffect no se usa directamente aquí
+import React, { useState } from 'react';
 import {
     Box,
     Container,
@@ -67,60 +67,55 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
 
     const handleFinalConfirm = async () => {
         setIsProcessing(true);
-        // Simulación de procesamiento, onConfirm se encarga de la lógica real.
-        await onConfirm(); // Llamamos a la prop onConfirm del Navigator
+        await onConfirm();
         setIsProcessing(false);
     };
 
     const {
         tipoCard,
         datosGenerales = {},
-        datosPersonalizados = {},
+        datosPersonalizados = {}, // This comes from RegistrosProveedorNavigator's state
         planSeleccionado = {}
     } = formData || {};
 
-    // datosPersonalizados[tipoCard] ya contiene las URLs finales de Firebase
     const personalDataForSelectedType = datosPersonalizados?.[tipoCard] || {};
 
-    // --- AJUSTES EN proveedorPreviewProps ---
     const proveedorPreviewProps = {
-        // Datos generales para ambas cards
         nombre: datosGenerales.nombreProveedor || 'Nombre de Empresa Ejemplo',
         tipoRegistro: datosGenerales.tipoRegistro || '',
         tipoProveedor: datosGenerales.tipoProveedor || [],
         ubicacionDetalle: `${datosGenerales.ciudad || ''}${datosGenerales.ciudad && datosGenerales.provincia ? ', ' : ''}${datosGenerales.provincia || ''}` || 'Ubicación Ejemplo',
         selectedServices: [datosGenerales.categoriaPrincipal, ...(datosGenerales.categoriasAdicionales || [])].filter(Boolean),
         
-        // Datos específicos de personalDataForSelectedType
         descripcion: personalDataForSelectedType.descripcion || '',
-        logoPreview: personalDataForSelectedType.logoURL || null, // Directamente de logoURL
-        carrusel: personalDataForSelectedType.carruselURLs || [], // Directamente de carruselURLs
-                                                                 // (ya es un array de {url, fileType, mimeType})
-        marca: personalDataForSelectedType.marca || [], // 'marca' es el campo en tipoA
-        extras: personalDataForSelectedType.extras || [],
-        sitioWeb: personalDataForSelectedType.sitioWeb || '',
-        whatsapp: personalDataForSelectedType.whatsapp || '', // WhatsApp de la empresa (card)
-        telefono: personalDataForSelectedType.telefono || '',
-        email: personalDataForSelectedType.email || '', // Email público de la empresa (card)
+        
+        logoPreview: personalDataForSelectedType.logo?.url || null, 
 
-        // Específico para tipoB (Productos)
+        carrusel: (personalDataForSelectedType.carruselURLs || []).map(item => ({
+            ...item, 
+            url: item.url 
+        })),
+                                                                 
+        marca: tipoCard === 'tipoA' 
+               ? (personalDataForSelectedType.marca || []) 
+               : (personalDataForSelectedType.marcas || []), 
+        extras: personalDataForSelectedType.extras || [], 
+        servicios: personalDataForSelectedType.servicios || [], 
+        
+        sitioWeb: personalDataForSelectedType.sitioWeb || '',
+        whatsapp: personalDataForSelectedType.whatsapp || '',
+        telefono: personalDataForSelectedType.telefono || '',
+        email: personalDataForSelectedType.email || '',
+
         ...(tipoCard === 'tipoB' && {
-            // 'marcas' es el campo en tipoB (diferente de 'marca' en tipoA)
-            // Si la estructura es la misma para marcas en tipoA y tipoB, usa un solo nombre de campo.
-            // Aquí asumimos que 'marcas' existe en personalDataForSelectedType para tipoB
-            marca: personalDataForSelectedType.marcas || personalDataForSelectedType.marca || [], 
             galeriaProductos: (personalDataForSelectedType.galeria || []).map(prod => ({
                 titulo: prod.titulo,
                 precio: prod.precio,
-                imagenPreview: prod.imagenURL || null, // Directamente de imagenURL
-                // fileType y mimeType no son usados por CardProductosPreview para la galería,
-                // pero si lo fueran, se podrían pasar desde prod.fileType y prod.mimeType
+                imagenPreview: prod.url || prod.imagenURL || null, 
             })).filter(p => p.titulo || p.precio || p.imagenPreview)
         }),
     };
-    // --- FIN DE AJUSTES EN proveedorPreviewProps ---
-
-
+    
     if (!formData) {
         return (
             <Container sx={{ py: 4, textAlign: 'center' }}>
@@ -129,7 +124,7 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
             </Container>
         );
     }
-
+    
     return (
         <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 } }}>
             <Typography variant="h4" component="h1" gutterBottom align="center" sx={{ mb: 4 }}>
@@ -223,8 +218,7 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
                              <Divider component="li" />
                             <ListItem>
                                 <ListItemIcon><FaCreditCard /></ListItemIcon>
-                                {/* Asumiendo que el email para facturación podría ser el email del contacto principal general o el email de la card */}
-                                <ListItemText primary="Email para Facturación/Notificaciones" secondary={datosGenerales.email /* Asumiendo que hay un datosGenerales.email para esto */ || personalDataForSelectedType.email || 'Email no provisto'} />
+                                <ListItemText primary="Email para Facturación/Notificaciones" secondary={personalDataForSelectedType.email || datosGenerales.email || 'Email no provisto'} />
                             </ListItem>
                         </List>
                     </Paper>
@@ -265,7 +259,7 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
                     <Button variant="outlined" onClick={onBack} disabled={isProcessing}>
                         Volver
                     </Button>
-                    {onCancel && ( // El botón Cancelar ya llama a la prop onCancel, que está conectada a la función del Navigator
+                    {onCancel && ( 
                          <Button variant="text" color="error" onClick={onCancel} disabled={isProcessing}>
                             Cancelar Registro
                         </Button>
@@ -273,8 +267,8 @@ const ResumenRegistro = ({ formData, onConfirm, onBack, onCancel }) => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={handleFinalConfirm} // Llama a onConfirm (prop) que ya maneja la lógica en el Navigator
-                        disabled={isProcessing || activeTab !== 2} // Solo se puede confirmar desde la pestaña de pago
+                        onClick={handleFinalConfirm} 
+                        disabled={isProcessing || activeTab !== 2} 
                         startIcon={isProcessing ? <CircularProgress size={20} color="inherit" /> : <FaCreditCard />}
                     >
                         {isProcessing ? 'Procesando...' : `Confirmar y Pagar ${planSeleccionado?.price || ''}`}

@@ -4,8 +4,8 @@ import { IoLocationOutline } from 'react-icons/io5';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { FaArrowRight, FaArrowLeft, FaImage, FaImages } from "react-icons/fa";
-import Tags from './assets/Tags'; // Assuming Tags.jsx is in ./assets/
-import ProductsCarousel from './assets/ProductsCarousel'; // Assuming ProductsCarousel.jsx is in ./assets/
+import Tags from './assets/Tags';
+import ProductsCarousel from './assets/ProductsCarousel';
 
 const CardDesktopV2 = ({ proveedor }) => {
     if (!proveedor) {
@@ -14,19 +14,24 @@ const CardDesktopV2 = ({ proveedor }) => {
 
     const {
         nombre = 'Nombre no disponible',
-        logo = '',
-        carrusel = [], // Expects array of { url, fileType, mimeType } for main carousel
+        logo, // Is an object: { url: "...", ... } or null
+        carrusel = [], // Is an array of objects: [{ url: "...", fileType: "image", ... }, ...]
         ubicacionDetalle = 'Ubicación no especificada',
-        productos = [], // Expects array from proveedor.galeriaProductos for ProductsCarousel
-        // tipo, servicios, tipoRegistro are used by Tags component via the proveedor prop
+        galeria = [], // This is `proveedor.galeria` from context, which comes from Firestore
     } = proveedor;
 
-    const tieneCarruselPrincipal = Array.isArray(carrusel) && carrusel.length > 0 && carrusel.some(item => item && typeof item.url === 'string');
-    const tieneLogo = logo && typeof logo === 'string';
+    const logoUrl = logo?.url;
+    const tieneLogo = !!logoUrl;
 
-    // Determine total slides for main carousel: logo first, then carousel items
-    const totalSlidesPrincipal = 1 + (tieneCarruselPrincipal ? carrusel.length : 0);
+    const validCarruselItems = Array.isArray(carrusel) ? carrusel.filter(item => item && typeof item.url === 'string') : [];
+    const tieneCarruselPrincipal = validCarruselItems.length > 0;
+
+    const totalSlidesPrincipal = 1 + (tieneCarruselPrincipal ? validCarruselItems.length : 0);
     const effectiveTotalSlidesPrincipal = totalSlidesPrincipal > 1 ? totalSlidesPrincipal : (tieneLogo ? 1 : 1);
+
+    // The 'galeria' prop is passed to ProductsCarousel.
+    // It's an array of objects, each having 'url' and/or 'imagenURL', 'titulo', 'precio'.
+    const validProductos = Array.isArray(galeria) ? galeria.filter(p => p && (p.url || p.imagenURL)) : [];
 
 
     return (
@@ -42,7 +47,7 @@ const CardDesktopV2 = ({ proveedor }) => {
                     <Slider>
                         <Slide className='carousel-slide' index={0}>
                             {tieneLogo ? (
-                                <img className='carousel-image' src={logo} alt={`${nombre} Logo`} />
+                                <img className='carousel-image' src={logoUrl} alt={`${nombre} Logo`} />
                             ) : (
                                 <div className="carousel-placeholder" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#f0f0f0'}}>
                                     <FaImage size={50} color="#ccc"/>
@@ -50,7 +55,7 @@ const CardDesktopV2 = ({ proveedor }) => {
                                 </div>
                             )}
                         </Slide>
-                        {tieneCarruselPrincipal && carrusel.map((item, index) => (
+                        {tieneCarruselPrincipal && validCarruselItems.map((item, index) => (
                             <Slide className='carousel-slide' key={item.url ? `${item.url}-${index}` : index} index={index + 1}>
                                 {item.fileType === 'image' ? (
                                     <img
@@ -97,8 +102,8 @@ const CardDesktopV2 = ({ proveedor }) => {
             <div className='info-box'>
                 <div className='titles-box'>
                     <div className='small-logo-box'>
-                        {logo ? (
-                            <img className='small-logo' src={logo} alt={nombre} />
+                        {tieneLogo ? (
+                            <img className='small-logo' src={logoUrl} alt={nombre} />
                         ) : (
                             <div className="logo-placeholder" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '60px', height: '60px', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
                                 <FaImage size={30} color="#ccc" />
@@ -113,8 +118,10 @@ const CardDesktopV2 = ({ proveedor }) => {
                     <p><IoLocationOutline />{ubicacionDetalle}</p>
                 </div>
                 <div className='products-box'>
-                    {Array.isArray(productos) && productos.length > 0 ? (
-                        <ProductsCarousel productos={productos} />
+                    {validProductos.length > 0 ? (
+                        // ProductsCarousel will receive items from 'proveedor.galeria'
+                        // It needs to access 'producto.url' or 'producto.imagenURL' for the image src
+                        <ProductsCarousel productos={validProductos} />
                     ) : (
                         <div style={{textAlign: 'center', padding: '20px', color: '#777', width: '100%'}}>
                             <p>(No hay productos destacados para mostrar)</p>
