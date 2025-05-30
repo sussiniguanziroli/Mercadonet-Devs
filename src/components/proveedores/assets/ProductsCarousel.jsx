@@ -38,7 +38,7 @@ const ProductsCarousel = ({ productos }) => {
                 {productos.map((producto, index) => (
                     <div key={index} className="product-item">
                         <img
-                            src={producto.imagen}
+                            src={producto.imagenURL}
                             alt={producto.titulo}
                             className="product-image"
                         />

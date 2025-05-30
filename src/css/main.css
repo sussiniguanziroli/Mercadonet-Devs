@@ -2528,42 +2528,65 @@
   color: #2c2c2c;
 }
 .proveedor-item-v2 .carousel-box {
-  margin: 10px 0;
+  margin: 20px 0;
+  padding: 0 5px;
+  /* Dots originales (solo agrando para móvil) */
 }
 .proveedor-item-v2 .carousel-box .product-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  background-color: #f8f8f8;
+  background-color: #f8f8f8; /* Mantengo tu fondo */
   border-radius: 8px;
   padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Mantengo tu sombra */
+  /* Contenedor de imagen ESTÁNDAR */
+}
+.proveedor-item-v2 .carousel-box .product-card .image-wrapper {
+  width: 100%;
+  height: 130px; /* Altura fija para uniformidad */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+  background: white; /* Fondo blanco para imágenes */
+  overflow: hidden;
 }
 .proveedor-item-v2 .carousel-box .product-card .product-image {
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  margin-bottom: 8px;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Sin deformar imágenes */
+}
+.proveedor-item-v2 .carousel-box .product-card .product-details {
+  width: 100%;
 }
 .proveedor-item-v2 .carousel-box .product-card .product-details h4 {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #333;
+  color: #333; /* Mantengo tus colores */
+  margin: 0 0 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .proveedor-item-v2 .carousel-box .product-card .product-details p {
   font-size: 1rem;
-  color: #666;
+  color: #666; /* Mantengo tu color */
+  margin: 0;
 }
 .proveedor-item-v2 .carousel-box .slick-dots {
-  bottom: -10px;
+  bottom: -25px;
+}
+.proveedor-item-v2 .carousel-box .slick-dots li {
+  margin: 0 2px;
 }
 .proveedor-item-v2 .carousel-box .slick-dots li button:before {
-  font-size: 10px;
+  font-size: 12px; /* Más grande para dedos */
   color: #888;
 }
 .proveedor-item-v2 .carousel-box .slick-dots li.slick-active button:before {
-  color: #0056b3;
+  color: #0056b3; /* Mantengo tu azul */
 }
 .proveedor-item-v2 .alineado-auto {
   display: flex;

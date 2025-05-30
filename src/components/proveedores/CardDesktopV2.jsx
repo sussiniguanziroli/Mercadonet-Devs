@@ -31,10 +31,10 @@ const CardDesktopV2 = ({ proveedor }) => {
 
     return (
         <div className='proveedor-item-desktop-v2 hiddenInMobile'>
-            <div className='carousel-box'> {/* Main Media Carousel */}
+            <div className='carousel-box'> 
                 <CarouselProvider
-                    naturalSlideWidth={100} // Adjust as needed
-                    naturalSlideHeight={60}  // Adjust as needed
+                    naturalSlideWidth={100} 
+                    naturalSlideHeight={100}  
                     totalSlides={effectiveTotalSlidesPrincipal}
                     className="carousel-frame"
                     infinite={effectiveTotalSlidesPrincipal > 1}
@@ -108,7 +108,7 @@ const CardDesktopV2 = ({ proveedor }) => {
                     <h3>{nombre}</h3>
                     <img className="verificado" src='https://i.ibb.co/BsSRKwy/Verificado-HD.jpg' alt="Verificado" />
                     <div className='tags-box alineado-auto'>
-                        <Tags proveedor={proveedor} /> {/* Pass the whole transformed proveedor object */}
+                        <Tags proveedor={proveedor} />
                     </div>
                     <p><IoLocationOutline />{ubicacionDetalle}</p>
                 </div>

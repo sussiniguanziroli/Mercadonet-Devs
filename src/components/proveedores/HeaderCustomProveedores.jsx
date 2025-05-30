@@ -109,7 +109,7 @@ const HeaderCustomProveedores = () => {
     
     const navigateToProfile = () => {
         setIsProfileDropdownOpen(false);
-        navigate('/perfil'); // Placeholder for profile page
+        navigate('/perfil'); 
     };
 
     return (

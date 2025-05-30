@@ -26,14 +26,14 @@ const CardMobileV2 = ({ proveedor }) => {
         slidesToShow: Math.min(3, productos.length || 1), // Show 3, or less if fewer products
         slidesToScroll: 1,
         arrows: false,
-         responsive: [
+        responsive: [
             {
                 breakpoint: 480, // Small mobile
                 settings: {
                     slidesToShow: Math.min(2, productos.length || 1),
                 }
             },
-             {
+            {
                 breakpoint: 380, // Even smaller mobile
                 settings: {
                     slidesToShow: 1,
@@ -47,7 +47,7 @@ const CardMobileV2 = ({ proveedor }) => {
             <div className='top-container'>
                 <div className='titles-container'>
                     <div className='small-logo-box'>
-                         {logo ? (
+                        {logo ? (
                             <img className='small-logo' src={logo} alt={nombre} />
                         ) : (
                             <div className="logo-placeholder" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '50px', height: '50px', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
@@ -66,26 +66,27 @@ const CardMobileV2 = ({ proveedor }) => {
             </div>
 
             {Array.isArray(productos) && productos.length > 0 ? (
-                <div className='carousel-box products-carousel-mobile-v2'> {/* Added class for specific styling */}
+                <div className='carousel-box '> {/* Added class for specific styling */}
                     <Slider {...settings}>
                         {productos.map((producto, index) => (
-                            <div key={producto.imagenURL || index} className="product-card-mobile"> {/* Use imagenURL as key if available */}
-                                <img 
-                                    src={producto.imagenURL || 'default-product-image.png'} // Use imagenURL
-                                    alt={producto.titulo} 
-                                    className="product-image" 
-                                    onError={(e) => { e.target.src = 'https://placehold.co/100x100/eee/ccc?text=Img'; }} // Fallback
-                                />
-                                <div className="product-details-mobile">
-                                    <h4>{producto.titulo || "Producto"}</h4>
-                                    <p>{producto.precio || "Consultar"}</p>
+                            <div className="product-card">
+                                <div className="image-wrapper"> {/* Nuevo contenedor */}
+                                    <img
+                                        src={producto.imagenURL}
+                                        className="product-image"
+                                        onError={(e) => e.target.src = 'https://placehold.co/100x100/eee/ccc?text=Img'}
+                                    />
+                                </div>
+                                <div className="product-details">
+                                    <h4>{producto.titulo}</h4>
+                                    <p>{producto.precio}</p>
                                 </div>
                             </div>
                         ))}
                     </Slider>
                 </div>
             ) : (
-                <div style={{textAlign: 'center', padding: '20px', color: '#777'}}>
+                <div style={{ textAlign: 'center', padding: '20px', color: '#777' }}>
                     <p>(No hay productos destacados para mostrar)</p>
                 </div>
             )}
