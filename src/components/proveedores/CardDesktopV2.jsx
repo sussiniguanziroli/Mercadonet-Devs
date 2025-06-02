@@ -5,19 +5,21 @@ import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } fro
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { FaArrowRight, FaArrowLeft, FaImage, FaImages, FaWhatsapp, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
-import Tags from './assets/Tags'; 
-import ProductsCarousel from './assets/ProductsCarousel'; 
+import Tags from './assets/Tags';
+import ProductsCarousel from './assets/ProductsCarousel';
+import { NavLink } from 'react-router-dom'; // Import NavLink
 
 const CardDesktopV2 = ({ proveedor }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownTogglerRef = useRef(null); // Ref for the button that toggles the dropdown
-    const dropdownMenuRef = useRef(null); // Ref for the dropdown menu itself
+    const dropdownTogglerRef = useRef(null);
+    const dropdownMenuRef = useRef(null);
 
     if (!proveedor) {
         return null;
     }
 
     const {
+        id, // Assuming this is the ID for the route
         nombre = 'Nombre no disponible',
         logo,
         carrusel = [],
@@ -25,6 +27,7 @@ const CardDesktopV2 = ({ proveedor }) => {
         galeria = [],
         contacto = {}
     } = proveedor;
+
 
     const logoUrl = logo?.url;
     const tieneLogo = !!logoUrl;
@@ -37,15 +40,16 @@ const CardDesktopV2 = ({ proveedor }) => {
 
     const validProductos = Array.isArray(galeria) ? galeria.filter(p => p && (p.url || p.imagenURL)) : [];
 
+    // Construct the link to the provider's page
+    const proveedorPageLink = id ? `/proveedor/${id}` : '#'; 
+
     const toggleDropdown = (e) => {
         e.stopPropagation();
         setIsDropdownOpen(prev => !prev);
     };
 
-    // Close dropdown if clicked outside
     useEffect(() => {
         const handleClickOutside = (event) => {
-            // Check if the click is outside the dropdown menu AND outside the toggle button
             if (
                 dropdownMenuRef.current &&
                 !dropdownMenuRef.current.contains(event.target) &&
@@ -63,25 +67,24 @@ const CardDesktopV2 = ({ proveedor }) => {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [isDropdownOpen]); // Only re-run if isDropdownOpen changes
+    }, [isDropdownOpen]);
 
 
     return (
-        <div className='proveedor-item-desktop-v2 hiddenInMobile'>  
+        <div className='proveedor-item-desktop-v2 hiddenInMobile'>
             <div
                 className='contact-dropdown-button'
                 onClick={toggleDropdown}
-                ref={dropdownTogglerRef} // Assign ref to the button
-                role="button" // For accessibility
-                tabIndex={0} // For accessibility
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleDropdown(e);}} // For accessibility
+                ref={dropdownTogglerRef}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleDropdown(e);}}
             >
                 <p>Contactar al Proveedor </p><IoIosArrowDown/>
             </div>
 
-            {/* Dropdown Menu */}
             {isDropdownOpen && (
-                <div className='contact-dropdown-menu' ref={dropdownMenuRef}> {/* Assign ref to the menu */}
+                <div className='contact-dropdown-menu' ref={dropdownMenuRef}>
                     {contacto.sitioWeb && (
                         <a
                             href={contacto.sitioWeb.startsWith('http') ? contacto.sitioWeb : `https://${contacto.sitioWeb}`}
@@ -139,8 +142,8 @@ const CardDesktopV2 = ({ proveedor }) => {
                             {tieneLogo ? (
                                 <img className='carousel-image' src={logoUrl} alt={`${nombre} Logo`} />
                             ) : (
-                                <div className="carousel-placeholder"> {/* Removed inline styles */}
-                                    <FaImage size={50} /> {/* Removed color prop */}
+                                <div className="carousel-placeholder">
+                                    <FaImage size={50} />
                                     <span>Logo del Proveedor</span>
                                 </div>
                             )}
@@ -155,7 +158,7 @@ const CardDesktopV2 = ({ proveedor }) => {
                                     />
                                 ) : item.fileType === 'video' ? (
                                     <video
-                                        className='carousel-image' // Same class for consistent styling
+                                        className='carousel-image'
                                         src={item.url}
                                         controls
                                         muted
@@ -164,7 +167,7 @@ const CardDesktopV2 = ({ proveedor }) => {
                                         Tu navegador no soporta la etiqueta de video.
                                     </video>
                                 ) : (
-                                    <div className="carousel-placeholder-item"> {/* Removed inline styles */}
+                                    <div className="carousel-placeholder-item">
                                         <span>Formato no soportado</span>
                                     </div>
                                 )}
@@ -172,8 +175,8 @@ const CardDesktopV2 = ({ proveedor }) => {
                         ))}
                         {!tieneLogo && !tieneCarruselPrincipal && (
                             <Slide className="carousel-slide" index={0}>
-                                <div className="carousel-placeholder"> {/* Removed inline styles */}
-                                    <FaImages size={50} /> {/* Removed color prop */}
+                                <div className="carousel-placeholder">
+                                    <FaImages size={50} />
                                     <span>Multimedia del Proveedor</span>
                                 </div>
                             </Slide>
@@ -194,12 +197,15 @@ const CardDesktopV2 = ({ proveedor }) => {
                         {tieneLogo ? (
                             <img className='small-logo' src={logoUrl} alt={nombre} />
                         ) : (
-                            <div className="logo-placeholder"> {/* Removed inline styles */}
-                                <FaImage size={30} /> {/* Removed color prop */}
+                            <div className="logo-placeholder">
+                                <FaImage size={30} />
                             </div>
                         )}
                     </div>
-                    <h3>{nombre}</h3>
+                    {/* MODIFIED: Wrap nombre in NavLink */}
+                    <NavLink to={proveedorPageLink} className="proveedor-name-link" style={{textDecoration: 'none', color: 'inherit'}}>
+                        <h3>{nombre}</h3>
+                    </NavLink>
                     <img className="verificado" src='https://i.ibb.co/BsSRKwy/Verificado-HD.jpg' alt="Verificado" />
                     <div className='tags-box alineado-auto'>
                         <Tags proveedor={proveedor} />
@@ -210,7 +216,7 @@ const CardDesktopV2 = ({ proveedor }) => {
                     {validProductos.length > 0 ? (
                         <ProductsCarousel productos={validProductos} />
                     ) : (
-                        <div className="no-products-placeholder"> {/* Added class, removed inline styles */}
+                        <div className="no-products-placeholder">
                             <p>(No hay productos destacados para mostrar)</p>
                         </div>
                     )}

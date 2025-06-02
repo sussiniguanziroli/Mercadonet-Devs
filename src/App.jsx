@@ -15,6 +15,9 @@ import RegistrosProveedorNavigator from './components/registroProveedor/Registro
 import LandingRegistroProveedor from './components/registroProveedor/LandingRegistroProveedor';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+import Dashboard from './components/dashboard/Dashboard';
+import ProductosLanding from './components/productos/ProductosLanding';
+import ProveedorPage from './components/proveedorPage/ProveedorPage';
 
 function App() {
 
@@ -33,21 +36,23 @@ function App() {
                                 <Route path="/registrarme" element={<RegisterNavigator />} />
                                 <Route path="/registrar-mi-empresa" element={<LandingRegistroProveedor />} />
 
-                                <Route 
-                                    path='/registrar-mi-empresa/flujo' 
+                                <Route
+                                    path='/registrar-mi-empresa/flujo'
                                     element={
                                         <ProtectedRoute>
                                             <RegistrosProveedorNavigator />
                                         </ProtectedRoute>
-                                    } 
+                                    }
                                 />
+                                <Route path="/proveedor/:proveedorId" element={<ProveedorPage />} />
 
-                                {/* Add a placeholder route for /perfil if you haven't already */}
-                                {/* <Route path="/perfil" element={
+                                <Route path="/perfil" element={
                                     <ProtectedRoute>
-                                        <div>Página de Perfil del Usuario (Próximamente)</div>
+                                        <Dashboard />
                                     </ProtectedRoute>
-                                } /> */}
+                                } />
+
+                                <Route path='/productos' element={<ProductosLanding />} />
 
                             </Routes>
                         </div>
