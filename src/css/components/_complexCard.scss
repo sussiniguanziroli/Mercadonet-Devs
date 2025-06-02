@@ -1,3 +1,9 @@
+$primary-text-color: #333;
+$secondary-text-color: #777;
+$dropdown-background: #084484;
+$dropdown-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+
 .proveedor-item-v2 {
     background-color: #ffffff;
     border-radius: .7rem;
@@ -222,6 +228,7 @@
     align-items: center;
     justify-content: space-between;
     height: fit-content;
+    position: relative;
     max-height: 400px;
     background-color: #ffffff;
     border-radius: 3px;
@@ -234,6 +241,98 @@
         box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15) !important;
         transform: scale(1.005);
     }
+
+    .contact-dropdown-button {
+        position: absolute;
+        top: 12px;  // Adjusted for a bit more padding from the edge
+        right: 12px; // Adjusted for a bit more padding from the edge
+        z-index: 100; 
+        background: rgba(255, 255, 255, 0.9); // Slightly more opaque
+        border-radius: 16px;
+        padding: 8px;
+        cursor: pointer;
+        border: 1px solid $color-azul;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        transition: background-color 0.2s ease, box-shadow 0.2s ease;
+
+        svg { 
+            color: $primary-text-color;
+            width: 20px; // Explicit size for the icon
+            height: 20px; // Explicit size for the icon
+        }
+
+        &:hover, &:focus {
+            background: rgba(240, 240, 240, 0.95); 
+            box-shadow: 0 3px 7px rgba(0,0,0,0.15);
+        }
+         &:focus { // Accessibility: outline for keyboard navigation
+            outline: 2px solid dodgerblue;
+            outline-offset: 2px;
+        }
+    }
+
+    .contact-dropdown-menu {
+        position: absolute;
+        top: 55px; 
+        right: 10px;
+        background-color: $dropdown-background;
+        border-radius: 8px;
+        box-shadow: $dropdown-shadow;
+        z-index: 110; 
+        width: 205px; 
+        padding: 8px 0;
+        overflow: hidden; 
+        animation: fadeInDropdown 0.2s ease-out; // Simple fade-in animation
+
+        .contact-dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 18px; // Increased padding
+            cursor: pointer;
+            font-size: 14px;
+            color: $main-white;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+
+            .contact-dropdown-item-icon {
+                margin-right: 12px; // Increased margin
+                color: $main-white; 
+                width: 16px; // Explicit size
+                height: 16px; // Explicit size
+            }
+
+            &:hover, &:focus {
+                background-color: #406ac4;
+            }
+            &:focus { // Accessibility: outline for keyboard navigation
+                outline: 2px solid dodgerblue;
+                outline-offset: -2px; // Inner outline
+            }
+
+
+            &.contact-dropdown-item-empty {
+                cursor: default;
+                color: $secondary-text-color;
+                &:hover, &:focus {
+                    background-color: transparent; 
+                }
+            }
+        }
+        @keyframes fadeInDropdown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    }
+
 
     .carousel-box {
         margin: 3px;

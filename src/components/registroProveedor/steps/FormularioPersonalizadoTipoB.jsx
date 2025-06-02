@@ -20,11 +20,12 @@ const FormularioPersonalizadoTipoB = ({
     initialData,
     onNext,
     onBack,
+    onCancel, // Make sure this prop is passed from FormularioPersonalizado
     nombreProveedor = '',
     ciudad = '',
     provincia = '',
     marcas: marcasOpciones = [],
-    extras: extrasOpciones = [], // Assuming 'extras' are 'servicios' for TipoB
+    extras: extrasOpciones = [], 
     fileUploadProgress = {},
     uploadFileImmediately,
     tipoRegistro,
@@ -32,56 +33,57 @@ const FormularioPersonalizadoTipoB = ({
     selectedServices
 }) => {
 
-    const getInitialDefaultValues = useCallback(() => {
-        const initialLogoRHF = initialData?.logo
+    const getInitialDefaultValues = useCallback((currentInitialData) => {
+        const dataToUse = currentInitialData || {}; // Use provided data or empty object
+
+        const initialLogoRHF = dataToUse.logo
             ? { 
-                file: null, preview: initialData.logo.url, isExisting: true, 
-                name: 'logo_cargado', type: initialData.logo.mimeType || 'image/existing', 
-                tempId: initialData.logo.tempId || null, status: initialData.logo.status || 'loaded'
+                file: null, preview: dataToUse.logo.url, isExisting: true, 
+                name: 'logo_cargado', type: dataToUse.logo.mimeType || 'image/existing', 
+                tempId: dataToUse.logo.tempId || null, status: dataToUse.logo.status || 'loaded'
               }
             : null;
 
-        const initialCarruselItemsRHF = (initialData?.carruselURLs || []).map(media => ({
+        const initialCarruselItemsRHF = (dataToUse.carruselURLs || []).map(media => ({
             file: null, url: media.url, fileType: media.fileType,
             mimeType: media.mimeType, isExisting: true, name: 'media_cargado', 
             tempId: media.tempId || null, status: media.status || 'loaded'
         }));
         
         const initialGaleriaRHF = Array(LIMITE_GALERIA_PRODUCTOS_B).fill(null).map((_, index) => {
-            const productData = initialData?.galeria?.[index]; // galeria from Navigator's formData
+            const productData = dataToUse.galeria?.[index];
             if (productData && (productData.titulo || productData.precio || productData.url || productData.imagenURL)) {
                 return {
                     titulo: productData.titulo || '',
                     precio: productData.precio || '',
-                    imagenFile: (productData.url || productData.imagenURL) // Check if productData.url exists
+                    imagenFile: (productData.url || productData.imagenURL)
                         ? { 
                             file: null, preview: productData.url || productData.imagenURL, isExisting: true, 
                             name: `prod_${index}_cargado`, type: productData.mimeType || 'image/existing', 
                             tempId: productData.tempId || null, status: productData.status || 'loaded'
                           }
                         : null,
-                    // fileType and mimeType are part of the file object now
                 };
             }
             return { imagenFile: null, titulo: '', precio: '' };
         });
 
         return {
-            descripcion: initialData?.descripcion || '',
-            sitioWeb: initialData?.sitioWeb || '',
-            whatsapp: initialData?.whatsapp || '',
-            telefono: initialData?.telefono || '',
-            email: initialData?.email || '',
-            marcasSeleccionadas: Array.isArray(initialData?.marcas) ? initialData.marcas : [], // 'marcas' for TipoB
-            serviciosSeleccionados: Array.isArray(initialData?.servicios) ? initialData.servicios : [], // 'servicios' for TipoB
+            descripcion: dataToUse.descripcion || '',
+            sitioWeb: dataToUse.sitioWeb || '',
+            whatsapp: dataToUse.whatsapp || '',
+            telefono: dataToUse.telefono || '',
+            email: dataToUse.email || '',
+            marcasSeleccionadas: Array.isArray(dataToUse.marcas) ? dataToUse.marcas : [],
+            serviciosSeleccionados: Array.isArray(dataToUse.servicios) ? dataToUse.servicios : [],
             logoFile: initialLogoRHF,
             carruselMediaItems: initialCarruselItemsRHF,
             galeria: initialGaleriaRHF,
         };
-    }, [initialData]);
+    }, []); // Empty dependency array as it's a definition based on its argument
 
     const { control, handleSubmit, watch, setValue, reset, formState: { errors }, register, getValues } = useForm({
-        defaultValues: getInitialDefaultValues(),
+        defaultValues: getInitialDefaultValues(initialData), // Initial call with initialData
         mode: 'onBlur',
     });
 
@@ -89,15 +91,53 @@ const FormularioPersonalizadoTipoB = ({
     const watchedAllFields = watch();
     const uploadQueueRef = useRef(new Set());
 
+    // This useEffect handles re-initialization when initialData prop changes,
+    // for example, after a file upload completes and RegistrosProveedorNavigator updates its formData.
     useEffect(() => {
-        scrollToTop();
-        reset(getInitialDefaultValues());
-        uploadQueueRef.current.clear();
-    }, [initialData, reset, getInitialDefaultValues]);
+        // console.log("FormularioPersonalizadoTipoB: initialData prop changed", initialData);
+        const currentFormValues = getValues(); // Get current values from the form
+        const newDefaultsFromInitialData = getInitialDefaultValues(initialData); // Get defaults based on new initialData
+
+        // Create a merged object: prioritize current form values for non-file text fields,
+        // but take file structures from newDefaultsFromInitialData (which reflects uploaded files).
+        const mergedValues = {
+            ...newDefaultsFromInitialData, // Start with new defaults (includes updated file info)
+            
+            // Overwrite with current form values if they exist and are different, for specific fields
+            descripcion: currentFormValues.descripcion !== undefined ? currentFormValues.descripcion : newDefaultsFromInitialData.descripcion,
+            sitioWeb: currentFormValues.sitioWeb !== undefined ? currentFormValues.sitioWeb : newDefaultsFromInitialData.sitioWeb,
+            whatsapp: currentFormValues.whatsapp !== undefined ? currentFormValues.whatsapp : newDefaultsFromInitialData.whatsapp,
+            telefono: currentFormValues.telefono !== undefined ? currentFormValues.telefono : newDefaultsFromInitialData.telefono,
+            email: currentFormValues.email !== undefined ? currentFormValues.email : newDefaultsFromInitialData.email,
+            
+            marcasSeleccionadas: currentFormValues.marcasSeleccionadas !== undefined ? currentFormValues.marcasSeleccionadas : newDefaultsFromInitialData.marcasSeleccionadas,
+            serviciosSeleccionados: currentFormValues.serviciosSeleccionados !== undefined ? currentFormValues.serviciosSeleccionados : newDefaultsFromInitialData.serviciosSeleccionados,
+            
+            // For galeria, merge title and price from current form values into the structure derived from initialData
+            galeria: newDefaultsFromInitialData.galeria.map((defaultGalleryItem, index) => {
+                const currentGalleryItem = currentFormValues.galeria?.[index];
+                if (currentGalleryItem) {
+                    return {
+                        ...defaultGalleryItem, // This has the correct imagenFile from newInitialData
+                        titulo: currentGalleryItem.titulo !== undefined ? currentGalleryItem.titulo : defaultGalleryItem.titulo,
+                        precio: currentGalleryItem.precio !== undefined ? currentGalleryItem.precio : defaultGalleryItem.precio,
+                    };
+                }
+                return defaultGalleryItem;
+            }),
+        };
+        
+        reset(mergedValues); // Reset the form with merged values
+        // uploadQueueRef.current.clear(); // Clearing queue might be too aggressive here if uploads are multi-stage
+    }, [initialData, reset, getInitialDefaultValues, getValues]);
+
 
     const initiateFileUpload = useCallback(({ file, tempId, type, itemIndex }) => {
         if (!file || !tempId) return;
-        if (uploadQueueRef.current.has(tempId)) return;
+        if (uploadQueueRef.current.has(tempId)) {
+            // console.log(`Upload for ${tempId} already in queue or processing.`);
+            return;
+        }
         uploadQueueRef.current.add(tempId);
 
         let pathPrefix = '';
@@ -118,9 +158,9 @@ const FormularioPersonalizadoTipoB = ({
             }
         } else if (type === 'galeria') {
             pathPrefix = 'proveedores/tipoB/galeria';
-            metadata.fieldType = 'galeria'; // Used by Navigator's handleFileUploaded
-            metadata.arrayName = 'galeria'; // Used by Navigator's handleFileUploaded
-            metadata.itemIndex = itemIndex; // Used by Navigator's handleFileUploaded
+            metadata.fieldType = 'galeria'; 
+            metadata.arrayName = 'galeria'; 
+            metadata.itemIndex = itemIndex; 
             rhfPathForStatusUpdate = `galeria.${itemIndex}.imagenFile.status`;
         }
         
@@ -131,7 +171,11 @@ const FormularioPersonalizadoTipoB = ({
 
     }, [uploadFileImmediately, setValue, getValues]);
     
+    // This useEffect updates the RHF state for specific file fields when their upload completes.
+    // It should NOT reset the whole form.
     useEffect(() => {
+        let formChanged = false;
+
         const watchedLogoFileValue = getValues('logoFile');
         if (watchedLogoFileValue?.tempId && fileUploadProgress[watchedLogoFileValue.tempId]) {
             const progress = fileUploadProgress[watchedLogoFileValue.tempId];
@@ -142,20 +186,21 @@ const FormularioPersonalizadoTipoB = ({
                     type: progress.mimeTypeOriginal || watchedLogoFileValue.type
                 }, { shouldValidate: true, shouldDirty: true });
                 uploadQueueRef.current.delete(watchedLogoFileValue.tempId);
+                formChanged = true;
             } else if (progress.status === 'error' && watchedLogoFileValue.status !== 'error_upload') {
                 setValue('logoFile.status', 'error_upload', { shouldValidate: true, shouldDirty: true });
                 uploadQueueRef.current.delete(watchedLogoFileValue.tempId);
+                formChanged = true;
             }
         }
 
         const currentCarruselValues = getValues('carruselMediaItems') || [];
-        let carruselItemsChanged = false;
         const newCarruselMediaItems = currentCarruselValues.map(item => {
             if (item.tempId && fileUploadProgress[item.tempId]) {
                 const progress = fileUploadProgress[item.tempId];
                 if (progress.status === 'success' && item.status !== 'loaded') {
                     uploadQueueRef.current.delete(item.tempId);
-                    carruselItemsChanged = true;
+                    formChanged = true;
                     return { 
                         ...item, url: progress.finalUrl, 
                         fileType: progress.fileTypeOriginal || item.fileType,
@@ -164,41 +209,41 @@ const FormularioPersonalizadoTipoB = ({
                     };
                 } else if (progress.status === 'error' && item.status !== 'error_upload') {
                     uploadQueueRef.current.delete(item.tempId);
-                    carruselItemsChanged = true;
+                    formChanged = true;
                     return { ...item, status: 'error_upload' };
                 }
             }
             return item;
         });
-        if (carruselItemsChanged) {
+        if (formChanged && JSON.stringify(newCarruselMediaItems) !== JSON.stringify(currentCarruselValues)) { // Only update if changed
             setValue('carruselMediaItems', newCarruselMediaItems, { shouldValidate: true, shouldDirty: true });
         }
-
+        
+        let galeriaFormChanged = false;
         const currentGaleriaValues = getValues('galeria') || [];
-        let galeriaItemsChanged = false;
-        const newGaleriaItems = currentGaleriaValues.map((item, index) => {
+        const newGaleriaItems = currentGaleriaValues.map((item) => {
             if (item.imagenFile?.tempId && fileUploadProgress[item.imagenFile.tempId]) {
                 const progress = fileUploadProgress[item.imagenFile.tempId];
                 if (progress.status === 'success' && item.imagenFile.status !== 'loaded') {
                     uploadQueueRef.current.delete(item.imagenFile.tempId);
-                    galeriaItemsChanged = true;
+                    galeriaFormChanged = true;
                     return { 
                         ...item, 
                         imagenFile: { 
                             ...item.imagenFile, preview: progress.finalUrl, 
                             file: null, isExisting: true, status: 'loaded',
-                            type: progress.mimeTypeOriginal || item.imagenFile.type // Store mimeType for RHF
+                            type: progress.mimeTypeOriginal || item.imagenFile.type
                         } 
                     };
                 } else if (progress.status === 'error' && item.imagenFile.status !== 'error_upload') {
                     uploadQueueRef.current.delete(item.imagenFile.tempId);
-                    galeriaItemsChanged = true;
+                    galeriaFormChanged = true;
                     return { ...item, imagenFile: { ...item.imagenFile, status: 'error_upload' } };
                 }
             }
             return item;
         });
-        if (galeriaItemsChanged) {
+        if (galeriaFormChanged) {
             setValue('galeria', newGaleriaItems, { shouldValidate: true, shouldDirty: true });
         }
 
@@ -247,7 +292,10 @@ const FormularioPersonalizadoTipoB = ({
             };
         } else if (initialData?.logo && rhfLogo?.status !== 'removed' && rhfLogo?.isExisting) {
             submittedLogoData = initialData.logo;
+        } else if (initialData?.logo && !rhfLogo) { // Logo was removed
+             submittedLogoData = null;
         }
+
 
         const submittedCarruselData = (currentRHFValues.carruselMediaItems || [])
             .map(item => {
@@ -277,8 +325,8 @@ const FormularioPersonalizadoTipoB = ({
                     return {
                         titulo: producto.titulo,
                         precio: producto.precio,
-                        url: rhfImagenFile.preview, // This is the temp download URL
-                        imagenURL: rhfImagenFile.preview, // For consistency if ResumenRegistro uses imagenURL
+                        url: rhfImagenFile.preview, 
+                        imagenURL: rhfImagenFile.preview, 
                         tempPath: itemProgress?.storagePath || initialData?.galeria?.find(p => p.tempId === rhfImagenFile.tempId)?.tempPath || '',
                         fileType: rhfImagenFile.type?.startsWith('video/') ? 'video' : 'image',
                         mimeType: rhfImagenFile.type,
@@ -286,10 +334,8 @@ const FormularioPersonalizadoTipoB = ({
                         status: 'loaded'
                     };
                 } else if (rhfImagenFile?.isExisting && rhfImagenFile?.status !== 'removed' && rhfImagenFile?.preview) {
-                    // If it was existing, not removed, and still has a URL, find it in initialData
                     const existingInitialItem = initialData?.galeria?.find(p => p.tempId === rhfImagenFile.tempId || p.url === rhfImagenFile.preview || p.imagenURL === rhfImagenFile.preview);
                     if (existingInitialItem) {
-                         // Ensure the returned object has all necessary fields for Navigator
                         return {
                             titulo: producto.titulo || existingInitialItem.titulo,
                             precio: producto.precio || existingInitialItem.precio,
@@ -303,12 +349,11 @@ const FormularioPersonalizadoTipoB = ({
                         };
                     }
                 }
-                // If only titulo/precio are filled, but no image, still include it if it's not an empty slot
-                if (producto.titulo || producto.precio) {
+                if (producto.titulo || producto.precio) { // Keep item if only text fields are filled
                     return {
                         titulo: producto.titulo,
                         precio: producto.precio,
-                        url: null, imagenURL: null, tempPath: null, fileType: null, mimeType: null, tempId: null, status: 'no_image'
+                        url: null, imagenURL: null, tempPath: null, fileType: null, mimeType: null, tempId: null, status: rhfImagenFile ? 'error_upload' : 'no_image'
                     };
                 }
                 return null;
@@ -417,9 +462,6 @@ const FormularioPersonalizadoTipoB = ({
             }
         }
         setValue(rhfPath, null, { shouldValidate: true, shouldDirty: true });
-        // Also clear titulo and precio if image is removed? Optional.
-        // setValue(`galeria.${index}.titulo`, '', { shouldDirty: true });
-        // setValue(`galeria.${index}.precio`, '', { shouldDirty: true });
     };
 
     return (
@@ -445,7 +487,7 @@ const FormularioPersonalizadoTipoB = ({
                         rhfName="carruselMediaItems"
                         watchedValue={watch('carruselMediaItems')}
                         fileUploadProgress={fileUploadProgress}
-                        onInitiateUpload={({ file, tempId, itemIndex }) => initiateFileUpload({ file, tempId, type: 'carrusel', itemIndex })}
+                        onInitiateUpload={({ file, tempId }) => initiateFileUpload({ file, tempId, type: 'carrusel' })}
                         onRemoveItem={handleRemoveCarruselItem}
                         limit={LIMITE_CARRUSEL_B}
                         sectionLabel="Carrusel Multimedia"
@@ -478,7 +520,7 @@ const FormularioPersonalizadoTipoB = ({
                         rhfName="serviciosSeleccionados" 
                         control={control}
                         errors={errors}
-                        options={extrasOpciones} // Assuming 'extrasOpciones' are 'servicios' for TipoB
+                        options={extrasOpciones} 
                         label="Servicios Adicionales"
                     />
                     
@@ -506,6 +548,7 @@ const FormularioPersonalizadoTipoB = ({
 
                     <div className="botones-navegacion">
                         <button type="button" onClick={handleBack} className="secondary-button">Atrás</button>
+                        <button type="button" onClick={onCancel} className="cancel-button">Cancelar Registro</button>
                         <button type="submit" className="primary-button">Continuar</button>
                     </div>
                 </form>

@@ -99,7 +99,6 @@ export const fetchFiltrosGlobales = async () => {
                 const data = snapshot.data();
                 if (data[fieldName] && Array.isArray(data[fieldName])) {
                     const stringArray = data[fieldName].filter(item => typeof item === 'string'); // Asegurar que sean strings
-                    stringArray.sort(); // Ordenar alfabéticamente
                     console.log(`[Service] Procesado: ${fieldName} (${stringArray.length})`);
                     return stringArray;
                 } else {

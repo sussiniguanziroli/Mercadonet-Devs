@@ -1,3 +1,4 @@
+// src/components/registroProveedor/steps/FormularioGeneral.jsx
 import React, { useEffect, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import {
@@ -17,17 +18,17 @@ import CardHistoriaPreview from '../card_simulators/CardHistoriaPreview';
 import CardProductosPreview from '../card_simulators/CardProductosPreview';
 
 const FormularioGeneral = ({
-    selectedServices, // Esta prop parece que era para el preview, verificar su uso
-    setSelectedServices, // Esta prop parece que era para el preview, verificar su uso
+    // selectedServices, // Prop no longer needed from parent for its own preview logic
+    // setSelectedServices, // Prop no longer needed from parent
     initialData,
     onNext,
     onBack,
     categorias = [],
-    selectedCard, // Para determinar qué preview mostrar
+    selectedCard, 
     ubicaciones = [],
-    pproductos = [], // Opciones para "Tipo de Proveedor"
-    servicios = [],  // Opciones para "Tipo de Servicio Principal" si es de servicios
-    marcasDisponibles = [] // Opciones para "Marcas Oficiales"
+    pproductos = [], 
+    servicios = [],  
+    marcasDisponibles = []
 }) => {
 
     const initialTipoRegistroFromData = initialData?.tipoRegistro || '';
@@ -46,7 +47,7 @@ const FormularioGeneral = ({
             pais: initialData?.pais || 'Argentina',
             tipoRegistro: initialTipoRegistroFromData,
             nombreProveedor: initialData?.nombreProveedor || '',
-            tipoProveedor: initialData?.tipoProveedor || [], // Array para selección múltiple
+            tipoProveedor: initialData?.tipoProveedor || [],
             categoriaPrincipal: initialData?.categoriaPrincipal || '',
             categoriasAdicionales: initialData?.categoriasAdicionales || [],
             ciudad: initialData?.ciudad || '',
@@ -64,19 +65,23 @@ const FormularioGeneral = ({
         }
     });
 
-    // Lógica de onSubmit simplificada: ya no procesa archivos aquí.
     const onSubmit = (data) => {
-        // Asegurar que tipoProveedor esté vacío si no es de productos
+        // Construct serviciosClaveParaTags from the form data if tipoRegistro is 'servicios'
+        let serviciosParaEnviar = [];
+        if (data.tipoRegistro === 'servicios') {
+            serviciosParaEnviar = [data.categoriaPrincipal, ...(data.categoriasAdicionales || [])].filter(Boolean);
+        }
+
         const stepData = {
             ...data,
             tipoProveedor: data.tipoRegistro === 'productos' ? data.tipoProveedor : [],
+            serviciosClaveParaTags: serviciosParaEnviar, // Explicitly add this field
         };
-        onNext(stepData); // stepData ahora solo contiene los datos generales del formulario
+        onNext(stepData); 
     };
 
     const watchedTipoRegistro = watch('tipoRegistro');
     const watchedTipoProveedor = watch('tipoProveedor', []);
-
     const prevTipoRegistroRef = useRef(initialTipoRegistroFromData);
 
     useEffect(() => {
@@ -133,49 +138,26 @@ const FormularioGeneral = ({
     const watchedNombreProveedor = watch('nombreProveedor');
     const watchedCiudad = watch('ciudad');
     const watchedProvincia = watch('provincia');
-    const watchedCategoriaPrincipal = watch('categoriaPrincipal'); // Para preview
-    const watchedCategoriasAdicionales = watch('categoriasAdicionales', []); // Para preview
-
-    // Efecto para actualizar selectedServices para la preview
-    // Este efecto se mantiene si selectedServices es usado por las Card Previews
-    // y necesita reflejar las selecciones de este formulario.
-    useEffect(() => {
-        if (setSelectedServices) { // Solo si la función está definida
-            if (esProveedorDeServicios) {
-                const allServices = [
-                    watchedCategoriaPrincipal,
-                    ...watchedCategoriasAdicionales
-                ].filter(Boolean);
-                setSelectedServices(allServices);
-            } else {
-                setSelectedServices([]); // Limpiar si no es proveedor de servicios
-            }
-        }
-    }, [
-        esProveedorDeServicios,
-        watchedCategoriaPrincipal,
-        watchedCategoriasAdicionales,
-        setSelectedServices // Añadir como dependencia
-    ]);
-
+    const watchedCategoriaPrincipal = watch('categoriaPrincipal');
+    const watchedCategoriasAdicionales = watch('categoriasAdicionales', []);
 
     const buildPreviewDataForStep1 = () => {
         const ubicacionDetalle = `${watchedCiudad}${watchedCiudad && watchedProvincia ? ', ' : ''}${watchedProvincia}`;
-        let servicesForPreview = [];
-        if (esProveedorDeServicios) {
-            servicesForPreview = [watchedCategoriaPrincipal, ...watchedCategoriasAdicionales].filter(Boolean);
+        
+        let currentSelectedServicesForPreview = [];
+        if (watchedTipoRegistro === 'servicios') {
+            currentSelectedServicesForPreview = [watchedCategoriaPrincipal, ...watchedCategoriasAdicionales].filter(Boolean);
         }
 
         return {
-            // selectedServices se espera que venga de una prop si es un estado global
-            // o se puede construir aquí si es solo para esta preview.
-            // Si selectedServices es un estado del Navigator, no se debería modificar aquí directamente.
-            // Para la preview, construimos los datos directamente de lo que se observa:
-            selectedServices: servicesForPreview,
-            tipoProveedor: watchedTipoProveedor || [],
+            // Fields for RegisterTags.jsx
             tipoRegistro: watchedTipoRegistro || '',
-            nombre: watchedNombreProveedor || 'Nombre Empresa', // Placeholder si está vacío
-            ubicacionDetalle: ubicacionDetalle || 'Ubicación', // Placeholder
+            tipoProveedor: watchedTipoProveedor || [], 
+            selectedServices: currentSelectedServicesForPreview, // This is what RegisterTags expects for service tags
+
+            // Other preview fields
+            nombre: watchedNombreProveedor || 'Nombre Empresa',
+            ubicacionDetalle: ubicacionDetalle || 'Ubicación',
         };
     };
     const previewData = buildPreviewDataForStep1();
@@ -294,7 +276,7 @@ const FormularioGeneral = ({
                     )}
 
                     <div className="form-section">
-                        <legend>Ubicación:</legend> {/* Removido asterisco si no son obligatorios todos */}
+                        <legend>Ubicación:</legend>
                         <label htmlFor="ciudad">Ciudad:</label>
                         <input type="text" id="ciudad" placeholder="Ciudad" {...register("ciudad")} />
                         {errors.ciudad && <p className="error-message">{errors.ciudad.message}</p>}
@@ -344,7 +326,6 @@ const FormularioGeneral = ({
                     </div>
 
                     <div className="botones-navegacion">
-                        {/* El botón "Atrás" en el primer formulario real podría simplemente ir a la selección de card, que es manejado por el Navigator */}
                         <button type="button" onClick={onBack}>Atrás</button>
                         <button type="submit">Continuar</button>
                     </div>
@@ -352,7 +333,6 @@ const FormularioGeneral = ({
             </div>
 
             <div className="simulator-wrapper">
-                {/* Asegúrate que selectedCard y previewData se pasen correctamente para la previsualización */}
                 <h1>{selectedCard === 'tipoA' ? 'Card Historia' : (selectedCard === 'tipoB' ? 'Card Producto' : 'Vista Previa')}</h1>
                 {selectedCard === 'tipoA' && <CardHistoriaPreview proveedor={previewData} />}
                 {selectedCard === 'tipoB' && <CardProductosPreview proveedor={previewData} />}

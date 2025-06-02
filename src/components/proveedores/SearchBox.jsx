@@ -13,6 +13,8 @@ const SearchBox = () => {
         proveedores
     } = useFiltersContext();
 
+    const [scrolled, setScrolled] = useState(null)
+
     const inputRef = useRef(null);
     const searchBoxRef = useRef(null);
     const [tempSearchTerm, setTempSearchTerm] = useState(searchTerm || "");
