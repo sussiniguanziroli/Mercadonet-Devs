@@ -1,15 +1,23 @@
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .proveedores-desktop {
     font-family: 'Montserrat', sans-serif;
-
 }
 
 .main-proveedores {
-
     display: flex;
     flex-direction: column;
 
     .secondary-proveedores {
-
         .proveedores-filter-section {
             background: linear-gradient(to bottom, $color-azul 22%, #eee 29%);
             display: flex;
@@ -18,8 +26,6 @@
             background-size: 100% 1250px;
             background-repeat: no-repeat;
             
-            //MOTOR DE BUSQUEDA-----------
-
             .main-search {
                 margin-top: 6em;
                 display: flex;
@@ -46,7 +52,7 @@
             
                         input {
                             all: unset;
-                            flex: 1; /* Se adapta al espacio disponible */
+                            flex: 1; 
                             margin: .8rem 1rem;
                             font-size: 1rem;
                             color: black;
@@ -82,30 +88,40 @@
                         width: 100%;
                         max-height: 200px;
                         background-color: $main-white;
-                        border: 1px solid #ccc;
-                        border-radius: 4px;
+                        border: 1px solid #e0e0e0;
+                        border-radius: 4px; 
                         overflow-y: auto;
                         z-index: 10;
                         list-style: none;
                         padding: 0;
                         margin-top: 0.5rem;
+                        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                        animation: fadeInDown 0.25s ease-out forwards;
             
                         li {
                             padding: 0.5rem;
                             cursor: pointer;
                             font-size: 0.9rem;
+                            transition: background-color 0.15s ease, transform 0.15s ease;
+                            border-bottom: 1px solid #f5f5f5;
+
+                            &:last-child {
+                                border-bottom: none;
+                            }
             
                             &:hover {
                                 background-color: #f0f0f0;
+                            }
+
+                            strong {
+                                color: $color-naranja;
+                                font-weight: 600;
                             }
                         }
                     }
                 }
             }
             
-            
-            
-
             .mobile-thumb-filters {
                 margin-top: 1rem;
                 width: 100%;
@@ -118,7 +134,7 @@
                     height: auto;
                     width: 100%;
                     gap: 1.5rem;
-                    -webkit-overflow-scrolling: touch; // Scroll suave en dispositivos móviles
+                    -webkit-overflow-scrolling: touch; 
                     scroll-snap-type: x mandatory;
 
                     &::-webkit-scrollbar {
@@ -134,16 +150,12 @@
                         background-color: #f1f1f1;
                     }
 
-
-
                     .thumbFilter {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         text-align: center;
                         padding-left: 1rem;
-
-
 
                         .thumbFilter-icon {
                             width: 5em;
@@ -167,14 +179,11 @@
                     }
 
                     .active {
-
                         .thumbFilter-icon {
                             border: 1px solid $color-naranja-hover;
                             background-color: $dark-gray;
                             transition: all .2s;
                         }
-
-
                     }
                 }
 
@@ -205,7 +214,6 @@
                 height: 15em;
                 border-radius: 1.7rem;
                 color: $main-white;
-
             }
 
             .news-banner {
@@ -222,17 +230,10 @@
 
                     .flickity-prev-next-button {
                         width: 2.5rem;
-                        /* Ancho de las flechas */
                         height: 2.5rem;
-                        /* Alto de las flechas */
                         border: transparent;
-                        /* Sin borde */
                         outline: transparent;
-                        /* Sin borde de foco */
                         background-color: $dark-gray;
-
-
-
                     }
 
                     .carousel-image {
@@ -241,18 +242,12 @@
                     }
                 }
             }
-
-
         }
     }
 }
 
-
-
-
 @media (min-width: 850px) {}
 
-//desktop
 @media (min-width: 1024px) {
     .proveedores-desktop {
         background-image: linear-gradient(to bottom, rgba(238, 238, 238, 0) 60%, $color-azul 100%), url('https://i.ibb.co/tZ1y0zQ/Background-Ciudad.png');
@@ -263,7 +258,6 @@
         max-width: 2400px;
         width: 100%;
 
-
         .suggestions-list-box {
             display: flex;
             justify-content: center;
@@ -272,32 +266,41 @@
                 max-width: 580px;
                 position: absolute;
                 background-color: white;
-                border: 1px solid #ccc;
+                border: 1px solid #d8d8d8;
                 border-radius: 4px;
                 width: 32%;
                 max-height: fit-content;
                 overflow-y: auto;
-                z-index: 3;
+                z-index: 1003;
                 list-style: none;
                 padding: 0;
                 margin-top: 5px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+                animation: fadeInDown 0.3s ease-out forwards;
 
                 li {
                     padding: 10px;
                     cursor: pointer;
-                }
+                    transition: background-color 0.2s ease, transform 0.2s ease;
+                    border-bottom: 1px solid #f0f0f0;
 
-                li:hover {
-                    background-color: #f0f0f0;
+                    &:last-child {
+                        border-bottom: none;
+                    }
+                    
+                    &:hover {
+                        background-color: #f0f0f0;
+                    }
+                    strong {
+                        color: $color-naranja;
+                        font-weight: 600;
+                    }
                 }
             }
         }
-
-
     }
 
     .main-proveedores {
-
         display: flex;
         flex-direction: column;
 
@@ -338,7 +341,6 @@
                         margin-left: 1rem;
                         margin-right: 1rem;
                         width: 100%;
-
                     }
 
                     button {
@@ -354,14 +356,10 @@
                         &:hover {
                             background-color: $color-naranja-hover;
                         }
-
                     }
                 }
             }
-
-
         }
-
 
         .secondary-proveedores {
             display: flex;
@@ -377,11 +375,6 @@
             .proveedores-filter-section {
                 background: none;
             }
-
-
-
         }
-
-
     }
 }

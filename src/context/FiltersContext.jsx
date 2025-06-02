@@ -1,8 +1,7 @@
-// src/context/FiltersContext.jsx
 import React, { createContext, useState, useEffect, useContext, useMemo, useCallback } from "react";
-import { db } from "../firebase/config"; // Adjust path if needed
-import { collection, onSnapshot } from "firebase/firestore"; // onSnapshot for real-time providers
-import { fetchFiltrosGlobales } from "../services/firestoreService"; // Import your service
+import { db } from "../firebase/config";
+import { collection, onSnapshot } from "firebase/firestore";
+import { fetchFiltrosGlobales } from "../services/firestoreService";
 
 const FiltersContext = createContext();
 
@@ -14,55 +13,59 @@ const transformProviderDataForDisplay = (firestoreDocWithId) => {
 
     const ubicacionDetalle = `${data.ciudad || ''}${data.ciudad && data.provincia ? ', ' : ''}${data.provincia || ''}`.trim() || 'Ubicación no especificada';
 
-    let displayCardType = data.cardType; // Original type from Firestore: 'tipoA' or 'tipoB'
+    let displayCardType = data.cardType;
     if (data.cardType === 'tipoB') {
-        displayCardType = 'cardProductos'; // For frontend logic in Proveedor.jsx
+        displayCardType = 'cardProductos';
     } else if (data.cardType === 'tipoA') {
-        displayCardType = 'cardHistoria'; // For frontend logic
+        displayCardType = 'cardHistoria';
     }
 
     return {
         id: id,
         nombre: data.nombreProveedor || 'Nombre no disponible',
-        
-        // --- CORRECTED FILE OBJECT MAPPINGS ---
-        logo: data.logo || null, // Pass the entire logo object from Firestore
-                                 // It now contains { url: "permanent_https_url", isPermanent: true, ... }
-        
-        carrusel: data.carrusel || [], // Pass the entire carrusel array of objects from Firestore
-                                       // Each item contains { url: "permanent_https_url", ... }
-
-        // For CardTypeB (V2 cards), they will use 'galeria' for their products carousel
-        // The 'productos' alias was from an older structure. We'll use 'galeria' directly.
-        galeria: data.galeria || [],   // Pass the entire galeria array of objects from Firestore
-                                       // Each item contains { url: "permanent_https_url", imagenURL: "permanent_https_url", ... }
-        // --- END OF CORRECTED MAPPINGS ---
-        
-        descripcionGeneral: data.descripcionGeneral || '', // Use the field name from Firestore
+        logo: data.logo || null,
+        carrusel: data.carrusel || [],
+        galeria: data.galeria || [],
+        descripcionGeneral: data.descripcionGeneral || '',
         ubicacionDetalle: ubicacionDetalle,
         ciudad: data.ciudad || '', 
         provincia: data.provincia || '', 
         contacto: data.contacto || {},
-        
-        // Fields for Tags.jsx and specific filters
-        // Ensure these field names match what's in your Firestore 'proveedor' documents
         tipoProveedor: data.tipoProveedor || [], 
         serviciosClaveParaTags: data.serviciosClaveParaTags || [], 
-        
         marcasConfiguradas: data.marcasConfiguradas || [], 
         extrasConfigurados: data.extrasConfigurados || [], 
-        
         tipoRegistro: data.tipoRegistro,
-        cardType: displayCardType, // For Proveedor.jsx to choose card component
-        originalCardType: data.cardType, // Keep original 'tipoA'/'tipoB' if needed
+        cardType: displayCardType,
+        originalCardType: data.cardType,
         categoriaPrincipal: data.categoriaPrincipal || '',
         categoriasAdicionales: data.categoriasAdicionales || [],
-
-        // Pass other relevant fields directly
         planSeleccionado: data.planSeleccionado,
         estadoCuenta: data.estadoCuenta,
-        // Ensure all fields needed by Tags or other parts of the card are included
     };
+};
+
+const checkProviderAgainstSearchTerm = (proveedor, term) => {
+    if (!term) return true;
+    const lowerCaseTerm = term.toLowerCase();
+
+    const fieldsToSearch = [
+        proveedor.nombre,
+        proveedor.categoriaPrincipal,
+        proveedor.ciudad,
+        proveedor.provincia,
+        ...(proveedor.categoriasAdicionales || []),
+        ...(Array.isArray(proveedor.tipoProveedor) ? proveedor.tipoProveedor : (typeof proveedor.tipoProveedor === 'string' ? [proveedor.tipoProveedor] : [])),
+        ...(proveedor.serviciosClaveParaTags || []),
+        ...(proveedor.marcasConfiguradas || [])
+    ];
+
+    for (const fieldValue of fieldsToSearch) {
+        if (fieldValue && typeof fieldValue === 'string' && fieldValue.toLowerCase().includes(lowerCaseTerm)) {
+            return true;
+        }
+    }
+    return false;
 };
 
 export const FiltersProvider = ({ children }) => {
@@ -90,7 +93,7 @@ export const FiltersProvider = ({ children }) => {
         const loadFilterOptions = async () => {
             setIsLoadingFilterOptions(true);
             try {
-                const options = await fetchFiltrosGlobales(); //
+                const options = await fetchFiltrosGlobales();
                 setFiltrosOpciones({
                     ubicaciones: options.ubicaciones || [],
                     categorias: options.categorias || [],
@@ -100,7 +103,6 @@ export const FiltersProvider = ({ children }) => {
                     pproductos: options.pproductos || [],
                 });
             } catch (error) {
-                console.error("Error fetching global filter options:", error);
                 setFiltrosOpciones({ ubicaciones: [], categorias: [], marcas: [], servicios: [], extras: [], pproductos: [] });
             }
             setIsLoadingFilterOptions(false);
@@ -120,7 +122,6 @@ export const FiltersProvider = ({ children }) => {
             setAllProveedores(transformedData);
             setIsLoadingProviders(false);
         }, (error) => {
-            console.error("Error obteniendo los proveedores: ", error);
             setIsLoadingProviders(false);
         });
         return () => unsubscribeProveedores();
@@ -130,35 +131,31 @@ export const FiltersProvider = ({ children }) => {
         return allProveedores.filter((proveedor) => {
             if (!proveedor) return false;
 
-            const cumpleSearchTerm =
-                !searchTerm || (proveedor.nombre && proveedor.nombre.toLowerCase().includes(searchTerm.toLowerCase()));
+            const cumpleSearchTerm = checkProviderAgainstSearchTerm(proveedor, searchTerm);
 
             const proveedorCategoriasDirectas = [proveedor.categoriaPrincipal, ...(proveedor.categoriasAdicionales || [])].filter(Boolean);
             const cumpleCategorias =
                 !selectedCategoria.length ||
                 selectedCategoria.some(catFiltro => proveedorCategoriasDirectas.includes(catFiltro));
             
-            // proveedor.marcasConfiguradas should be used here as per transformProviderDataForDisplay
             const cumpleMarca = !selectedMarca || (proveedor.marcasConfiguradas && proveedor.marcasConfiguradas.includes(selectedMarca));
             
             const cumpleUbicacion = !selectedUbicacion || proveedor.provincia === selectedUbicacion;
 
-            // proveedor.tipoProveedor should be used here
+            const proveedorTipo = Array.isArray(proveedor.tipoProveedor) ? proveedor.tipoProveedor : (typeof proveedor.tipoProveedor === 'string' ? [proveedor.tipoProveedor] : []);
             const cumplePProductos =
                 !selectedPProductos.length ||
-                selectedPProductos.every(pproductoFiltro => proveedor.tipoProveedor?.includes(pproductoFiltro));
+                selectedPProductos.every(pproductoFiltro => proveedorTipo.includes(pproductoFiltro));
 
-            // proveedor.serviciosClaveParaTags should be used here
             const cumpleServicios = 
                 !checkedServices.length ||
-                checkedServices.every(servicioFiltro => proveedor.serviciosClaveParaTags?.includes(servicioFiltro));
+                (Array.isArray(proveedor.serviciosClaveParaTags) && checkedServices.every(servicioFiltro => proveedor.serviciosClaveParaTags.includes(servicioFiltro)));
 
-            // proveedor.extrasConfigurados should be used here
             const cumpleExtras = 
                 !selectedExtras || 
                 (proveedor.extrasConfigurados && proveedor.extrasConfigurados.includes(selectedExtras));
 
-            return cumpleCategorias && cumpleMarca && cumpleUbicacion && cumpleSearchTerm && cumplePProductos && cumpleServicios && cumpleExtras;
+            return cumpleSearchTerm && cumpleCategorias && cumpleMarca && cumpleUbicacion && cumplePProductos && cumpleServicios && cumpleExtras;
         });
     }, [allProveedores, searchTerm, selectedCategoria, selectedMarca, selectedUbicacion, selectedPProductos, checkedServices, selectedExtras]);
 
@@ -171,7 +168,7 @@ export const FiltersProvider = ({ children }) => {
             case "extras": setSelectedExtras(value); break;
             case "servicio": setCheckedServices(value); break;
             case "pproductos": setSelectedPProductos(value); break;
-            default: console.warn("Filtro desconocido:", key);
+            default: break;
         }
     }, []); 
 
@@ -179,6 +176,7 @@ export const FiltersProvider = ({ children }) => {
 
     const contextValue = useMemo(() => ({
         searchTerm,
+        allProveedores,
         proveedoresFiltrados,
         filtrosOpciones, 
         updateFilters,
@@ -188,12 +186,11 @@ export const FiltersProvider = ({ children }) => {
         checkedServices,
         selectedExtras,
         isLoading,
-        allProveedores, 
         selectedPProductos
     }), [
-        searchTerm, proveedoresFiltrados, filtrosOpciones, updateFilters,
+        searchTerm, allProveedores, proveedoresFiltrados, filtrosOpciones, updateFilters,
         selectedCategoria, selectedUbicacion, selectedMarca, checkedServices,
-        selectedExtras, isLoading, allProveedores, selectedPProductos
+        selectedExtras, isLoading, selectedPProductos
     ]);
 
     return (
