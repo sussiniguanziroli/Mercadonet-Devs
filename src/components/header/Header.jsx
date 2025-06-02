@@ -13,6 +13,8 @@ const Header = () => {
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const profileDropdownRef = useRef(null);
 
+    console.log(currentUser)
+
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 120);
@@ -84,12 +86,11 @@ const Header = () => {
                     <div className='profile-section' ref={profileDropdownRef} style={{ position: 'relative' }}>
                         <button onClick={toggleProfileDropdown} className='profile-button' style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}>
                             {currentUser.photoURL ? (
-                                <img src={currentUser.photoURL} alt="Perfil" style={{ width: '32px', height: '32px', borderRadius: '50%', marginRight: '8px' }} />
+                                <img referrerPolicy="no-referrer" src={currentUser.photoURL} alt="Perfil" style={{ width: '32px', height: '32px', borderRadius: '50%', marginRight: '8px' }} />
                             ) : (
                                 <FaUserCircle size={28} style={{ marginRight: '8px', color: '#fff' }} />
                             )}
-                            {/* Optional: Display name next to picture if design allows */}
-                            {/* <span style={{color: '#fff'}}>{currentUser.displayName || currentUser.email.split('@')[0]}</span> */}
+                            
                         </button>
                         {isProfileDropdownOpen && (
                             <div className="profile-dropdown" style={{

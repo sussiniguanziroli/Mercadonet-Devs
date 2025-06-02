@@ -56,19 +56,18 @@ const servicioTagsDisplay = {
 };
 
 const Tags = ({ proveedor }) => {
+    // console.log("Tags.jsx received proveedor:", JSON.stringify(proveedor, null, 2)); 
     if (!proveedor) {
         return null;
     }
 
-    // Props from transformed data (FiltersContext):
-    // proveedor.tipo (array, e.g., ["Fabricantes", "Mayoristas"]) -> maps to tipoProveedor from Firestore
-    // proveedor.servicios (array, e.g., ["Logística/Transporte"]) -> maps to serviciosClaveParaTags from Firestore
-    // proveedor.tipoRegistro ("productos" or "servicios")
+    // proveedor.tipoProveedor is an array of strings (from data.tipoProveedor via FiltersContext)
+    // proveedor.serviciosClaveParaTags is an array of strings (from data.serviciosClaveParaTags via FiltersContext)
 
     return (
         <>
             {/* Render tags based on tipoProveedor if tipoRegistro is 'productos' */}
-            {proveedor.tipoRegistro === 'productos' && proveedor.tipo?.map((tipoItem) => (
+            {proveedor.tipoRegistro === 'productos' && proveedor.tipoProveedor?.map((tipoItem) => (
                 tipoTagsDisplay[tipoItem] && (
                     <img
                         key={`tipo-${tipoItem}`}
@@ -92,7 +91,7 @@ const Tags = ({ proveedor }) => {
                         />
                     )}
                     {/* Then map over the specific services */}
-                    {proveedor.servicios?.map((servicioItem) => (
+                    {proveedor.serviciosClaveParaTags?.map((servicioItem) => (
                         servicioTagsDisplay[servicioItem] && (
                             <img
                                 key={`servicio-${servicioItem}`}
