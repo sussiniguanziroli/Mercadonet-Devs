@@ -5,7 +5,8 @@ import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } fro
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { FaArrowRight, FaArrowLeft, FaWhatsapp, FaPhoneAlt, FaEnvelope, FaImage, FaImages } from "react-icons/fa";
 import { IoGlobeOutline } from "react-icons/io5";
-import Tags from './assets/Tags'; 
+import Tags from './assets/Tags';
+import { NavLink } from 'react-router-dom';
 
 const CardDesktop = ({ proveedor }) => {
     if (!proveedor) {
@@ -20,17 +21,20 @@ const CardDesktop = ({ proveedor }) => {
         descripcionGeneral, // Use this field name
         marcasConfiguradas, // Use this field name
         extrasConfigurados, // Use this field name
-        contacto = {}
+        contacto = {},
+        id
     } = proveedor;
 
-    const logoUrl = logo?.url; 
+    const proveedorPageLink = id ? `/proveedor/${id}` : '#';
+
+    const logoUrl = logo?.url;
     const tieneLogo = !!logoUrl;
 
     const validCarruselItems = Array.isArray(carrusel) ? carrusel.filter(item => item && typeof item.url === 'string') : [];
     const tieneCarrusel = validCarruselItems.length > 0;
 
     const totalSlides = 1 + (tieneCarrusel ? validCarruselItems.length : 0);
-    const effectiveTotalSlides = totalSlides > 1 ? totalSlides : (tieneLogo ? 1 : 1) ;
+    const effectiveTotalSlides = totalSlides > 1 ? totalSlides : (tieneLogo ? 1 : 1);
 
     return (
         <div className='proveedor-item-desktop hiddenInMobile'>
@@ -47,8 +51,8 @@ const CardDesktop = ({ proveedor }) => {
                             {tieneLogo ? (
                                 <img className='carousel-image' src={logoUrl} alt={`${nombre} Logo`} />
                             ) : (
-                                <div className="carousel-placeholder" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#f0f0f0'}}>
-                                    <FaImage size={50} color="#ccc"/>
+                                <div className="carousel-placeholder" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#f0f0f0' }}>
+                                    <FaImage size={50} color="#ccc" />
                                     <span>Logo del Proveedor</span>
                                 </div>
                             )}
@@ -73,16 +77,16 @@ const CardDesktop = ({ proveedor }) => {
                                         Tu navegador no soporta la etiqueta de video.
                                     </video>
                                 ) : (
-                                    <div className="carousel-placeholder-item" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#e9e9e9'}}>
+                                    <div className="carousel-placeholder-item" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#e9e9e9' }}>
                                         <span>Formato no soportado</span>
                                     </div>
                                 )}
                             </Slide>
                         ))}
                         {!tieneLogo && !tieneCarrusel && (
-                             <Slide className="carousel-slide" index={0}>
-                                <div className="carousel-placeholder" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#f0f0f0'}}>
-                                    <FaImages size={50} color="#ccc"/>
+                            <Slide className="carousel-slide" index={0}>
+                                <div className="carousel-placeholder" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', backgroundColor: '#f0f0f0' }}>
+                                    <FaImages size={50} color="#ccc" />
                                     <span>Multimedia del Proveedor</span>
                                 </div>
                             </Slide>
@@ -103,12 +107,14 @@ const CardDesktop = ({ proveedor }) => {
                         {tieneLogo ? (
                             <img className='small-logo' src={logoUrl} alt={nombre} />
                         ) : (
-                             <div className="logo-placeholder" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '60px', height: '60px', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
+                            <div className="logo-placeholder" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '60px', height: '60px', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
                                 <FaImage size={30} color="#ccc" />
                             </div>
                         )}
                     </div>
-                    <h3>{nombre}</h3>
+                    <NavLink to={proveedorPageLink} className="proveedor-name-link" style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <h3>{nombre}</h3>
+                    </NavLink>
                     <img className="verificado" src='https://i.ibb.co/BsSRKwy/Verificado-HD.jpg' alt="Verificado" />
                     <p><IoLocationOutline />{ubicacionDetalle}</p>
                 </div>

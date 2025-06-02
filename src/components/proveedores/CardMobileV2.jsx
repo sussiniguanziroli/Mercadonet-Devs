@@ -4,6 +4,7 @@ import Slider from 'react-slick';
 import { IoLocationOutline } from 'react-icons/io5';
 import Tags from './assets/Tags';
 import { FaImage } from "react-icons/fa";
+import { NavLink } from 'react-router-dom';
 
 const CardMobileV2 = ({ proveedor }) => {
     if (!proveedor) {
@@ -15,11 +16,13 @@ const CardMobileV2 = ({ proveedor }) => {
         logo, // Is an object: { url: "...", ... } or null
         ubicacionDetalle = 'Ubicación no especificada',
         galeria = [], // This is `proveedor.galeria` from context/Firestore
-                      // Each item is an object: { url: "...", imagenURL: "...", titulo: "...", precio: "..." }
+        // Each item is an object: { url: "...", imagenURL: "...", titulo: "...", precio: "..." }
+        id
     } = proveedor;
 
     const logoUrl = logo?.url; // Access .url property
     const tieneLogo = !!logoUrl;
+    const proveedorPageLink = id ? `/proveedor/${id}` : '#';
 
     // Filter for valid products to display in the carousel
     const validProductos = Array.isArray(galeria) ? galeria.filter(p => p && (p.url || p.imagenURL)) : [];
@@ -67,7 +70,9 @@ const CardMobileV2 = ({ proveedor }) => {
                         <Tags proveedor={proveedor} />
                     </div>
                 </div>
-                <button>Ver Detalles</button>
+                <NavLink to={proveedorPageLink} className="details-button-link" style={{ textDecoration: 'none' }}>
+                    <button className="ver-detalles-btn">Ver Detalles</button>
+                </NavLink>
             </div>
 
             {validProductos.length > 0 ? (

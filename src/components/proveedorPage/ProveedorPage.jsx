@@ -1,83 +1,44 @@
 // src/components/proveedores/ProveedorPage.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams, NavLink } from 'react-router-dom'; // Added NavLink for breadcrumbs or other links
+import { useParams, NavLink } from 'react-router-dom';
 import { IoLocationOutline, IoGlobeOutline, IoArrowBack } from 'react-icons/io5';
 import { FaWhatsapp, FaPhoneAlt, FaEnvelope, FaImage, FaImages, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
 // Assuming these child components exist and are correctly imported
-// Make sure the paths are correct relative to this file.
-// If they are in an 'assets' subfolder within 'proveedores', the path might be './assets/Tags'
 import Tags from '../proveedores/assets/Tags';
 import ProductsCarousel from '../proveedores/assets/ProductsCarousel';
-// import HeaderCustomProveedores from './HeaderCustomProveedores'; // Optional
-import Footer from '../footer/Footer'; // Optional
+import Footer from '../footer/Footer';
 
-// --- Mock Data and Fetching ---
-// This mock data should reflect the structure you provided, especially the 'id' field.
-const MOCK_PROVEEDOR_DATA = {
-    id: "gHiGTRzvjePKUNZTHoirIj5DRew1", // Using 'id' as the identifier
-    nombre: "Prueba Productos Inc.", // Using 'nombre' as it appears in your object
-    antiguedad: "5 años",
-    apellidoContactoPersona: "Sussini",
-    cardType: "tipoB", // or "cardProductos" depending on the provider
-    carrusel: [
-        { fileType: "image", url: "https://firebasestorage.googleapis.com/v0/b/mercadonet-net.firebasestorage.app/o/temp_registrations%2FgHiGTRzvjePKUNZTHoirIj5DRew1%2Fproveedores%2FtipoB%2Fcarrusel%2F1748622810905-1998001_1985_Corolla_GTS_liftback-640x418.jpg?alt=media&token=03ee4060-012e-4df0-8d39-b91dc19b83b3" },
-        { fileType: "image", url: "https://firebasestorage.googleapis.com/v0/b/mercadonet-net.firebasestorage.app/o/temp_registrations%2FgHiGTRzvjePKUNZTHoirIj5DRew1%2Fproveedores%2FtipoB%2Fcarrusel%2F1748622810906-audi-sport-quattro-s1-e2-1985_3.jpg?alt=media&token=184158a1-1223-4a44-98a6-47686f2bdb2f" },
-        { fileType: "image", url: "https://firebasestorage.googleapis.com/v0/b/mercadonet-net.firebasestorage.app/o/temp_registrations%2FgHiGTRzvjePKUNZTHoirIj5DRew1%2Fproveedores%2FtipoB%2Fcarrusel%2F1748622810906-Audi-WRC-Car.jpg?alt=media&token=23605649-e741-4581-80f9-6c36a36ea713" },
-    ],
-    categoriaPrincipal: "Automotriz y Repuestos",
-    categoriasAdicionales: ["Construcción y Ferretería", "Maquinaria y Equipos Industriales", "Tecnología y Electrónica"],
-    ciudad: "Corrientes",
-    provincia: "Rio Negro",
-    ubicacionDetalle: "Av. Siempreviva 742", // More specific address if available, otherwise construct from ciudad/provincia
-    contacto: {
-        email: "sussiniguanziroli@gmail.com",
-        sitioWeb: "www.mercadonet.com",
-        telefono: "+5493791234567",
-        whatsapp: "5493791234567" // Numbers should be E.164 or similar for wa.me links
-    },
-    descripcionGeneral: "Somos Prueba Productos Inc., un proveedor líder en la industria automotriz y de repuestos con más de 5 años de experiencia. Ofrecemos una amplia gama de productos de alta calidad y servicios especializados como dropshipping y asesoramiento técnico. Nuestro compromiso es brindar soluciones integrales y personalizadas a nuestros clientes en Corrientes, Rio Negro y todo el país. Trabajamos con marcas reconocidas y nos esforzamos por mantenernos a la vanguardia de la tecnología y las tendencias del mercado.",
-    estadoCuenta: "pendienteRevision",
-    extrasConfigurados: ["Dropshipping", "Asesoramiento Técnico", "Envíos a todo el país", "Garantía Extendida"],
-    galeria: [ // This is for products/services gallery
-        { url: "https://firebasestorage.googleapis.com/v0/b/mercadonet-net.firebasestorage.app/o/temp_registrations%2FgHiGTRzvjePKUNZTHoirIj5DRew1%2Fproveedores%2FtipoB%2Fgaleria%2F1748622830238-grass_image001_copy_Z2uCG5c.jpg?alt=media&token=adaa57d4-0136-456d-b439-faa392ff5eb7", precio: "$233", titulo: "Motor Clásico 280ZX" },
-        { url: "https://firebasestorage.googleapis.com/v0/b/mercadonet-net.firebasestorage.app/o/temp_registrations%2FgHiGTRzvjePKUNZTHoirIj5DRew1%2Fproveedores%2FtipoB%2Fgaleria%2F1748622844345-d985f57bf604a8d2e3654ed5c5187b71.jpg?alt=media&token=4e5703bc-5a30-4340-966f-79c5a9f24640", precio: "$344", titulo: "Kit de Suspensión R32" },
-        { url: "https://firebasestorage.googleapis.com/v0/b/mercadonet-net.firebasestorage.app/o/temp_registrations%2FgHiGTRzvjePKUNZTHoirIj5DRew1%2Fproveedores%2FtipoB%2Fgaleria%2F1748622849086-00_Title_850306P-Rohrl-1-rkT.jpg?alt=media&token=71358000-6561-4f72-83af-a0b6a6094eca", precio: "$120", titulo: "Filtro de Aire Audi Sport" },
-    ],
-    logo: { url: "https://firebasestorage.googleapis.com/v0/b/mercadonet-net.firebasestorage.app/o/temp_registrations%2FgHiGTRzvjePKUNZTHoirIj5DRew1%2Fproveedores%2FtipoB%2Flogos%2F1748622801627-Me5BhaI9kXDG5XMLzPTuo0p5OtcL_7MFuKCOJaVUgJk.jpg?alt=media&token=8862efbe-96f3-4d72-9d2e-fd5781841b96" },
-    marcasConfiguradas: ["Toyota", "Bosch", "Audi", "Nissan"],
-    nombreContactoPersona: "Patricio",
-    pais: "Argentina",
-    planSeleccionado: { name: "Pro", tag: "Más Vendido" },
-    rolContactoPersona: "Dueño y Senior",
-    serviciosClaveParaTags: ["Automotriz", "Repuestos", "Mayorista"], // Used by Tags component
-    tipoProveedor: ["Distribuidores Oficiales", "Mayoristas"], // Used by Tags component
-    tipoRegistro: "productos", // Used by Tags component
+// Import Firebase Firestore functions and the db instance
+import { getDoc, doc } from "firebase/firestore";
+// Adjust the path to your Firebase config file as necessary
+// It's typically in a folder like 'src/firebase/config.js' or 'src/config/firebase.js'
+import { db } from '../../firebase/config'; // IMPORTANT: Verify this path is correct
+
+// This function will fetch data from Firebase
+const fetchProveedorById = async (proveedorIdParam) => {
+    if (!proveedorIdParam) {
+        throw new Error("ID de proveedor no válido.");
+    }
+    // Assuming your collection is named 'proveedores'
+    // If your collection has a different name, change 'proveedores' to the correct name.
+    const proveedorDocRef = doc(db, "proveedores", proveedorIdParam);
+    console.log(`Fetching document from Firestore: proveedores/${proveedorIdParam}`);
+
+    const docSnap = await getDoc(proveedorDocRef);
+
+    if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        // Combine the document ID with its data
+        return { id: docSnap.id, ...docSnap.data() };
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+        throw new Error(`Proveedor con ID ${proveedorIdParam} no encontrado.`);
+    }
 };
-
-// Replace this with your actual Firebase fetching logic
-// Example: import { getDoc, doc } from 'firebase/firestore';
-// import { db } from '../../firebase-config'; // Adjust path to your Firebase config
-const fetchProveedorByIdSimulated = (proveedorIdParam) => {
-    console.log("Simulating fetch for proveedor with ID:", proveedorIdParam);
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            // Ensure the mock data ID matches the parameter
-            if (proveedorIdParam === MOCK_PROVEEDOR_DATA.id) {
-                resolve(MOCK_PROVEEDOR_DATA);
-            } else {
-                // Simulate finding another provider if you have more mock data
-                // For now, just reject if not the main mock ID
-                console.warn(`Mock data for ID ${proveedorIdParam} not found. Serving default mock or error.`);
-                reject(new Error(`Proveedor con ID ${proveedorIdParam} no encontrado en datos de prueba.`));
-            }
-        }, 500); // Simulate network delay
-    });
-};
-// --- End of Mock Data ---
-
 
 const ProveedorPage = () => {
     const { proveedorId } = useParams(); // This gets the ':proveedorId' from the URL
@@ -90,24 +51,20 @@ const ProveedorPage = () => {
             if (!proveedorId) {
                 setError("No se proporcionó ID de proveedor.");
                 setLoading(false);
+                console.warn("ProveedorPage: proveedorId is undefined or null.");
                 return;
             }
+            console.log(`ProveedorPage: Attempting to load data for proveedorId: ${proveedorId}`);
             setLoading(true);
             setError(null);
             try {
-                // Replace with your actual Firebase call:
-                // const docRef = doc(db, "proveedores", proveedorId); // Assuming 'proveedores' collection
-                // const docSnap = await getDoc(docRef);
-                // if (docSnap.exists()) {
-                //     setProveedor({ id: docSnap.id, ...docSnap.data() });
-                // } else {
-                //     setError("Proveedor no encontrado.");
-                // }
-                const data = await fetchProveedorByIdSimulated(proveedorId);
+                // Call the new Firebase fetch function
+                const data = await fetchProveedorById(proveedorId);
                 setProveedor(data);
+                console.log(`ProveedorPage: Data loaded successfully for ${proveedorId}`, data);
             } catch (err) {
                 setError(err.message || "Error al cargar los datos del proveedor.");
-                console.error("Error fetching proveedor data:", err);
+                console.error(`ProveedorPage: Error fetching proveedor data for ID ${proveedorId}:`, err);
             } finally {
                 setLoading(false);
             }
@@ -132,7 +89,7 @@ const ProveedorPage = () => {
     if (!proveedor) {
         return (
             <div className="proveedor-page-status">
-                <p>Proveedor no encontrado.</p>
+                <p>Proveedor no encontrado o datos no disponibles.</p>
                 <NavLink to="/proveedores" className="button-like">Volver a Proveedores</NavLink>
             </div>
         );
@@ -161,8 +118,6 @@ const ProveedorPage = () => {
     const validCarruselItems = Array.isArray(carrusel) ? carrusel.filter(item => item && typeof item.url === 'string') : [];
     const tieneCarrusel = validCarruselItems.length > 0;
     
-    // For the main carousel, decide what to show: logo first, then carrusel items.
-    // If no logo but carrusel exists, show carrusel. If neither, show placeholder.
     let mainCarouselSlides = [];
     if (tieneLogo) {
         mainCarouselSlides.push({ type: 'logo', url: logoUrl, alt: `${nombre} Logo` });
@@ -170,12 +125,12 @@ const ProveedorPage = () => {
     if (tieneCarrusel) {
         validCarruselItems.forEach(item => mainCarouselSlides.push({type: 'carrusel', ...item}));
     }
-    const effectiveTotalSlides = mainCarouselSlides.length > 0 ? mainCarouselSlides.length : 1; // At least one slide for placeholder
+    const effectiveTotalSlides = mainCarouselSlides.length > 0 ? mainCarouselSlides.length : 1;
 
     const validProductos = Array.isArray(galeria) ? galeria.filter(p => p && (p.url || p.imagenURL)) : [];
 
-
     // Basic styling (consider moving to a CSS file)
+    // This style block is the same as before, just included for completeness
     const styles = `
         .proveedor-page-container { padding: 20px; max-width: 1200px; margin: 40px auto; font-family: 'Inter', sans-serif; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .proveedor-page-breadcrumb { margin-bottom: 20px; font-size: 0.9em; color: #555; }
@@ -227,7 +182,6 @@ const ProveedorPage = () => {
     return (
         <>
             <style>{styles}</style>
-            {/* <HeaderCustomProveedores /> */}
             <div className="proveedor-page-container">
                 <nav className="proveedor-page-breadcrumb">
                     <NavLink to="/"><IoArrowBack /> Volver a Inicio</NavLink> / <NavLink to="/proveedores">Proveedores</NavLink> / <span>{nombre}</span>
@@ -244,7 +198,6 @@ const ProveedorPage = () => {
                             {fullUbicacion}
                         </p>
                     )}
-                     {/* Assuming Tags component takes the full proveedor object */}
                     <div className="tags-container">
                         <Tags proveedor={proveedor} />
                     </div>
@@ -276,7 +229,7 @@ const ProveedorPage = () => {
                                             <video className='carousel-image' src={slide.url} controls muted loop>
                                                 Tu navegador no soporta la etiqueta de video.
                                             </video>
-                                        ) : ( // Fallback for other types or if carrusel item is malformed
+                                        ) : ( 
                                             <div className="carousel-placeholder">
                                                 <FaImage size={50} />
                                                 <span>Contenido multimedia</span>
@@ -332,7 +285,6 @@ const ProveedorPage = () => {
                     {validProductos.length > 0 && (
                         <section className="proveedor-page-productos-destacados proveedor-page-section">
                             <h2 className="section-title">Productos Destacados</h2>
-                            {/* Ensure ProductsCarousel can handle the 'galeria' items directly */}
                             <ProductsCarousel productos={validProductos} />
                         </section>
                     )}

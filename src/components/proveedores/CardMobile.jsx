@@ -3,6 +3,7 @@ import React from 'react';
 import { IoLocationOutline } from 'react-icons/io5';
 import Tags from './assets/Tags';
 import { FaImage } from "react-icons/fa";
+import { NavLink } from 'react-router-dom';
 
 const CardMobile = ({ proveedor }) => {
     if (!proveedor) {
@@ -17,6 +18,7 @@ const CardMobile = ({ proveedor }) => {
         marcasConfiguradas, // Corrected field name
         extrasConfigurados, // Corrected field name
         // tipoProveedor, serviciosClaveParaTags, tipoRegistro are used by Tags component via the proveedor prop
+        id
     } = proveedor;
 
     const logoUrl = logo?.url; // Access .url property
@@ -27,6 +29,8 @@ const CardMobile = ({ proveedor }) => {
     const truncatedDescription = safeDescripcion.length > maxLength
         ? safeDescripcion.slice(0, maxLength) + "...[ver más]"
         : safeDescripcion;
+
+    const proveedorPageLink = id ? `/proveedor/${id}` : '#';
 
     return (
         <div className='proveedor-item hiddenInDesktop'>
@@ -48,12 +52,14 @@ const CardMobile = ({ proveedor }) => {
                         <Tags proveedor={proveedor} />
                     </div>
                 </div>
-                <button>Ver Detalles</button>
+                <NavLink to={proveedorPageLink} className="details-button-link" style={{ textDecoration: 'none' }}>
+                    <button className="ver-detalles-btn">Ver Detalles</button>
+                </NavLink>
             </div>
 
             <div className='texts-box'>
                 {safeDescripcion && <p className='description'>{truncatedDescription}</p>}
-                
+
                 {Array.isArray(marcasConfiguradas) && marcasConfiguradas.length > 0 && (
                     <div className='marcas alineado-auto'>
                         <h4>Marcas:</h4>
