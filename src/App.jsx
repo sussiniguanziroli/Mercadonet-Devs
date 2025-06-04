@@ -46,7 +46,7 @@ function App() {
                                 />
                                 <Route path="/proveedor/:proveedorId" element={<ProveedorPage />} />
 
-                                <Route path="/perfil" element={
+                                <Route path="/perfil/*" element={
                                     <ProtectedRoute>
                                         <Dashboard />
                                     </ProtectedRoute>

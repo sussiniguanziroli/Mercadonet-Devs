@@ -1,246 +1,284 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, useLocation, NavLink } from 'react-router-dom';
-import {
-    Box, Drawer, AppBar, Toolbar, List, Typography, Divider, CssBaseline,
-    ListItem, ListItemButton, ListItemIcon, ListItemText, Collapse
-} from '@mui/material';
-import { useAuth } from '../../context/AuthContext'; // Assuming path to AuthContext
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../firebase/config'; // Assuming path to firebase config
+    import { useNavigate, useLocation, NavLink } from 'react-router-dom';
+    import {
+        Box, Drawer, AppBar, Toolbar, List, Typography, Divider, CssBaseline,
+        ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, CircularProgress, Button as MuiButton
+    } from '@mui/material';
+    import {
+        AccountCircle, BarChart, Email, Storefront, Favorite, Receipt,
+        Dashboard as DashboardIcon, Menu as MenuIcon, Business
+    } from '@mui/icons-material';
 
-// Placeholder components for each dashboard section
-// You will create these actual components later
-const UserProfileSection = () => <Typography variant="h5" p={3}>User Profile Customization</Typography>;
-const ProviderSettingsSection = () => <Typography variant="h5" p={3}>Provider Card/Page Settings</Typography>;
-const StatisticsSection = () => <Typography variant="h5" p={3}>Useful Statistics</Typography>;
-const ChatSection = () => <Typography variant="h5" p={3}>Internal Chat</Typography>;
-const EditProviderGeneral = () => <Typography variant="h5" p={3}>Edit Provider General Info</Typography>;
-const EditProviderPersonalized = () => <Typography variant="h5" p={3}>Edit Provider Personalized Info</Typography>;
-const EditProviderPlan = () => <Typography variant="h5" p={3}>Edit Provider Plan</Typography>;
+    import { useAuth } from '../../context/AuthContext'; // Adjust path as needed
+    import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+    import { db } from '../../firebase/config'; // Adjust path as needed
+    import DashboardRouter from './DashboardRouter'; // Import the router for the content
 
+    const drawerWidth = 260;
 
-const drawerWidth = 280;
+    function Dashboard() {
+        const navigate = useNavigate();
+        const location = useLocation();
+        const { currentUser, logout } = useAuth();
+        const [isProvider, setIsProvider] = useState(false);
+        // eslint-disable-next-line no-unused-vars
+        const [providerDocs, setProviderDocs] = useState([]);
+        const [loadingUserData, setLoadingUserData] = useState(true);
+        const [mobileOpen, setMobileOpen] = useState(false);
+        const [userName, setUserName] = useState('');
+        const [headerTitle, setHeaderTitle] = useState('Panel');
 
-function Dashboard() {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const { currentUser } = useAuth();
-    const [isProvider, setIsProvider] = useState(false);
-    const [providerData, setProviderData] = useState(null);
-    const [loadingUserData, setLoadingUserData] = useState(true);
-    const [mobileOpen, setMobileOpen] = useState(false);
-    const [providerSubMenuOpen, setProviderSubMenuOpen] = useState(false);
-
-    useEffect(() => {
-        if (currentUser) {
-            const fetchUserData = async () => {
-                setLoadingUserData(true);
-                try {
-                    const userDocRef = doc(db, "users", currentUser.uid);
-                    const userDocSnap = await getDoc(userDocRef);
-                    if (userDocSnap.exists()) {
-                        const userData = userDocSnap.data();
-                        setIsProvider(userData.isProveedor || false);
-                        if (userData.isProveedor) {
-                            // Attempt to fetch provider data using the *actual uploader's ID* (currentUser.uid)
-                            // as the document ID for the provider's record.
-                            // This assumes the provider document ID is still the uploader's UID.
-                            // If provider IDs are now auto-generated, this logic needs to change
-                            // to find the provider document associated with this currentUser.uid.
-                            // For now, we'll assume a direct link for simplicity in this skeleton.
-                            // You might need a query: collection("proveedores"), where("userId", "==", currentUser.uid)
-                            const providerDocRef = doc(db, "proveedores", currentUser.uid); // << ADJUST IF PROVIDER ID IS NOT USER UID
-                            const providerDocSnap = await getDoc(providerDocRef);
-                            if (providerDocSnap.exists()) {
-                                setProviderData(providerDocSnap.data());
-                            } else {
-                                console.log("Provider document not found for this user, though isProveedor is true.");
-                                // This case needs handling - perhaps user is marked as provider but registration is incomplete
-                                // or the provider document ID scheme has changed and this fetch is incorrect.
-                            }
-                        }
-                    } else {
-                        console.log("User document not found!");
-                    }
-                } catch (error) {
-                    console.error("Error fetching user/provider data:", error);
-                } finally {
-                    setLoadingUserData(false);
-                }
+        useEffect(() => {
+            const currentPath = location.pathname;
+            // Define paths for title setting
+            const pathTitles = {
+                '/perfil/provider-panel': 'Panel de Proveedor',
+                '/perfil/provider/edit': 'Editar Mi Empresa',
+                '/perfil/provider/products': 'Mis Productos',
+                '/perfil/provider/stats': 'Estadísticas de Proveedor',
+                '/perfil/provider/messages': 'Mensajes de Proveedor',
+                '/perfil/profile': 'Editar Perfil',
+                '/perfil/favorites': 'Favoritos',
+                '/perfil/billing': 'Facturación',
             };
-            fetchUserData();
-        } else {
-            setLoadingUserData(false);
-        }
-    }, [currentUser]);
 
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
+            if (currentPath === '/perfil') {
+                setHeaderTitle(isProvider ? 'Panel de Proveedor' : 'Editar Perfil');
+            } else {
+                setHeaderTitle(pathTitles[currentPath] || 'Panel');
+            }
+        }, [location.pathname, isProvider]);
 
-    const handleProviderSubMenuToggle = () => {
-        setProviderSubMenuOpen(!providerSubMenuOpen);
-    };
+        useEffect(() => {
+            if (currentUser) {
+                const fetchUserDataAndProviderStatus = async () => {
+                    setLoadingUserData(true);
+                    try {
+                        const userDocRef = doc(db, "users", currentUser.uid);
+                        const userDocSnap = await getDoc(userDocRef);
 
-    const menuItems = [
-        { text: 'User Profile', icon: <AccountCircle />, path: '/perfil/profile', show: true },
-        { text: 'Provider Settings', icon: <Storefront />, path: '/perfil/provider', show: isProvider, isSubMenuHeader: true, onClick: handleProviderSubMenuToggle, open: providerSubMenuOpen },
-        { text: 'Edit General', icon: <Edit />, path: '/perfil/provider/general', show: isProvider, isSubMenuItem: true, parentOpen: providerSubMenuOpen },
-        { text: 'Edit Personalized', icon: <Edit />, path: '/perfil/provider/personalized', show: isProvider, isSubMenuItem: true, parentOpen: providerSubMenuOpen },
-        { text: 'Edit Plan', icon: <Edit />, path: '/perfil/provider/plan', show: isProvider, isSubMenuItem: true, parentOpen: providerSubMenuOpen },
-        { text: 'Statistics', icon: <BarChart />, path: '/perfil/stats', show: true },
-        { text: 'Chat', icon: <Message />, path: '/perfil/chat', show: true },
-    ];
+                        if (userDocSnap.exists()) {
+                            const userData = userDocSnap.data();
+                            const providerStatus = userData.isProveedor || false;
+                            setIsProvider(providerStatus);
+                            setUserName(userData.displayName || currentUser.email || 'Usuario');
 
-    const drawerContent = (
-        <div>
-            <Toolbar>
-                <Typography variant="h6" noWrap component="div" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
-                    Dashboard
-                </Typography>
-            </Toolbar>
-            <Divider />
-            <List>
-                {menuItems.map((item) => {
-                    if (!item.show) return null;
-
-                    if (item.isSubMenuHeader) {
-                        return (
-                            <React.Fragment key={item.text}>
-                                <ListItemButton onClick={item.onClick}>
-                                    <ListItemIcon sx={{ minWidth: '40px' }}>{item.icon}</ListItemIcon>
-                                    <ListItemText primary={item.text} />
-                                    {item.open ? <ExpandLess /> : <ExpandMore />}
-                                </ListItemButton>
-                                <Collapse in={item.open} timeout="auto" unmountOnExit>
-                                    <List component="div" disablePadding>
-                                        {menuItems.filter(subItem => subItem.isSubMenuItem && subItem.parentOpen).map(subItem => (
-                                             <ListItem key={subItem.text} disablePadding sx={{ pl: 4 }}>
-                                                <ListItemButton component={NavLink} to={subItem.path} selected={location.pathname === subItem.path}>
-                                                    <ListItemIcon sx={{ minWidth: '36px' }}>{subItem.icon}</ListItemIcon>
-                                                    <ListItemText primary={subItem.text} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </Collapse>
-                            </React.Fragment>
-                        );
+                            if (providerStatus) {
+                                const q = query(collection(db, "proveedores"), where("userId", "==", currentUser.uid));
+                                const providerQuerySnapshot = await getDocs(q);
+                                const fetchedProviderDocs = [];
+                                providerQuerySnapshot.forEach((doc) => {
+                                    fetchedProviderDocs.push({ id: doc.id, ...doc.data() });
+                                });
+                                setProviderDocs(fetchedProviderDocs);
+                                // if (fetchedProviderDocs.length === 0) {
+                                //     console.log("User is marked as provider, but no provider documents found linking to this user ID.");
+                                // }
+                            }
+                        } else {
+                            // console.log("User document not found for UID:", currentUser.uid);
+                            setIsProvider(false); 
+                        }
+                    } catch (error) {
+                        console.error("Error fetching user/provider data:", error);
+                        setIsProvider(false); 
+                    } finally {
+                        setLoadingUserData(false);
                     }
-                    
-                    if (item.isSubMenuItem) return null; // Rendered under Collapse
+                };
+                fetchUserDataAndProviderStatus();
+            } else {
+                setLoadingUserData(false); 
+                navigate('/login'); 
+            }
+        }, [currentUser, navigate]);
 
-                    return (
-                        <ListItem key={item.text} disablePadding>
-                            <ListItemButton component={NavLink} to={item.path} selected={location.pathname === item.path}>
-                                <ListItemIcon sx={{ minWidth: '40px' }}>
-                                    {item.icon}
-                                </ListItemIcon>
-                                <ListItemText primary={item.text} />
-                            </ListItemButton>
-                        </ListItem>
-                    );
-                })}
-            </List>
-        </div>
-    );
+        const handleDrawerToggle = () => {
+            setMobileOpen(!mobileOpen);
+        };
+        
+        const handleLogout = async () => {
+            try {
+                await logout();
+                navigate('/'); 
+            } catch (error) {
+                console.error("Error logging out:", error);
+            }
+        };
 
-    if (loadingUserData) {
-        return <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><Typography>Loading dashboard...</Typography></Box>;
-    }
-    if (!currentUser) {
-         navigate('/login'); // Or your login route
-         return null;
-    }
+        const providerMenuItems = [
+            { text: 'Panel de Proveedor', icon: <DashboardIcon />, path: '/perfil/provider-panel' },
+            { text: 'Editar mi Empresa', icon: <Business />, path: '/perfil/provider/edit' },
+            { text: 'Mis productos', icon: <Storefront />, path: '/perfil/provider/products' },
+            { text: 'Estadísticas', icon: <BarChart />, path: '/perfil/provider/stats' },
+            { text: 'Mensajes', icon: <Email />, path: '/perfil/provider/messages' },
+        ];
 
+        const userMenuItems = [
+            { text: 'Editar Perfil', icon: <AccountCircle />, path: '/perfil/profile' },
+            { text: 'Favoritos', icon: <Favorite />, path: '/perfil/favorites' },
+            { text: 'Facturación', icon: <Receipt />, path: '/perfil/billing' },
+        ];
 
-    return (
-        <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-            <CssBaseline />
-            <AppBar
-                position="fixed"
-                sx={{
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    ml: { sm: `${drawerWidth}px` },
-                    backgroundColor: 'rgba(255,255,255,0.1)',
-                    backdropFilter: 'blur(10px)',
-                    boxShadow: 'none',
-                    borderBottom: '1px solid rgba(255,255,255,0.2)'
-                }}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { sm: 'none' }, color: 'text.primary' }}
-                    >
-                        <Settings /> {/* Using Settings as a placeholder for MenuIcon */}
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, color: 'text.primary' }}>
-                        {menuItems.find(item => location.pathname.startsWith(item.path) && !item.isSubMenuItem)?.text || 
-                         menuItems.find(item => location.pathname === item.path && item.isSubMenuItem)?.text ||
-                         'My Profile'}
+        const drawerContent = (
+            <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <Toolbar sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', py: 2, backgroundColor: 'rgba(0,0,0,0.2)' }}>
+                    <Typography variant="h5" noWrap component={NavLink} to="/"
+                        sx={{
+                            color: '#FFA500', 
+                            fontWeight: 'bold',
+                            textDecoration: 'none',
+                            '&:hover': { color: '#FFC966' }
+                        }}>
+                        Mercado<span style={{ color: 'white' }}>.NET</span>
                     </Typography>
-                     <Button color="inherit" onClick={() => navigate('/')} sx={{color: 'text.secondary'}}>
-                        Go Home
-                    </Button>
                 </Toolbar>
-            </AppBar>
-            <Box
-                component="nav"
-                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-                aria-label="dashboard sections"
-            >
-                <Drawer
-                    variant="temporary"
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    ModalProps={{
-                        keepMounted: true, 
-                    }}
-                    sx={{
-                        display: { xs: 'block', sm: 'none' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, backgroundColor: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)', borderRight: '1px solid rgba(255,255,255,0.2)' },
-                    }}
-                >
-                    {drawerContent}
-                </Drawer>
-                <Drawer
-                    variant="permanent"
-                    sx={{
-                        display: { xs: 'none', sm: 'block' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, backgroundColor: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(20px)', borderRight: '1px solid rgba(0,0,0,0.5)', color: 'white' },
-                    }}
-                    open
-                >
-                    {drawerContent}
-                </Drawer>
-            </Box>
-            <Box
-                component="main"
-                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` }, backgroundColor: 'rgba(0,0,0,0.7)' }}
-            >
-                <Toolbar /> {/* For spacing under the AppBar */}
-                <Routes>
-                    <Route index element={<UserProfileSection />} /> {/* Default for /perfil */}
-                    <Route path="profile" element={<UserProfileSection />} />
+                <Divider sx={{ borderColor: 'rgba(255,255,255,0.2)' }} />
+                <List sx={{ flexGrow: 1, py:0 }}>
                     {isProvider && (
                         <>
-                            <Route path="provider" element={<ProviderSettingsSection />} /> 
-                            <Route path="provider/general" element={<EditProviderGeneral />} />
-                            <Route path="provider/personalized" element={<EditProviderPersonalized />} />
-                            <Route path="provider/plan" element={<EditProviderPlan />} />
+                            <ListItem sx={{ pt: 2, pb: 1 }}>
+                                <Typography variant="overline" sx={{ color: 'grey.500', pl: 2, fontSize: '0.65rem', fontWeight: 'bold' }}>PROVEEDOR</Typography>
+                            </ListItem>
+                            {providerMenuItems.map((item) => (
+                                <ListItem key={item.text} disablePadding>
+                                    <ListItemButton component={NavLink} to={item.path} selected={location.pathname === item.path}
+                                        sx={{
+                                            '&.Mui-selected': { backgroundColor: 'rgba(255, 165, 0, 0.15)', borderRight: '4px solid #FFA500', '& svg': {color: '#FFA500'}, '& .MuiListItemText-primary': {color: '#FFA500', fontWeight: '500'} , '&:hover': {backgroundColor: 'rgba(255, 165, 0, 0.25)'} },
+                                            '&:hover': { backgroundColor: 'rgba(255,255,255,0.08)' },
+                                            py: 1, pl:3, my: 0.5, borderRadius: '0 8px 8px 0', mr:1
+                                        }}>
+                                        <ListItemIcon sx={{ color: 'grey.400', minWidth: '40px' }}>{item.icon}</ListItemIcon>
+                                        <ListItemText primary={item.text} primaryTypographyProps={{fontSize: '0.9rem'}}/>
+                                    </ListItemButton>
+                                </ListItem>
+                            ))}
+                            <Divider sx={{ my: 1, borderColor: 'rgba(255,255,255,0.1)' }} />
                         </>
                     )}
-                    <Route path="stats" element={<StatisticsSection />} />
-                    <Route path="chat" element={<ChatSection />} />
-                    <Route path="*" element={<Typography>Section not found.</Typography>} /> {/* Fallback for /perfil/* */}
-                </Routes>
+                    <ListItem sx={{ pt: isProvider ? 1 : 2, pb: 1 }}>
+                        <Typography variant="overline" sx={{ color: 'grey.500', pl: 2, fontSize: '0.65rem', fontWeight: 'bold' }}>USUARIO</Typography>
+                    </ListItem>
+                    {userMenuItems.map((item) => (
+                        <ListItem key={item.text} disablePadding>
+                            <ListItemButton component={NavLink} to={item.path} selected={location.pathname === item.path}
+                                 sx={{
+                                    '&.Mui-selected': { backgroundColor: 'rgba(255, 165, 0, 0.15)', borderRight: '4px solid #FFA500', '& svg': {color: '#FFA500'}, '& .MuiListItemText-primary': {color: '#FFA500', fontWeight: '500'} , '&:hover': {backgroundColor: 'rgba(255, 165, 0, 0.25)'} },
+                                    '&:hover': { backgroundColor: 'rgba(255,255,255,0.08)' },
+                                    py: 1, pl:3, my: 0.5, borderRadius: '0 8px 8px 0', mr:1
+                                }}>
+                                <ListItemIcon sx={{ color: 'grey.400', minWidth: '40px' }}>{item.icon}</ListItemIcon>
+                                <ListItemText primary={item.text} primaryTypographyProps={{fontSize: '0.9rem'}}/>
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
+                <Divider sx={{ borderColor: 'rgba(255,255,255,0.2)' }} />
+                 <Box sx={{ p: 2, mt: 'auto' }}>
+                    <MuiButton fullWidth variant="outlined" onClick={handleLogout} sx={{color: 'grey.400', borderColor: 'grey.600', '&:hover': {borderColor: 'grey.500', backgroundColor: 'rgba(255,255,255,0.05)'}}}>
+                        Cerrar Sesión
+                    </MuiButton>
+                </Box>
             </Box>
-        </Box>
-    );
-}
+        );
 
-export default Dashboard;
+        if (loadingUserData) {
+            return (
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#121212' }}>
+                    <CircularProgress sx={{color: '#FFA500' }} />
+                    <Typography sx={{ml: 2, color: 'white'}}>Cargando panel...</Typography>
+                </Box>
+            );
+        }
+        
+        if (!currentUser && !loadingUserData) { 
+            return null; 
+        }
+
+        return (
+            <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: '#1e1e1e' }}>
+                <CssBaseline />
+                <AppBar
+                    position="fixed"
+                    sx={{
+                        width: { md: `calc(100% - ${drawerWidth}px)` },
+                        ml: { md: `${drawerWidth}px` },
+                        backgroundColor: 'rgba(30,30,30,0.85)', 
+                        backdropFilter: 'blur(8px)',
+                        boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)',
+                    }}
+                >
+                    <Toolbar>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            edge="start"
+                            onClick={handleDrawerToggle}
+                            sx={{ mr: 2, display: { md: 'none' }, color: 'white' }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, color: 'white', fontWeight: '500' }}>
+                             {headerTitle}
+                        </Typography>
+                        <Typography sx={{ color: 'grey.400', mr: 2 }}>Hola, {userName}</Typography>
+                    </Toolbar>
+                </AppBar>
+                <Box
+                    component="nav"
+                    sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+                    aria-label="dashboard sections"
+                >
+                    <Drawer 
+                        variant="temporary"
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        ModalProps={{ keepMounted: true }}
+                        sx={{
+                            display: { xs: 'block', md: 'none' },
+                            '& .MuiDrawer-paper': { 
+                                boxSizing: 'border-box', 
+                                width: drawerWidth, 
+                                backgroundColor: '#171717', 
+                                color: 'white',
+                                borderRight: '1px solid rgba(255,255,255,0.1)'
+                            },
+                        }}
+                    >
+                        {drawerContent}
+                    </Drawer>
+                    <Drawer 
+                        variant="permanent"
+                        sx={{
+                            display: { xs: 'none', md: 'block' },
+                            '& .MuiDrawer-paper': { 
+                                boxSizing: 'border-box', 
+                                width: drawerWidth,
+                                backgroundColor: '#171717', 
+                                color: 'white',
+                                borderRight: 'none' 
+                            },
+                        }}
+                        open
+                    >
+                        {drawerContent}
+                    </Drawer>
+                </Box>
+                <Box
+                    component="main"
+                    sx={{ 
+                        flexGrow: 1, 
+                        p: {xs: 2, sm: 3}, 
+                        width: { md: `calc(100% - ${drawerWidth}px)` }, 
+                        color: 'white',
+                        mt: { xs: '56px', sm: '64px'} 
+                    }}
+                >
+                    {!loadingUserData && <DashboardRouter isProvider={isProvider} />}
+                </Box>
+            </Box>
+        );
+    }
+
+    export default Dashboard;
+    
