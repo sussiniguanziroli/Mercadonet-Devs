@@ -1,52 +1,52 @@
 [
-  {
-    "id": 1,
-    "titulo": "Tecnología y Accesorios",
-    "imagen": "https://i.imgur.com/zYGStnB.jpeg"
-  },
-  {
-    "id": 2,
-    "titulo": "Ropa y Calzado",
-    "imagen": "https://i.imgur.com/6gATphN.jpeg"
-  },
-  {
-    "id": 3,
-    "titulo": "Ferreterías",
-    "imagen": "https://i.imgur.com/X0f4agl.jpeg"
-  },
-  {
-    "id": 4,
-    "titulo": "Mueblería y Colchonería",
-    "imagen": "https://i.imgur.com/lNRKaAG.jpeg"
-  },
-  {
-    "id": 5,
-    "titulo": "Gimnasios y Deportes",
-    "imagen": "https://i.imgur.com/5hH1eXI.jpeg"
-  },
-  {
-    "id": 6,
-    "titulo": "Estética Vehicular",
-    "imagen": "https://i.imgur.com/IrwS3QP.jpeg"
-  },
-  {
-    "id": 7,
-    "titulo": "Corralones y Constructoras",
-    "imagen": "https://i.imgur.com/yA8D9rS.jpeg"
-  },
-  {
-    "id": 8,
-    "titulo": "Deco y Hogar",
-    "imagen": "https://i.imgur.com/82gy68K.jpeg"
-  },
-  {
-    "id": 9,
-    "titulo": "Agro y campo",
-    "imagen": "https://i.imgur.com/PuPFu9U.jpeg"
-  },
-  {
-    "id": 10,
-    "titulo": "Librerías y Mercerías",
-    "imagen": "https://i.imgur.com/pWWhRL0.jpeg"
-  }
-]
+    {
+      "id": 1,
+      "titulo": "Tecnología y Accesorios",
+      "imagen": "https://i.ibb.co/NF6WGzv/Tecnologia-Accesorios.jpg"
+    },
+    {
+      "id": 2,
+      "titulo": "Ropa y Calzado",
+      "imagen": "https://i.ibb.co/ns9qn8x/Ropay-Calzado.jpg"
+    },
+    {
+      "id": 3,
+      "titulo": "Ferreterías",
+      "imagen": "https://i.ibb.co/4V4LNBZ/Ferreterias.jpg"
+    },
+    {
+      "id": 4,
+      "titulo": "Mueblería y Colchonería",
+      "imagen": "https://i.ibb.co/0y7qWf0/Muebleriay-Colchoneria.jpg"
+    },
+    {
+      "id": 5,
+      "titulo": "Gimnasios y Deportes",
+      "imagen": "https://i.ibb.co/1vxr3xd/Gimnasios-Deporte.jpg"
+    },
+    {
+      "id": 6,
+      "titulo": "Estética Vehicular",
+      "imagen": "https://i.ibb.co/LpNVYsB/Estetica-Vehicular.jpg"
+    },
+    {
+      "id": 7,
+      "titulo": "Corralones y Constructoras",
+      "imagen": "https://i.ibb.co/hf8pCGB/Corralones-Constructoras.jpg"
+    },
+    {
+      "id": 8,
+      "titulo": "Deco y Hogar",
+      "imagen": "https://i.ibb.co/JH0wZXs/Deco-Hogar.jpg"
+    },
+    {
+      "id": 9,
+      "titulo": "Agro y campo",
+      "imagen": "https://i.ibb.co/Z6sqSPW/Agroy-Campo.jpg"
+    },
+    {
+      "id": 10,
+      "titulo": "Librerías y Mercerías",
+      "imagen": "https://i.ibb.co/HggTgDx/Librerias-Mercerias.jpg"
+    }
+  ]
