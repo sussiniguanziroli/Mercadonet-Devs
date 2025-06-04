@@ -1,6 +1,6 @@
 // src/services/providerService.js
 import { db } from '../firebase/config';
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { collection, doc, setDoc, serverTimestamp, addDoc } from "firebase/firestore";
 
 export const prepareProviderDataForFirestore = (formData, userId) => {
   const {
@@ -15,7 +15,7 @@ export const prepareProviderDataForFirestore = (formData, userId) => {
   const cleanTempIdFromFileObjects = (fileArray) => {
     return (fileArray || []).map(item => {
       if (typeof item !== 'object' || item === null) return item;
-      const { tempId, status, ...restOfItem } = item; // also removing status if it's client-side only
+      const { tempId, status, ...restOfItem } = item; 
       return restOfItem;
     });
   }
@@ -29,7 +29,7 @@ export const prepareProviderDataForFirestore = (formData, userId) => {
   }
 
   const providerData = {
-    userId: userId,
+    userId: userId, 
     nombreProveedor: datosGenerales.nombreProveedor || '',
     tipoRegistro: datosGenerales.tipoRegistro || '',
     tipoProveedor: datosGenerales.tipoProveedor || [],
@@ -91,8 +91,8 @@ export const prepareProviderDataForFirestore = (formData, userId) => {
     providerData.galeria = cleanTempIdFromFileObjects(cardSpecificData.galeria).map(item => ({
         titulo: item.titulo || '',
         precio: item.precio || '',
-        imagenURL: item.imagenURL || item.url || '', // Use imagenURL or url
-        url: item.url || item.imagenURL || '', // Ensure consistency
+        imagenURL: item.imagenURL || item.url || '', 
+        url: item.url || item.imagenURL || '', 
         tempStoragePath: item.tempPath || '',
         fileType: item.fileType || '',
         mimeType: item.mimeType || '',
@@ -106,21 +106,20 @@ export const prepareProviderDataForFirestore = (formData, userId) => {
   return providerData;
 };
 
-export const saveProviderProfileToFirestore = async (userId, providerData) => {
-  if (!userId) {
-    console.error("User ID es requerido para guardar el perfil del proveedor.");
-    throw new Error("User ID es requerido para guardar el perfil del proveedor.");
-  }
+export const saveProviderProfileToFirestore = async (providerData) => {
   if (!providerData) {
     console.error("Datos del proveedor son requeridos.");
     throw new Error("Datos del proveedor son requeridos.");
   }
+  if (!providerData.userId) {
+    console.error("providerData.userId es requerido para guardar el perfil del proveedor.");
+    throw new Error("providerData.userId es requerido para guardar el perfil del proveedor.");
+  }
 
   try {
-    const providerDocRef = doc(db, "proveedores", userId);
-    await setDoc(providerDocRef, providerData, { merge: true }); 
-    console.log("Perfil de proveedor guardado/actualizado en Firestore con ID: ", userId);
-    return { success: true, id: userId };
+    const newProviderDocRef = await addDoc(collection(db, "proveedores"), providerData);
+    console.log("Perfil de proveedor guardado en Firestore con ID autogenerado: ", newProviderDocRef.id);
+    return { success: true, id: newProviderDocRef.id };
   } catch (error) {
     console.error("Error guardando perfil de proveedor en Firestore: ", error);
     throw error; 

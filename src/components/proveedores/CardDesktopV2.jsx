@@ -138,16 +138,7 @@ const CardDesktopV2 = ({ proveedor }) => {
                     infinite={effectiveTotalSlidesPrincipal > 1}
                 >
                     <Slider>
-                        <Slide className='carousel-slide' index={0}>
-                            {tieneLogo ? (
-                                <img className='carousel-image' src={logoUrl} alt={`${nombre} Logo`} />
-                            ) : (
-                                <div className="carousel-placeholder">
-                                    <FaImage size={50} />
-                                    <span>Logo del Proveedor</span>
-                                </div>
-                            )}
-                        </Slide>
+
                         {tieneCarruselPrincipal && validCarruselItems.map((item, index) => (
                             <Slide className='carousel-slide' key={item.url ? `${item.url}-${index}` : index} index={index + 1}>
                                 {item.fileType === 'image' ? (

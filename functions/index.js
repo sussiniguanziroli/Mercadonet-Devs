@@ -15,11 +15,11 @@ exports.finalizeProviderRegistrationFiles = onDocumentCreated("proveedores/{user
       return null;
     }
 
-    const userId = event.params.userId;
+    const userId = event.params.userId; // This will now be the auto-generated document ID
     const providerData = snap.data();
 
     logger.log(
-      `[${userId}] Starting finalizeProviderRegistrationFiles for new provider (v2 syntax).`
+      `[${userId}] Starting finalizeProviderRegistrationFiles for new provider (v2 syntax). Document ID: ${userId}, Uploader UserID: ${providerData.userId}`
     );
 
     if (
@@ -34,7 +34,7 @@ exports.finalizeProviderRegistrationFiles = onDocumentCreated("proveedores/{user
 
     const updates = {};
     let allFilesProcessedSuccessfully = true;
-    const defaultBucket = storage.bucket(); 
+    const defaultBucket = storage.bucket();
 
     const processFile = async (
       fileObject, // Original file object from Firestore
@@ -42,15 +42,13 @@ exports.finalizeProviderRegistrationFiles = onDocumentCreated("proveedores/{user
     ) => {
       if (
         !fileObject ||
-        !fileObject.tempStoragePath || 
-        fileObject.isPermanent 
+        !fileObject.tempStoragePath ||
+        fileObject.isPermanent
       ) {
         logger.log(`[${userId}] Skipping file processing for object (no tempPath or already permanent):`, fileObject ? (fileObject.url || "No URL") : "No file object");
         const returnObject = { ...fileObject };
-        // If isPermanent is true, it should ideally already be clean of errorMoving.
-        // If no tempStoragePath, it was likely never meant for upload processing here.
         if(returnObject.isPermanent) delete returnObject.errorMoving;
-        return returnObject; 
+        return returnObject;
       }
 
       const tempPath = fileObject.tempStoragePath;
@@ -62,6 +60,7 @@ exports.finalizeProviderRegistrationFiles = onDocumentCreated("proveedores/{user
         logger.warn(`[${userId}] Could not decode filename: ${fileName}`, e);
       }
 
+      // The 'userId' here is event.params.userId, which is the auto-generated document ID
       const newPermanentPath = `providers/${userId}/${permanentFolder}/${fileName}`;
       const file = defaultBucket.file(tempPath);
       const newFile = defaultBucket.file(newPermanentPath);
@@ -78,7 +77,7 @@ exports.finalizeProviderRegistrationFiles = onDocumentCreated("proveedores/{user
 
         const processedFileData = {
           url: publicUrl,
-          tempStoragePath: '', 
+          tempStoragePath: '',
           permanentStoragePath: newPermanentPath,
           isPermanent: true,
         };
@@ -109,20 +108,20 @@ exports.finalizeProviderRegistrationFiles = onDocumentCreated("proveedores/{user
           error
         );
         allFilesProcessedSuccessfully = false;
-        return { 
-            ...fileObject, 
-            errorMoving: error.message, 
-            isPermanent: false 
-        }; 
+        return {
+            ...fileObject,
+            errorMoving: error.message,
+            isPermanent: false
+        };
       }
     };
 
     if (providerData.logo && providerData.logo.tempStoragePath && !providerData.logo.isPermanent) {
       updates["logo"] = await processFile(providerData.logo, "logos");
-    } else if (providerData.logo) { 
+    } else if (providerData.logo) {
       const cleanLogo = { ...providerData.logo };
       if(cleanLogo.isPermanent) delete cleanLogo.errorMoving;
-      updates["logo"] = cleanLogo; 
+      updates["logo"] = cleanLogo;
     }
 
 
@@ -131,10 +130,10 @@ exports.finalizeProviderRegistrationFiles = onDocumentCreated("proveedores/{user
       for (const item of providerData.carrusel) {
         if(item && item.tempStoragePath && !item.isPermanent) {
             processedCarrusel.push(await processFile(item, "carrusel_media"));
-        } else if (item) { // Ensure item is not null/undefined
+        } else if (item) { 
             const cleanItem = { ...item };
             if(cleanItem.isPermanent) delete cleanItem.errorMoving;
-            processedCarrusel.push(cleanItem); 
+            processedCarrusel.push(cleanItem);
         }
       }
       updates["carrusel"] = processedCarrusel;
@@ -145,7 +144,7 @@ exports.finalizeProviderRegistrationFiles = onDocumentCreated("proveedores/{user
       for (const item of providerData.galeria) {
          if(item && item.tempStoragePath && !item.isPermanent) {
             processedGaleria.push(await processFile(item, "galeria_productos"));
-        } else if (item) { // Ensure item is not null/undefined
+        } else if (item) { 
             const cleanItem = { ...item };
             if(cleanItem.isPermanent) delete cleanItem.errorMoving;
             processedGaleria.push(cleanItem);
@@ -169,7 +168,7 @@ exports.finalizeProviderRegistrationFiles = onDocumentCreated("proveedores/{user
         `[${userId}] CRITICAL: Error updating Firestore document AFTER file processing:`,
         error,
         "Data attempted for update:",
-        JSON.stringify(updates, null, 2) 
+        JSON.stringify(updates, null, 2)
       );
     }
     return null;

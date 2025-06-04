@@ -40,7 +40,7 @@ const Qsmnet = () => {
                 </p>
             </section>
             <section className='seccion-imagen-containers'>
-                <img  src="https://i.imgur.com/DWCcK3h.png" alt="containers bandera" />
+                <img  src="https://i.ibb.co/rKCLmBh7/Container-Argentina.png" alt="containers bandera" />
             </section>
             <section className='seccion-simplificamos-mayorista'>
                 <h1>Simplificamos el Comercio Mayorista</h1>
