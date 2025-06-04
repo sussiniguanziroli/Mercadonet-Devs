@@ -473,7 +473,8 @@ $dropdown-shadow: 0 4px 12px rgba(0,0,0,0.15);
         gap: 12px;
 
         .titles-box {
-            padding-top: 10px;
+            max-width: 79%;
+            padding-top: 3px;
             width: fit-content;
             display: grid;
             grid-template-columns: 60px 1fr auto;
@@ -482,13 +483,13 @@ $dropdown-shadow: 0 4px 12px rgba(0,0,0,0.15);
                 'logo-small h3 verificado tags'
                 'logo-small p p p';
             align-items: center;
-            column-gap: 7px;
+            column-gap: 5px;
             row-gap: 1px;
 
             .tags-box {
                 grid-area: tags;
                 margin: 4px 0;
-
+                width: fit-content;
                 img {
                     margin: .5px;
                     height: 1.6rem;
@@ -498,7 +499,7 @@ $dropdown-shadow: 0 4px 12px rgba(0,0,0,0.15);
             }
 
             .verificado {
-                width: 85px;
+                width: 75px;
                 grid-area: verificado;
             }
 
@@ -521,7 +522,7 @@ $dropdown-shadow: 0 4px 12px rgba(0,0,0,0.15);
                 font-family: 'Montserrat', sans-serif;
                 grid-area: h3;
                 color: $text-gray;
-
+                min-width: 100px;
                 &:hover {
                     text-decoration: underline;
                     cursor: pointer;

@@ -24,7 +24,7 @@ const tipoTagsDisplay = {
 const servicioTagsDisplay = {
     // Generic "Servicios" tag, to be shown if tipoRegistro is 'servicios'
     'ServiciosGeneral': { 
-        src: 'https://luisgarcia-d.com/wp-content/uploads/2022/05/Pagina-1-1568x474.png',
+        src: 'https://i.ibb.co/KpPRH1Gw/Malditos-Mentidores-removebg-preview.png',
         alt: 'Servicios',
         className: 'tag-distroficial' // Or a more generic class
     },

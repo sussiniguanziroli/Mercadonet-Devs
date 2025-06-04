@@ -2311,7 +2311,7 @@
   /* Color para el dot activo o hover */
 }
 .proveedor-item-desktop .info-box {
-  width: 75%;
+  width: 65%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -2368,6 +2368,10 @@
   height: 1.7rem;
   border-radius: 2px;
 }
+.proveedor-item-desktop .info-box .texts-box {
+  max-width: inherit;
+  width: 100%;
+}
 .proveedor-item-desktop .info-box .texts-box .marcas {
   color: #2c2c2c;
   border: none;
@@ -2375,6 +2379,10 @@
 .proveedor-item-desktop .info-box .texts-box .description {
   color: #2c2c2c;
   font-weight: 470;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-wrap: wrap;
 }
 .proveedor-item-desktop .info-box .texts-box .extras {
   display: flex;
@@ -2846,19 +2854,21 @@
   gap: 12px;
 }
 .proveedor-item-desktop-v2 .info-box .titles-box {
-  padding-top: 10px;
+  max-width: 79%;
+  padding-top: 3px;
   width: fit-content;
   display: grid;
   grid-template-columns: 60px 1fr auto;
   grid-template-rows: auto auto;
   grid-template-areas: "logo-small h3 verificado tags" "logo-small p p p";
   align-items: center;
-  column-gap: 7px;
+  column-gap: 5px;
   row-gap: 1px;
 }
 .proveedor-item-desktop-v2 .info-box .titles-box .tags-box {
   grid-area: tags;
   margin: 4px 0;
+  width: fit-content;
 }
 .proveedor-item-desktop-v2 .info-box .titles-box .tags-box img {
   margin: 0.5px;
@@ -2866,7 +2876,7 @@
   border-radius: 2px;
 }
 .proveedor-item-desktop-v2 .info-box .titles-box .verificado {
-  width: 85px;
+  width: 75px;
   grid-area: verificado;
 }
 .proveedor-item-desktop-v2 .info-box .titles-box .small-logo-box {
@@ -2886,6 +2896,7 @@
   font-family: "Montserrat", sans-serif;
   grid-area: h3;
   color: #2c2c2c;
+  min-width: 100px;
 }
 .proveedor-item-desktop-v2 .info-box .titles-box h3:hover {
   text-decoration: underline;
@@ -3992,7 +4003,7 @@
   border-radius: 2px;
 }
 .card-historia-preview .info-box .texts-box {
-  margin-top: 16px;
+  margin-top: 8px;
   width: 100%;
   max-width: 360px;
 }

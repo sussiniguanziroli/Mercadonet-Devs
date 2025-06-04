@@ -3,7 +3,7 @@ import { IoLocationOutline } from 'react-icons/io5';
 import { FaArrowLeft, FaArrowRight, FaImage, FaImages } from "react-icons/fa";
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext, DotGroup } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
-import  RegisterTags from '../assetsRegistro/RegisterTags';
+import RegisterTags from '../assetsRegistro/RegisterTags';
 
 
 const CardHistoriaPreview = ({ proveedor }) => {
@@ -109,12 +109,12 @@ const CardHistoriaPreview = ({ proveedor }) => {
                     {/* RegisterTags consume varias props de proveedor */}
                     <RegisterTags proveedor={proveedor} />
                 </div>
-                
+
                 <div className="texts-box">
                     {descripcion ? (
                         <p className="description">
-                            {descripcion.length > 540
-                                ? `${descripcion.substring(0, 540)}...`
+                            {descripcion.length > 500
+                                ? `${descripcion.substring(0, 500)}...`
                                 : descripcion
                             }
                         </p>
@@ -124,7 +124,15 @@ const CardHistoriaPreview = ({ proveedor }) => {
                         <div className="marcas alineado-auto"><h4>Marcas:</h4> {marca.slice(0, 5).map((m, i) => <p key={`${m}-${i}`}>{m}</p>)}{marca.length > 5 && <p>...</p>}</div>
                     )}
                     {Array.isArray(extras) && extras.length > 0 && (
-                        <div className="extras alineado-auto"><h4>Servicios/Extras:</h4> {extras.slice(0, 4).map((e, i) => (<p key={`${e}-${i}`} className="tag-extra">{e}</p>))}{extras.length > 4 && <p className="tag-extra">...</p>}</div>
+                        <div className="extras alineado-auto">
+                            <h4>Servicios/Extras:</h4>
+                            {extras.slice(0, 2).map((e, i) => (
+                                <p key={`${e}-${i}`} className="tag-extra">{e}</p>
+                            ))}
+                            {extras.length > 2 && (
+                                <p className="tag-extra">...</p>
+                            )}
+                        </div>
                     )}
                     {!descripcion && (!marca || marca.length === 0) && (!extras || extras.length === 0) && (
                         <p className='placeholder-text'>(Aquí aparecerá tu descripción, marcas y servicios)</p>

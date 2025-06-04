@@ -259,7 +259,7 @@
         }
 
         .texts-box {
-            margin-top: 16px;
+            margin-top: 8px;
             width: 100%;
             max-width: 360px;
             .marcas {
@@ -271,8 +271,8 @@
                 color: $text-gray;
                 font-weight: 470;
                 word-wrap: break-word;  // asegura que corte palabras largas
-                    overflow-wrap: break-word;
-                    white-space: normal;
+                overflow-wrap: break-word;
+                white-space: normal;
                 p {
                     width: 100%;
                     word-wrap: break-word;  // asegura que corte palabras largas

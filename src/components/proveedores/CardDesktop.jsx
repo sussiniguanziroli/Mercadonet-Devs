@@ -25,6 +25,12 @@ const CardDesktop = ({ proveedor }) => {
         id
     } = proveedor;
 
+    const maxLength = 700;
+
+    const truncatedDescription = descripcionGeneral?.length > maxLength
+        ? descripcionGeneral.substring(0, maxLength) + '...'
+        : descripcionGeneral || 'Descripción no disponible';
+
     const proveedorPageLink = id ? `/proveedor/${id}` : '#';
 
     const logoUrl = logo?.url;
@@ -112,19 +118,25 @@ const CardDesktop = ({ proveedor }) => {
                     <Tags proveedor={proveedor} />
                 </div>
                 <div className='texts-box'>
-                    {descripcionGeneral && <p className='description'>{descripcionGeneral}</p>}
+                    {descripcionGeneral && <p className='description'>{truncatedDescription}</p>}
                     {Array.isArray(marcasConfiguradas) && marcasConfiguradas.length > 0 && (
                         <div className='marcas alineado-auto'>
                             <h4>Marcas:</h4>
-                            {marcasConfiguradas.map((m, i) => <p key={`${m}-${i}`}>{m}{i < marcasConfiguradas.length - 1 ? ',' : ''}</p>)}
+                            <p>
+                                {marcasConfiguradas.slice(0, 8).join(', ')}
+                                {marcasConfiguradas.length > 8 && ` +${marcasConfiguradas.length - 8}`}
+                            </p>
                         </div>
                     )}
                     {Array.isArray(extrasConfigurados) && extrasConfigurados.length > 0 && (
                         <div className='extras alineado-auto'>
-                            <h4>Servicios y Capacidades: </h4>
-                            {extrasConfigurados.map((extra, index) => (
+                            <h4>Servicios y Capacidades:</h4>
+                            {extrasConfigurados.slice(0, 3).map((extra, index) => (
                                 <p key={index} className='tag-extra'>{extra}</p>
                             ))}
+                            {extrasConfigurados.length > 3 && (
+                                <p className='tag-extra'>+{extrasConfigurados.length - 3} más</p>
+                            )}
                         </div>
                     )}
                 </div>

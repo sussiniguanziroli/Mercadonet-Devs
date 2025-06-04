@@ -115,6 +115,7 @@
             color: $text-gray;
             font-weight: 470;
             font-size: 1.2rem;
+            
         }
 
         .extras {
@@ -294,7 +295,7 @@
     }
 
     .info-box {
-        width: 75%;
+        width: 65%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -364,6 +365,8 @@
         }
 
         .texts-box {
+            max-width: inherit;
+            width: 100%;
             .marcas {
                 color: $text-gray;
                 border: none;
@@ -372,6 +375,10 @@
             .description {
                 color: $text-gray;
                 font-weight: 470;
+                word-wrap: break-word;  // asegura que corte palabras largas
+                overflow-wrap: break-word;
+                white-space: normal;
+                text-wrap: wrap;
             }
 
             .extras {
