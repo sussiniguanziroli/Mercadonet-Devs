@@ -53,7 +53,7 @@ const Header = () => {
 
     const navigateToProfile = () => {
         setIsProfileDropdownOpen(false);
-        navigate('/perfil'); // Placeholder for profile page
+        navigate('/dashboard/perfil'); // Placeholder for profile page
     };
 
     return (

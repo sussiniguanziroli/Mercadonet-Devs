@@ -1,9 +1,9 @@
 .proveedores-list-container {
+    width: 100%;
 
     .proveedores-list {
         width: 100%;
         min-height: 150vh;
-        
         .loader {
             display: flex;
             justify-content: center;
@@ -83,10 +83,9 @@
             display: flex;
             flex-direction: column;
             gap: 24px;
-            margin-left: 16px;
-            margin-top: 16px;
-            padding: 16px;
-            width: 25%;
+            margin-left: 12px;
+            margin-top: 12px;
+            width: 15%;
             max-width: 410px;
 
             // SERVICIOS ------------

@@ -11,7 +11,6 @@
 @import "./components/proveedoresListContainer";
 @import "./components/filtrosComponent";
 @import "./components/proveedor";
-@import "./components/admin";
 @import "./components/newsCarousel";
 @import "./components/csimpleCard";
 @import "./components/complexCard";
@@ -103,7 +102,7 @@ $scrollbar-thumb-active: #5c5c5c;
 
 @media (min-width: 1500px) {
     html {
-        font-size: 15px;
+        font-size: 12px;
     }
     * {
 

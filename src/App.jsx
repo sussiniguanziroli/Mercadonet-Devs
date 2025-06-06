@@ -15,9 +15,9 @@ import RegistrosProveedorNavigator from './components/registroProveedor/Registro
 import LandingRegistroProveedor from './components/registroProveedor/LandingRegistroProveedor';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
-import Dashboard from './components/dashboard/Dashboard';
 import ProductosLanding from './components/productos/ProductosLanding';
 import ProveedorPage from './components/proveedorPage/ProveedorPage';
+import DashboardWrapper from './components/dashboard/DashboardIndex';
 
 function App() {
 
@@ -46,9 +46,9 @@ function App() {
                                 />
                                 <Route path="/proveedor/:proveedorId" element={<ProveedorPage />} />
 
-                                <Route path="/perfil/*" element={
+                                <Route path="/dashboard/*" element={
                                     <ProtectedRoute>
-                                        <Dashboard />
+                                        <DashboardWrapper />
                                     </ProtectedRoute>
                                 } />
 

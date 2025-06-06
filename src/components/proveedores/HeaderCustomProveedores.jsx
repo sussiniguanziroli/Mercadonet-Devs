@@ -209,7 +209,7 @@ const HeaderCustomProveedores = () => {
     
     const navigateToProfile = () => {
         setIsProfileDropdownOpen(false);
-        navigate('/perfil'); 
+        navigate('/dashboard/perfil'); 
     };
 
     const formatSuggestionCategory = (suggestion) => {
