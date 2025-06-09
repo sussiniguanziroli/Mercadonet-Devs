@@ -77,7 +77,7 @@
   gap: 1.5rem;
 }
 .header .nav-container .nav-link {
-  font-size: 0.89rem;
+  font-size: 1rem;
   color: #FFFFFF;
   text-decoration: none;
   white-space: nowrap;
@@ -511,7 +511,7 @@
   color: #FFFFFF;
 }
 .main-categorias h1 {
-  font-size: 3.7rem;
+  font-size: 4rem;
   margin: 2.2rem;
   text-align: center;
   margin-top: 6rem;
@@ -521,7 +521,7 @@
   margin-top: 0.5rem;
   margin: 1.3rem;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   letter-spacing: 0.5px;
 }
 .main-categorias section {
@@ -610,11 +610,12 @@
     grid-template-columns: repeat(5, 1fr);
   }
   .div-de-grid .categorias-contenido img {
-    width: 30%;
+    width: 40%;
     height: 100%;
+    object-fit: cover;
   }
   .div-de-grid .categorias-contenido p {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     margin: 1rem;
     padding: 0.5rem;
     padding-right: 0;
@@ -634,7 +635,7 @@
     padding: 0.5rem;
   }
   .div-de-grid .cat-iconos p {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     padding: 0.5rem;
     width: 85%;
   }
@@ -723,10 +724,10 @@
     grid-template-areas: "seccion-que-es seccion-imagen-containers" "seccion-contador seccion-simplificamos-mayorista";
   }
   .seccion-que-es h1 {
-    font-size: 1.9rem;
+    font-size: 2rem;
   }
   .seccion-que-es p {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
   .seccion-imagen-containers {
     width: 70%;
@@ -737,10 +738,10 @@
     padding: 1rem;
   }
   .seccion-simplificamos-mayorista h1 {
-    font-size: 1.9rem;
+    font-size: 2rem;
   }
   .seccion-simplificamos-mayorista p {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
   .seccion-contador {
     margin: 1rem;
@@ -757,11 +758,11 @@
   .seccion-contador .contadores strong {
     color: #FF7F00;
     font-weight: 800;
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-family: "Roboto", system-ui;
   }
   .seccion-contador .contadores p {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     color: #474747;
     font-weight: 550;
   }
@@ -2201,7 +2202,7 @@
   /* Color para el dot activo o hover */
 }
 .proveedor-item-desktop .info-box {
-  width: 60%;
+  width: 65%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -2241,6 +2242,7 @@
   font-family: "Montserrat", sans-serif;
   grid-area: h3;
   color: #2c2c2c;
+  font-size: 1.3rem;
 }
 .proveedor-item-desktop .info-box .titles-box h3:hover {
   text-decoration: underline;
@@ -2249,6 +2251,7 @@
 .proveedor-item-desktop .info-box .titles-box p {
   color: #2c2c2c;
   grid-area: p;
+  font-size: 1.1rem;
 }
 .proveedor-item-desktop .info-box .tags-box {
   margin: 7px 0;
@@ -2795,6 +2798,7 @@
   grid-area: h3;
   color: #2c2c2c;
   min-width: 100px;
+  font-size: 1.3rem;
 }
 .proveedor-item-desktop-v2 .info-box .titles-box h3:hover {
   text-decoration: underline;
@@ -2803,6 +2807,7 @@
 .proveedor-item-desktop-v2 .info-box .titles-box p {
   color: #2c2c2c;
   grid-area: p;
+  font-size: 1.1rem;
 }
 .proveedor-item-desktop-v2 .info-box .products-box {
   width: 100%;
@@ -6497,7 +6502,7 @@
 }
 
 html {
-  font-size: 10px;
+  font-size: 16px;
 }
 
 @media (min-width: 400px) {
@@ -6559,8 +6564,6 @@ html {
   .app-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     /* Ancho máximo */
   }
 }
