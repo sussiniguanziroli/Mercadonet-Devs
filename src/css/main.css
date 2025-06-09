@@ -2311,7 +2311,7 @@
   cursor: pointer;
 }
 .proveedor-item-desktop .buttons-box a:hover {
-  background-color: rgb(5.0857142857, 43.2285714286, 83.9142857143);
+  background-color: #052b54;
   /* Oscurece al hacer hover */
 }
 .proveedor-item-desktop .alineado-auto {
@@ -2977,7 +2977,7 @@
   cursor: pointer;
 }
 .proveedor-item-desktop-v2 .buttons-box a:hover {
-  background-color: rgb(5.0857142857, 43.2285714286, 83.9142857143);
+  background-color: #052b54;
   /* Oscurece al hacer hover */
 }
 .proveedor-item-desktop-v2 .alineado-auto {
@@ -4468,7 +4468,7 @@
   text-align: center;
   position: relative;
   padding: 15px;
-  background-color: rgb(240.8697674419, 242.6, 244.3302325581);
+  background-color: #f1f3f4;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
   cursor: pointer;
@@ -4479,8 +4479,8 @@
   justify-content: center;
 }
 .file-uploader-container:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
-  background-color: rgb(235.0581395349, 237.5, 239.9418604651);
+  border-color: #b1bbc4;
+  background-color: #ebeef0;
 }
 .file-uploader-container .file-input-content {
   display: flex;
@@ -4687,7 +4687,7 @@
 .registro-form input[type=number]::placeholder,
 .registro-form textarea::placeholder,
 .registro-form select::placeholder {
-  color: rgb(168.8445945946, 177.25, 185.6554054054);
+  color: #a9b1ba;
   opacity: 0.9;
 }
 .registro-form input[type=text]:focus,
@@ -4697,7 +4697,7 @@
 .registro-form input[type=number]:focus,
 .registro-form textarea:focus,
 .registro-form select:focus {
-  border-color: rgb(133.1, 183.45, 244.4);
+  border-color: #85b7f4;
   outline: none;
   box-shadow: 0 0 0 0.25rem rgba(20, 115, 230, 0.25);
 }
@@ -4708,7 +4708,7 @@
 .registro-form input[type=number]:hover,
 .registro-form textarea:hover,
 .registro-form select:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
+  border-color: #b1bbc4;
 }
 .registro-form textarea {
   min-height: 100px;
@@ -4771,8 +4771,8 @@
   border: 1px solid #1473e6;
 }
 .registro-form .botones-navegacion button[type=submit]:hover {
-  background-color: rgb(16.736, 96.232, 192.464);
-  border-color: rgb(16.736, 96.232, 192.464);
+  background-color: #1160c0;
+  border-color: #1160c0;
 }
 .registro-form .botones-navegacion button[type=submit]:focus-visible {
   outline: none;
@@ -4825,7 +4825,7 @@
   text-align: center;
   position: relative;
   padding: 15px;
-  background-color: rgb(240.8697674419, 242.6, 244.3302325581);
+  background-color: #f1f3f4;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
   cursor: pointer;
@@ -4836,8 +4836,8 @@
   justify-content: center;
 }
 .file-uploader-container:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
-  background-color: rgb(235.0581395349, 237.5, 239.9418604651);
+  border-color: #b1bbc4;
+  background-color: #ebeef0;
 }
 .file-uploader-container .file-input-content {
   display: flex;
@@ -5044,7 +5044,7 @@
 .registro-form input[type=number]::placeholder,
 .registro-form textarea::placeholder,
 .registro-form select::placeholder {
-  color: rgb(168.8445945946, 177.25, 185.6554054054);
+  color: #a9b1ba;
   opacity: 0.9;
 }
 .registro-form input[type=text]:focus,
@@ -5054,7 +5054,7 @@
 .registro-form input[type=number]:focus,
 .registro-form textarea:focus,
 .registro-form select:focus {
-  border-color: rgb(133.1, 183.45, 244.4);
+  border-color: #85b7f4;
   outline: none;
   box-shadow: 0 0 0 0.25rem rgba(20, 115, 230, 0.25);
 }
@@ -5065,7 +5065,7 @@
 .registro-form input[type=number]:hover,
 .registro-form textarea:hover,
 .registro-form select:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
+  border-color: #b1bbc4;
 }
 .registro-form textarea {
   min-height: 100px;
@@ -5128,8 +5128,8 @@
   border: 1px solid #1473e6;
 }
 .registro-form .botones-navegacion button[type=submit]:hover {
-  background-color: rgb(16.736, 96.232, 192.464);
-  border-color: rgb(16.736, 96.232, 192.464);
+  background-color: #1160c0;
+  border-color: #1160c0;
 }
 .registro-form .botones-navegacion button[type=submit]:focus-visible {
   outline: none;
@@ -5215,7 +5215,7 @@
   text-align: center;
   position: relative;
   padding: 15px;
-  background-color: rgb(240.8697674419, 242.6, 244.3302325581);
+  background-color: #f1f3f4;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
   cursor: pointer;
@@ -5226,8 +5226,8 @@
   justify-content: center;
 }
 .file-uploader-container:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
-  background-color: rgb(235.0581395349, 237.5, 239.9418604651);
+  border-color: #b1bbc4;
+  background-color: #ebeef0;
 }
 .file-uploader-container .file-input-content {
   display: flex;
@@ -5434,7 +5434,7 @@
 .registro-form input[type=number]::placeholder,
 .registro-form textarea::placeholder,
 .registro-form select::placeholder {
-  color: rgb(168.8445945946, 177.25, 185.6554054054);
+  color: #a9b1ba;
   opacity: 0.9;
 }
 .registro-form input[type=text]:focus,
@@ -5444,7 +5444,7 @@
 .registro-form input[type=number]:focus,
 .registro-form textarea:focus,
 .registro-form select:focus {
-  border-color: rgb(133.1, 183.45, 244.4);
+  border-color: #85b7f4;
   outline: none;
   box-shadow: 0 0 0 0.25rem rgba(20, 115, 230, 0.25);
 }
@@ -5455,7 +5455,7 @@
 .registro-form input[type=number]:hover,
 .registro-form textarea:hover,
 .registro-form select:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
+  border-color: #b1bbc4;
 }
 .registro-form textarea {
   min-height: 100px;
@@ -5518,8 +5518,8 @@
   border: 1px solid #1473e6;
 }
 .registro-form .botones-navegacion button[type=submit]:hover {
-  background-color: rgb(16.736, 96.232, 192.464);
-  border-color: rgb(16.736, 96.232, 192.464);
+  background-color: #1160c0;
+  border-color: #1160c0;
 }
 .registro-form .botones-navegacion button[type=submit]:focus-visible {
   outline: none;
@@ -5572,7 +5572,7 @@
   text-align: center;
   position: relative;
   padding: 15px;
-  background-color: rgb(240.8697674419, 242.6, 244.3302325581);
+  background-color: #f1f3f4;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
   height: 140px;
@@ -5580,8 +5580,8 @@
   padding: 10px;
 }
 .form-section .input-logo:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
-  background-color: rgb(235.0581395349, 237.5, 239.9418604651);
+  border-color: #b1bbc4;
+  background-color: #ebeef0;
 }
 .form-section .input-logo .file-input-content {
   display: flex;
@@ -5618,7 +5618,7 @@
   text-align: center;
   position: relative;
   padding: 15px;
-  background-color: rgb(240.8697674419, 242.6, 244.3302325581);
+  background-color: #f1f3f4;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
   height: 180px;
@@ -5626,8 +5626,8 @@
   padding: 15px;
 }
 .form-section .input-carrusel:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
-  background-color: rgb(235.0581395349, 237.5, 239.9418604651);
+  border-color: #b1bbc4;
+  background-color: #ebeef0;
 }
 .form-section .input-carrusel .file-input-content {
   display: flex;
@@ -5668,7 +5668,7 @@
   text-align: center;
   position: relative;
   padding: 15px;
-  background-color: rgb(240.8697674419, 242.6, 244.3302325581);
+  background-color: #f1f3f4;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
   cursor: pointer;
@@ -5679,8 +5679,8 @@
   justify-content: center;
 }
 .file-uploader-container:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
-  background-color: rgb(235.0581395349, 237.5, 239.9418604651);
+  border-color: #b1bbc4;
+  background-color: #ebeef0;
 }
 .file-uploader-container .file-input-content {
   display: flex;
@@ -5887,7 +5887,7 @@
 .registro-form input[type=number]::placeholder,
 .registro-form textarea::placeholder,
 .registro-form select::placeholder {
-  color: rgb(168.8445945946, 177.25, 185.6554054054);
+  color: #a9b1ba;
   opacity: 0.9;
 }
 .registro-form input[type=text]:focus,
@@ -5897,7 +5897,7 @@
 .registro-form input[type=number]:focus,
 .registro-form textarea:focus,
 .registro-form select:focus {
-  border-color: rgb(133.1, 183.45, 244.4);
+  border-color: #85b7f4;
   outline: none;
   box-shadow: 0 0 0 0.25rem rgba(20, 115, 230, 0.25);
 }
@@ -5908,7 +5908,7 @@
 .registro-form input[type=number]:hover,
 .registro-form textarea:hover,
 .registro-form select:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
+  border-color: #b1bbc4;
 }
 .registro-form textarea {
   min-height: 100px;
@@ -5971,8 +5971,8 @@
   border: 1px solid #1473e6;
 }
 .registro-form .botones-navegacion button[type=submit]:hover {
-  background-color: rgb(16.736, 96.232, 192.464);
-  border-color: rgb(16.736, 96.232, 192.464);
+  background-color: #1160c0;
+  border-color: #1160c0;
 }
 .registro-form .botones-navegacion button[type=submit]:focus-visible {
   outline: none;
@@ -6062,7 +6062,7 @@
   text-align: center;
   position: relative;
   padding: 15px;
-  background-color: rgb(240.8697674419, 242.6, 244.3302325581);
+  background-color: #f1f3f4;
   transition: border-color 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
   height: 100px;
@@ -6070,8 +6070,8 @@
   margin-bottom: 8px;
 }
 .producto-card .custom-file-upload:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
-  background-color: rgb(235.0581395349, 237.5, 239.9418604651);
+  border-color: #b1bbc4;
+  background-color: #ebeef0;
 }
 .producto-card .custom-file-upload .file-input-content {
   display: flex;
@@ -6157,16 +6157,16 @@
   padding: 8px 10px;
 }
 .producto-card input[type=text]::placeholder {
-  color: rgb(168.8445945946, 177.25, 185.6554054054);
+  color: #a9b1ba;
   opacity: 0.9;
 }
 .producto-card input[type=text]:focus {
-  border-color: rgb(133.1, 183.45, 244.4);
+  border-color: #85b7f4;
   outline: none;
   box-shadow: 0 0 0 0.25rem rgba(20, 115, 230, 0.25);
 }
 .producto-card input[type=text]:hover {
-  border-color: rgb(176.9418604651, 186.5, 196.0581395349);
+  border-color: #b1bbc4;
 }
 
 .section-plans-title {
@@ -6314,7 +6314,7 @@
   color: rgba(255, 255, 255, 0.85);
 }
 .plan-card--popular .plan-feature-list .plan-feature-icon {
-  color: rgb(113.4130434783, 221.0869565217, 138);
+  color: #71dd8a;
 }
 .plan-card--popular .plan-button {
   background-color: transparent !important;
@@ -6448,7 +6448,7 @@
 }
 .MuiPaper-elevation3 .MuiBox-root > .MuiButton-outlined:hover {
   background-color: rgba(0, 0, 0, 0.04);
-  border-color: rgb(46.3065326633, 48.256281407, 50.6934673367);
+  border-color: #2e3033;
 }
 .MuiPaper-elevation3 .MuiBox-root > .MuiButton-textError {
   font-weight: 500;
@@ -6459,7 +6459,7 @@
   font-weight: 500;
 }
 .MuiPaper-elevation3 .MuiBox-root > .MuiButton-containedPrimary:hover {
-  background-color: rgb(9.1896551724, 50.1896551724, 113.8103448276);
+  background-color: #093272;
 }
 .MuiPaper-elevation3 .MuiBox-root > .MuiButton-containedPrimary.Mui-disabled {
   background-color: rgba(0, 0, 0, 0.12);
