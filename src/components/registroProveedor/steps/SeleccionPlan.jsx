@@ -92,17 +92,15 @@ const SeleccionPlan = ({ initialData, onNext, onBack }) => {
                     const cardClasses = `plan-card ${plan.isPopular ? 'plan-card--popular' : 'plan-card--base'} ${isSelected ? 'plan-card--selected' : ''}`;
 
                     return (
-                        <Grid item key={plan.id} xs={12} sm={7} md={plan.isPopular ? 4.5 : 3.5}>
+                        <Grid item key={plan.id} xs={12} sm={6} md={6} lg={5}>
                             <Card
                                 className={cardClasses}
                                 onClick={() => handlePlanCardSelection(plan.id)}
-                                sx={{ // Mantener solo SX que no colisionen con SASS o sean para layout básico
+                                sx={{
                                     height: '100%',
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    position: 'relative', // Necesario para el Chip absoluto
-                                    // cursor: 'pointer', // Ya definido en SASS .plan-card
-                                    // transiciones, borders, shadows, transform manejados por SASS
+                                    position: 'relative',
                                 }}
                             >
                                 {plan.isPopular && plan.tag && (
