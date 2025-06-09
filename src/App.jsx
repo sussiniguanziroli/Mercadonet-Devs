@@ -17,7 +17,10 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import ProductosLanding from './components/productos/ProductosLanding';
 import ProveedorPage from './components/proveedorPage/ProveedorPage';
-import DashboardWrapper from './components/dashboard/DashboardIndex';
+import MainDashboard from './components/dashboard/MainDashboard';
+import Home from './components/dashboard/pages/Home';
+import Perfil from './components/dashboard/pages/Perfil';
+import MiEmpresa from './components/dashboard/pages/MiEmpresa';
 
 function App() {
 
@@ -46,11 +49,18 @@ function App() {
                                 />
                                 <Route path="/proveedor/:proveedorId" element={<ProveedorPage />} />
 
-                                <Route path="/dashboard/*" element={
-                                    <ProtectedRoute>
-                                        <DashboardWrapper />
-                                    </ProtectedRoute>
-                                } />
+                                <Route
+                                    path="/dashboard"
+                                    element={
+                                        <ProtectedRoute>
+                                            <MainDashboard />
+                                        </ProtectedRoute>
+                                    }
+                                >
+                                    <Route index element={<Home />} />
+                                    <Route path="perfil" element={<Perfil />} />
+                                    <Route path="mi-empresa" element={<MiEmpresa />} />
+                                </Route>
 
                                 <Route path='/productos' element={<ProductosLanding />} />
 
