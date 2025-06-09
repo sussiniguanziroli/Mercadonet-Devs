@@ -549,7 +549,7 @@ $dropdown-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
                 grid-area: h3;
                 color: $text-gray;
                 min-width: 100px;
-
+                font-size: 1.3rem;
                 &:hover {
                     text-decoration: underline;
                     cursor: pointer;
@@ -559,6 +559,7 @@ $dropdown-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             p {
                 color: $text-gray;
                 grid-area: p;
+                font-size: 1.1rem;
             }
         }
 
