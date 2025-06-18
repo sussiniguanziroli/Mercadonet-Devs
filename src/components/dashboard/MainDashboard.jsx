@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import DashboardLayout from './DashboardLayout';
-import Menu from '../header/Menu'; 
+import Menu from '../header/Menu';
 import Footer from '../footer/Footer';
 import Header from '../header/Header';
 import { Box, Paper, ThemeProvider, createTheme } from '@mui/material';
@@ -36,24 +36,27 @@ const MainDashboard = () => {
                 divider: 'rgba(255, 255, 255, 0.12)',
               }),
         },
+        typography: {
+          fontFamily: 'Inter, sans-serif', // Ensure Inter font is used
+        },
       }, esES),
     [mode]
   );
 
   return (
-    <Box 
-      sx={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
         minHeight: '100vh',
-        backgroundColor: '#131923'
+        backgroundColor: '#131923' // Keep original background color for the outer box
       }}
     >
       <Header />
       <Menu />
-      
+
       <Box component="main" sx={{ py: 3, px: 3, flex: 1 }}>
-        {/* The ThemeProvider still wraps the dashboard, so only it and its 
+        {/* The ThemeProvider still wraps the dashboard, so only it and its
             children will be affected by the theme toggle. */}
         <ThemeProvider theme={dashboardTheme}>
           <Paper elevation={8} sx={{ borderRadius: '12px', overflow: 'hidden' }}>
@@ -61,7 +64,7 @@ const MainDashboard = () => {
           </Paper>
         </ThemeProvider>
       </Box>
-      
+
       <Box component="footer" sx={{ mt: 'auto' }}>
          <Footer />
       </Box>
