@@ -58,39 +58,27 @@ function App() {
                   element={<ProveedorPage />}
                 />
 
-                {/* UPDATED DASHBOARD ROUTES */}
-                <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <MainDashboard />
-                    </ProtectedRoute>
-                  }
-                >
-                  {/* Dashboard Landing Page */}
-                  <Route index element={<Home />} />
+                 {/* Dashboard Routes - MainDashboard will handle its own Header, Menu, Footer internally */}
+                                <Route
+                                    path="/dashboard"
+                                    element={
+                                        <ProtectedRoute>
+                                            <MainDashboard />
+                                        </ProtectedRoute>
+                                    }
+                                >
+                                    {/* Dashboard Landing Page */}
+                                    <Route index element={<Home />} />
 
-                  {/* Perfil Personal Section */}
-                  <Route
-                    path="perfil-personal"
-                    element={<MiPerfilPersonal />}
-                  />
-                  <Route
-                    path="perfil-personal/financiero"
-                    element={<InfoFinancieraPersonal />}
-                  />
+                                    {/* Perfil Personal Section */}
+                                    <Route path="perfil-personal" element={<MiPerfilPersonal />} />
+                                    <Route path="perfil-personal/financiero" element={<InfoFinancieraPersonal />} />
 
-                  {/* Mi Empresa Section */}
-                  <Route path="mi-empresa" element={<MiEmpresaOverview />} />
-                  <Route
-                    path="mi-empresa/personalizar-card"
-                    element={<MiEmpresaCardCustomization />}
-                  />
-                  <Route
-                    path="mi-empresa/productos"
-                    element={<MiEmpresaProducts />}
-                  />
-                </Route>
+                                    {/* Mi Empresa Section - New routes with :proveedorId */}
+                                    <Route path="mi-empresa" element={<MiEmpresaOverview />} />
+                                    <Route path="mi-empresa/:proveedorId/personalizar-card" element={<MiEmpresaCardCustomization />} />
+                                    <Route path="mi-empresa/:proveedorId/productos" element={<MiEmpresaProducts />} />
+                                </Route>
 
                 <Route path="/productos" element={<ProductosLanding />} />
               </Routes>

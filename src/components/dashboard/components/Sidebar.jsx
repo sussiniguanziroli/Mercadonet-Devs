@@ -1,15 +1,52 @@
 // src/components/dashboard/components/Sidebar.jsx
 
-import React from 'react';
-import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import React, { useState, useEffect } from 'react'; // Import useEffect
+import { Sidebar as ProSidebar, Menu, MenuItem } from 'react-pro-sidebar'; // Removed SubMenu as we're using direct items/typography
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { Home, AccountCircle, Business, MenuOutlined, AttachMoney, Edit, LocalMall } from '@mui/icons-material';
-import { Typography, Box } from '@mui/material'; // Import Box and Typography for subtitles
+import { Typography, Box } from '@mui/material';
+import { useAuth } from '../../../context/AuthContext'; // Import useAuth
 
 const Sidebar = ({ collapsed, handleToggleSidebar }) => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const { userProviders, loadingAuth } = useAuth(); // Get userProviders from AuthContext
+
+  // State to hold the default/first provider ID for direct links
+  const [defaultProviderId, setDefaultProviderId] = useState(null);
+
+  useEffect(() => {
+    if (!loadingAuth && userProviders.length > 0) {
+      // If the user has at least one provider, set the first one as default
+      // In a more complex app, you might persist a 'last selected' provider ID
+      setDefaultProviderId(userProviders[0].id);
+    } else if (!loadingAuth && userProviders.length === 0) {
+      // If no providers, clear the default
+      setDefaultProviderId(null);
+    }
+  }, [userProviders, loadingAuth]); // Re-run when userProviders or loadingAuth changes
+
+  const handleNavigateToCompanySection = (pathSuffix) => {
+    if (defaultProviderId) {
+      // If a default provider is available, navigate directly to that provider's specific page
+      navigate(`/dashboard/mi-empresa/${defaultProviderId}/${pathSuffix}`);
+    } else {
+      // If no default provider (or multiple), navigate to the overview to make a selection
+      // Or if the pathSuffix is 'overview' itself, just go there
+      if (pathSuffix === '') { // This is the "Visión General" link
+        navigate('/dashboard/mi-empresa');
+      } else {
+        // If no provider selected and user clicks a specific customization/product link,
+        // direct them to the overview page and maybe show a message.
+        // For now, we'll just navigate to the overview.
+        navigate('/dashboard/mi-empresa');
+        // Optionally, you could add a notification here:
+        // notify("Selecciona una empresa para personalizar su card/productos.");
+      }
+    }
+  };
+
 
   return (
     <ProSidebar
@@ -28,9 +65,8 @@ const Sidebar = ({ collapsed, handleToggleSidebar }) => {
               color: theme.palette.text.primary,
             },
           },
-          // Style for sub-menu items to visually differentiate them
           subMenuContent: {
-            backgroundColor: theme.palette.background.default, // Slightly different background for sub-menus
+            backgroundColor: theme.palette.background.default,
           },
         }}
       >
@@ -50,7 +86,6 @@ const Sidebar = ({ collapsed, handleToggleSidebar }) => {
         </MenuItem>
 
         {/* Perfil Personal Section */}
-        {/* Use Box and Typography for subtitles within the sidebar */}
         <Box sx={{ ml: 2, mt: 3, mb: 1, display: 'flex', alignItems: 'center', pl: collapsed ? 0 : 2 }}>
             <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontWeight: 'bold' }}>
                 {!collapsed && "PERFIL PERSONAL"}
@@ -72,10 +107,18 @@ const Sidebar = ({ collapsed, handleToggleSidebar }) => {
         <MenuItem icon={<Business />} onClick={() => navigate('/dashboard/mi-empresa')}>
           Visión General
         </MenuItem>
-        <MenuItem icon={<Edit />} onClick={() => navigate('/dashboard/mi-empresa/personalizar-card')}>
+        <MenuItem
+            icon={<Edit />}
+            onClick={() => handleNavigateToCompanySection('personalizar-card')}
+            disabled={!defaultProviderId} // Disable if no default provider is set
+        >
           Personalizar Mi Card
         </MenuItem>
-        <MenuItem icon={<LocalMall />} onClick={() => navigate('/dashboard/mi-empresa/productos')}>
+        <MenuItem
+            icon={<LocalMall />}
+            onClick={() => handleNavigateToCompanySection('productos')}
+            disabled={!defaultProviderId} // Disable if no default provider is set
+        >
           Productos
         </MenuItem>
       </Menu>
