@@ -1,73 +1,16 @@
-// src/services/providerService.js
-import { db, storage } from '../firebase/config'; // Import storage
-import { collection, doc, setDoc, serverTimestamp, addDoc, updateDoc } from "firebase/firestore"; // Import updateDoc
-import { ref, uploadBytes, deleteObject } from "firebase/storage"; // Import for file operations
+import { db, storage } from '../firebase/config';
+import { collection, doc, serverTimestamp, addDoc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
+import { ref, uploadBytes, deleteObject, getDownloadURL, listAll } from "firebase/storage";
 
-// Base path for permanent provider media in Firebase Storage
 const PERMANENT_STORAGE_BASE_PATH = 'proveedores_media';
 
 export const prepareProviderDataForFirestore = (formData, userId) => {
-  const {
-    datosGenerales,
-    tipoCard,
-    // When editing, datosPersonalizados is already structured, so we take it as-is.
-    // When registering, it's a nested object (datosPersonalizados[tipoCard]).
-    // To handle both, we'll check if it's already the specific data.
-    datosPersonalizados, // This might be the full object or just the data for tipoA/B
-    planSeleccionado
-  } = formData;
+  const isRegistrationFlow = !!formData.datosGenerales;
 
-  // Adapt to handle both registration (nested) and editing (flat data for specific card)
-  let cardSpecificData = {};
-  if (datosPersonalizados && datosPersonalizados[tipoCard]) {
-    // This is from registration flow or if the data is still nested
-    cardSpecificData = datosPersonalizados[tipoCard] || {};
-  } else if (tipoCard && datosPersonalizados) {
-    // This is from editing, where `datosPersonalizados` might directly contain the card's data
-    cardSpecificData = datosPersonalizados; // Assume datosPersonalizados directly contains the specific card data
-  }
-
-
-  const cleanAndPrepareFileObjects = (fileArray, providerDocId) => {
-    return (fileArray || []).map(item => {
-      if (typeof item !== 'object' || item === null) return item;
-
-      // Determine the permanent path for the file
-      const originalFileName = item.name || (item.tempPath ? item.tempPath.split('/').pop() : 'file');
-      const uniqueSuffix = Date.now(); // Or use a UUID if more collision-proof needed
-      const permanentPath = `${PERMANENT_STORAGE_BASE_PATH}/${providerDocId}/card_media/${item.fileType === 'video' ? 'videos' : 'images'}/${originalFileName.replace(/\s/g, '_')}-${uniqueSuffix}`;
-
-      // If it's a new upload (has tempPath and is not already permanent)
-      if (item.tempPath && !item.isPermanent) {
-        return {
-          url: item.url || '', // This is the temporary download URL from initial upload
-          tempStoragePath: item.tempPath || '',
-          permanentStoragePath: permanentPath, // New permanent path for storage
-          fileType: item.fileType || '',
-          mimeType: item.mimeType || '',
-          isPermanent: true, // Mark it for finalization
-          status: item.status || 'loaded',
-        };
-      }
-      // If it's an existing permanent file or a placeholder without tempPath
-      return {
-        url: item.url || item.imagenURL || '', // Use the existing URL
-        permanentStoragePath: item.permanentStoragePath || item.tempStoragePath || '', // Use existing permanent path or previous temp path if it became permanent
-        fileType: item.fileType || '',
-        mimeType: item.mimeType || '',
-        isPermanent: item.isPermanent || (item.permanentStoragePath ? true : false), // Confirm if it's permanent
-        status: item.status || 'loaded',
-      };
-    });
-  }
-
-  let serviciosParaTagsData = [];
-  if (datosGenerales.tipoRegistro === 'servicios') {
-    serviciosParaTagsData = [
-      datosGenerales.categoriaPrincipal,
-      ...(datosGenerales.categoriasAdicionales || [])
-    ].filter(Boolean);
-  }
+  const datosGenerales = isRegistrationFlow ? formData.datosGenerales : formData;
+  const tipoCard = isRegistrationFlow ? formData.tipoCard : formData.cardType;
+  const planSeleccionado = isRegistrationFlow ? formData.planSeleccionado : formData.planSeleccionado;
+  const datosPersonalizados = isRegistrationFlow ? (formData.datosPersonalizados?.[tipoCard] || {}) : formData;
 
   const providerData = {
     userId: userId,
@@ -79,180 +22,168 @@ export const prepareProviderDataForFirestore = (formData, userId) => {
     pais: datosGenerales.pais || 'Argentina',
     provincia: datosGenerales.provincia || '',
     ciudad: datosGenerales.ciudad || '',
-    nombreContactoPersona: datosGenerales.nombre || '',
-    apellidoContactoPersona: datosGenerales.apellido || '',
-    rolContactoPersona: datosGenerales.rol || '',
+    nombreContactoPersona: datosGenerales.nombre || datosGenerales.nombreContactoPersona || '',
+    apellidoContactoPersona: datosGenerales.apellido || datosGenerales.apellidoContactoPersona || '',
+    rolContactoPersona: datosGenerales.rol || datosGenerales.rolContactoPersona || '',
     cuit: datosGenerales.cuit || '',
-    antiguedad: datosGenerales.antiguedad || '',
-    facturacion: datosGenerales.facturacion || '',
+    antiguedad: datosGenerales.antiguedad ? Number(datosGenerales.antiguedad) : null,
+    facturacion: datosGenerales.facturacion ? Number(datosGenerales.facturacion) : null,
     marcasOficiales: datosGenerales.marcasOficiales || [],
-
-    serviciosClaveParaTags: serviciosParaTagsData,
-
-    cardType: tipoCard, // Keep the original card type
-
-    // These will be prepared for permanent storage during update process
-    logo: null,
-    carrusel: [],
-    galeria: [], // Only if TipoB
-
-    descripcionGeneral: cardSpecificData.descripcion || '',
+    serviciosClaveParaTags: datosGenerales.serviciosClaveParaTags || [],
+    cardType: tipoCard,
+    descripcionGeneral: datosPersonalizados.descripcion || formData.descripcion || '',
     contacto: {
-      email: cardSpecificData.email || '',
-      sitioWeb: cardSpecificData.sitioWeb || '',
-      whatsapp: cardSpecificData.whatsapp || '',
-      telefono: cardSpecificData.telefono || ''
+      email: datosPersonalizados.email || formData.email || '',
+      sitioWeb: datosPersonalizados.sitioWeb || formData.sitioWeb || '',
+      whatsapp: datosPersonalizados.whatsapp || formData.whatsapp || '',
+      telefono: datosPersonalizados.telefono || formData.telefono || '',
     },
-
-    marcasConfiguradas: cardSpecificData.marcasSeleccionadas || cardSpecificData.marca || cardSpecificData.marcas || [],
-    extrasConfigurados: cardSpecificData.extrasSeleccionados || cardSpecificData.extras || cardSpecificData.servicios || [], // Covers both `extras` and `servicios`
-
+    marcasConfiguradas: datosPersonalizados.marcasSeleccionadas || formData.marcasSeleccionadas || [],
+    extrasConfigurados: datosPersonalizados.extrasSeleccionados || formData.extrasSeleccionados || [],
+    serviciosConfigurados: datosPersonalizados.serviciosSeleccionados || formData.serviciosSeleccionados || [],
     planSeleccionado: planSeleccionado || null,
-
-    // fileProcessingStatus: 'pending', // This will be handled during finalizeMediaForProvider
-    updatedAt: serverTimestamp(),
-    estadoCuenta: "pendienteRevision" // Status might change based on admin review
+    _rawLogoFile: formData.logoFile,
+    _rawCarruselFiles: formData.carruselMediaItems,
+    _rawGaleriaFiles: formData.galeria,
+    logo: isRegistrationFlow ? datosPersonalizados.logo : undefined,
+    carrusel: isRegistrationFlow ? datosPersonalizados.carruselURLs : undefined,
+    galeria: isRegistrationFlow ? datosPersonalizados.galeria : undefined,
   };
-
-  // Temporarily store raw file objects (with temp paths) for processing by finalization step
-  // These are not directly stored in Firestore, but passed to the finalization function
-  providerData._rawLogoFile = cardSpecificData.logo;
-  providerData._rawCarruselFiles = cardSpecificData.carruselURLs;
-  providerData._rawGaleriaFiles = tipoCard === 'tipoB' ? cardSpecificData.galeria : [];
-
 
   return providerData;
 };
 
-// New helper function to finalize media after provider document is created/updated
-export const finalizeMediaForProvider = async (providerDocId, rawLogo, rawCarrusel, rawGaleria, tempFilesToDelete) => {
-  const mediaToSave = {
-    logo: null,
-    carrusel: [],
-    galeria: []
-  };
-  let filesToMove = []; // [{ from: tempPath, to: permanentPath, file: blob/File }]
-  let filesToDelete = []; // [filePath]
+const processMediaForUpdate = async (providerDocId, rawFiles, oldMediaData, mediaType) => {
+    const filesToDelete = new Set((oldMediaData || []).map(item => item.permanentStoragePath).filter(Boolean));
+    
+    const uploadPromises = (rawFiles || []).map(async (item) => {
+        if (!item) return null;
 
-  // Process Logo
-  if (rawLogo) {
-    if (rawLogo.tempPath && !rawLogo.isPermanent) { // New upload
-      const permanentPath = `${PERMANENT_STORAGE_BASE_PATH}/${providerDocId}/card_media/images/logo-${Date.now()}-${rawLogo.tempPath.split('/').pop()}`;
-      filesToMove.push({ from: rawLogo.tempPath, to: permanentPath, fileType: rawLogo.fileType, mimeType: rawLogo.mimeType });
-      mediaToSave.logo = { url: permanentPath, permanentStoragePath: permanentPath, fileType: rawLogo.fileType, mimeType: rawLogo.mimeType, isPermanent: true };
-    } else if (rawLogo.permanentStoragePath || rawLogo.url) { // Existing permanent logo
-      mediaToSave.logo = { url: rawLogo.url || rawLogo.permanentStoragePath, permanentStoragePath: rawLogo.permanentStoragePath || rawLogo.tempStoragePath, fileType: rawLogo.fileType, mimeType: rawLogo.mimeType, isPermanent: true };
-    }
-  } else if (rawLogo === null) { // Logo was explicitly removed
-      // If there was an old logo, it should be deleted. This needs to be handled
-      // by comparing with the existing data before update.
-      // For simplicity in this function, we assume `tempFilesToDelete` handles this.
-  }
+        if (item.file) {
+            const subFolder = mediaType === 'logo' ? 'logos' : (mediaType === 'carrusel' ? 'carrusel_media' : 'galeria_productos');
+            const path = `${PERMANENT_STORAGE_BASE_PATH}/${providerDocId}/${subFolder}/${Date.now()}-${item.file.name.replace(/\s/g, '_')}`;
+            const fileRef = ref(storage, path);
+            await uploadBytes(fileRef, item.file);
+            const url = await getDownloadURL(fileRef);
+            
+            const newMediaObject = {
+                titulo: item.titulo || null,
+                precio: item.precio || null,
+                url: url,
+                permanentStoragePath: path,
+                fileType: item.fileType || (item.file.type.startsWith('video') ? 'video' : 'image'),
+                mimeType: item.mimeType || item.file.type,
+                isPermanent: true,
+            };
+            if(mediaType === 'galeria') newMediaObject.imagenURL = url;
+            return newMediaObject;
+        }
 
-  // Process Carrusel
-  mediaToSave.carrusel = (rawCarrusel || []).map(item => {
-    if (item.tempPath && !item.isPermanent) { // New upload
-      const permanentPath = `${PERMANENT_STORAGE_BASE_PATH}/${providerDocId}/card_media/${item.fileType === 'video' ? 'videos' : 'images'}/carrusel-${Date.now()}-${item.tempPath.split('/').pop()}`;
-      filesToMove.push({ from: item.tempPath, to: permanentPath, fileType: item.fileType, mimeType: item.mimeType });
-      return { url: permanentPath, permanentStoragePath: permanentPath, fileType: item.fileType, mimeType: item.mimeType, isPermanent: true };
-    } else if (item.permanentStoragePath || item.url) { // Existing permanent item
-      return { url: item.url || item.permanentStoragePath, permanentStoragePath: item.permanentStoragePath || item.tempStoragePath, fileType: item.fileType, mimeType: item.mimeType, isPermanent: true };
-    }
-    return null;
-  }).filter(Boolean);
+        if (item.isExisting && item.permanentStoragePath) {
+            filesToDelete.delete(item.permanentStoragePath);
+            const existingMediaObject = {
+                ...item,
+                url: item.preview || item.url,
+            };
+            if (mediaType === 'galeria') {
+              existingMediaObject.imagenURL = item.preview || item.url;
+            }
+            delete existingMediaObject.preview;
+            return existingMediaObject;
+        }
+        return null; 
+    });
 
-  // Process Galeria (for TipoB)
-  mediaToSave.galeria = (rawGaleria || []).map(item => {
-    const imagenFile = item.imagenFile || item; // Handle both RHF structure and raw data
-    if (imagenFile.tempPath && !imagenFile.isPermanent) { // New upload
-      const permanentPath = `${PERMANENT_STORAGE_BASE_PATH}/${providerDocId}/card_media/images/galeria-${Date.now()}-${imagenFile.tempPath.split('/').pop()}`;
-      filesToMove.push({ from: imagenFile.tempPath, to: permanentPath, fileType: imagenFile.fileType, mimeType: imagenFile.mimeType });
-      return { titulo: item.titulo, precio: item.precio, url: permanentPath, imagenURL: permanentPath, permanentStoragePath: permanentPath, fileType: imagenFile.fileType, mimeType: imagenFile.mimeType, isPermanent: true };
-    } else if (imagenFile.permanentStoragePath || imagenFile.url || imagenFile.imagenURL) { // Existing permanent item
-      return { titulo: item.titulo, precio: item.precio, url: imagenFile.url || imagenFile.imagenURL || imagenFile.permanentStoragePath, imagenURL: imagenFile.imagenURL || imagenFile.url || imagenFile.permanentStoragePath, permanentStoragePath: imagenFile.permanentStoragePath || imagenFile.tempStoragePath, fileType: imagenFile.fileType, mimeType: imagenFile.mimeType, isPermanent: true };
-    }
-    // If no image but title/price, keep the text data
-    if (item.titulo || item.precio) {
-      return { titulo: item.titulo, precio: item.precio, url: null, imagenURL: null, permanentStoragePath: null, fileType: null, mimeType: null, isPermanent: false };
-    }
-    return null;
-  }).filter(Boolean);
+    const newMediaItems = (await Promise.all(uploadPromises)).filter(item => item !== null);
 
-
-  // Execute file movements and deletions (conceptual - requires Cloud Functions or client-side file copying)
-  // IMPORTANT: Firebase Storage does not have a "move" operation. You must copy then delete.
-  // This usually requires a Cloud Function for server-side processing,
-  // or a more complex client-side sequence if you want to avoid functions.
-  // For now, we'll simulate this with client-side delete.
-  console.log("Simulating file movements/deletions:", { filesToMove, tempFilesToDelete });
-
-  // Client-side deletion of old temporary files
-  const deletePromises = tempFilesToDelete.map(async (path) => {
-    try {
-      const fileRef = ref(storage, path);
-      await deleteObject(fileRef);
-      console.log("Deleted old temporary file:", path);
-    } catch (e) {
-      console.warn("Could not delete old temporary file:", path, e);
-    }
-  });
-  await Promise.all(deletePromises); // Wait for deletions
-
-  // To truly "move" files to permanent storage, you'd re-upload them to the new path
-  // from their blob/file objects, or use a Cloud Function that reads from temp and writes to permanent.
-  // This client-side code will assume the URLs are correct for Firestore, but actual file move is missing.
-  // For a real production app, consider Firebase Cloud Functions for robust media finalization.
-
-  return mediaToSave;
+    await Promise.all(Array.from(filesToDelete).map(async (path) => {
+        try {
+            await deleteObject(ref(storage, path));
+        } catch (e) {
+            console.warn(`Could not delete old file: ${path}`, e);
+        }
+    }));
+    
+    return newMediaItems;
 };
 
-
 export const saveProviderProfileToFirestore = async (providerData, providerDocId = null) => {
-  if (!providerData) {
-    console.error("Datos del proveedor son requeridos.");
-    throw new Error("Datos del proveedor son requeridos.");
-  }
-  if (!providerData.userId) {
-    console.error("providerData.userId es requerido para guardar/actualizar el perfil del proveedor.");
-    throw new Error("providerData.userId es requerido para guardar/actualizar el perfil del proveedor.");
+  if (!providerData || !providerData.userId) {
+    throw new Error("Provider data or userId is required.");
   }
 
-  // Extract raw file data before sending to Firestore
   const { _rawLogoFile, _rawCarruselFiles, _rawGaleriaFiles, ...dataToSave } = providerData;
 
-  let docRef;
   if (providerDocId) {
-    // Update existing document
-    docRef = doc(db, "proveedores", providerDocId);
-    await updateDoc(docRef, dataToSave);
-    console.log("Perfil de proveedor actualizado en Firestore con ID: ", providerDocId);
-  } else {
-    // Create new document
-    docRef = await addDoc(collection(db, "proveedores"), {
-      ...dataToSave,
-      createdAt: serverTimestamp(), // Only set on creation
+    const docRef = doc(db, "proveedores", providerDocId);
+    const docSnap = await getDoc(docRef);
+    const oldProviderData = docSnap.exists() ? docSnap.data() : {};
+    
+    const mediaUpdates = {};
+    
+    if (_rawLogoFile !== undefined) {
+        const logoResult = await processMediaForUpdate(providerDocId, _rawLogoFile ? [_rawLogoFile] : [], oldProviderData.logo ? [oldProviderData.logo] : [], 'logo');
+        mediaUpdates.logo = logoResult[0] || null;
+    }
+    if (_rawCarruselFiles !== undefined) {
+        mediaUpdates.carrusel = await processMediaForUpdate(providerDocId, _rawCarruselFiles, oldProviderData.carrusel, 'carrusel');
+    }
+    if (_rawGaleriaFiles !== undefined) {
+        mediaUpdates.galeria = await processMediaForUpdate(providerDocId, _rawGaleriaFiles, oldProviderData.galeria, 'galeria');
+    }
+
+    Object.keys(dataToSave).forEach(key => {
+        if (dataToSave[key] === undefined) {
+            delete dataToSave[key];
+        }
     });
-    console.log("Perfil de proveedor guardado en Firestore con ID autogenerado: ", docRef.id);
+
+    const finalData = { ...dataToSave, ...mediaUpdates, updatedAt: serverTimestamp() };
+
+    await updateDoc(docRef, finalData);
+    return { success: true, id: providerDocId };
+
+  } else {
+    Object.keys(dataToSave).forEach(key => {
+        if (dataToSave[key] === undefined) {
+            delete dataToSave[key];
+        }
+    });
+
+    const newProviderDocRef = await addDoc(collection(db, "proveedores"), {
+      ...dataToSave,
+      fileProcessingStatus: 'pending_move',
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      estadoCuenta: "pendienteRevision"
+    });
+    return { success: true, id: newProviderDocRef.id };
+  }
+};
+
+export const deleteProvider = async (providerId) => {
+  if (!providerId) {
+    throw new Error("Provider ID is required to delete.");
   }
 
-  
+  const docRef = doc(db, "proveedores", providerId);
+  const storageFolderRef = ref(storage, `${PERMANENT_STORAGE_BASE_PATH}/${providerId}`);
 
-  const currentProviderDocId = providerDocId || docRef.id;
-  const tempFilesToDelete = []; // Collect paths of temp files that are replaced or removed
-
-  const finalizedMediaData = await finalizeMediaForProvider(
-    currentProviderDocId,
-    _rawLogoFile,
-    _rawCarruselFiles,
-    _rawGaleriaFiles,
+  try {
+    const deleteFilesInFolder = async (folderRef) => {
+      const listResult = await listAll(folderRef);
+      const deleteFilePromises = listResult.items.map(itemRef => deleteObject(itemRef));
+      await Promise.all(deleteFilePromises);
+      const deleteFolderPromises = listResult.prefixes.map(subfolderRef => deleteFilesInFolder(subfolderRef));
+      await Promise.all(deleteFolderPromises);
+    };
     
-    [] 
-  );
-
-  // Update the Firestore document with the permanent media URLs
-  await updateDoc(doc(db, "proveedores", currentProviderDocId), finalizedMediaData);
-  console.log("Updated provider document with permanent media URLs for ID:", currentProviderDocId);
-
-
-  return { success: true, id: currentProviderDocId };
+    await deleteFilesInFolder(storageFolderRef);
+    await deleteDoc(docRef);
+    
+    return { success: true };
+  } catch (error) {
+    console.error(`Error deleting provider ${providerId}:`, error);
+    throw error;
+  }
 };

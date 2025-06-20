@@ -1,11 +1,9 @@
-// src/components/dashboard/pages/MiEmpresaOverview.jsx
-
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Paper, Button, Grid, CircularProgress, Alert } from '@mui/material';
+import { Box, Typography, Paper, Button, Grid, CircularProgress, Alert, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { BusinessCenter, Store, Assessment, AddCircleOutline, Edit, LocalMall, Visibility } from '@mui/icons-material';
+import { BusinessCenter, AddCircleOutline, Edit, LocalMall, Visibility, Delete } from '@mui/icons-material';
 import { useAuth } from '../../../context/AuthContext';
-import { fetchProvidersByUserId } from '../../../services/firestoreService'; // Import the new service function
+import { deleteProvider } from '../../../services/providerService';
 
 const StatCard = ({ icon, title, value }) => (
   <Paper
@@ -32,37 +30,37 @@ const MiEmpresaOverview = () => {
   const { currentUser, loadingAuth, userProviders, isProveedor } = useAuth();
   const [loadingProviders, setLoadingProviders] = useState(true);
   const [error, setError] = useState(null);
-  const [providersList, setProvidersList] = useState([]); // State to hold the fetched providers
+  const [providersList, setProvidersList] = useState([]);
+  const [deleting, setDeleting] = useState(null);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   useEffect(() => {
-    const loadProviders = async () => {
-      if (loadingAuth || !currentUser) {
-        setLoadingProviders(true); // Still loading auth or no user logged in
-        return;
-      }
-      
-      setLoadingProviders(true);
-      setError(null);
-      try {
-        // userProviders from AuthContext should already be loaded.
-        // We can just use it directly after AuthContext has populated it.
-        // If AuthContext needs more time, this effect will re-run.
-        if (isProveedor && userProviders.length > 0) {
-            setProvidersList(userProviders);
-        } else {
-            setProvidersList([]); // No providers found
-        }
-      } catch (err) {
-        console.error("Error loading providers in MiEmpresaOverview:", err);
-        setError("Error al cargar la lista de tus empresas.");
-        setProvidersList([]);
-      } finally {
+    setLoadingProviders(true);
+    if (!loadingAuth && currentUser) {
+        setProvidersList(userProviders);
         setLoadingProviders(false);
-      }
-    };
+    } else if (!loadingAuth && !currentUser) {
+        setLoadingProviders(false);
+    }
+  }, [loadingAuth, currentUser, userProviders]);
 
-    loadProviders();
-  }, [loadingAuth, currentUser, userProviders, isProveedor]); // Depend on userProviders from context
+  const handleDeleteClick = (providerId) => {
+    setDeleting(providerId);
+    setOpenConfirm(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleting) return;
+    try {
+        await deleteProvider(deleting);
+        setProvidersList(prev => prev.filter(p => p.id !== deleting));
+    } catch (err) {
+        setError("Falló la eliminación del perfil de proveedor. Por favor, intenta de nuevo.");
+    } finally {
+        setOpenConfirm(false);
+        setDeleting(null);
+    }
+  };
 
   if (loadingAuth || loadingProviders) {
     return (
@@ -72,16 +70,11 @@ const MiEmpresaOverview = () => {
       </Box>
     );
   }
-
+  
   if (error) {
-    return (
-      <Alert severity="error" sx={{ mt: 2 }}>
-        {error}
-      </Alert>
-    );
+    return <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>;
   }
 
-  // If no providers found and auth is done, show registration prompt
   if (!isProveedor || providersList.length === 0) {
     return (
       <Paper sx={{ p: 4, textAlign: 'center', bgcolor: 'background.paper', borderRadius: '8px' }}>
@@ -103,7 +96,6 @@ const MiEmpresaOverview = () => {
       </Typography>
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        {/* Placeholder for overall business statistics */}
         <Grid item xs={12} md={4}>
           <StatCard
             icon={<BusinessCenter sx={{ fontSize: 40, color: 'primary.main' }} />}
@@ -111,7 +103,6 @@ const MiEmpresaOverview = () => {
             value={providersList.length}
           />
         </Grid>
-        {/* Add more aggregate stats here */}
       </Grid>
 
       <Paper sx={{ p: 4, bgcolor: 'background.paper', borderRadius: '8px' }}>
@@ -143,32 +134,19 @@ const MiEmpresaOverview = () => {
                   Ubicación: {provider.data.ciudad || 'N/A'}, {provider.data.provincia || 'N/A'}
                 </Typography>
                 <Box sx={{ mt: 'auto', display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    startIcon={<Edit />}
-                    onClick={() => navigate(`/dashboard/mi-empresa/${provider.id}/personalizar-card`)}
-                  >
+                  <Button variant="outlined" fullWidth startIcon={<Edit />} onClick={() => navigate(`/dashboard/mi-empresa/${provider.id}/personalizar-card`)}>
                     Personalizar Card
                   </Button>
-                  {provider.data.cardType === 'tipoB' && ( // Only show "Gestionar Productos" for TipoB
-                    <Button
-                      variant="outlined"
-                      fullWidth
-                      startIcon={<LocalMall />}
-                      onClick={() => navigate(`/dashboard/mi-empresa/${provider.id}/productos`)}
-                    >
+                  {provider.data.cardType === 'tipoB' && (
+                    <Button variant="outlined" fullWidth startIcon={<LocalMall />} onClick={() => navigate(`/dashboard/mi-empresa/${provider.id}/productos`)}>
                       Gestionar Productos
                     </Button>
                   )}
-                   <Button
-                    variant="text"
-                    color="primary"
-                    fullWidth
-                    startIcon={<Visibility />}
-                    onClick={() => navigate(`/proveedor/${provider.id}`)} // Link to public page
-                  >
+                   <Button variant="text" color="primary" fullWidth startIcon={<Visibility />} onClick={() => navigate(`/proveedor/${provider.id}`)}>
                     Ver Página Pública
+                  </Button>
+                  <Button variant="text" color="error" fullWidth startIcon={<Delete />} onClick={() => handleDeleteClick(provider.id)}>
+                    Eliminar
                   </Button>
                 </Box>
               </Paper>
@@ -176,6 +154,20 @@ const MiEmpresaOverview = () => {
           ))}
         </Grid>
       </Paper>
+      <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
+        <DialogTitle>Confirmar Eliminación</DialogTitle>
+        <DialogContent>
+            <DialogContentText>
+                ¿Estás seguro de que quieres eliminar este proveedor? Esta acción es permanente y eliminará todos los datos y archivos multimedia asociados.
+            </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={() => setOpenConfirm(false)}>Cancelar</Button>
+            <Button onClick={handleConfirmDelete} color="error" disabled={deleting === null}>
+                {deleting ? 'Eliminar' : <CircularProgress size={20} />}
+            </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

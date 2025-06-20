@@ -27,7 +27,7 @@ const saveToSessionStorage = (key, value) => {
     try {
         sessionStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
-        console.error("Error al guardar en sessionStorage", error);
+        console.error("Error saving to sessionStorage", error);
     }
 };
 
@@ -36,7 +36,7 @@ const loadFromSessionStorage = (key) => {
         const data = sessionStorage.getItem(key);
         return data ? JSON.parse(data) : null;
     } catch (error) {
-        console.error("Error al cargar desde sessionStorage", error);
+        console.error("Error loading from sessionStorage", error);
         return null;
     }
 };
@@ -150,10 +150,9 @@ const RegistrosProveedorNavigator = () => {
         const fileRef = ref(storage, filePath);
         try {
             await deleteObject(fileRef);
-            console.log("Archivo eliminado de Storage:", filePath);
             removeDeArchivosTemporales(filePath);
         } catch (error) {
-            console.warn("Error al eliminar archivo de Storage:", filePath, error);
+            console.warn("Error deleting file from Storage:", filePath, error);
         }
     }, [removeDeArchivosTemporales]);
 
@@ -163,14 +162,13 @@ const RegistrosProveedorNavigator = () => {
             const tipo = newFormData.tipoCard;
 
             if (!tipo || !newFormData.datosPersonalizados[tipo]) {
-                console.warn("handleFileUploaded: tipoCard no definido en formData, no se puede actualizar.");
                 return prevFormData;
             }
             
             const personalizados = newFormData.datosPersonalizados[tipo];
 
             if (error) {
-                console.error(`Error final para ${tempFileId} (reportado por uploadFileImmediately):`, error);
+                console.error(`Error final for ${tempFileId}:`, error);
             } else if (downloadURL && storagePath) {
                 updateArchivosTemporales(storagePath);
                 const fileData = {
@@ -228,7 +226,6 @@ const RegistrosProveedorNavigator = () => {
                         }
                         break;
                     default:
-                        console.warn("Tipo de campo desconocido en handleFileUploaded:", fieldType);
                         break;
                 }
             }
@@ -240,14 +237,12 @@ const RegistrosProveedorNavigator = () => {
 
     const uploadFileImmediately = useCallback(async (file, tempFileId, pathSuffixFromForm = 'general_uploads', fileMetadata = {}) => {
         if (!currentUser || !currentUser.uid) {
-            console.error("uploadFileImmediately: Usuario no autenticado. No se puede subir el archivo.");
-            handleFileUploadProgress(tempFileId, { progress: 0, status: 'error', errorMsg: 'Usuario no autenticado.' });
-            setOperationError("Debes iniciar sesión para subir archivos. Por favor, recarga la página e inicia sesión.");
+            handleFileUploadProgress(tempFileId, { progress: 0, status: 'error', errorMsg: 'User not authenticated.' });
+            setOperationError("You must be logged in to upload files. Please refresh and log in.");
             return;
         }
         if (!file || !tempFileId) {
-            console.error("uploadFileImmediately: Falta archivo o tempFileId");
-            handleFileUploadProgress(tempFileId, { progress: 0, status: 'error', errorMsg: 'Faltan datos para subir.' });
+            handleFileUploadProgress(tempFileId, { progress: 0, status: 'error', errorMsg: 'Missing data for upload.' });
             return;
         }
         setOperationError(null);
@@ -265,7 +260,6 @@ const RegistrosProveedorNavigator = () => {
                 handleFileUploadProgress(tempFileId, { progress: Math.round(progress), status: 'uploading' });
             },
             (error) => {
-                console.error(`Error en subida para ${tempFileId} (${file.name}):`, error);
                 let errorCode = error.code || 'storage/unknown';
                 handleFileUploadProgress(tempFileId, { progress: 0, status: 'error', errorMsg: errorCode });
                 handleFileUploaded(tempFileId, { error, ...fileMetadata });
@@ -282,8 +276,7 @@ const RegistrosProveedorNavigator = () => {
                         ...fileMetadata
                     });
                 } catch (error) {
-                    console.error(`Error obteniendo downloadURL para ${tempFileId} (${file.name}):`, error);
-                    handleFileUploadProgress(tempFileId, { progress: 100, status: 'error', errorMsg: 'Error al obtener URL final' });
+                    handleFileUploadProgress(tempFileId, { progress: 100, status: 'error', errorMsg: 'Error getting final URL' });
                     handleFileUploaded(tempFileId, { error, ...fileMetadata });
                 }
             }
@@ -303,8 +296,7 @@ const RegistrosProveedorNavigator = () => {
                 const datosGlobales = await fetchFiltrosGlobales();
                 setFiltrosData(datosGlobales);
             } catch (err) {
-                console.error("[Navigator] Error CRÍTICO al llamar fetchFiltrosGlobales:", err);
-                setErrorFiltros("Error al cargar datos esenciales. Intenta recargar.");
+                setErrorFiltros("Error loading essential data. Please try reloading.");
             } finally {
                 setLoadingFiltros(false);
             }
@@ -404,13 +396,12 @@ const RegistrosProveedorNavigator = () => {
             const uploadsStillActive = Object.values(fileUploadProgress).some(f => f.status === 'uploading');
             
             if (uploadsStillActive) {
-                setOperationError("Algunos archivos aún se están subiendo. Por favor, espera...");
+                setOperationError("Some files are still uploading. Please wait...");
             } else if (!operationError) {
                  nextStep();
             }
         } catch (error) {
-            console.error("Error en handleStepCompletion:", error);
-            setOperationError("Ocurrió un error al procesar el paso.");
+            setOperationError("An error occurred while processing the step.");
         } finally {
             setIsProcessingGlobal(false);
         }
@@ -427,8 +418,6 @@ const RegistrosProveedorNavigator = () => {
                 );
                 const deletePromises = userSpecificTempFiles.map(path => deleteFileFromStorage(path));
                 await Promise.all(deletePromises);
-            } else {
-                 console.warn("Cancelación sin UID de usuario, no se borraron archivos específicos del usuario.");
             }
             
             setArchivosSubidosTemporalmente([]);
@@ -439,8 +428,7 @@ const RegistrosProveedorNavigator = () => {
             setCurrentStep(0);
             navigate("/registrar-mi-empresa");
         } catch (error) {
-            console.error("Error durante la cancelación y limpieza:", error);
-            setOperationError("Error al limpiar archivos temporales. Contacta a soporte si persiste.");
+            setOperationError("Error cleaning temporary files. Please contact support if this persists.");
         } finally {
             setIsProcessingGlobal(false);
         }
@@ -489,8 +477,8 @@ const RegistrosProveedorNavigator = () => {
 
     useEffect(() => {
         if (!loadingAuth && !currentUser) {
-            setOperationError("Sesión no válida. Debes iniciar sesión para continuar.");
-        } else if (currentUser && operationError === "Sesión no válida. Debes iniciar sesión para continuar.") {
+            setOperationError("Invalid session. You must be logged in to continue.");
+        } else if (currentUser && operationError === "Invalid session. You must be logged in to continue.") {
             setOperationError(null);
         }
     }, [currentUser, loadingAuth, operationError]);
@@ -498,18 +486,18 @@ const RegistrosProveedorNavigator = () => {
 
     const renderCurrentStep = () => {
         if (loadingAuth || loadingFiltros) {
-            return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5 }}><CircularProgress sx={{ color: 'common.white' }} /><Typography sx={{ ml: 2, color: 'common.white' }}>Cargando configuración...</Typography></Box>);
+            return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5 }}><CircularProgress sx={{ color: 'common.white' }} /><Typography sx={{ ml: 2, color: 'common.white' }}>Loading configuration...</Typography></Box>);
         }
         if (!currentUser && !loadingAuth) {
-             return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}><Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>Debes iniciar sesión para registrar tu empresa.</Typography><Button onClick={() => navigate('/registrarme')} variant="outlined" color="warning">Iniciar Sesión / Registrarse</Button></Box>);
+             return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}><Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>You must be logged in to register your company.</Typography><Button onClick={() => navigate('/registrarme')} variant="outlined" color="warning">Login / Register</Button></Box>);
         }
         if (errorFiltros) {
-            return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}><Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>{errorFiltros}</Typography><Button onClick={() => window.location.reload()} variant="outlined" color="warning">Recargar</Button></Box>);
+            return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}><Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>{errorFiltros}</Typography><Button onClick={() => window.location.reload()} variant="outlined" color="warning">Reload</Button></Box>);
         }
         
         const uploadsStillActive = Object.values(fileUploadProgress).some(f => f.status === 'uploading');
         if (operationError && !uploadsStillActive) {
-            return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}><Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>{operationError}</Typography><Button onClick={() => setOperationError(null)} variant="outlined" color="info">Entendido</Button></Box>);
+            return (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px', py: 5, flexDirection: 'column' }}><Typography sx={{ color: 'error.main', textAlign: 'center', mb: 2 }}>{operationError}</Typography><Button onClick={() => setOperationError(null)} variant="outlined" color="info">Got it</Button></Box>);
         }
 
         switch (currentStep) {
@@ -532,7 +520,7 @@ const RegistrosProveedorNavigator = () => {
                     marcasDisponibles={filtrosData.marcas}
                 />;
             case 2:
-                if (!formData.tipoCard) return <Typography color="error.main">Error: Tipo de card no seleccionado...</Typography>;
+                if (!formData.tipoCard) return <Typography color="error.main">Error: Card type not selected...</Typography>;
                 const commonPersonalizadoProps = {
                     fileUploadProgress,
                     uploadFileImmediately,
@@ -571,27 +559,22 @@ const RegistrosProveedorNavigator = () => {
                         setOperationError(null);
                         const uploadsStillActiveConfirm = Object.values(fileUploadProgress).some(f => f.status === 'uploading');
                         if (uploadsStillActiveConfirm) {
-                            setOperationError("Algunos archivos aún se están subiendo. Por favor, espera a que terminen antes de confirmar.");
+                            setOperationError("Some files are still uploading. Please wait for them to finish before confirming.");
                             setIsProcessingGlobal(false);
                             return;
                         }
                         if (!currentUser || !currentUser.uid) {
-                             setOperationError("Error de autenticación. No se puede confirmar el registro.");
+                             setOperationError("Authentication error. Cannot confirm registration.");
                              setIsProcessingGlobal(false);
                              return;
                         }
                         
                         const userId = currentUser.uid;
-                        console.log("[Navigator] Iniciando Confirmación de Registro para UID:", userId);
 
                         try {
                             const providerDataToSave = prepareProviderDataForFirestore(formData, userId);
                             
-                            console.log("Datos preparados para Firestore (con temp paths):", JSON.stringify(providerDataToSave, null, 2));
-                            
                             await saveProviderProfileToFirestore(providerDataToSave);
-                            
-                            alert("¡Perfil de Proveedor guardado! La finalización de archivos se procesará en segundo plano.");
                                                         
                             setArchivosSubidosTemporalmente([]);
                             sessionStorage.removeItem("archivosSubidosTemporalmente");
@@ -599,18 +582,17 @@ const RegistrosProveedorNavigator = () => {
                             sessionStorage.removeItem("formData");
                             setFileUploadProgress({});
                             setCurrentStep(0);
-                            navigate('/perfil');
+                            navigate('/dashboard/mi-empresa');
 
                         } catch (error) {
-                            console.error("Error al confirmar y guardar el registro del proveedor:", error);
-                            setOperationError("Error al guardar el registro. Intenta de nuevo. Detalles: " + error.message);
+                            setOperationError("Error saving registration. Please try again. Details: " + error.message);
                         } finally {
                             setIsProcessingGlobal(false);
                         }
                     }}
                 />;
             default:
-                return <Typography sx={{ color: 'error.main', textAlign: 'center', mt: 5 }}>Error: Paso desconocido.</Typography>;
+                return <Typography sx={{ color: 'error.main', textAlign: 'center', mt: 5 }}>Error: Unknown step.</Typography>;
         }
     };
 
@@ -622,7 +604,7 @@ const RegistrosProveedorNavigator = () => {
             >
                 <CircularProgress color="inherit" />
                 <Typography sx={{ mt: 2 }}>
-                    {Object.values(fileUploadProgress).some(f => f.status === 'uploading') ? 'Subiendo archivos...' : 'Procesando...'}
+                    {Object.values(fileUploadProgress).some(f => f.status === 'uploading') ? 'Uploading files...' : 'Processing...'}
                 </Typography>
             </Backdrop>
 

@@ -1,175 +1,119 @@
-// functions/index.js
-
-const { onDocumentCreated } = require("firebase-functions/v2/firestore");
+const { onDocumentWritten } = require("firebase-functions/v2/firestore");
 const { logger } = require("firebase-functions");
 const admin = require("firebase-admin");
 
 admin.initializeApp();
 
 const storage = admin.storage();
+const PERMANENT_STORAGE_BASE_PATH = 'proveedores_media';
 
-exports.finalizeProviderRegistrationFiles = onDocumentCreated("proveedores/{userId}", async (event) => {
-    const snap = event.data;
-    if (!snap) {
-      logger.warn("No data (snapshot) associated with the event. This should not happen for onDocumentCreated.");
-      return null;
+exports.processProviderMediaOnWrite = onDocumentWritten("proveedores/{providerId}", async (event) => {
+    const providerId = event.params.providerId;
+    const snapAfter = event.data.after;
+
+    if (!snapAfter.exists) {
+        logger.log(`[${providerId}] Document deleted. No media to process.`);
+        return null;
     }
 
-    const userId = event.params.userId; // This will now be the auto-generated document ID
-    const providerData = snap.data();
+    const providerData = snapAfter.data();
 
+    if (providerData.fileProcessingStatus !== 'pending_move') {
+        logger.log(`[${providerId}] Skipping. Status is '${providerData.fileProcessingStatus || 'not set'}', not 'pending_move'.`);
+        return null;
+    }
+    
     logger.log(
-      `[${userId}] Starting finalizeProviderRegistrationFiles for new provider (v2 syntax). Document ID: ${userId}, Uploader UserID: ${providerData.userId}`
+      `[${providerId}] Starting media processing. Status: ${providerData.fileProcessingStatus}`
     );
 
-    if (
-      !providerData ||
-      providerData.fileProcessingStatus !== "pending"
-    ) {
-      logger.log(
-        `[${userId}] Exiting: Provider data not found, or fileProcessingStatus is not 'pending' (is '${providerData?.fileProcessingStatus}').`
-      );
-      return null;
-    }
-
     const updates = {};
-    let allFilesProcessedSuccessfully = true;
     const defaultBucket = storage.bucket();
 
-    const processFile = async (
-      fileObject, // Original file object from Firestore
-      permanentFolder
-    ) => {
-      if (
-        !fileObject ||
-        !fileObject.tempStoragePath ||
-        fileObject.isPermanent
-      ) {
-        logger.log(`[${userId}] Skipping file processing for object (no tempPath or already permanent):`, fileObject ? (fileObject.url || "No URL") : "No file object");
-        const returnObject = { ...fileObject };
-        if(returnObject.isPermanent) delete returnObject.errorMoving;
-        return returnObject;
+    const processAndMoveFile = async (fileObject, subFolder) => {
+      if (!fileObject || !fileObject.url || !fileObject.tempPath) {
+        return fileObject;
       }
-
-      const tempPath = fileObject.tempStoragePath;
-      let fileName = tempPath.substring(tempPath.lastIndexOf("/") + 1);
       
-      try {
-        fileName = decodeURIComponent(fileName);
-      } catch (e) {
-        logger.warn(`[${userId}] Could not decode filename: ${fileName}`, e);
-      }
+      const tempPath = fileObject.tempPath;
+      let fileName = tempPath.substring(tempPath.lastIndexOf("/") + 1);
+      try { fileName = decodeURIComponent(fileName); } catch (e) { logger.warn(`[${providerId}] Could not decode filename: ${fileName}`, e); }
 
-      // The 'userId' here is event.params.userId, which is the auto-generated document ID
-      const newPermanentPath = `providers/${userId}/${permanentFolder}/${fileName}`;
-      const file = defaultBucket.file(tempPath);
-      const newFile = defaultBucket.file(newPermanentPath);
+      const newPermanentPath = `${PERMANENT_STORAGE_BASE_PATH}/${providerId}/${subFolder}/${fileName}`;
+      const tempFileRef = defaultBucket.file(tempPath);
+      const newFileRef = defaultBucket.file(newPermanentPath);
 
       try {
-        logger.log(`[${userId}] Moving: ${tempPath} to ${newPermanentPath}`);
-        await file.move(newPermanentPath);
-        logger.log(`[${userId}] Moved: ${tempPath} to ${newPermanentPath} successfully.`);
-        
-        await newFile.makePublic();
-        const publicUrl = newFile.publicUrl();
-        
-        logger.log(`[${userId}] File made public at: ${publicUrl}`);
-
-        const processedFileData = {
-          url: publicUrl,
-          tempStoragePath: '',
-          permanentStoragePath: newPermanentPath,
-          isPermanent: true,
-        };
-
-        if (fileObject.fileType !== undefined) {
-          processedFileData.fileType = fileObject.fileType;
-        }
-        if (fileObject.mimeType !== undefined) {
-          processedFileData.mimeType = fileObject.mimeType;
-        }
-        
-        if (Object.prototype.hasOwnProperty.call(fileObject, 'titulo')) {
-            processedFileData.titulo = fileObject.titulo;
-        }
-        if (Object.prototype.hasOwnProperty.call(fileObject, 'precio')) {
-            processedFileData.precio = fileObject.precio;
+        const [exists] = await tempFileRef.exists();
+        if (!exists) {
+            logger.warn(`[${providerId}] Source file does not exist at ${tempPath}. Skipping move.`);
+            return { ...fileObject, errorProcessing: "Source file not found.", isPermanent: false };
         }
 
-        if (Object.prototype.hasOwnProperty.call(fileObject, 'imagenURL')) {
-          processedFileData.imagenURL = publicUrl;
-        }
-        
-        return processedFileData;
+        await tempFileRef.copy(newPermanentPath);
+        await tempFileRef.delete();
+        await newFileRef.makePublic();
+        const publicUrl = newFileRef.publicUrl();
 
+        const newFileObject = { ...fileObject, url: publicUrl, permanentStoragePath: newPermanentPath, isPermanent: true };
+        delete newFileObject.tempPath; 
+        delete newFileObject.tempId;
+        delete newFileObject.status;
+
+        if (newFileObject.hasOwnProperty('imagenURL')) {
+            newFileObject.imagenURL = publicUrl;
+        }
+
+        return newFileObject;
       } catch (error) {
-        logger.error(
-          `[${userId}] Error moving file ${tempPath} to ${newPermanentPath}:`,
-          error
-        );
-        allFilesProcessedSuccessfully = false;
-        return {
-            ...fileObject,
-            errorMoving: error.message,
-            isPermanent: false
-        };
+        logger.error(`[${providerId}] Error processing file ${tempPath}:`, error);
+        return { ...fileObject, errorProcessing: error.message, isPermanent: false };
       }
     };
+    
+    let changesMade = false;
 
-    if (providerData.logo && providerData.logo.tempStoragePath && !providerData.logo.isPermanent) {
-      updates["logo"] = await processFile(providerData.logo, "logos");
-    } else if (providerData.logo) {
-      const cleanLogo = { ...providerData.logo };
-      if(cleanLogo.isPermanent) delete cleanLogo.errorMoving;
-      updates["logo"] = cleanLogo;
-    }
-
-
-    if (providerData.carrusel && Array.isArray(providerData.carrusel)) {
-      const processedCarrusel = [];
-      for (const item of providerData.carrusel) {
-        if(item && item.tempStoragePath && !item.isPermanent) {
-            processedCarrusel.push(await processFile(item, "carrusel_media"));
-        } else if (item) { 
-            const cleanItem = { ...item };
-            if(cleanItem.isPermanent) delete cleanItem.errorMoving;
-            processedCarrusel.push(cleanItem);
+    if (providerData.logo && providerData.logo.tempPath) {
+        const processedLogo = await processAndMoveFile(providerData.logo, "logos");
+        if (JSON.stringify(processedLogo) !== JSON.stringify(providerData.logo)) {
+            updates["logo"] = processedLogo;
+            changesMade = true;
         }
-      }
-      updates["carrusel"] = processedCarrusel;
     }
 
-    if (providerData.galeria && Array.isArray(providerData.galeria)) {
-      const processedGaleria = [];
-      for (const item of providerData.galeria) {
-         if(item && item.tempStoragePath && !item.isPermanent) {
-            processedGaleria.push(await processFile(item, "galeria_productos"));
-        } else if (item) { 
-            const cleanItem = { ...item };
-            if(cleanItem.isPermanent) delete cleanItem.errorMoving;
-            processedGaleria.push(cleanItem);
+    if (Array.isArray(providerData.carrusel) && providerData.carrusel.length > 0) {
+      const processedPromises = providerData.carrusel.map(item => processAndMoveFile(item, "carrusel_media"));
+      const processedResult = await Promise.all(processedPromises);
+      if (JSON.stringify(processedResult) !== JSON.stringify(providerData.carrusel)) {
+          updates["carrusel"] = processedResult;
+          changesMade = true;
+      }
+    }
+
+    if (Array.isArray(providerData.galeria) && providerData.galeria.length > 0) {
+      const processedPromises = providerData.galeria.map(item => processAndMoveFile(item, "galeria_productos"));
+      const processedResult = await Promise.all(processedPromises);
+      if (JSON.stringify(processedResult) !== JSON.stringify(providerData.galeria)) {
+          updates["galeria"] = processedResult;
+          changesMade = true;
+      }
+    }
+
+    if (changesMade) {
+        updates["fileProcessingStatus"] = "completed_by_cloud_function";
+        updates["updatedAt"] = admin.firestore.FieldValue.serverTimestamp();
+        try {
+            await snapAfter.ref.update(updates);
+            logger.log(`[${providerId}] Firestore document updated successfully. Status: ${updates["fileProcessingStatus"]}`);
+        } catch (error) {
+            logger.error(`[${providerId}] CRITICAL: Error updating Firestore with finalized media:`, error);
         }
-      }
-      updates["galeria"] = processedGaleria;
+    } else {
+        await snapAfter.ref.update({
+            fileProcessingStatus: "completed_no_action_needed",
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
     }
 
-    updates["fileProcessingStatus"] = allFilesProcessedSuccessfully
-      ? "completed"
-      : "completed_with_errors";
-    updates["updatedAt"] = admin.firestore.FieldValue.serverTimestamp();
-
-    try {
-      await snap.ref.update(updates);
-      logger.log(
-        `[${userId}] Firestore document updated successfully. Status: ${updates["fileProcessingStatus"]}`
-      );
-    } catch (error) {
-      logger.error(
-        `[${userId}] CRITICAL: Error updating Firestore document AFTER file processing:`,
-        error,
-        "Data attempted for update:",
-        JSON.stringify(updates, null, 2)
-      );
-    }
     return null;
-  });
+});
