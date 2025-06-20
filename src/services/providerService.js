@@ -1,155 +1,87 @@
 import { db, storage } from '../firebase/config';
-import { collection, doc, serverTimestamp, addDoc, updateDoc, getDoc, deleteDoc } from "firebase/firestore";
-import { ref, uploadBytes, deleteObject, getDownloadURL, listAll } from "firebase/storage";
+import { collection, doc, serverTimestamp, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { ref, deleteObject, listAll } from "firebase/storage";
 
 const PERMANENT_STORAGE_BASE_PATH = 'proveedores_media';
 
 export const prepareProviderDataForFirestore = (formData, userId) => {
   const isRegistrationFlow = !!formData.datosGenerales;
 
-  const datosGenerales = isRegistrationFlow ? formData.datosGenerales : formData;
-  const tipoCard = isRegistrationFlow ? formData.tipoCard : formData.cardType;
-  const planSeleccionado = isRegistrationFlow ? formData.planSeleccionado : formData.planSeleccionado;
-  const datosPersonalizados = isRegistrationFlow ? (formData.datosPersonalizados?.[tipoCard] || {}) : formData;
+  const sourceData = isRegistrationFlow ? formData.datosGenerales : formData;
+  const cardType = isRegistrationFlow ? formData.tipoCard : formData.cardType;
+  const personalizadosSource = isRegistrationFlow ? formData.datosPersonalizados?.[cardType] : formData;
 
   const providerData = {
     userId: userId,
-    nombreProveedor: datosGenerales.nombreProveedor || '',
-    tipoRegistro: datosGenerales.tipoRegistro || '',
-    tipoProveedor: datosGenerales.tipoProveedor || [],
-    categoriaPrincipal: datosGenerales.categoriaPrincipal || '',
-    categoriasAdicionales: datosGenerales.categoriasAdicionales || [],
-    pais: datosGenerales.pais || 'Argentina',
-    provincia: datosGenerales.provincia || '',
-    ciudad: datosGenerales.ciudad || '',
-    nombreContactoPersona: datosGenerales.nombre || datosGenerales.nombreContactoPersona || '',
-    apellidoContactoPersona: datosGenerales.apellido || datosGenerales.apellidoContactoPersona || '',
-    rolContactoPersona: datosGenerales.rol || datosGenerales.rolContactoPersona || '',
-    cuit: datosGenerales.cuit || '',
-    antiguedad: datosGenerales.antiguedad ? Number(datosGenerales.antiguedad) : null,
-    facturacion: datosGenerales.facturacion ? Number(datosGenerales.facturacion) : null,
-    marcasOficiales: datosGenerales.marcasOficiales || [],
-    serviciosClaveParaTags: datosGenerales.serviciosClaveParaTags || [],
-    cardType: tipoCard,
-    descripcionGeneral: datosPersonalizados.descripcion || formData.descripcion || '',
+    nombreProveedor: sourceData.nombreProveedor || '',
+    tipoRegistro: sourceData.tipoRegistro || '',
+    tipoProveedor: sourceData.tipoProveedor || [],
+    categoriaPrincipal: sourceData.categoriaPrincipal || '',
+    categoriasAdicionales: sourceData.categoriasAdicionales || [],
+    pais: sourceData.pais || 'Argentina',
+    provincia: sourceData.provincia || '',
+    ciudad: sourceData.ciudad || '',
+    nombreContactoPersona: sourceData.nombre || sourceData.nombreContactoPersona || '',
+    apellidoContactoPersona: sourceData.apellido || sourceData.apellidoContactoPersona || '',
+    rolContactoPersona: sourceData.rol || sourceData.rolContactoPersona || '',
+    cuit: sourceData.cuit || '',
+    antiguedad: sourceData.antiguedad ? Number(sourceData.antiguedad) : null,
+    facturacion: sourceData.facturacion ? Number(sourceData.facturacion) : null,
+    marcasOficiales: sourceData.marcasOficiales || [],
+    serviciosClaveParaTags: sourceData.serviciosClaveParaTags || [],
+    cardType: cardType,
+    planSeleccionado: sourceData.planSeleccionado || null,
+    
+    descripcionGeneral: personalizadosSource?.descripcion || '',
     contacto: {
-      email: datosPersonalizados.email || formData.email || '',
-      sitioWeb: datosPersonalizados.sitioWeb || formData.sitioWeb || '',
-      whatsapp: datosPersonalizados.whatsapp || formData.whatsapp || '',
-      telefono: datosPersonalizados.telefono || formData.telefono || '',
+      email: personalizadosSource?.email || '',
+      sitioWeb: personalizadosSource?.sitioWeb || '',
+      whatsapp: personalizadosSource?.whatsapp || '',
+      telefono: personalizadosSource?.telefono || '',
     },
-    marcasConfiguradas: datosPersonalizados.marcasSeleccionadas || formData.marcasSeleccionadas || [],
-    extrasConfigurados: datosPersonalizados.extrasSeleccionados || formData.extrasSeleccionados || [],
-    serviciosConfigurados: datosPersonalizados.serviciosSeleccionados || formData.serviciosSeleccionados || [],
-    planSeleccionado: planSeleccionado || null,
-    _rawLogoFile: formData.logoFile,
-    _rawCarruselFiles: formData.carruselMediaItems,
-    _rawGaleriaFiles: formData.galeria,
-    logo: isRegistrationFlow ? datosPersonalizados.logo : undefined,
-    carrusel: isRegistrationFlow ? datosPersonalizados.carruselURLs : undefined,
-    galeria: isRegistrationFlow ? datosPersonalizados.galeria : undefined,
-  };
+    marcasConfiguradas: personalizadosSource?.marcasSeleccionadas || [],
+    extrasConfigurados: personalizadosSource?.extrasSeleccionados || [],
 
+    logo: personalizadosSource?.logoFile || personalizadosSource?.logo || null,
+    carrusel: personalizadosSource?.carruselMediaItems || personalizadosSource?.carruselURLs || [],
+    galeria: (personalizadosSource?.galeria || []).map(g => {
+        if (!g) return null;
+        const hasImage = g.imagenFile;
+        const baseItem = hasImage ? g.imagenFile : g;
+        return {
+            ...baseItem,
+            titulo: g.titulo,
+            precio: g.precio,
+        };
+    }).filter(Boolean),
+  };
+  
   return providerData;
 };
 
-const processMediaForUpdate = async (providerDocId, rawFiles, oldMediaData, mediaType) => {
-    const filesToDelete = new Set((oldMediaData || []).map(item => item.permanentStoragePath).filter(Boolean));
-    
-    const uploadPromises = (rawFiles || []).map(async (item) => {
-        if (!item) return null;
-
-        if (item.file) {
-            const subFolder = mediaType === 'logo' ? 'logos' : (mediaType === 'carrusel' ? 'carrusel_media' : 'galeria_productos');
-            const path = `${PERMANENT_STORAGE_BASE_PATH}/${providerDocId}/${subFolder}/${Date.now()}-${item.file.name.replace(/\s/g, '_')}`;
-            const fileRef = ref(storage, path);
-            await uploadBytes(fileRef, item.file);
-            const url = await getDownloadURL(fileRef);
-            
-            const newMediaObject = {
-                titulo: item.titulo || null,
-                precio: item.precio || null,
-                url: url,
-                permanentStoragePath: path,
-                fileType: item.fileType || (item.file.type.startsWith('video') ? 'video' : 'image'),
-                mimeType: item.mimeType || item.file.type,
-                isPermanent: true,
-            };
-            if(mediaType === 'galeria') newMediaObject.imagenURL = url;
-            return newMediaObject;
-        }
-
-        if (item.isExisting && item.permanentStoragePath) {
-            filesToDelete.delete(item.permanentStoragePath);
-            const existingMediaObject = {
-                ...item,
-                url: item.preview || item.url,
-            };
-            if (mediaType === 'galeria') {
-              existingMediaObject.imagenURL = item.preview || item.url;
-            }
-            delete existingMediaObject.preview;
-            return existingMediaObject;
-        }
-        return null; 
-    });
-
-    const newMediaItems = (await Promise.all(uploadPromises)).filter(item => item !== null);
-
-    await Promise.all(Array.from(filesToDelete).map(async (path) => {
-        try {
-            await deleteObject(ref(storage, path));
-        } catch (e) {
-            console.warn(`Could not delete old file: ${path}`, e);
-        }
-    }));
-    
-    return newMediaItems;
-};
 
 export const saveProviderProfileToFirestore = async (providerData, providerDocId = null) => {
   if (!providerData || !providerData.userId) {
     throw new Error("Provider data or userId is required.");
   }
-
-  const { _rawLogoFile, _rawCarruselFiles, _rawGaleriaFiles, ...dataToSave } = providerData;
+  
+  let dataToSave = { ...providerData };
+  Object.keys(dataToSave).forEach(key => {
+      if (dataToSave[key] === undefined) delete dataToSave[key];
+  });
 
   if (providerDocId) {
     const docRef = doc(db, "proveedores", providerDocId);
-    const docSnap = await getDoc(docRef);
-    const oldProviderData = docSnap.exists() ? docSnap.data() : {};
     
-    const mediaUpdates = {};
-    
-    if (_rawLogoFile !== undefined) {
-        const logoResult = await processMediaForUpdate(providerDocId, _rawLogoFile ? [_rawLogoFile] : [], oldProviderData.logo ? [oldProviderData.logo] : [], 'logo');
-        mediaUpdates.logo = logoResult[0] || null;
-    }
-    if (_rawCarruselFiles !== undefined) {
-        mediaUpdates.carrusel = await processMediaForUpdate(providerDocId, _rawCarruselFiles, oldProviderData.carrusel, 'carrusel');
-    }
-    if (_rawGaleriaFiles !== undefined) {
-        mediaUpdates.galeria = await processMediaForUpdate(providerDocId, _rawGaleriaFiles, oldProviderData.galeria, 'galeria');
-    }
-
-    Object.keys(dataToSave).forEach(key => {
-        if (dataToSave[key] === undefined) {
-            delete dataToSave[key];
-        }
+    await updateDoc(docRef, { 
+      ...dataToSave, 
+      fileProcessingStatus: 'pending_update_move', 
+      updatedAt: serverTimestamp() 
     });
-
-    const finalData = { ...dataToSave, ...mediaUpdates, updatedAt: serverTimestamp() };
-
-    await updateDoc(docRef, finalData);
+    
     return { success: true, id: providerDocId };
 
   } else {
-    Object.keys(dataToSave).forEach(key => {
-        if (dataToSave[key] === undefined) {
-            delete dataToSave[key];
-        }
-    });
-
     const newProviderDocRef = await addDoc(collection(db, "proveedores"), {
       ...dataToSave,
       fileProcessingStatus: 'pending_move',
