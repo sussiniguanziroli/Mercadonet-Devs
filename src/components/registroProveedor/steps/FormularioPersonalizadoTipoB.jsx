@@ -32,16 +32,23 @@ const FormularioPersonalizadoTipoB = ({
 }) => {
 
     const getInitialDefaultValues = useCallback((data) => {
-        const initialLogoRHF = data?.logo ? { file: null, preview: data.logo.url, isExisting: true, name: 'logo_cargado', type: data.logo.mimeType, tempId: data.logo.tempId, status: data.logo.status || 'loaded' } : null;
-        const initialCarruselItemsRHF = (data?.carruselURLs || []).map(media => ({ file: null, url: media.url, fileType: media.fileType, mimeType: media.mimeType, isExisting: true, name: 'media_cargado', tempId: media.tempId, status: media.status || 'loaded' }));
+        const initialLogoRHF = data?.logo ? { ...data.logo, file: null, preview: data.logo.url, isExisting: true } : null;
+        
+        const initialCarruselItemsRHF = (data?.carruselURLs || []).map(media => ({ ...media, file: null, preview: media.url, isExisting: true }));
+        
         const initialGaleriaRHF = Array(LIMITE_GALERIA_PRODUCTOS_B).fill(null).map((_, index) => {
             const productData = data?.galeria?.[index];
-            return productData ? {
+            if (!productData) return { imagenFile: null, titulo: '', precio: '' };
+            
+            const hasImage = productData.url || productData.imagenURL;
+            const imageFileObject = hasImage ? { ...productData, file: null, preview: productData.url || productData.imagenURL, isExisting: true } : null;
+            
+            return {
+                ...productData,
                 titulo: productData.titulo || '',
                 precio: productData.precio || '',
-                imagenFile: (productData.url || productData.imagenURL) ? { file: null, preview: productData.url || productData.imagenURL, isExisting: true, name: `prod_cargado`, type: productData.mimeType, tempId: productData.tempId, status: productData.status || 'loaded' } : null,
-                ...productData
-            } : { imagenFile: null, titulo: '', precio: '' };
+                imagenFile: imageFileObject,
+            };
         });
 
         return {
@@ -95,41 +102,39 @@ const FormularioPersonalizadoTipoB = ({
     const prepareSubmitData = () => {
         const currentData = getValues();
         
+        const logoObject = currentData.logoFile ? { ...currentData.logoFile, url: currentData.logoFile.preview || currentData.logoFile.url } : null;
+        if (logoObject) delete logoObject.file;
+
+        const carruselObjects = (currentData.carruselMediaItems || []).map(item => {
+            const newItem = { ...item, url: item.url || item.preview };
+            delete newItem.file;
+            return newItem;
+        });
+
         const transformedGaleria = currentData.galeria.map(g => {
-            const imageUrl = g.imagenFile?.preview || g.imagenFile?.url || g.url || g.imagenURL || null;
-            return {
-                titulo: g.titulo,
-                precio: g.precio,
-                url: imageUrl,
-                imagenURL: imageUrl,
-                tempPath: g.imagenFile?.tempPath || g.tempPath,
-                fileType: 'image',
-                mimeType: g.imagenFile?.type || g.mimeType,
-                tempId: g.imagenFile?.tempId || g.tempId,
-                status: g.imagenFile?.status || g.status,
-            };
-        }).filter(g => g.titulo || g.precio || g.url);
+            if (!g) return null;
+            const hasImage = g.imagenFile;
+            if (!hasImage && !g.titulo && !g.precio) return null;
 
-        const logoObject = currentData.logoFile ? {
-            url: currentData.logoFile.preview || currentData.logoFile.url,
-            tempPath: currentData.logoFile.tempPath,
-            fileType: 'image',
-            mimeType: currentData.logoFile.type,
-            tempId: currentData.logoFile.tempId,
-            status: currentData.logoFile.status,
-        } : null;
-
-        const carruselObjects = (currentData.carruselMediaItems || []).map(item => ({
-             url: item.url || item.preview,
-             tempPath: item.tempPath,
-             fileType: item.fileType,
-             mimeType: item.mimeType,
-             tempId: item.tempId,
-             status: item.status,
-        }));
+            const newItem = hasImage ? { ...g.imagenFile } : {};
+            newItem.titulo = g.titulo;
+            newItem.precio = g.precio;
+            if (hasImage) {
+                newItem.url = g.imagenFile.preview || g.imagenFile.url;
+                newItem.imagenURL = g.imagenFile.preview || g.imagenFile.url;
+            }
+            delete newItem.file;
+            return newItem;
+        }).filter(Boolean);
 
         return {
-            ...currentData,
+            descripcion: currentData.descripcion,
+            sitioWeb: currentData.sitioWeb,
+            whatsapp: currentData.whatsapp,
+            telefono: currentData.telefono,
+            email: currentData.email,
+            marcasSeleccionadas: currentData.marcasSeleccionadas,
+            extrasSeleccionados: currentData.extrasSeleccionados,
             logo: logoObject,
             carruselURLs: carruselObjects,
             galeria: transformedGaleria,

@@ -36,8 +36,8 @@ const FormularioPersonalizadoTipoA = ({
         email: data?.email || '',
         marcasSeleccionadas: data?.marcasSeleccionadas || [],
         extrasSeleccionados: data?.extrasSeleccionados || [],
-        logoFile: data?.logo ? { file: null, preview: data.logo.url, isExisting: true, name: 'logo_cargado', type: data.logo.mimeType, tempId: data.logo.tempId, status: data.logo.status || 'loaded' } : null,
-        carruselMediaItems: (data?.carruselURLs || []).map(media => ({ file: null, url: media.url, fileType: media.fileType, mimeType: media.mimeType, isExisting: true, name: 'media_cargado', tempId: media.tempId, status: media.status || 'loaded' })),
+        logoFile: data?.logo ? { ...data.logo, file: null, preview: data.logo.url, isExisting: true } : null,
+        carruselMediaItems: (data?.carruselURLs || []).map(media => ({ ...media, file: null, preview: media.url, isExisting: true })),
     }), []);
 
     const { control, handleSubmit, watch, setValue, formState: { errors }, register, getValues, reset } = useForm({
@@ -66,29 +66,26 @@ const FormularioPersonalizadoTipoA = ({
         }
     }, [initialData?.carruselURLs, setValue, getValues, getInitialDefaultValues]);
 
-
     const prepareSubmitData = () => {
         const currentData = getValues();
-        const logoObject = currentData.logoFile ? {
-            url: currentData.logoFile.preview || currentData.logoFile.url,
-            tempPath: currentData.logoFile.tempPath,
-            fileType: 'image',
-            mimeType: currentData.logoFile.type,
-            tempId: currentData.logoFile.tempId,
-            status: currentData.logoFile.status,
-        } : null;
+        
+        const logoObject = currentData.logoFile ? { ...currentData.logoFile, url: currentData.logoFile.preview || currentData.logoFile.url } : null;
+        if (logoObject) delete logoObject.file;
 
-        const carruselObjects = (currentData.carruselMediaItems || []).map(item => ({
-             url: item.url || item.preview,
-             tempPath: item.tempPath,
-             fileType: item.fileType,
-             mimeType: item.mimeType,
-             tempId: item.tempId,
-             status: item.status,
-        }));
+        const carruselObjects = (currentData.carruselMediaItems || []).map(item => {
+             const newItem = { ...item, url: item.url || item.preview };
+             delete newItem.file;
+             return newItem;
+        });
         
         return {
-            ...currentData,
+            descripcion: currentData.descripcion,
+            sitioWeb: currentData.sitioWeb,
+            whatsapp: currentData.whatsapp,
+            telefono: currentData.telefono,
+            email: currentData.email,
+            marcasSeleccionadas: currentData.marcasSeleccionadas,
+            extrasSeleccionados: currentData.extrasSeleccionados,
             logo: logoObject,
             carruselURLs: carruselObjects,
         };
