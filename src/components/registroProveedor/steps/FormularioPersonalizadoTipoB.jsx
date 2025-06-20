@@ -40,6 +40,7 @@ const FormularioPersonalizadoTipoB = ({
                 titulo: productData.titulo || '',
                 precio: productData.precio || '',
                 imagenFile: (productData.url || productData.imagenURL) ? { file: null, preview: productData.url || productData.imagenURL, isExisting: true, name: `prod_cargado`, type: productData.mimeType, tempId: productData.tempId, status: productData.status || 'loaded' } : null,
+                ...productData
             } : { imagenFile: null, titulo: '', precio: '' };
         });
 
@@ -67,22 +68,74 @@ const FormularioPersonalizadoTipoB = ({
 
     useEffect(() => {
         scrollToTop();
-        if (initialData) {
-            reset(getInitialDefaultValues(initialData));
+        reset(getInitialDefaultValues(initialData));
+    }, [reset, getInitialDefaultValues]);
+
+    useEffect(() => {
+        const newLogoValue = getInitialDefaultValues(initialData).logoFile;
+        if (JSON.stringify(newLogoValue) !== JSON.stringify(getValues('logoFile'))) {
+            setValue('logoFile', newLogoValue, { shouldValidate: true, shouldDirty: true });
         }
-    }, [initialData, reset, getInitialDefaultValues]);
+    }, [initialData?.logo, setValue, getValues, getInitialDefaultValues]);
+
+    useEffect(() => {
+        const newCarruselValue = getInitialDefaultValues(initialData).carruselMediaItems;
+        if (JSON.stringify(newCarruselValue) !== JSON.stringify(getValues('carruselMediaItems'))) {
+            setValue('carruselMediaItems', newCarruselValue, { shouldValidate: true, shouldDirty: true });
+        }
+    }, [initialData?.carruselURLs, setValue, getValues, getInitialDefaultValues]);
+
+    useEffect(() => {
+        const newGaleriaValue = getInitialDefaultValues(initialData).galeria;
+        if (JSON.stringify(newGaleriaValue) !== JSON.stringify(getValues('galeria'))) {
+            setValue('galeria', newGaleriaValue, { shouldValidate: true, shouldDirty: true });
+        }
+    }, [initialData?.galeria, setValue, getValues, getInitialDefaultValues]);
 
     const prepareSubmitData = () => {
         const currentData = getValues();
+        
+        const transformedGaleria = currentData.galeria.map(g => {
+            const imageUrl = g.imagenFile?.preview || g.imagenFile?.url || g.url || g.imagenURL || null;
+            return {
+                titulo: g.titulo,
+                precio: g.precio,
+                url: imageUrl,
+                imagenURL: imageUrl,
+                tempPath: g.imagenFile?.tempPath || g.tempPath,
+                fileType: 'image',
+                mimeType: g.imagenFile?.type || g.mimeType,
+                tempId: g.imagenFile?.tempId || g.tempId,
+                status: g.imagenFile?.status || g.status,
+            };
+        }).filter(g => g.titulo || g.precio || g.url);
+
+        const logoObject = currentData.logoFile ? {
+            url: currentData.logoFile.preview || currentData.logoFile.url,
+            tempPath: currentData.logoFile.tempPath,
+            fileType: 'image',
+            mimeType: currentData.logoFile.type,
+            tempId: currentData.logoFile.tempId,
+            status: currentData.logoFile.status,
+        } : null;
+
+        const carruselObjects = (currentData.carruselMediaItems || []).map(item => ({
+             url: item.url || item.preview,
+             tempPath: item.tempPath,
+             fileType: item.fileType,
+             mimeType: item.mimeType,
+             tempId: item.tempId,
+             status: item.status,
+        }));
+
         return {
-            ...initialData,
             ...currentData,
-            marcasSeleccionadas: currentData.marcasSeleccionadas,
-            extrasSeleccionados: currentData.extrasSeleccionados,
-            galeria: currentData.galeria.filter(g => g.titulo || g.precio || g.imagenFile),
+            logo: logoObject,
+            carruselURLs: carruselObjects,
+            galeria: transformedGaleria,
         };
     };
-    
+
     const onSubmit = () => onNext(prepareSubmitData());
     const handleBack = () => onBack(prepareSubmitData());
 
@@ -104,7 +157,7 @@ const FormularioPersonalizadoTipoB = ({
             galeriaProductos: galeriaForPreview,
         };
     };
-    
+
     const previewData = buildPreviewData(watchedAllFields);
 
     return (

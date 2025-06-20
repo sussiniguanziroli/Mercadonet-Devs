@@ -2,7 +2,6 @@ import React, { useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { scrollToTop } from '../../../utils/scrollHelper';
 import CardHistoriaPreview from '../card_simulators/CardHistoriaPreview';
-
 import LogoUploadSection from './formSections/LogoUploadSection';
 import CarruselUploadSection from './formSections/CarruselUploadSection';
 import TextFieldSection from './formSections/TextFieldSection';
@@ -26,7 +25,7 @@ const FormularioPersonalizadoTipoA = ({
     uploadFileImmediately,
     tipoRegistro,
     tipoProveedor,
-    selectedServices 
+    selectedServices
 }) => {
 
     const getInitialDefaultValues = useCallback((data) => ({
@@ -41,23 +40,57 @@ const FormularioPersonalizadoTipoA = ({
         carruselMediaItems: (data?.carruselURLs || []).map(media => ({ file: null, url: media.url, fileType: media.fileType, mimeType: media.mimeType, isExisting: true, name: 'media_cargado', tempId: media.tempId, status: media.status || 'loaded' })),
     }), []);
 
-    const { control, handleSubmit, watch, setValue, reset, formState: { errors }, register, getValues } = useForm({
+    const { control, handleSubmit, watch, setValue, formState: { errors }, register, getValues, reset } = useForm({
         defaultValues: getInitialDefaultValues(initialData),
         mode: 'onBlur',
     });
 
     const watchedAllFields = watch();
-    
+
     useEffect(() => {
         scrollToTop();
         reset(getInitialDefaultValues(initialData));
-    }, [initialData, reset, getInitialDefaultValues]);
+    }, [reset, getInitialDefaultValues]);
+
+    useEffect(() => {
+        const newLogoValue = getInitialDefaultValues(initialData).logoFile;
+        if (JSON.stringify(newLogoValue) !== JSON.stringify(getValues('logoFile'))) {
+            setValue('logoFile', newLogoValue, { shouldValidate: true, shouldDirty: true });
+        }
+    }, [initialData?.logo, setValue, getValues, getInitialDefaultValues]);
+
+    useEffect(() => {
+        const newCarruselValue = getInitialDefaultValues(initialData).carruselMediaItems;
+        if (JSON.stringify(newCarruselValue) !== JSON.stringify(getValues('carruselMediaItems'))) {
+            setValue('carruselMediaItems', newCarruselValue, { shouldValidate: true, shouldDirty: true });
+        }
+    }, [initialData?.carruselURLs, setValue, getValues, getInitialDefaultValues]);
+
 
     const prepareSubmitData = () => {
         const currentData = getValues();
+        const logoObject = currentData.logoFile ? {
+            url: currentData.logoFile.preview || currentData.logoFile.url,
+            tempPath: currentData.logoFile.tempPath,
+            fileType: 'image',
+            mimeType: currentData.logoFile.type,
+            tempId: currentData.logoFile.tempId,
+            status: currentData.logoFile.status,
+        } : null;
+
+        const carruselObjects = (currentData.carruselMediaItems || []).map(item => ({
+             url: item.url || item.preview,
+             tempPath: item.tempPath,
+             fileType: item.fileType,
+             mimeType: item.mimeType,
+             tempId: item.tempId,
+             status: item.status,
+        }));
+        
         return {
-            ...initialData, // Keep existing media data like logo, carruselURLs
-            ...currentData, // Overwrite with current form values
+            ...currentData,
+            logo: logoObject,
+            carruselURLs: carruselObjects,
         };
     };
 
@@ -73,14 +106,14 @@ const FormularioPersonalizadoTipoA = ({
             tipoRegistro, tipoProveedor, selectedServices,
             nombre: nombreProveedor, ubicacionDetalle,
             descripcion: currentRHFData.descripcion,
-            marca: currentRHFData.marcasSeleccionadas, 
+            marca: currentRHFData.marcasSeleccionadas,
             extras: currentRHFData.extrasSeleccionados,
             logoPreview: logoForPreview, carrusel: carruselForPreview,
             sitioWeb: currentRHFData.sitioWeb, whatsapp: currentRHFData.whatsapp,
             telefono: currentRHFData.telefono, email: currentRHFData.email,
         };
     };
-    
+
     const previewData = buildPreviewData(watchedAllFields);
 
     return (
