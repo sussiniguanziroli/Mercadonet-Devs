@@ -21,16 +21,10 @@ const NewsCarousel = () => {
             >
                 <Slider>
                     <Slide className='carousel-slide' index={0}>
-                        <img className='carousel-image' src="https://http2.mlstatic.com/D_NQ_639672-MLA80622004552_112024-OO.webp" alt="Slide 1" />
+                        <img className='carousel-image' src="https://i.ibb.co/tptKK79Y/1-El-Alibaba-Argentino.png" alt="Slide 1" />
                     </Slide>
                     <Slide className='carousel-slide' index={1}>
-                        <img className='carousel-image' src="https://http2.mlstatic.com/D_NQ_656264-MLA80939003907_112024-OO.webp" alt="Slide 2" />
-                    </Slide>
-                    <Slide className='carousel-slide' index={2}>
-                        <img className='carousel-image' src="https://http2.mlstatic.com/D_NQ_657991-MLA80886869747_112024-OO.webp" alt="Slide 3" />
-                    </Slide>
-                    <Slide className='carousel-slide' index={3}>
-                        <img className='carousel-image' src="https://http2.mlstatic.com/D_NQ_966444-MLA80886866275_112024-OO.webp" alt="Slide 4" />
+                        <img className='carousel-image' src="https://i.ibb.co/rR98BxT5/2-Import-directo-sin-riesgos.png" alt="Slide 2" />
                     </Slide>
                 </Slider>
                 <ButtonBack className="carousel-button back"><FaArrowLeft />
